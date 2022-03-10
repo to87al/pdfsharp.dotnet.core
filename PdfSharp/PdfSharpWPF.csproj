@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>PdfSharpWPF.dotNet.Core</PackageId>
-    <Description>.NET Core 3.0 port of PDFSharp-WPF: A .NET library for processing PDF.</Description>
+    <Description>.NET 6 port of PDFSharp-WPF: A .NET library for processing PDF.</Description>
     <PackageTags>PDF, PDFsharp, creation</PackageTags>
     <Authors>empira Software GmbH, Łukasz Ząbik</Authors>
     <PackageProjectUrl>http://www.pdfsharp.net/</PackageProjectUrl>
@@ -13,6 +13,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENCE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/lzabik/pdfsharp.dotnet.core.git</RepositoryUrl>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,13 +27,17 @@
 
   <ItemGroup>
     <Compile Remove="PdfSharp.XPS.Test\**" />
+    <Compile Remove="Resources\**" />
     <EmbeddedResource Remove="PdfSharp.XPS.Test\**" />
+    <EmbeddedResource Remove="Resources\**" />
     <None Remove="PdfSharp.XPS.Test\**" />
+    <None Remove="Resources\**" />
     <None Include="..\LICENCE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
     <Page Remove="PdfSharp.XPS.Test\**" />
+    <Page Remove="Resources\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1,18 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>empira Software GmbH, Łukasz Ząbik</Authors>
     <PackageId>PdfSharp.Xps.dotNet.Core</PackageId>
-    <Description>A .NET library for processing PDF.</Description>
+    <Description>A .NET 6 library for processing PDF.</Description>
     <PackageTags>PDF, PDFsharp, creation, conversion</PackageTags>
     <PackageProjectUrl>http://www.pdfsharp.net/</PackageProjectUrl>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENCE.md</PackageLicenseFile>
     <RepositoryUrl>https://github.com/lzabik/pdfsharp.dotnet.core.git</RepositoryUrl>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -52,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
