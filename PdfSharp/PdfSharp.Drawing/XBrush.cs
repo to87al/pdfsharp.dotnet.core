@@ -27,25 +27,21 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Classes derived from this abstract base class define objects used to fill the 
-  /// interiors of paths.
-  /// </summary>
-  public abstract class XBrush
-  {
+    /// <summary>
+    /// Classes derived from this abstract base class define objects used to fill the 
+    /// interiors of paths.
+    /// </summary>
+    public abstract class XBrush
+    {
 #if GDI
     internal abstract System.Drawing. Brush RealizeGdiBrush();
 
@@ -76,7 +72,7 @@ namespace PdfSharp.Drawing
 #endif
 #endif
 #if WPF
-    internal abstract System.Windows.Media. Brush RealizeWpfBrush();
+        internal abstract System.Windows.Media.Brush RealizeWpfBrush();
 #endif
-  }
+    }
 }

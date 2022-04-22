@@ -33,58 +33,58 @@ using System.Text;
 
 namespace PdfSharp.Pdf.Internal
 {
-  /// <summary>
-  /// An encoder for PDF DocEncoding.
-  /// </summary>
-  internal sealed class DocEncoding : Encoding
-  {
-    public DocEncoding()
-    {
-    }
-
-    public override int GetByteCount(char[] chars, int index, int count)
-    {
-      return PdfEncoders.WinAnsiEncoding.GetByteCount(chars, index, count);
-    }
-
-    public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
-    {
-      byte[] ansi = PdfEncoders.WinAnsiEncoding.GetBytes(chars, charIndex, charCount);
-      for (int idx = 0, count = ansi.Length; count > 0; idx++, byteIndex++, count--)
-        bytes[byteIndex] = AnsiToDoc[ansi[idx]];
-      return ansi.Length;
-    }
-
-    public override int GetCharCount(byte[] bytes, int index, int count)
-    {
-      //return PdfEncoders.WinAnsiEncoding.GetCharCount(bytes, index, count);
-      Debug.Assert(PdfEncoders.WinAnsiEncoding.GetCharCount(bytes, index, count) == count);
-      return count;
-    }
-
-    public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
-    {
-      throw new NotImplementedException("GetChars");
-      //for (; byteCount > 0; byteIndex++, charIndex++, byteCount--)
-      //  chars[charIndex] = (char)bytes[byteIndex];
-      //return byteCount;
-    }
-
-    public override int GetMaxByteCount(int charCount)
-    {
-      return charCount;
-    }
-
-    public override int GetMaxCharCount(int byteCount)
-    {
-      return byteCount;
-    }
-
     /// <summary>
-    /// Converts WinAnsi to DocEncode characters. Incomplete, just maps € and some other characters.
+    /// An encoder for PDF DocEncoding.
     /// </summary>
-    static byte[] AnsiToDoc = new byte[256]
+    internal sealed class DocEncoding : Encoding
     {
+        public DocEncoding()
+        {
+        }
+
+        public override int GetByteCount(char[] chars, int index, int count)
+        {
+            return PdfEncoders.WinAnsiEncoding.GetByteCount(chars, index, count);
+        }
+
+        public override int GetBytes(char[] chars, int charIndex, int charCount, byte[] bytes, int byteIndex)
+        {
+            byte[] ansi = PdfEncoders.WinAnsiEncoding.GetBytes(chars, charIndex, charCount);
+            for (int idx = 0, count = ansi.Length; count > 0; idx++, byteIndex++, count--)
+                bytes[byteIndex] = AnsiToDoc[ansi[idx]];
+            return ansi.Length;
+        }
+
+        public override int GetCharCount(byte[] bytes, int index, int count)
+        {
+            //return PdfEncoders.WinAnsiEncoding.GetCharCount(bytes, index, count);
+            Debug.Assert(PdfEncoders.WinAnsiEncoding.GetCharCount(bytes, index, count) == count);
+            return count;
+        }
+
+        public override int GetChars(byte[] bytes, int byteIndex, int byteCount, char[] chars, int charIndex)
+        {
+            throw new NotImplementedException("GetChars");
+            //for (; byteCount > 0; byteIndex++, charIndex++, byteCount--)
+            //  chars[charIndex] = (char)bytes[byteIndex];
+            //return byteCount;
+        }
+
+        public override int GetMaxByteCount(int charCount)
+        {
+            return charCount;
+        }
+
+        public override int GetMaxCharCount(int byteCount)
+        {
+            return byteCount;
+        }
+
+        /// <summary>
+        /// Converts WinAnsi to DocEncode characters. Incomplete, just maps € and some other characters.
+        /// </summary>
+        static readonly byte[] AnsiToDoc = new byte[256]
+        {
       // TODO: verify
       0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
       0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
@@ -102,11 +102,11 @@ namespace PdfSharp.Pdf.Internal
       0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
       0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF,
       0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
-    };
+        };
 
-    // TODO: use this table
-    static char[] PdfDocToUnicode = new char[]
-    {
+        // TODO: use this table
+        static readonly char[] PdfDocToUnicode = new char[]
+        {
       '\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0A', '\x0B', '\x0C', '\x0D', '\x0E', '\x0F',
       '\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', '\x18', '\x19', '\x1A', '\x1B', '\x1C', '\x1D', '\x1E', '\x1F',
       '\x20', '\x21', '\x22', '\x23', '\x24', '\x25', '\x26', '\x27', '\x28', '\x29', '\x2A', '\x2B', '\x2C', '\x2D', '\x2E', '\x2F',
@@ -123,8 +123,8 @@ namespace PdfSharp.Pdf.Internal
       '\xD0', '\xD1', '\xD2', '\xD3', '\xD4', '\xD5', '\xD6', '\xD7', '\xD8', '\xD9', '\xDA', '\xDB', '\xDC', '\xDD', '\xDE', '\xDF',
       '\xE0', '\xE1', '\xE2', '\xE3', '\xE4', '\xE5', '\xE6', '\xE7', '\xE8', '\xE9', '\xEA', '\xEB', '\xEC', '\xED', '\xEE', '\xEF',
       '\xF0', '\xF1', '\xF2', '\xF3', '\xF4', '\xF5', '\xF6', '\xF7', '\xF8', '\xF9', '\xFA', '\xFB', '\xFC', '\xFD', '\xFE', '\xFF',
-    };
+        };
 
 
-  }
+    }
 }

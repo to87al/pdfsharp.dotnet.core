@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace PdfSharp.Xps.Rendering
+﻿namespace PdfSharp.Xps.Rendering
 {
-  enum PdfTraceLevel
-  {
-    None,
+    enum PdfTraceLevel
+    {
+        None,
 
-    Verbose,
- }
+        Verbose,
+    }
 }

@@ -27,66 +27,63 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
 using PdfSharp.Drawing;
-using PdfSharp.Internal;
+using System;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Holds PDF specific information of the document.
-  /// </summary>
-  public sealed class PdfDocumentSettings
-  {
-    internal PdfDocumentSettings(PdfDocument document)
-    {
-    }
-
     /// <summary>
-    /// Sets the private font collection.
+    /// Holds PDF specific information of the document.
     /// </summary>
-    public XPrivateFontCollection PrivateFontCollection
+    public sealed class PdfDocumentSettings
     {
-      internal get { return this.privateFontCollection; }
-      set
-      {
-        if (this.privateFontCollection != null)
-          throw new InvalidOperationException("PrivateFontCollection can only be set once.");
-
-        this.privateFontCollection = value;
-      }
-    }
-    private XPrivateFontCollection privateFontCollection;
-
-
-    /// <summary>
-    /// Gets or sets the default trim margins.
-    /// </summary>
-    public TrimMargins TrimMargins
-    {
-      get
-      {
-        if (this.trimMargins == null)
-          this.trimMargins = new TrimMargins();
-        return this.trimMargins;
-      }
-      set
-      {
-        if (this.trimMargins == null)
-          this.trimMargins = new TrimMargins();
-        if (value != null)
+        internal PdfDocumentSettings(PdfDocument document)
         {
-          this.trimMargins.Left = value.Left;
-          this.trimMargins.Right = value.Right;
-          this.trimMargins.Top = value.Top;
-          this.trimMargins.Bottom = value.Bottom;
         }
-        else
-          this.trimMargins.All = 0;
-      }
+
+        /// <summary>
+        /// Sets the private font collection.
+        /// </summary>
+        public XPrivateFontCollection PrivateFontCollection
+        {
+            internal get { return this.privateFontCollection; }
+            set
+            {
+                if (this.privateFontCollection != null)
+                    throw new InvalidOperationException("PrivateFontCollection can only be set once.");
+
+                this.privateFontCollection = value;
+            }
+        }
+        private XPrivateFontCollection privateFontCollection;
+
+
+        /// <summary>
+        /// Gets or sets the default trim margins.
+        /// </summary>
+        public TrimMargins TrimMargins
+        {
+            get
+            {
+                if (this.trimMargins == null)
+                    this.trimMargins = new TrimMargins();
+                return this.trimMargins;
+            }
+            set
+            {
+                if (this.trimMargins == null)
+                    this.trimMargins = new TrimMargins();
+                if (value != null)
+                {
+                    this.trimMargins.Left = value.Left;
+                    this.trimMargins.Right = value.Right;
+                    this.trimMargins.Top = value.Top;
+                    this.trimMargins.Bottom = value.Bottom;
+                }
+                else
+                    this.trimMargins.All = 0;
+            }
+        }
+        TrimMargins trimMargins = new TrimMargins();
     }
-    TrimMargins trimMargins = new TrimMargins();
-  }
 }

@@ -28,16 +28,12 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 #if GDI
 using System.Drawing;
 using System.Drawing.Imaging;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Media;
 #endif
-using PdfSharp.Drawing;
 
 
 
@@ -52,39 +48,39 @@ using PdfSharp.Drawing;
 
 namespace PdfSharp.Drawing.BarCodes
 {
-  /// <summary>
-  /// Creates the XImage object for a DataMatrix.
-  /// Important note for OpenSource version of PDFsharp:
-  ///   The generated image object only contains random data.
-  ///   If you need the correct implementation as defined in the ISO/IEC 16022:2000 specification,
-  ///   please contact empira Software GmbH via www.pdfsharp.com.
-  /// </summary>
-  internal class DataMatrixImage
-  {
-    public static XImage GenerateMatrixImage(string text, string encoding, int rows, int columns)
-    {
-      DataMatrixImage dataMatrixImage = new DataMatrixImage(text, encoding, rows, columns);
-      return dataMatrixImage.DrawMatrix();
-    }
-
-    public DataMatrixImage(string text, string encoding, int rows, int columns)
-    {
-      this.text = text;
-      this.encoding = encoding;
-      this.rows = rows;
-      this.columns = columns;
-    }
-
-    string text;
-    string encoding;
-    int rows;
-    int columns;
-
     /// <summary>
-    /// Possible ECC200 Matrixes
+    /// Creates the XImage object for a DataMatrix.
+    /// Important note for OpenSource version of PDFsharp:
+    ///   The generated image object only contains random data.
+    ///   If you need the correct implementation as defined in the ISO/IEC 16022:2000 specification,
+    ///   please contact empira Software GmbH via www.pdfsharp.com.
     /// </summary>
-    static Ecc200Block[] ecc200Sizes =
+    internal class DataMatrixImage
     {
+        public static XImage GenerateMatrixImage(string text, string encoding, int rows, int columns)
+        {
+            DataMatrixImage dataMatrixImage = new DataMatrixImage(text, encoding, rows, columns);
+            return dataMatrixImage.DrawMatrix();
+        }
+
+        public DataMatrixImage(string text, string encoding, int rows, int columns)
+        {
+            this.text = text;
+            this.encoding = encoding;
+            this.rows = rows;
+            this.columns = columns;
+        }
+
+        readonly string text;
+        readonly string encoding;
+        readonly int rows;
+        readonly int columns;
+
+        /// <summary>
+        /// Possible ECC200 Matrixes
+        /// </summary>
+        static readonly Ecc200Block[] ecc200Sizes =
+        {
       new Ecc200Block( 10,  10, 10, 10,    3,   3,  5),    //
       new Ecc200Block( 12,  12, 12, 12,    5,   5,  7),    //
       new Ecc200Block(  8,  18,  8, 18,    5,   5,  7),    //
@@ -118,78 +114,78 @@ namespace PdfSharp.Drawing.BarCodes
       new Ecc200Block(  0,   0,  0,  0,    0,    0, 0)     // terminate
     };
 
-    public XImage DrawMatrix()
-    {
-      return CreateImage(DataMatrix(), this.rows, this.columns);
-    }
+        public XImage DrawMatrix()
+        {
+            return CreateImage(DataMatrix(), this.rows, this.columns);
+        }
 
-    /// <summary>
-    /// Creates the DataMatrix code.
-    /// </summary>
-    internal char[] DataMatrix()
-    {
-      int matrixColumns = this.columns;
-      int matrixRows = this.rows;
-      Ecc200Block matrix = new Ecc200Block(0, 0, 0, 0, 0, 0, 0);
+        /// <summary>
+        /// Creates the DataMatrix code.
+        /// </summary>
+        internal char[] DataMatrix()
+        {
+            int matrixColumns = this.columns;
+            int matrixRows = this.rows;
+            Ecc200Block matrix = new Ecc200Block(0, 0, 0, 0, 0, 0, 0);
 
-      foreach (Ecc200Block eccmatrix in ecc200Sizes)
-      {
-        matrix = eccmatrix;
-        if (matrix.Width != columns || matrix.Height != rows)
-          continue;
-        else
-          break;
-      }
+            foreach (Ecc200Block eccmatrix in ecc200Sizes)
+            {
+                matrix = eccmatrix;
+                if (matrix.Width != columns || matrix.Height != rows)
+                    continue;
+                else
+                    break;
+            }
 
-      char[] grid = new char[matrixColumns * matrixRows];
-      Random rand = new Random();
+            char[] grid = new char[matrixColumns * matrixRows];
+            Random rand = new Random();
 
-      for (int ccol = 0; ccol < matrixColumns; ccol++)
-        grid[ccol] = (char)1;
+            for (int ccol = 0; ccol < matrixColumns; ccol++)
+                grid[ccol] = (char)1;
 
-      for (int rrows = 1; rrows < matrixRows; rrows++)
-      {
-        grid[rrows * matrixRows] = (char)1;
-        for (int ccol = 1; ccol < matrixColumns; ccol++)
-          grid[rrows * matrixRows + ccol] = (char)rand.Next(2);
-      }
+            for (int rrows = 1; rrows < matrixRows; rrows++)
+            {
+                grid[rrows * matrixRows] = (char)1;
+                for (int ccol = 1; ccol < matrixColumns; ccol++)
+                    grid[rrows * matrixRows + ccol] = (char)rand.Next(2);
+            }
 
-      if (grid == null || matrixColumns == 0)
-        return null; //No barcode produced;
-      return grid;
-    }
+            if (grid == null || matrixColumns == 0)
+                return null; //No barcode produced;
+            return grid;
+        }
 
-    /// <summary>
-    /// Encodes the DataMatrix.
-    /// </summary>
-    internal char[] Iec16022Ecc200(int columns, int rows, string encoding, int barcodelen, string barcode, int len, int max, int ecc)
-    {
-      return null;
-    }
+        /// <summary>
+        /// Encodes the DataMatrix.
+        /// </summary>
+        internal static char[] Iec16022Ecc200(int columns, int rows, string encoding, int barcodelen, string barcode, int len, int max, int ecc)
+        {
+            return null;
+        }
 
-    /// <summary>
-    /// Creates a DataMatrix image object.
-    /// </summary>
-    /// <param name="code">A hex string like "AB 08 C3...".</param>
-    /// <param name="size">I.e. 26 for a 26x26 matrix</param>
-    public XImage CreateImage(char[] code, int size)//(string code, int size)
-    {
-      return CreateImage(code, size, size, 10);
-    }
+        /// <summary>
+        /// Creates a DataMatrix image object.
+        /// </summary>
+        /// <param name="code">A hex string like "AB 08 C3...".</param>
+        /// <param name="size">I.e. 26 for a 26x26 matrix</param>
+        public XImage CreateImage(char[] code, int size)//(string code, int size)
+        {
+            return CreateImage(code, size, size, 10);
+        }
 
-    /// <summary>
-    /// Creates a DataMatrix image object.
-    /// </summary>
-    public XImage CreateImage(char[] code, int rows, int columns)
-    {
-      return CreateImage(code, rows, columns, 10);
-    }
+        /// <summary>
+        /// Creates a DataMatrix image object.
+        /// </summary>
+        public XImage CreateImage(char[] code, int rows, int columns)
+        {
+            return CreateImage(code, rows, columns, 10);
+        }
 
-    /// <summary>
-    /// Creates a DataMatrix image object.
-    /// </summary>
-    public XImage CreateImage(char[] code, int rows, int columns, int pixelsize)
-    {
+        /// <summary>
+        /// Creates a DataMatrix image object.
+        /// </summary>
+        public static XImage CreateImage(char[] code, int rows, int columns, int pixelsize)
+        {
 #if GDI
       Bitmap bm = new Bitmap(columns * pixelsize, rows * pixelsize);
       using (Graphics gfx = Graphics.FromImage(bm))
@@ -212,30 +208,30 @@ namespace PdfSharp.Drawing.BarCodes
       image.Interpolate = false;
       return image;
 #elif WPF
-      return null;
+            return null;
 #endif
+        }
     }
-  }
 
-  struct Ecc200Block
-  {
-    public int Height;
-    public int Width;
-    public int CellHeight;
-    public int CellWidth;
-    public int Bytes;
-    public int DataBlock;
-    public int RSBlock;
-
-    public Ecc200Block(int h, int w, int ch, int cw, int bytes, int datablock, int rsblock)
+    struct Ecc200Block
     {
-      Height = h;
-      Width = w;
-      CellHeight = ch;
-      CellWidth = cw;
-      Bytes = bytes;
-      DataBlock = datablock;
-      RSBlock = rsblock;
+        public int Height;
+        public int Width;
+        public int CellHeight;
+        public int CellWidth;
+        public int Bytes;
+        public int DataBlock;
+        public int RSBlock;
+
+        public Ecc200Block(int h, int w, int ch, int cw, int bytes, int datablock, int rsblock)
+        {
+            Height = h;
+            Width = w;
+            CellHeight = ch;
+            CellWidth = cw;
+            Bytes = bytes;
+            DataBlock = datablock;
+            RSBlock = rsblock;
+        }
     }
-  }
 }

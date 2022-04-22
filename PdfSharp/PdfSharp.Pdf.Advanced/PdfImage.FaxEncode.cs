@@ -59,10 +59,10 @@ using System.Diagnostics;
 
 namespace PdfSharp.Pdf.Advanced
 {
-  partial class PdfImage
-  {
-    internal readonly static uint[] WhiteTerminatingCodes =
+    partial class PdfImage
     {
+        internal readonly static uint[] WhiteTerminatingCodes =
+        {
       0x35, 8, //00110101 // 0
       0x07, 6, //000111
       0x07, 4, //0111
@@ -129,8 +129,8 @@ namespace PdfSharp.Pdf.Advanced
       0x34, 8, //00110100 // 63
     };
 
-    internal readonly static uint[] BlackTerminatingCodes =
-    {
+        internal readonly static uint[] BlackTerminatingCodes =
+        {
       0x37, 10, //0000110111   // 0
       0x02,  3, //010
       0x03,  2, //11
@@ -197,8 +197,8 @@ namespace PdfSharp.Pdf.Advanced
       0x67, 12, //000001100111 // 63
     };
 
-    internal readonly static uint[] WhiteMakeUpCodes =
-    {
+        internal readonly static uint[] WhiteMakeUpCodes =
+        {
       0x1b,  5, //11011 64          // 0
       0x12,  5, //10010 128
       0x17,  6, //010111 192
@@ -243,8 +243,8 @@ namespace PdfSharp.Pdf.Advanced
       0x01, 12, //000000000001 EOL  // 40
     };
 
-    internal readonly static uint[] BlackMakeUpCodes =
-    {
+        internal readonly static uint[] BlackMakeUpCodes =
+        {
       0x0f, 10, //0000001111    64   // 0
       0xc8, 12, //000011001000  128
       0xc9, 12, //000011001001  192
@@ -289,10 +289,10 @@ namespace PdfSharp.Pdf.Advanced
       0x01, 12, //000000000001 EOL   // 40
     };
 
-    internal readonly static uint[] HorizontalCodes = { 0x1, 3 }; /* 001 */
-    internal readonly static uint[] PassCodes = { 0x1, 4, }; /* 0001 */
-    internal readonly static uint[] VerticalCodes =
-    {
+        internal readonly static uint[] HorizontalCodes = { 0x1, 3 }; /* 001 */
+        internal readonly static uint[] PassCodes = { 0x1, 4, }; /* 0001 */
+        internal readonly static uint[] VerticalCodes =
+        {
       0x03, 7, /* 0000 011 */
       0x03, 6, /* 0000 11 */
       0x03, 3, /* 011 */
@@ -302,8 +302,8 @@ namespace PdfSharp.Pdf.Advanced
       0x02, 7, /* 0000 010 */
     };
 
-    readonly static uint[] ZeroRuns =
-    {
+        readonly static uint[] ZeroRuns =
+        {
       8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,	/* 0x00 - 0x0f */
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,	/* 0x10 - 0x1f */
       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,	/* 0x20 - 0x2f */
@@ -322,8 +322,8 @@ namespace PdfSharp.Pdf.Advanced
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0xf0 - 0xff */
     };
 
-    readonly static uint[] OneRuns =
-    {
+        readonly static uint[] OneRuns =
+        {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x00 - 0x0f */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x10 - 0x1f */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x20 - 0x2f */
@@ -342,510 +342,510 @@ namespace PdfSharp.Pdf.Advanced
       4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8,	/* 0xf0 - 0xff */
     };
 
-    /// <summary>
-    /// Counts the consecutive one bits in an image line.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="bitsLeft">The bits left.</param>
-    private static uint CountOneBits(BitReader reader, uint bitsLeft)
-    {
-      uint found = 0;
-      for (; ; )
-      {
-        uint bits;
-        int @byte = reader.PeekByte(out bits);
-        uint hits = OneRuns[@byte];
-        if (hits < bits)
+        /// <summary>
+        /// Counts the consecutive one bits in an image line.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="bitsLeft">The bits left.</param>
+        private static uint CountOneBits(BitReader reader, uint bitsLeft)
         {
-          if (hits > 0)
-            reader.SkipBits(hits);
-          return found + hits;
-        }
-        found += bits;
-        if (found >= bitsLeft)
-          return bitsLeft;
-        reader.NextByte();
-      }
-    }
-
-    /// <summary>
-    /// Counts the consecutive zero bits in an image line.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="bitsLeft">The bits left.</param>
-    private static uint CountZeroBits(BitReader reader, uint bitsLeft)
-    {
-      uint found = 0;
-      for (; ; )
-      {
-        uint bits;
-        int @byte = reader.PeekByte(out bits);
-        uint hits = ZeroRuns[@byte];
-        if (hits < bits)
-        {
-          if (hits > 0)
-            reader.SkipBits(hits);
-          return found + hits;
-        }
-        found += bits;
-        if (found >= bitsLeft)
-          return bitsLeft;
-        reader.NextByte();
-      }
-    }
-
-    /// <summary>
-    /// Returns the offset of the next bit in the range
-    /// [bitStart..bitEnd] that is different from the
-    /// specified color.  The end, bitEnd, is returned
-    /// if no such bit exists.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="bitStart">The offset of the start bit.</param>
-    /// <param name="bitEnd">The offset of the end bit.</param>
-    /// <param name="searchOne">If set to <c>true</c> searches "one" (i. e. white), otherwise searches black.</param>
-    /// <returns>The offset of the first non-matching bit.</returns>
-    private static uint FindDifference(BitReader reader, uint bitStart, uint bitEnd, bool searchOne)
-    {
-      // Translated from LibTiff
-      reader.SetPosition(bitStart);
-      return (bitStart + (searchOne ? CountOneBits(reader, bitEnd - bitStart) : CountZeroBits(reader, bitEnd - bitStart)));
-    }
-
-    /// <summary>
-    /// Returns the offset of the next bit in the range
-    /// [bitStart..bitEnd] that is different from the
-    /// specified color.  The end, bitEnd, is returned
-    /// if no such bit exists.
-    /// Like FindDifference, but also check the
-    /// starting bit against the end in case start > end.
-    /// </summary>
-    /// <param name="reader">The reader.</param>
-    /// <param name="bitStart">The offset of the start bit.</param>
-    /// <param name="bitEnd">The offset of the end bit.</param>
-    /// <param name="searchOne">If set to <c>true</c> searches "one" (i. e. white), otherwise searches black.</param>
-    /// <returns>The offset of the first non-matching bit.</returns>
-    private static uint FindDifferenceWithCheck(BitReader reader, uint bitStart, uint bitEnd, bool searchOne)
-    {
-      // Translated from LibTiff
-      return ((bitStart < bitEnd) ? FindDifference(reader, bitStart, bitEnd, searchOne) : bitEnd);
-    }
-
-    /// <summary>
-    /// 2d-encode a row of pixels. Consult the CCITT documentation for the algorithm.
-    /// </summary>
-    /// <param name="writer">The writer.</param>
-    /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
-    /// <param name="imageBits">The bitmap file.</param>
-    /// <param name="currentRow">Index of the current row.</param>
-    /// <param name="referenceRow">Index of the reference row (0xffffffff if there is none).</param>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    /// <param name="bytesPerLineBmp">The bytes per line in the bitmap file.</param>
-    static void FaxEncode2DRow(BitWriter writer, uint bytesFileOffset, byte[] imageBits, uint currentRow, uint referenceRow, uint width, uint height, uint bytesPerLineBmp)
-    {
-      // Translated from LibTiff
-      uint bytesOffsetRead = bytesFileOffset + (height - 1 - currentRow) * bytesPerLineBmp;
-      BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
-      BitReader readerReference;
-      if (referenceRow != 0xffffffff)
-      {
-        uint bytesOffsetReadReference = bytesFileOffset + (height - 1 - referenceRow) * bytesPerLineBmp;
-        readerReference = new BitReader(imageBits, bytesOffsetReadReference, width);
-      }
-      else
-      {
-        byte[] tmpImageBits = new byte[bytesPerLineBmp];
-        for (int i = 0; i < bytesPerLineBmp; ++i)
-          tmpImageBits[i] = 255;
-        readerReference = new BitReader(tmpImageBits, 0, width);
-      }
-
-      uint a0 = 0;
-      uint a1 = !reader.GetBit(0) ? 0 : FindDifference(reader, 0, width, true);
-      uint b1 = !readerReference.GetBit(0) ? 0 : FindDifference(readerReference, 0, width, true);
-// ReSharper disable TooWideLocalVariableScope
-      uint a2, b2;
-// ReSharper restore TooWideLocalVariableScope
-
-      for (; ; )
-      {
-        b2 = FindDifferenceWithCheck(readerReference, b1, width, readerReference.GetBit(b1));
-        if (b2 >= a1)
-        {
-          int d = (int)b1 - (int)a1;
-          if (!(-3 <= d && d <= 3))
-          { 
-            /* horizontal mode */
-            a2 = FindDifferenceWithCheck(reader, a1, width, reader.GetBit(a1));
-            writer.WriteTableLine(HorizontalCodes, 0);
-
-            if (a0 + a1 == 0 || reader.GetBit(a0))
+            uint found = 0;
+            for (; ; )
             {
-              WriteSample(writer, a1 - a0, true);
-              WriteSample(writer, a2 - a1, false);
+                uint bits;
+                int @byte = reader.PeekByte(out bits);
+                uint hits = OneRuns[@byte];
+                if (hits < bits)
+                {
+                    if (hits > 0)
+                        reader.SkipBits(hits);
+                    return found + hits;
+                }
+                found += bits;
+                if (found >= bitsLeft)
+                    return bitsLeft;
+                reader.NextByte();
+            }
+        }
+
+        /// <summary>
+        /// Counts the consecutive zero bits in an image line.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="bitsLeft">The bits left.</param>
+        private static uint CountZeroBits(BitReader reader, uint bitsLeft)
+        {
+            uint found = 0;
+            for (; ; )
+            {
+                uint bits;
+                int @byte = reader.PeekByte(out bits);
+                uint hits = ZeroRuns[@byte];
+                if (hits < bits)
+                {
+                    if (hits > 0)
+                        reader.SkipBits(hits);
+                    return found + hits;
+                }
+                found += bits;
+                if (found >= bitsLeft)
+                    return bitsLeft;
+                reader.NextByte();
+            }
+        }
+
+        /// <summary>
+        /// Returns the offset of the next bit in the range
+        /// [bitStart..bitEnd] that is different from the
+        /// specified color.  The end, bitEnd, is returned
+        /// if no such bit exists.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="bitStart">The offset of the start bit.</param>
+        /// <param name="bitEnd">The offset of the end bit.</param>
+        /// <param name="searchOne">If set to <c>true</c> searches "one" (i. e. white), otherwise searches black.</param>
+        /// <returns>The offset of the first non-matching bit.</returns>
+        private static uint FindDifference(BitReader reader, uint bitStart, uint bitEnd, bool searchOne)
+        {
+            // Translated from LibTiff
+            reader.SetPosition(bitStart);
+            return (bitStart + (searchOne ? CountOneBits(reader, bitEnd - bitStart) : CountZeroBits(reader, bitEnd - bitStart)));
+        }
+
+        /// <summary>
+        /// Returns the offset of the next bit in the range
+        /// [bitStart..bitEnd] that is different from the
+        /// specified color.  The end, bitEnd, is returned
+        /// if no such bit exists.
+        /// Like FindDifference, but also check the
+        /// starting bit against the end in case start > end.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="bitStart">The offset of the start bit.</param>
+        /// <param name="bitEnd">The offset of the end bit.</param>
+        /// <param name="searchOne">If set to <c>true</c> searches "one" (i. e. white), otherwise searches black.</param>
+        /// <returns>The offset of the first non-matching bit.</returns>
+        private static uint FindDifferenceWithCheck(BitReader reader, uint bitStart, uint bitEnd, bool searchOne)
+        {
+            // Translated from LibTiff
+            return ((bitStart < bitEnd) ? FindDifference(reader, bitStart, bitEnd, searchOne) : bitEnd);
+        }
+
+        /// <summary>
+        /// 2d-encode a row of pixels. Consult the CCITT documentation for the algorithm.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
+        /// <param name="imageBits">The bitmap file.</param>
+        /// <param name="currentRow">Index of the current row.</param>
+        /// <param name="referenceRow">Index of the reference row (0xffffffff if there is none).</param>
+        /// <param name="width">The width of the image.</param>
+        /// <param name="height">The height of the image.</param>
+        /// <param name="bytesPerLineBmp">The bytes per line in the bitmap file.</param>
+        static void FaxEncode2DRow(BitWriter writer, uint bytesFileOffset, byte[] imageBits, uint currentRow, uint referenceRow, uint width, uint height, uint bytesPerLineBmp)
+        {
+            // Translated from LibTiff
+            uint bytesOffsetRead = bytesFileOffset + (height - 1 - currentRow) * bytesPerLineBmp;
+            BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
+            BitReader readerReference;
+            if (referenceRow != 0xffffffff)
+            {
+                uint bytesOffsetReadReference = bytesFileOffset + (height - 1 - referenceRow) * bytesPerLineBmp;
+                readerReference = new BitReader(imageBits, bytesOffsetReadReference, width);
             }
             else
             {
-              WriteSample(writer, a1 - a0, false);
-              WriteSample(writer, a2 - a1, true);
+                byte[] tmpImageBits = new byte[bytesPerLineBmp];
+                for (int i = 0; i < bytesPerLineBmp; ++i)
+                    tmpImageBits[i] = 255;
+                readerReference = new BitReader(tmpImageBits, 0, width);
             }
-            a0 = a2;
-          }
-          else
-          { 
-            /* vertical mode */
-            writer.WriteTableLine(VerticalCodes, (uint)(d + 3));
-            a0 = a1;
-          }
-        }
-        else
-        { 
-          /* pass mode */
-          writer.WriteTableLine(PassCodes, 0);
-          a0 = b2;
-        }
-        if (a0 >= width)
-          break;
-        bool bitA0 = reader.GetBit(a0);
-        a1 = FindDifference(reader, a0, width, bitA0/*reader.GetBit(a0)*/);
-        b1 = FindDifference(readerReference, a0, width, !bitA0/*reader.GetBit(a0)*/);
-        b1 = FindDifferenceWithCheck(readerReference, b1, width, bitA0/*reader.GetBit(a0)*/);
-      }
-    }
 
-    /// <summary>
-    /// Encodes a bitonal bitmap using 1D CCITT fax encoding.
-    /// </summary>
-    /// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
-    /// <param name="imageBits">The bitmap to be encoded.</param>
-    /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    /// <returns>The size of the fax encoded image (0 on failure).</returns>
-    private static int DoFaxEncoding(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height)
-    {
-      try
-      {
-        uint bytesPerLineBmp = ((width + 31) / 32) * 4;
-        BitWriter writer = new BitWriter(ref imageData);
-        for (uint y = 0; y < height; ++y)
-        {
-          uint bytesOffsetRead = bytesFileOffset + (height - 1 - y) * bytesPerLineBmp;
-          BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
-          for (uint bitsRead = 0; bitsRead < width; )
-          {
-            uint white = CountOneBits(reader, width - bitsRead);
-            WriteSample(writer, white, true);
-            bitsRead += white;
-            if (bitsRead < width)
+            uint a0 = 0;
+            uint a1 = !reader.GetBit(0) ? 0 : FindDifference(reader, 0, width, true);
+            uint b1 = !readerReference.GetBit(0) ? 0 : FindDifference(readerReference, 0, width, true);
+            // ReSharper disable TooWideLocalVariableScope
+            uint a2, b2;
+            // ReSharper restore TooWideLocalVariableScope
+
+            for (; ; )
             {
-              uint black = CountZeroBits(reader, width - bitsRead);
-              WriteSample(writer, black, false);
-              bitsRead += black;
+                b2 = FindDifferenceWithCheck(readerReference, b1, width, readerReference.GetBit(b1));
+                if (b2 >= a1)
+                {
+                    int d = (int)b1 - (int)a1;
+                    if (d is not (>= (-3) and <= 3))
+                    {
+                        /* horizontal mode */
+                        a2 = FindDifferenceWithCheck(reader, a1, width, reader.GetBit(a1));
+                        writer.WriteTableLine(HorizontalCodes, 0);
+
+                        if (a0 + a1 == 0 || reader.GetBit(a0))
+                        {
+                            WriteSample(writer, a1 - a0, true);
+                            WriteSample(writer, a2 - a1, false);
+                        }
+                        else
+                        {
+                            WriteSample(writer, a1 - a0, false);
+                            WriteSample(writer, a2 - a1, true);
+                        }
+                        a0 = a2;
+                    }
+                    else
+                    {
+                        /* vertical mode */
+                        writer.WriteTableLine(VerticalCodes, (uint)(d + 3));
+                        a0 = a1;
+                    }
+                }
+                else
+                {
+                    /* pass mode */
+                    writer.WriteTableLine(PassCodes, 0);
+                    a0 = b2;
+                }
+                if (a0 >= width)
+                    break;
+                bool bitA0 = reader.GetBit(a0);
+                a1 = FindDifference(reader, a0, width, bitA0/*reader.GetBit(a0)*/);
+                b1 = FindDifference(readerReference, a0, width, !bitA0/*reader.GetBit(a0)*/);
+                b1 = FindDifferenceWithCheck(readerReference, b1, width, bitA0/*reader.GetBit(a0)*/);
             }
-          }
         }
-        writer.FlushBuffer();
-        return writer.BytesWritten();
-      }
-      catch (Exception /*ex*/)
-      {
-        //ex.GetType();
-        return 0;
-      }
-    }
 
-    //[Obsolete]
-    ///// <summary>
-    ///// Encodes a bitonal bitmap using 2D group 3 CCITT fax encoding.
-    ///// </summary>
-    ///// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
-    ///// <param name="imageBits">The bitmap to be encoded.</param>
-    ///// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
-    ///// <param name="width">The width of the image.</param>
-    ///// <param name="height">The height of the image.</param>
-    ///// <param name="dpiY">The horizontal dpi of the image (needed to determine K).</param>
-    ///// <param name="k">The K parameter (passed to the PDF file).</param>
-    ///// <returns>The size of the fax encoded image (0 on failure).</returns>
-    //private static int DoFaxEncoding2D(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height, uint dpiY, out uint k)
-    //{
-    //  // It seems that either pure 1D or pure 2D encoding creates smaller files than this mixed 1D/2D encoding.
-    //  // Therefore this routine is not currently in use, but is left here for further research.
-    //  try
-    //  {
-    //    k = (dpiY > 199) ? (uint)4 : (uint)2;
-    //    uint bytesPerLineBmp = ((width + 31) / 32) * 4;
-    //    BitWriter writer = new BitWriter(ref imageData);
-    //    uint kTmp = 0;
-    //    for (uint y = 0; y < height; ++y)
-    //    {
-    //      if (kTmp == 0)
-    //      {
-    //        kTmp = k - 1;
-    //        uint bytesOffsetRead = bytesFileOffset + (height - 1 - y) * bytesPerLineBmp;
-    //        BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
-    //        for (uint bitsRead = 0; bitsRead < width; )
-    //        {
-    //          uint white = CountOneBits(reader, width - bitsRead);
-    //          WriteSample(writer, white, true);
-    //          bitsRead += white;
-    //          if (bitsRead < width)
-    //          {
-    //            uint black = CountZeroBits(reader, width - bitsRead);
-    //            WriteSample(writer, black, false);
-    //            bitsRead += black;
-    //          }
-    //        }
-    //      }
-    //      else
-    //      {
-    //        uint refLine = y - 1;
-    //        FaxEncode2DRow(writer, bytesFileOffset, imageBits, y, refLine, width, height, bytesPerLineBmp);
-    //        --kTmp;
-    //      }
-    //    }
-    //    writer.FlushBuffer();
-    //    return writer.BytesWritten();
-    //  }
-    //  catch (Exception ex)
-    //  {
-    //    ex.GetType();
-    //    k = 0;
-    //    return 0;
-    //  }
-    //}
-
-    /// <summary>
-    /// Encodes a bitonal bitmap using 2D group 4 CCITT fax encoding.
-    /// </summary>
-    /// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
-    /// <param name="imageBits">The bitmap to be encoded.</param>
-    /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    /// <returns>The size of the fax encoded image (0 on failure).</returns>
-    private static int DoFaxEncodingGroup4(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height)
-    {
-      try
-      {
-        uint bytesPerLineBmp = ((width + 31) / 32) * 4;
-        BitWriter writer = new BitWriter(ref imageData);
-        for (uint y = 0; y < height; ++y)
+        /// <summary>
+        /// Encodes a bitonal bitmap using 1D CCITT fax encoding.
+        /// </summary>
+        /// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
+        /// <param name="imageBits">The bitmap to be encoded.</param>
+        /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
+        /// <param name="width">The width of the image.</param>
+        /// <param name="height">The height of the image.</param>
+        /// <returns>The size of the fax encoded image (0 on failure).</returns>
+        private static int DoFaxEncoding(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height)
         {
-          FaxEncode2DRow(writer, bytesFileOffset, imageBits, y, (y != 0) ? y - 1 : 0xffffffff, width, height, bytesPerLineBmp);
+            try
+            {
+                uint bytesPerLineBmp = ((width + 31) / 32) * 4;
+                BitWriter writer = new BitWriter(ref imageData);
+                for (uint y = 0; y < height; ++y)
+                {
+                    uint bytesOffsetRead = bytesFileOffset + (height - 1 - y) * bytesPerLineBmp;
+                    BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
+                    for (uint bitsRead = 0; bitsRead < width;)
+                    {
+                        uint white = CountOneBits(reader, width - bitsRead);
+                        WriteSample(writer, white, true);
+                        bitsRead += white;
+                        if (bitsRead < width)
+                        {
+                            uint black = CountZeroBits(reader, width - bitsRead);
+                            WriteSample(writer, black, false);
+                            bitsRead += black;
+                        }
+                    }
+                }
+                writer.FlushBuffer();
+                return writer.BytesWritten();
+            }
+            catch (Exception /*ex*/)
+            {
+                //ex.GetType();
+                return 0;
+            }
         }
-        writer.FlushBuffer();
-        return writer.BytesWritten();
-      }
-      catch (Exception ex)
-      {
-        ex.GetType();
-        return 0;
-      }
+
+        //[Obsolete]
+        ///// <summary>
+        ///// Encodes a bitonal bitmap using 2D group 3 CCITT fax encoding.
+        ///// </summary>
+        ///// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
+        ///// <param name="imageBits">The bitmap to be encoded.</param>
+        ///// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
+        ///// <param name="width">The width of the image.</param>
+        ///// <param name="height">The height of the image.</param>
+        ///// <param name="dpiY">The horizontal dpi of the image (needed to determine K).</param>
+        ///// <param name="k">The K parameter (passed to the PDF file).</param>
+        ///// <returns>The size of the fax encoded image (0 on failure).</returns>
+        //private static int DoFaxEncoding2D(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height, uint dpiY, out uint k)
+        //{
+        //  // It seems that either pure 1D or pure 2D encoding creates smaller files than this mixed 1D/2D encoding.
+        //  // Therefore this routine is not currently in use, but is left here for further research.
+        //  try
+        //  {
+        //    k = (dpiY > 199) ? (uint)4 : (uint)2;
+        //    uint bytesPerLineBmp = ((width + 31) / 32) * 4;
+        //    BitWriter writer = new BitWriter(ref imageData);
+        //    uint kTmp = 0;
+        //    for (uint y = 0; y < height; ++y)
+        //    {
+        //      if (kTmp == 0)
+        //      {
+        //        kTmp = k - 1;
+        //        uint bytesOffsetRead = bytesFileOffset + (height - 1 - y) * bytesPerLineBmp;
+        //        BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
+        //        for (uint bitsRead = 0; bitsRead < width; )
+        //        {
+        //          uint white = CountOneBits(reader, width - bitsRead);
+        //          WriteSample(writer, white, true);
+        //          bitsRead += white;
+        //          if (bitsRead < width)
+        //          {
+        //            uint black = CountZeroBits(reader, width - bitsRead);
+        //            WriteSample(writer, black, false);
+        //            bitsRead += black;
+        //          }
+        //        }
+        //      }
+        //      else
+        //      {
+        //        uint refLine = y - 1;
+        //        FaxEncode2DRow(writer, bytesFileOffset, imageBits, y, refLine, width, height, bytesPerLineBmp);
+        //        --kTmp;
+        //      }
+        //    }
+        //    writer.FlushBuffer();
+        //    return writer.BytesWritten();
+        //  }
+        //  catch (Exception ex)
+        //  {
+        //    ex.GetType();
+        //    k = 0;
+        //    return 0;
+        //  }
+        //}
+
+        /// <summary>
+        /// Encodes a bitonal bitmap using 2D group 4 CCITT fax encoding.
+        /// </summary>
+        /// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
+        /// <param name="imageBits">The bitmap to be encoded.</param>
+        /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
+        /// <param name="width">The width of the image.</param>
+        /// <param name="height">The height of the image.</param>
+        /// <returns>The size of the fax encoded image (0 on failure).</returns>
+        private static int DoFaxEncodingGroup4(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height)
+        {
+            try
+            {
+                uint bytesPerLineBmp = ((width + 31) / 32) * 4;
+                BitWriter writer = new BitWriter(ref imageData);
+                for (uint y = 0; y < height; ++y)
+                {
+                    FaxEncode2DRow(writer, bytesFileOffset, imageBits, y, (y != 0) ? y - 1 : 0xffffffff, width, height, bytesPerLineBmp);
+                }
+                writer.FlushBuffer();
+                return writer.BytesWritten();
+            }
+            catch (Exception ex)
+            {
+                ex.GetType();
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Writes the image data.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="count">The count of bits (pels) to encode.</param>
+        /// <param name="white">The color of the pels.</param>
+        private static void WriteSample(BitWriter writer, uint count, bool white)
+        {
+            uint[] terminatingCodes = white ? WhiteTerminatingCodes : BlackTerminatingCodes;
+            uint[] makeUpCodes = white ? WhiteMakeUpCodes : BlackMakeUpCodes;
+
+            // The make-up code for 2560 will be written as often as required:
+            while (count >= 2624)
+            {
+                writer.WriteTableLine(makeUpCodes, 39); // Magic: 2560
+                count -= 2560;
+            }
+            // A make-up code for a multiple of 64 will be written if required:
+            if (count > 63)
+            {
+                uint line = count / 64 - 1;
+                writer.WriteTableLine(makeUpCodes, line);
+                count -= (line + 1) * 64;
+            }
+            // And finally the terminating code for the remaining value (0 through 63):
+            writer.WriteTableLine(terminatingCodes, count);
+        }
     }
 
     /// <summary>
-    /// Writes the image data.
+    /// The BitReader class is a helper to read bits from an in-memory bitmap file.
     /// </summary>
-    /// <param name="writer">The writer.</param>
-    /// <param name="count">The count of bits (pels) to encode.</param>
-    /// <param name="white">The color of the pels.</param>
-    private static void WriteSample(BitWriter writer, uint count, bool white)
+    class BitReader
     {
-      uint[] terminatingCodes = white ? WhiteTerminatingCodes : BlackTerminatingCodes;
-      uint[] makeUpCodes = white ? WhiteMakeUpCodes : BlackMakeUpCodes;
+        readonly byte[] imageBits;
+        uint bytesOffsetRead;
+        readonly uint bytesFileOffset;
+        byte buffer;
+        uint bitsInBuffer;
+        readonly uint bitsTotal; // Bits we may read (bits per image line)
 
-      // The make-up code for 2560 will be written as often as required:
-      while (count >= 2624)
-      {
-        writer.WriteTableLine(makeUpCodes, 39); // Magic: 2560
-        count -= 2560;
-      }
-      // A make-up code for a multiple of 64 will be written if required:
-      if (count > 63)
-      {
-        uint line = count / 64 - 1;
-        writer.WriteTableLine(makeUpCodes, line);
-        count -= (line + 1) * 64;
-      }
-      // And finally the terminating code for the remaining value (0 through 63):
-      writer.WriteTableLine(terminatingCodes, count);
-    }
-  }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitReader"/> class.
+        /// </summary>
+        /// <param name="imageBits">The in-memory bitmap file.</param>
+        /// <param name="bytesFileOffset">The offset of the line to read.</param>
+        /// <param name="bits">The count of bits that may be read (i. e. the width of the image for normal usage).</param>
+        internal BitReader(byte[] imageBits, uint bytesFileOffset, uint bits)
+        {
+            this.imageBits = imageBits;
+            this.bytesFileOffset = bytesFileOffset;
+            bitsTotal = bits;
+            bytesOffsetRead = bytesFileOffset;
+            buffer = imageBits[bytesOffsetRead];
+            bitsInBuffer = 8;
+        }
 
-  /// <summary>
-  /// The BitReader class is a helper to read bits from an in-memory bitmap file.
-  /// </summary>
-  class BitReader
-  {
-    readonly byte[] imageBits;
-    uint bytesOffsetRead;
-    readonly uint bytesFileOffset;
-    byte buffer;
-    uint bitsInBuffer;
-    readonly uint bitsTotal; // Bits we may read (bits per image line)
+        /// <summary>
+        /// Sets the position within the line (needed for 2D encoding).
+        /// </summary>
+        /// <param name="position">The new position.</param>
+        internal void SetPosition(uint position)
+        {
+            bytesOffsetRead = bytesFileOffset + (position >> 3);
+            buffer = imageBits[bytesOffsetRead];
+            bitsInBuffer = 8 - (position & 0x07);
+        }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BitReader"/> class.
-    /// </summary>
-    /// <param name="imageBits">The in-memory bitmap file.</param>
-    /// <param name="bytesFileOffset">The offset of the line to read.</param>
-    /// <param name="bits">The count of bits that may be read (i. e. the width of the image for normal usage).</param>
-    internal BitReader(byte[] imageBits, uint bytesFileOffset, uint bits)
-    {
-      this.imageBits = imageBits;
-      this.bytesFileOffset = bytesFileOffset;
-      bitsTotal = bits;
-      bytesOffsetRead = bytesFileOffset;
-      buffer = imageBits[bytesOffsetRead];
-      bitsInBuffer = 8;
-    }
+        /// <summary>
+        /// Gets a single bit at the specified position.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>True if bit is set.</returns>
+        internal bool GetBit(uint position)
+        {
+            if (position >= bitsTotal)
+                return false;
+            SetPosition(position);
+            uint dummy;
+            return (PeekByte(out dummy) & 0x80) > 0;
+        }
 
-    /// <summary>
-    /// Sets the position within the line (needed for 2D encoding).
-    /// </summary>
-    /// <param name="position">The new position.</param>
-    internal void SetPosition(uint position)
-    {
-      bytesOffsetRead = bytesFileOffset + (position >> 3);
-      buffer = imageBits[bytesOffsetRead];
-      bitsInBuffer = 8 - (position & 0x07);
-    }
+        /// <summary>
+        /// Returns the bits that are in the buffer (without changing the position).
+        /// Data is MSB aligned.
+        /// </summary>
+        /// <param name="bits">The count of bits that were returned (1 through 8).</param>
+        /// <returns>The MSB aligned bits from the buffer.</returns>
+        internal byte PeekByte(out uint bits)
+        {
+            // TODO: try to make this faster!
+            if (bitsInBuffer == 8)
+            {
+                bits = 8;
+                return buffer;
+            }
+            bits = bitsInBuffer;
+            return (byte)(buffer << (int)(8 - bitsInBuffer));
+        }
 
-    /// <summary>
-    /// Gets a single bit at the specified position.
-    /// </summary>
-    /// <param name="position">The position.</param>
-    /// <returns>True if bit is set.</returns>
-    internal bool GetBit(uint position)
-    {
-      if (position >= bitsTotal)
-        return false;
-      SetPosition(position);
-      uint dummy;
-      return (PeekByte(out dummy) & 0x80) > 0;
-    }
+        /// <summary>
+        /// Moves the buffer to the next byte.
+        /// </summary>
+        internal void NextByte()
+        {
+            buffer = imageBits[++bytesOffsetRead];
+            bitsInBuffer = 8;
+        }
 
-    /// <summary>
-    /// Returns the bits that are in the buffer (without changing the position).
-    /// Data is MSB aligned.
-    /// </summary>
-    /// <param name="bits">The count of bits that were returned (1 through 8).</param>
-    /// <returns>The MSB aligned bits from the buffer.</returns>
-    internal byte PeekByte(out uint bits)
-    {
-      // TODO: try to make this faster!
-      if (bitsInBuffer == 8)
-      {
-        bits = 8;
-        return buffer;
-      }
-      bits = bitsInBuffer;
-      return (byte)(buffer << (int)(8 - bitsInBuffer));
+        /// <summary>
+        /// "Removes" (eats) bits from the buffer.
+        /// </summary>
+        /// <param name="bits">The count of bits that were processed.</param>
+        internal void SkipBits(uint bits)
+        {
+            Debug.Assert(bits <= bitsInBuffer, "Buffer underrun");
+            if (bits == bitsInBuffer)
+            {
+                NextByte();
+                return;
+            }
+            bitsInBuffer -= bits;
+        }
     }
 
     /// <summary>
-    /// Moves the buffer to the next byte.
+    /// A helper class for writing groups of bits into an array of bytes.
     /// </summary>
-    internal void NextByte()
+    class BitWriter
     {
-      buffer = imageBits[++bytesOffsetRead];
-      bitsInBuffer = 8;
-    }
+        int bytesOffsetWrite;
+        readonly byte[] imageData;
+        uint buffer;
+        uint bitsInBuffer;
 
-    /// <summary>
-    /// "Removes" (eats) bits from the buffer.
-    /// </summary>
-    /// <param name="bits">The count of bits that were processed.</param>
-    internal void SkipBits(uint bits)
-    {
-      Debug.Assert(bits <= bitsInBuffer, "Buffer underrun");
-      if (bits == bitsInBuffer)
-      {
-        NextByte();
-        return;
-      }
-      bitsInBuffer -= bits;
-    }
-  }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitWriter"/> class.
+        /// </summary>
+        /// <param name="imageData">The byte array to be written to.</param>
+        internal BitWriter(ref byte[] imageData)
+        {
+            this.imageData = imageData;
+        }
 
-  /// <summary>
-  /// A helper class for writing groups of bits into an array of bytes.
-  /// </summary>
-  class BitWriter
-  {
-    int bytesOffsetWrite;
-    readonly byte[] imageData;
-    uint buffer;
-    uint bitsInBuffer;
+        /// <summary>
+        /// Writes the buffered bits into the byte array.
+        /// </summary>
+        internal void FlushBuffer()
+        {
+            if (bitsInBuffer > 0)
+            {
+                uint bits = 8 - bitsInBuffer;
+                WriteBits(0, bits);
+            }
+        }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BitWriter"/> class.
-    /// </summary>
-    /// <param name="imageData">The byte array to be written to.</param>
-    internal BitWriter(ref byte[] imageData)
-    {
-      this.imageData = imageData;
-    }
+        /// <summary>
+        /// Masks for n bits in a byte (with n = 0 through 8).
+        /// </summary>
+        static readonly uint[] masks = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
-    /// <summary>
-    /// Writes the buffered bits into the byte array.
-    /// </summary>
-    internal void FlushBuffer()
-    {
-      if (bitsInBuffer > 0)
-      {
-        uint bits = 8 - bitsInBuffer;
-        WriteBits(0, bits);
-      }
-    }
-
-    /// <summary>
-    /// Masks for n bits in a byte (with n = 0 through 8).
-    /// </summary>
-    static readonly uint[] masks = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
-
-    /// <summary>
-    /// Writes bits to the byte array.
-    /// </summary>
-    /// <param name="value">The bits to be written (LSB aligned).</param>
-    /// <param name="bits">The count of bits.</param>
-    internal void WriteBits(uint value, uint bits)
-    {
+        /// <summary>
+        /// Writes bits to the byte array.
+        /// </summary>
+        /// <param name="value">The bits to be written (LSB aligned).</param>
+        /// <param name="bits">The count of bits.</param>
+        internal void WriteBits(uint value, uint bits)
+        {
 #if true
-    // TODO: Try to make this faster!
+        // TODO: Try to make this faster!
 
-    // If we have to write more bits than fit into the buffer, we fill
-    // the buffer and call the same routine recursively for the rest.
+        // If we have to write more bits than fit into the buffer, we fill
+        // the buffer and call the same routine recursively for the rest.
 #if USE_GOTO
-    // Use GOTO instead of end recursion: (is this faster?)
-    SimulateRecursion:
+        // Use GOTO instead of end recursion: (is this faster?)
+        SimulateRecursion:
 #endif
-      if (bits + bitsInBuffer > 8)
-      {
-        // We can't add all bits this time.
-        uint bitsNow = 8 - bitsInBuffer;
-        uint bitsRemainder = bits - bitsNow;
-        WriteBits(value >> (int)(bitsRemainder), bitsNow); // that fits
+            if (bits + bitsInBuffer > 8)
+            {
+                // We can't add all bits this time.
+                uint bitsNow = 8 - bitsInBuffer;
+                uint bitsRemainder = bits - bitsNow;
+                WriteBits(value >> (int)(bitsRemainder), bitsNow); // that fits
 #if USE_GOTO
-        bits = bitsRemainder;
-        goto SimulateRecursion;
+                bits = bitsRemainder;
+                goto SimulateRecursion;
 #else
         WriteBits(value, bitsRemainder);
         return;
 #endif
-      }
+            }
 
-      buffer = (buffer << (int)bits) + (value & masks[bits]);
-      bitsInBuffer += bits;
+            buffer = (buffer << (int)bits) + (value & masks[bits]);
+            bitsInBuffer += bits;
 
-      if (bitsInBuffer == 8)
-      {
-        imageData[bytesOffsetWrite] = (byte)buffer;
-        bitsInBuffer = 0;
-        ++bytesOffsetWrite;
-      }
+            if (bitsInBuffer == 8)
+            {
+                imageData[bytesOffsetWrite] = (byte)buffer;
+                bitsInBuffer = 0;
+                ++bytesOffsetWrite;
+            }
 #else
       // Simple implementation writing bit by bit:
       int mask = 1 << (int)(bits - 1);
@@ -865,36 +865,36 @@ namespace PdfSharp.Pdf.Advanced
         }
       }
 #endif
-    }
+        }
 
-    /// <summary>
-    /// Writes a line from a look-up table.
-    /// A "line" in the table are two integers, one containing the values, one containing the bit count.
-    /// </summary>
-    /// <param name="table">The table.</param>
-    /// <param name="line">The line.</param>
-    internal void WriteTableLine(uint[] table, uint line)
-    {
-      uint value = table[line * 2];
-      uint bits = table[line * 2 + 1];
-      WriteBits(value, bits);
-    }
+        /// <summary>
+        /// Writes a line from a look-up table.
+        /// A "line" in the table are two integers, one containing the values, one containing the bit count.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="line">The line.</param>
+        internal void WriteTableLine(uint[] table, uint line)
+        {
+            uint value = table[line * 2];
+            uint bits = table[line * 2 + 1];
+            WriteBits(value, bits);
+        }
 
-    [Obsolete]
-    internal void WriteEOL()
-    {
-      // Not needed for PDF.
-      WriteTableLine(PdfImage.WhiteMakeUpCodes, 40);
-    }
+        [Obsolete]
+        internal void WriteEOL()
+        {
+            // Not needed for PDF.
+            WriteTableLine(PdfImage.WhiteMakeUpCodes, 40);
+        }
 
-    /// <summary>
-    /// Flushes the buffer and returns the count of bytes written to the array.
-    /// </summary>
-    /// <returns></returns>
-    internal int BytesWritten()
-    {
-      FlushBuffer();
-      return bytesOffsetWrite;
+        /// <summary>
+        /// Flushes the buffer and returns the count of bytes written to the array.
+        /// </summary>
+        /// <returns></returns>
+        internal int BytesWritten()
+        {
+            FlushBuffer();
+            return bytesOffsetWrite;
+        }
     }
-  }
 }

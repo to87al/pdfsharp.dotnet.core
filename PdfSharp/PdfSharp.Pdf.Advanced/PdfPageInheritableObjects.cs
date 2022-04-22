@@ -28,54 +28,47 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
-using PdfSharp.Pdf.IO;
-using PdfSharp.Drawing;
 
 namespace PdfSharp.Pdf.Advanced
 {
-  /// <summary>
-  /// Represents a PDF page object.
-  /// </summary>
-  internal class PdfPageInheritableObjects : PdfDictionary
-  {
-    public PdfPageInheritableObjects()
-    {
-    }
-
-    // TODO Inheritable Resources not yet supported
-
     /// <summary>
-    /// 
+    /// Represents a PDF page object.
     /// </summary>
-    public PdfRectangle MediaBox
+    internal class PdfPageInheritableObjects : PdfDictionary
     {
-      get {return this.mediaBox;}
-      set {this.mediaBox = value;}
-    }
-    PdfRectangle mediaBox;
+        public PdfPageInheritableObjects()
+        {
+        }
 
-    public PdfRectangle CropBox
-    {
-      get {return this.cropBox;}
-      set {this.cropBox = value;}
-    }
-    PdfRectangle cropBox;
+        // TODO Inheritable Resources not yet supported
 
-    public int Rotate
-    {
-      get {return this.rotate;}
-      set 
-      {
-        if (value % 90 != 0)
-          throw new ArgumentException("Rotate", "The value must be a multiple of 90.");
-        this.rotate = value;
-      }
+        /// <summary>
+        /// 
+        /// </summary>
+        public PdfRectangle MediaBox
+        {
+            get { return this.mediaBox; }
+            set { this.mediaBox = value; }
+        }
+        PdfRectangle mediaBox;
+
+        public PdfRectangle CropBox
+        {
+            get { return this.cropBox; }
+            set { this.cropBox = value; }
+        }
+        PdfRectangle cropBox;
+
+        public int Rotate
+        {
+            get { return this.rotate; }
+            set
+            {
+                if (value % 90 != 0)
+                    throw new ArgumentException("Rotate", "The value must be a multiple of 90.");
+                this.rotate = value;
+            }
+        }
+        int rotate;
     }
-    int rotate;
-  }
 }

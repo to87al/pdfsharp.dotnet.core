@@ -29,24 +29,24 @@
 
 namespace PdfSharp.Windows
 {
-  /// <summary>
-  /// Specifies how to render the preview.
-  /// </summary>
-  public enum RenderMode
-  {
     /// <summary>
-    /// Draw retained
+    /// Specifies how to render the preview.
     /// </summary>
-    Default = 0,
+    public enum RenderMode
+    {
+        /// <summary>
+        /// Draw retained
+        /// </summary>
+        Default = 0,
 
-    ///// <summary>
-    ///// Draw using a metafile
-    ///// </summary>
-    //Metafile = 1,
+        ///// <summary>
+        ///// Draw using a metafile
+        ///// </summary>
+        //Metafile = 1,
 
-    ///// <summary>
-    ///// Draw using a bitmap image.
-    ///// </summary>
-    //Bitmap = 2
-  }
+        ///// <summary>
+        ///// Draw using a bitmap image.
+        ///// </summary>
+        //Bitmap = 2
+    }
 }

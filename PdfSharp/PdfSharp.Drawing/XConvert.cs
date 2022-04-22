@@ -27,7 +27,6 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -38,11 +37,11 @@ using System.Windows.Media;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Converts XGraphics enums to GDI+ enums.
-  /// </summary>
-  static class XConvert
-  {
+    /// <summary>
+    /// Converts XGraphics enums to GDI+ enums.
+    /// </summary>
+    static class XConvert
+    {
 #if GDI
     /// <summary>
     /// Converts XLineJoin to LineJoin.
@@ -66,25 +65,25 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    /// <summary>
-    /// Converts XLineJoin to PenLineJoin.
-    /// </summary>
-    public static PenLineJoin ToPenLineJoin(XLineJoin lineJoin)
-    {
-      return wpfLineJoin[(int)lineJoin];
-    }
-    static readonly PenLineJoin[] wpfLineJoin = new PenLineJoin[] { PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel };
+        /// <summary>
+        /// Converts XLineJoin to PenLineJoin.
+        /// </summary>
+        public static PenLineJoin ToPenLineJoin(XLineJoin lineJoin)
+        {
+            return wpfLineJoin[(int)lineJoin];
+        }
+        static readonly PenLineJoin[] wpfLineJoin = new PenLineJoin[] { PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel };
 #endif
 
 #if WPF
-    /// <summary>
-    /// Converts XLineCap to PenLineCap.
-    /// </summary>
-    public static PenLineCap ToPenLineCap(XLineCap lineCap)
-    {
-      return wpfLineCap[(int)lineCap];
-    }
-    static readonly PenLineCap[] wpfLineCap = new PenLineCap[] { PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square };
+        /// <summary>
+        /// Converts XLineCap to PenLineCap.
+        /// </summary>
+        public static PenLineCap ToPenLineCap(XLineCap lineCap)
+        {
+            return wpfLineCap[(int)lineCap];
+        }
+        static readonly PenLineCap[] wpfLineCap = new PenLineCap[] { PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square };
 #endif
-  }
+    }
 }

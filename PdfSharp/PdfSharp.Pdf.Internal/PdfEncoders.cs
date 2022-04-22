@@ -27,15 +27,12 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
+using PdfSharp.Drawing;
+using PdfSharp.Pdf.Security;
 using System;
 using System.Diagnostics;
-using System.Collections;
 using System.Globalization;
 using System.Text;
-using PdfSharp.Drawing;
-using System.IO;
-using PdfSharp.Internal;
-using PdfSharp.Pdf.Security;
 
 namespace PdfSharp.Pdf.Internal
 {
@@ -236,29 +233,14 @@ namespace PdfSharp.Pdf.Internal
         {
             if (String.IsNullOrEmpty(text))
                 return "()";
-
-            byte[] bytes;
-            switch (encoding)
+            byte[] bytes = encoding switch
             {
-                case PdfStringEncoding.RawEncoding:
-                    bytes = RawEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.WinAnsiEncoding:
-                    bytes = WinAnsiEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.PDFDocEncoding:
-                    bytes = DocEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.Unicode:
-                    bytes = UnicodeEncoding.GetBytes(text);
-                    break;
-
-                default:
-                    throw new NotImplementedException(encoding.ToString());
-            }
+                PdfStringEncoding.RawEncoding => RawEncoding.GetBytes(text),
+                PdfStringEncoding.WinAnsiEncoding => WinAnsiEncoding.GetBytes(text),
+                PdfStringEncoding.PDFDocEncoding => DocEncoding.GetBytes(text),
+                PdfStringEncoding.Unicode => UnicodeEncoding.GetBytes(text),
+                _ => throw new NotImplementedException(encoding.ToString()),
+            };
             byte[] temp = FormatStringLiteral(bytes, encoding == PdfStringEncoding.Unicode, true, false, securityHandler);
             return RawEncoding.GetString(temp, 0, temp.Length);
         }
@@ -282,30 +264,14 @@ namespace PdfSharp.Pdf.Internal
         {
             if (String.IsNullOrEmpty(text))
                 return "<>";
-
-            byte[] bytes;
-            switch (encoding)
+            byte[] bytes = encoding switch
             {
-                case PdfStringEncoding.RawEncoding:
-                    bytes = RawEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.WinAnsiEncoding:
-                    bytes = WinAnsiEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.PDFDocEncoding:
-                    bytes = DocEncoding.GetBytes(text);
-                    break;
-
-                case PdfStringEncoding.Unicode:
-                    bytes = UnicodeEncoding.GetBytes(text);
-                    break;
-
-                default:
-                    throw new NotImplementedException(encoding.ToString());
-            }
-
+                PdfStringEncoding.RawEncoding => RawEncoding.GetBytes(text),
+                PdfStringEncoding.WinAnsiEncoding => WinAnsiEncoding.GetBytes(text),
+                PdfStringEncoding.PDFDocEncoding => DocEncoding.GetBytes(text),
+                PdfStringEncoding.Unicode => UnicodeEncoding.GetBytes(text),
+                _ => throw new NotImplementedException(encoding.ToString()),
+            };
             byte[] agTemp = FormatStringLiteral(bytes, encoding == PdfStringEncoding.Unicode, true, true, securityHandler);
             return RawEncoding.GetString(agTemp, 0, agTemp.Length);
         }
@@ -458,7 +424,7 @@ namespace PdfSharp.Pdf.Internal
         /// <summary>
         /// Converts WinAnsi to DocEncode characters. Incomplete, just maps € and some other characters.
         /// </summary>
-        static byte[] docencode_______ = new byte[256]
+        static readonly byte[] docencode_______ = new byte[256]
         {
       // TODO: 
       0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
@@ -626,16 +592,13 @@ namespace PdfSharp.Pdf.Internal
             if (colorMode == PdfColorMode.Undefined)
                 colorMode = color.ColorSpace == XColorSpace.Cmyk ? PdfColorMode.Cmyk : PdfColorMode.Rgb;
 
-            switch (colorMode)
+            return colorMode switch
             {
-                case PdfColorMode.Cmyk:
-                    return String.Format(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3:0.###}",
-                      color.C, color.M, color.Y, color.K);
-
-                default:
-                    return String.Format(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###}",
-                      color.R / 255.0, color.G / 255.0, color.B / 255.0);
-            }
+                PdfColorMode.Cmyk => String.Format(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3:0.###}",
+                                      color.C, color.M, color.Y, color.K),
+                _ => String.Format(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###}",
+color.R / 255.0, color.G / 255.0, color.B / 255.0),
+            };
         }
 
         /// <summary>

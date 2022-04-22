@@ -28,35 +28,25 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 #endif
 using PdfSharp.Fonts;
 using PdfSharp.Fonts.OpenType;
 using PdfSharp.Drawing;
-using PdfSharp.Internal;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing.Pdf;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Internal
 {
-  /// <summary>
-  /// Helper class for fonts in PDFsharp 1.4.
-  /// </summary>
-  public static class FontHelper14
-  {
+    /// <summary>
+    /// Helper class for fonts in PDFsharp 1.4.
+    /// </summary>
+    public static class FontHelper14
+    {
 #if WPF_
     /// <summary>
     /// </summary>
@@ -68,45 +58,45 @@ namespace PdfSharp.Internal
     }
 #endif
 
-    // ...took a look at the source code of WPF. About 50 classes and several 10,000 lines of code
-    // deal with that what colloquial is called 'fonts'.
-    // So let's start simple.
-    /// <summary>
-    /// Simple measure string function.
-    /// </summary>
-    public static XSize MeasureString(string text, XFont font, XStringFormat stringFormat)
-    {
-      XSize size = new XSize();
-
-      OpenTypeDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(font) as OpenTypeDescriptor;
-      if (descriptor != null)
-      {
-        size.Height = (descriptor.Ascender + Math.Abs(descriptor.Descender)) * font.Size / font.unitsPerEm;
-        Debug.Assert(descriptor.Ascender > 0);
-
-        bool symbol = descriptor.fontData.cmap.symbol;
-        int length = text.Length;
-        int width = 0;
-        for (int idx = 0; idx < length; idx++)
+        // ...took a look at the source code of WPF. About 50 classes and several 10,000 lines of code
+        // deal with that what colloquial is called 'fonts'.
+        // So let's start simple.
+        /// <summary>
+        /// Simple measure string function.
+        /// </summary>
+        public static XSize MeasureString(string text, XFont font, XStringFormat stringFormat)
         {
-          char ch = text[idx];
-          int glyphIndex = 0;
-          if (symbol)
-          {
-            glyphIndex = ch + (descriptor.fontData.os2.usFirstCharIndex & 0xFF00); // @@@
-            glyphIndex = descriptor.CharCodeToGlyphIndex((char)glyphIndex);
-          }
-          else
-            glyphIndex = descriptor.CharCodeToGlyphIndex(ch);
+            XSize size = new XSize();
 
-          //double width = descriptor.GlyphIndexToEmfWidth(glyphIndex, font.Size);
-          //size.Width += width;
-          width += descriptor.GlyphIndexToWidth(glyphIndex);
+            OpenTypeDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(font) as OpenTypeDescriptor;
+            if (descriptor != null)
+            {
+                size.Height = (descriptor.Ascender + Math.Abs(descriptor.Descender)) * font.Size / font.unitsPerEm;
+                Debug.Assert(descriptor.Ascender > 0);
+
+                bool symbol = descriptor.fontData.cmap.symbol;
+                int length = text.Length;
+                int width = 0;
+                for (int idx = 0; idx < length; idx++)
+                {
+                    char ch = text[idx];
+                    int glyphIndex = 0;
+                    if (symbol)
+                    {
+                        glyphIndex = ch + (descriptor.fontData.os2.usFirstCharIndex & 0xFF00); // @@@
+                        glyphIndex = descriptor.CharCodeToGlyphIndex((char)glyphIndex);
+                    }
+                    else
+                        glyphIndex = descriptor.CharCodeToGlyphIndex(ch);
+
+                    //double width = descriptor.GlyphIndexToEmfWidth(glyphIndex, font.Size);
+                    //size.Width += width;
+                    width += descriptor.GlyphIndexToWidth(glyphIndex);
+                }
+                size.Width = width * font.Size * (font.Italic ? 1 : 1) / descriptor.UnitsPerEm;
+            }
+            Debug.Assert(descriptor != null, "No OpenTypeDescriptor.");
+            return size;
         }
-        size.Width = width * font.Size * (font.Italic ? 1 : 1) / descriptor.UnitsPerEm;
-      }
-      Debug.Assert(descriptor != null, "No OpenTypeDescriptor.");
-      return size;
     }
-  }
 }

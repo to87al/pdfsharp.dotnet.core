@@ -27,19 +27,14 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Reflection;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
-using PdfSharp.Pdf;
+using PdfSharp.Pdf.AcroForms;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Internal;
 using PdfSharp.Pdf.IO;
-using PdfSharp.Pdf.AcroForms;
 using PdfSharp.Pdf.Security;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace PdfSharp.Pdf
 {
@@ -445,7 +440,7 @@ namespace PdfSharp.Pdf
         /// NYI Indicates whether large objects are written immediately to the output stream to relieve
         /// memory consumption.
         /// </summary>
-        internal bool EarlyWrite
+        internal static bool EarlyWrite
         {
             get { return false; }
         }
@@ -460,7 +455,7 @@ namespace PdfSharp.Pdf
             {
                 if (!CanModify)
                     throw new InvalidOperationException(PSSR.CannotModify);
-                if (value < 12 || value > 17) // TODO not really implemented
+                if (value is < 12 or > 17) // TODO not really implemented
                     throw new ArgumentException(PSSR.InvalidVersionNumber, "value");
                 this.version = value;
             }
@@ -507,7 +502,8 @@ namespace PdfSharp.Pdf
         {
             get { return this.guid; }
         }
-        Guid guid = Guid.NewGuid();
+
+        readonly Guid guid = Guid.NewGuid();
 
         internal DocumentHandle Handle
         {
@@ -537,7 +533,7 @@ namespace PdfSharp.Pdf
             get { return (this.openMode != PdfDocumentOpenMode.Modify); }
         }
 
-        internal Exception DocumentNotImported()
+        internal static Exception DocumentNotImported()
         {
             return new InvalidOperationException("Document not imported.");
         }
@@ -863,7 +859,8 @@ namespace PdfSharp.Pdf
             {
                 get { return this.weakRef.Target as PdfDocument; }
             }
-            WeakReference weakRef;
+
+            readonly WeakReference weakRef;
 
             public string ID;
 

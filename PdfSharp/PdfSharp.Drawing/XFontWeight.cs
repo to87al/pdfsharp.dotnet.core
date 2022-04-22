@@ -29,150 +29,141 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
-using PdfSharp.Fonts.OpenType;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Defines the density of a typeface, in terms of the lightness or heaviness of the strokes.
-  /// </summary>
-  [DebuggerDisplay("'{Weight}'")]
-  public class XFontWeight : IFormattable
-  {
-    internal XFontWeight(int weight)
-    {
-      this.weight = weight;
-    }
-
     /// <summary>
-    /// Gets the weight of the font, a value between 1 and 999.
+    /// Defines the density of a typeface, in terms of the lightness or heaviness of the strokes.
     /// </summary>
-    public int Weight
+    [DebuggerDisplay("'{Weight}'")]
+    public class XFontWeight : IFormattable
     {
-      get { return (this.weight); }
-    }
-    private int weight;
+        internal XFontWeight(int weight)
+        {
+            this.weight = weight;
+        }
 
-    //public static XFontWeight FromOpenTypeWeight(int weightValue)
-    //{
-    //  if (weightValue < 1 || weightValue > 999)
-    //    throw new ArgumentOutOfRangeException("weightValue", "Parameter must be between 1 and 999.");
-    //  return new XFontWeight(weightValue);
-    //}
+        /// <summary>
+        /// Gets the weight of the font, a value between 1 and 999.
+        /// </summary>
+        public int Weight
+        {
+            get { return (this.weight); }
+        }
+        private readonly int weight;
 
-    /// <summary>
-    /// Compares the specified font weights.
-    /// </summary>
-    public static int Compare(XFontWeight left, XFontWeight right)
-    {
-      return left.weight - right.weight;
-    }
+        //public static XFontWeight FromOpenTypeWeight(int weightValue)
+        //{
+        //  if (weightValue < 1 || weightValue > 999)
+        //    throw new ArgumentOutOfRangeException("weightValue", "Parameter must be between 1 and 999.");
+        //  return new XFontWeight(weightValue);
+        //}
 
-    /// <summary>
-    /// Implements the operator &lt;.
-    /// </summary>
-    public static bool operator <(XFontWeight left, XFontWeight right)
-    {
-      return Compare(left, right) < 0;
-    }
+        /// <summary>
+        /// Compares the specified font weights.
+        /// </summary>
+        public static int Compare(XFontWeight left, XFontWeight right)
+        {
+            return left.weight - right.weight;
+        }
 
-    /// <summary>
-    /// Implements the operator &lt;=.
-    /// </summary>
-    public static bool operator <=(XFontWeight left, XFontWeight right)
-    {
-      return Compare(left, right) <= 0;
-    }
+        /// <summary>
+        /// Implements the operator &lt;.
+        /// </summary>
+        public static bool operator <(XFontWeight left, XFontWeight right)
+        {
+            return Compare(left, right) < 0;
+        }
 
-    /// <summary>
-    /// Implements the operator &gt;.
-    /// </summary>
-    public static bool operator >(XFontWeight left, XFontWeight right)
-    {
-      return Compare(left, right) > 0;
-    }
+        /// <summary>
+        /// Implements the operator &lt;=.
+        /// </summary>
+        public static bool operator <=(XFontWeight left, XFontWeight right)
+        {
+            return Compare(left, right) <= 0;
+        }
 
-    /// <summary>
-    /// Implements the operator &gt;=.
-    /// </summary>
-    public static bool operator >=(XFontWeight left, XFontWeight right)
-    {
-      return Compare(left, right) >= 0;
-    }
+        /// <summary>
+        /// Implements the operator &gt;.
+        /// </summary>
+        public static bool operator >(XFontWeight left, XFontWeight right)
+        {
+            return Compare(left, right) > 0;
+        }
 
-    /// <summary>
-    /// Implements the operator ==.
-    /// </summary>
-    public static bool operator ==(XFontWeight left, XFontWeight right)
-    {
-      return Compare(left, right) == 0;
-    }
+        /// <summary>
+        /// Implements the operator &gt;=.
+        /// </summary>
+        public static bool operator >=(XFontWeight left, XFontWeight right)
+        {
+            return Compare(left, right) >= 0;
+        }
 
-    /// <summary>
-    /// Implements the operator !=.
-    /// </summary>
-    public static bool operator !=(XFontWeight left, XFontWeight right)
-    {
-      return !(left == right);
-    }
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        public static bool operator ==(XFontWeight left, XFontWeight right)
+        {
+            return Compare(left, right) == 0;
+        }
 
-    /// <summary>
-    /// Determines whether the specified <see cref="XFontWeight"/> is equal to the current <see cref="XFontWeight"/>.
-    /// </summary>
-    public bool Equals(XFontWeight obj)
-    {
-      return this == obj;
-    }
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        public static bool operator !=(XFontWeight left, XFontWeight right)
+        {
+            return !(left == right);
+        }
 
-    /// <summary>
-    /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-    /// </summary>
-    public override bool Equals(object obj)
-    {
-      return (obj is XFontWeight) && this == ((XFontWeight) obj);
-    }
+        /// <summary>
+        /// Determines whether the specified <see cref="XFontWeight"/> is equal to the current <see cref="XFontWeight"/>.
+        /// </summary>
+        public bool Equals(XFontWeight obj)
+        {
+            return this == obj;
+        }
 
-    /// <summary>
-    /// Serves as a hash function for this type.
-    /// </summary>
-    public override int GetHashCode()
-    {
-      return Weight;
-    }
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return (obj is XFontWeight) && this == ((XFontWeight)obj);
+        }
 
-    /// <summary>
-    /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-    /// </summary>
-    public override string ToString()
-    {
-      return ConvertToString(null, null);
-    }
+        /// <summary>
+        /// Serves as a hash function for this type.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Weight;
+        }
 
-    string IFormattable.ToString(string format, IFormatProvider provider)
-    {
-      return ConvertToString(format, provider);
-    }
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        public override string ToString()
+        {
+            return ConvertToString(null, null);
+        }
 
-    private string ConvertToString(string format, IFormatProvider provider)
-    {
-      string str;
-      if (!XFontWeights.FontWeightToString(Weight, out str))
-        return Weight.ToString(provider);
-      return str;
+        string IFormattable.ToString(string format, IFormatProvider provider)
+        {
+            return ConvertToString(format, provider);
+        }
+
+        private string ConvertToString(string format, IFormatProvider provider)
+        {
+            string str;
+            if (!XFontWeights.FontWeightToString(Weight, out str))
+                return Weight.ToString(provider);
+            return str;
+        }
     }
-  }
 }

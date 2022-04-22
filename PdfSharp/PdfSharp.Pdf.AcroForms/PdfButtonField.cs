@@ -27,79 +27,77 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
+using PdfSharp.Pdf.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Collections;
-using PdfSharp.Pdf.Annotations;
-using PdfSharp.Pdf.Internal;
 
 namespace PdfSharp.Pdf.AcroForms
 {
-  /// <summary>
-  /// Represents the base class for all button fields.
-  /// </summary>
-  public abstract class PdfButtonField : PdfAcroField
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PdfButtonField"/> class.
+    /// Represents the base class for all button fields.
     /// </summary>
-    protected PdfButtonField(PdfDocument document)
-      : base(document)
-    { }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PdfButtonField"/> class.
-    /// </summary>
-    protected PdfButtonField(PdfDictionary dict)
-      : base(dict)
-    { }
-
-    /// <summary>
-    /// Gets the name which represents the opposite of /Off.
-    /// </summary>
-    protected string GetNonOffValue()
+    public abstract class PdfButtonField : PdfAcroField
     {
-      // Try to get the information from the appearance dictionaray.
-      // Just return the first key that is not /Off.
-      // I'm not sure what is the right solution to get this value.
-      PdfDictionary ap = Elements[PdfAnnotation.Keys.AP] as PdfDictionary;
-      if (ap != null)
-      {
-        PdfDictionary n = ap.Elements["/N"] as PdfDictionary;
-        if (n != null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfButtonField"/> class.
+        /// </summary>
+        protected PdfButtonField(PdfDocument document)
+          : base(document)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfButtonField"/> class.
+        /// </summary>
+        protected PdfButtonField(PdfDictionary dict)
+          : base(dict)
+        { }
+
+        /// <summary>
+        /// Gets the name which represents the opposite of /Off.
+        /// </summary>
+        protected string GetNonOffValue()
         {
-          foreach (string name in n.Elements.Keys)
-            if (name != "/Off")
-              return name;
+            // Try to get the information from the appearance dictionaray.
+            // Just return the first key that is not /Off.
+            // I'm not sure what is the right solution to get this value.
+            PdfDictionary ap = Elements[PdfAnnotation.Keys.AP] as PdfDictionary;
+            if (ap != null)
+            {
+                PdfDictionary n = ap.Elements["/N"] as PdfDictionary;
+                if (n != null)
+                {
+                    foreach (string name in n.Elements.Keys)
+                        if (name != "/Off")
+                            return name;
+                }
+            }
+            return null;
         }
-      }
-      return null;
-    }
 
-    internal override void GetDescendantNames(ref List<PdfName> names, string partialName)
-    {
-      string t = Elements.GetString(PdfAcroField.Keys.T);
-      // HACK: ??? 
-      if (t == "")
-        t = "???";
-      Debug.Assert(t != "");
-      if (t.Length > 0)
-      {
-        if (!String.IsNullOrEmpty(partialName))
-          names.Add(new PdfName(partialName + "." + t));
-        else
-          names.Add(new PdfName(t));
-      }
-    }
+        internal override void GetDescendantNames(ref List<PdfName> names, string partialName)
+        {
+            string t = Elements.GetString(PdfAcroField.Keys.T);
+            // HACK: ??? 
+            if (t == "")
+                t = "???";
+            Debug.Assert(t != "");
+            if (t.Length > 0)
+            {
+                if (!String.IsNullOrEmpty(partialName))
+                    names.Add(new PdfName(partialName + "." + t));
+                else
+                    names.Add(new PdfName(t));
+            }
+        }
 
-    /// <summary>
-    /// Predefined keys of this dictionary. 
-    /// The description comes from PDF 1.4 Reference.
-    /// </summary>
-    public new class Keys : PdfAcroField.Keys
-    {
-      // Pushbuttons have no additional entries.
+        /// <summary>
+        /// Predefined keys of this dictionary. 
+        /// The description comes from PDF 1.4 Reference.
+        /// </summary>
+        public new class Keys : PdfAcroField.Keys
+        {
+            // Pushbuttons have no additional entries.
+        }
     }
-  }
 }

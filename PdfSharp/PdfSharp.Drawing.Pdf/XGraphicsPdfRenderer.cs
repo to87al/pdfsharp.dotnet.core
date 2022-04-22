@@ -32,18 +32,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows;
 using System.Windows.Media;
 #endif
 using PdfSharp.Internal;
 using PdfSharp.Pdf;
-using PdfSharp.Fonts;
 using PdfSharp.Fonts.OpenType;
 using PdfSharp.Pdf.Internal;
 using PdfSharp.Pdf.Advanced;
@@ -59,12 +56,12 @@ namespace PdfSharp.Drawing.Pdf
         {
             this.page = page;
             this.colorMode = page.document.Options.ColorMode;
-            this.options = options;
+            this.PageOptions = options;
 #if MIGRADOC
       this.options = options & ~XGraphicsPdfPageOptions.PDFlibHack;
       pdflibHack = (options & XGraphicsPdfPageOptions.PDFlibHack) != 0;
 #endif
-            this.gfx = gfx;
+            this.Gfx = gfx;
             this.content = new StringBuilder();
             page.RenderContent.pdfRenderer = this;
             this.gfxState = new PdfGraphicsState(this);
@@ -77,7 +74,7 @@ namespace PdfSharp.Drawing.Pdf
         {
             this.form = form;
             this.colorMode = form.Owner.Options.ColorMode;
-            this.gfx = gfx;
+            this.Gfx = gfx;
             this.content = new StringBuilder();
             form.pdfRenderer = this;
             this.gfxState = new PdfGraphicsState(this);
@@ -92,10 +89,7 @@ namespace PdfSharp.Drawing.Pdf
             return this.content.ToString();
         }
 
-        public XGraphicsPdfPageOptions PageOptions
-        {
-            get { return this.options; }
-        }
+        public XGraphicsPdfPageOptions PageOptions { get; }
 
         public void Close()
         {
@@ -104,7 +98,7 @@ namespace PdfSharp.Drawing.Pdf
                 PdfContent content = page.RenderContent;
                 content.CreateStream(PdfEncoders.RawEncoding.GetBytes(GetContent()));
 
-                this.gfx = null;
+                this.Gfx = null;
                 this.page.RenderContent.pdfRenderer = null;
                 this.page.RenderContent = null;
                 this.page = null;
@@ -112,7 +106,7 @@ namespace PdfSharp.Drawing.Pdf
             else if (this.form != null)
             {
                 this.form.pdfForm.CreateStream(PdfEncoders.RawEncoding.GetBytes(GetContent()));
-                this.gfx = null;
+                this.Gfx = null;
                 this.form.pdfRenderer = null;
                 this.form = null;
             }
@@ -128,7 +122,7 @@ namespace PdfSharp.Drawing.Pdf
 
         public void Clear(XColor color)
         {
-            if (!this.gfx.transform.IsIdentity)
+            if (!this.Gfx.transform.IsIdentity)
                 throw new NotImplementedException("Transform must be identity to clear the canvas.");
 
             // TODO: this is implementation is bogus. Reset transformation to identity an then fill
@@ -421,7 +415,7 @@ namespace PdfSharp.Drawing.Pdf
             double x = rect.X;
             double y = rect.Y;
 
-            double lineSpace = font.GetHeight(this.gfx);
+            double lineSpace = font.GetHeight(this.Gfx);
             //int cellSpace = font.cellSpace; // font.FontFamily.GetLineSpacing(font.Style);
             //int cellAscent = font.cellAscent; // font.FontFamily.GetCellAscent(font.Style);
             //int cellDescent = font.cellDescent; // font.FontFamily.GetCellDescent(font.Style);
@@ -429,7 +423,7 @@ namespace PdfSharp.Drawing.Pdf
             //double cyDescent = lineSpace * cellDescent / cellSpace;
             double cyAscent = lineSpace * font.cellAscent / font.cellSpace;
             double cyDescent = lineSpace * font.cellDescent / font.cellSpace;
-            double width = this.gfx.MeasureString(s, font).Width;
+            double width = this.Gfx.MeasureString(s, font).Width;
 
             bool bold = (font.Style & XFontStyle.Bold) != 0;
             bool italic = (font.Style & XFontStyle.Italic) != 0;
@@ -599,9 +593,9 @@ namespace PdfSharp.Drawing.Pdf
         public void DrawImage(XImage image, double x, double y, double width, double height)
         {
             string name = Realize(image);
-            if (!(image is XForm))
+            if (image is not XForm)
             {
-                if (this.gfx.PageDirection == XPageDirection.Downwards)
+                if (this.Gfx.PageDirection == XPageDirection.Downwards)
                 {
                     AppendFormat("q {2:0.####} 0 0 -{3:0.####} {0:0.####} {4:0.####} cm {5} Do Q\n",
                       x, y, width, height, y + height, name);
@@ -626,7 +620,7 @@ namespace PdfSharp.Drawing.Pdf
 
                 if (cx != 0 && cy != 0)
                 {
-                    if (this.gfx.PageDirection == XPageDirection.Downwards)
+                    if (this.Gfx.PageDirection == XPageDirection.Downwards)
                     {
                         AppendFormat("q {2:0.####} 0 0 -{3:0.####} {0:0.####} {4:0.####} cm 100 Tz {5} Do Q\n",
                           x, y, cx, cy, y + height, name);
@@ -649,9 +643,9 @@ namespace PdfSharp.Drawing.Pdf
             double height = destRect.Height;
 
             string name = Realize(image);
-            if (!(image is XForm))
+            if (image is not XForm)
             {
-                if (this.gfx.PageDirection == XPageDirection.Downwards)
+                if (this.Gfx.PageDirection == XPageDirection.Downwards)
                 {
                     AppendFormat("q {2:0.####} 0 0 -{3:0.####} {0:0.####} {4:0.####} cm {5} Do\nQ\n",
                       x, y, width, height, y + height, name);
@@ -676,7 +670,7 @@ namespace PdfSharp.Drawing.Pdf
 
                 if (cx != 0 && cy != 0)
                 {
-                    if (this.gfx.PageDirection == XPageDirection.Downwards)
+                    if (this.Gfx.PageDirection == XPageDirection.Downwards)
                     {
                         AppendFormat("q {2:0.####} 0 0 -{3:0.####} {0:0.####} {4:0.####} cm 100 Tz {5} Do Q\n",
                           x, y, cx, cy, y + height, name);
@@ -888,10 +882,10 @@ namespace PdfSharp.Drawing.Pdf
             // Normalize the angles
             double α = startAngle;
             if (α < 0)
-                α = α + (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
+                α += (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
             else if (α > 360)
-                α = α - Math.Floor(α / 360) * 360;
-            Debug.Assert(α >= 0 && α <= 360);
+                α -= Math.Floor(α / 360) * 360;
+            Debug.Assert(α is >= 0 and <= 360);
 
             double β = sweepAngle;
             if (β < -360)
@@ -909,7 +903,7 @@ namespace PdfSharp.Drawing.Pdf
 
             β = α + β;
             if (β < 0)
-                β = β + (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
+                β += (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
 
             bool clockwise = sweepAngle > 0;
             int startQuadrant = Quatrant(α, true, clockwise);
@@ -960,11 +954,11 @@ namespace PdfSharp.Drawing.Pdf
         /// Gets the quadrant (0 through 3) of the specified angle. If the angle lies on an edge
         /// (0, 90, 180, etc.) the result depends on the details how the angle is used.
         /// </summary>
-        int Quatrant(double φ, bool start, bool clockwise)
+        static int Quatrant(double φ, bool start, bool clockwise)
         {
             Debug.Assert(φ >= 0);
             if (φ > 360)
-                φ = φ - Math.Floor(φ / 360) * 360;
+                φ -= Math.Floor(φ / 360) * 360;
 
             int quadrant = (int)(φ / 90);
             if (quadrant * 90 == φ)
@@ -982,10 +976,10 @@ namespace PdfSharp.Drawing.Pdf
         /// </summary>
         void AppendPartialArcQuadrant(double x, double y, double width, double height, double α, double β, PathStart pathStart, XMatrix matrix)
         {
-            Debug.Assert(α >= 0 && α <= 360);
+            Debug.Assert(α is >= 0 and <= 360);
             Debug.Assert(β >= 0);
             if (β > 360)
-                β = β - Math.Floor(β / 360) * 360;
+                β -= Math.Floor(β / 360) * 360;
             Debug.Assert(Math.Abs(α - β) <= 90);
 
             // Scanling factor
@@ -1017,17 +1011,17 @@ namespace PdfSharp.Drawing.Pdf
             if (width == height)
             {
                 // Circular arc needs no correction.
-                α = α * Calc.Deg2Rad;
-                β = β * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
             }
             else
             {
                 // Elliptic arc needs the angles to be adjusted such that the scaling transformation is compensated.
-                α = α * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
                 sinα = Math.Sin(α);
                 if (Math.Abs(sinα) > 1E-10)
                     α = Calc.πHalf - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
-                β = β * Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
                 sinβ = Math.Sin(β);
                 if (Math.Abs(sinβ) > 1E-10)
                     β = Calc.πHalf - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
@@ -1276,7 +1270,7 @@ namespace PdfSharp.Drawing.Pdf
                     else if (type == typeof(PolyQuadraticBezierSegment))
                     {
                         PolyQuadraticBezierSegment seg = (PolyQuadraticBezierSegment)segment;
-                        currentPoint = seg.Points[seg.Points.Count - 1];
+                        currentPoint = seg.Points[^1];
                         // TODOWPF: Undone because XGraphics has no such curve type
                         throw new NotImplementedException("AppendPath with PolyQuadraticBezierSegment.");
                     }
@@ -1338,7 +1332,7 @@ namespace PdfSharp.Drawing.Pdf
                 // Flip page horizontaly and mirror text.
                 // TODO: Is PageOriging and PageScale (== Viewport) useful? Or just public DefaultViewMatrix (like Presentation Manager has had)
                 this.defaultViewMatrix = new XMatrix();  //XMatrix.Identity;
-                if (this.gfx.PageDirection == XPageDirection.Downwards)
+                if (this.Gfx.PageDirection == XPageDirection.Downwards)
                 {
 #if MIGRADOC
           if (this.pdflibHack)
@@ -1375,7 +1369,7 @@ namespace PdfSharp.Drawing.Pdf
                         }
 
                         // Scale with page units
-                        switch (this.gfx.PageUnit)
+                        switch (this.Gfx.PageUnit)
                         {
                             case XGraphicsUnit.Inch:
                                 defaultViewMatrix.ScalePrepend(XUnit.InchFactor);
@@ -1392,7 +1386,7 @@ namespace PdfSharp.Drawing.Pdf
 
                         if (trimOffset != new XPoint())
                         {
-                            Debug.Assert(this.gfx.PageUnit == XGraphicsUnit.Point, "With TrimMargins set the page units must be Point. Ohter cases nyi.");
+                            Debug.Assert(this.Gfx.PageUnit == XGraphicsUnit.Point, "With TrimMargins set the page units must be Point. Ohter cases nyi.");
                             defaultViewMatrix.TranslatePrepend(trimOffset.x, trimOffset.y);
                         }
 
@@ -1408,7 +1402,7 @@ namespace PdfSharp.Drawing.Pdf
                 else
                 {
                     // Scale with page units
-                    switch (this.gfx.PageUnit)
+                    switch (this.Gfx.PageUnit)
                     {
                         case XGraphicsUnit.Inch:
                             defaultViewMatrix.ScalePrepend(XUnit.InchFactor);
@@ -1516,7 +1510,7 @@ namespace PdfSharp.Drawing.Pdf
         void AdjustTextMatrix(ref XPoint pos)
         {
             XPoint posSave = pos;
-            pos = pos - new XVector(this.gfxState.realizedTextPosition.x, this.gfxState.realizedTextPosition.y);
+            pos -= new XVector(this.gfxState.realizedTextPosition.x, this.gfxState.realizedTextPosition.y);
             this.gfxState.realizedTextPosition = posSave;
         }
 
@@ -1586,10 +1580,7 @@ namespace PdfSharp.Drawing.Pdf
             }
         }
 
-        internal XGraphics Gfx
-        {
-            get { return this.gfx; }
-        }
+        internal XGraphics Gfx { get; private set; }
 
         /// <summary>
         /// Gets the PdfResources of this page or form.
@@ -1655,9 +1646,7 @@ namespace PdfSharp.Drawing.Pdf
         internal PdfPage page;
         internal XForm form;
         internal PdfColorMode colorMode;
-        XGraphicsPdfPageOptions options;
-        XGraphics gfx;
-        StringBuilder content;
+        readonly StringBuilder content;
 
         /// <summary>
         /// The q/Q nesting level is 0.
@@ -1723,7 +1712,7 @@ namespace PdfSharp.Drawing.Pdf
         /// <summary>
         /// The graphical state stack.
         /// </summary>
-        Stack<PdfGraphicsState> gfxStateStack = new Stack<PdfGraphicsState>();
+        readonly Stack<PdfGraphicsState> gfxStateStack = new Stack<PdfGraphicsState>();
 
         #endregion
 

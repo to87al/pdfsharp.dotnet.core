@@ -31,27 +31,27 @@ using System;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Specifies the encoding schema used for an XFont when converted into PDF.
-  /// </summary>
-  public enum PdfFontEncoding
-  {
     /// <summary>
-    /// Windows ANSI encoding.
+    /// Specifies the encoding schema used for an XFont when converted into PDF.
     /// </summary>
-    WinAnsi = 0,
+    public enum PdfFontEncoding
+    {
+        /// <summary>
+        /// Windows ANSI encoding.
+        /// </summary>
+        WinAnsi = 0,
 
-    /// <summary>
-    /// Alternate name for Windows ANSI encoding.
-    /// </summary>
-    [Obsolete("Use WinAnsi.")]
-    CP1252 = 0,
+        /// <summary>
+        /// Alternate name for Windows ANSI encoding.
+        /// </summary>
+        [Obsolete("Use WinAnsi.")]
+        CP1252 = 0,
 
-    //BuildIn, // FontSpecific
+        //BuildIn, // FontSpecific
 
-    /// <summary>
-    /// Unicode encoding.
-    /// </summary>
-    Unicode = 1,
-  }
+        /// <summary>
+        /// Unicode encoding.
+        /// </summary>
+        Unicode = 1,
+    }
 }

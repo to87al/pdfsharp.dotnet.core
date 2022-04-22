@@ -31,40 +31,40 @@ using System;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Specifies style information applied to text.
-  /// </summary>
-  [Flags]
-  public enum XFontStyle  // same values as System.Drawing.FontStyle
-  {
     /// <summary>
-    /// Normal text.
+    /// Specifies style information applied to text.
     /// </summary>
-    Regular = 0,
+    [Flags]
+    public enum XFontStyle  // same values as System.Drawing.FontStyle
+    {
+        /// <summary>
+        /// Normal text.
+        /// </summary>
+        Regular = 0,
 
-    /// <summary>
-    /// Bold text.
-    /// </summary>
-    Bold = 1,
+        /// <summary>
+        /// Bold text.
+        /// </summary>
+        Bold = 1,
 
-    /// <summary>
-    /// Italic text.
-    /// </summary>
-    Italic = 2,
+        /// <summary>
+        /// Italic text.
+        /// </summary>
+        Italic = 2,
 
-    /// <summary>
-    /// Bold and italic text. 
-    /// </summary>
-    BoldItalic = 3,
+        /// <summary>
+        /// Bold and italic text. 
+        /// </summary>
+        BoldItalic = 3,
 
-    /// <summary>
-    /// Underlined text.
-    /// </summary>
-    Underline = 4,
+        /// <summary>
+        /// Underlined text.
+        /// </summary>
+        Underline = 4,
 
-    /// <summary>
-    /// Text with a line through the middle.
-    /// </summary>
-    Strikeout = 8,
-  }
+        /// <summary>
+        /// Text with a line through the middle.
+        /// </summary>
+        Strikeout = 8,
+    }
 }

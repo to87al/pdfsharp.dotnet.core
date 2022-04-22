@@ -29,22 +29,16 @@
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Collections.Generic;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 #endif
 #if WPF
-using System.Windows;
 using System.Windows.Media;
 #endif
 using PdfSharp.Internal;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing.Pdf;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Drawing
 {
@@ -105,18 +99,18 @@ namespace PdfSharp.Drawing
             // Normalize the angles
             double α = startAngle;
             if (α < 0)
-                α = α + (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
+                α += (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
             else if (α > 360)
-                α = α - Math.Floor(α / 360) * 360;
-            Debug.Assert(α >= 0 && α <= 360);
+                α -= Math.Floor(α / 360) * 360;
+            Debug.Assert(α is >= 0 and <= 360);
 
             if (Math.Abs(sweepAngle) >= 360)
                 sweepAngle = Math.Sign(sweepAngle) * 360;
             double β = startAngle + sweepAngle;
             if (β < 0)
-                β = β + (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
+                β += (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
             else if (β > 360)
-                β = β - Math.Floor(β / 360) * 360;
+                β -= Math.Floor(β / 360) * 360;
 
             if (α == 0 && β < 0)
                 α = 360;
@@ -135,13 +129,13 @@ namespace PdfSharp.Drawing
             if (width == height)
             {
                 // Circular arc needs no correction.
-                α = α * Calc.Deg2Rad;
-                β = β * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
             }
             else
             {
                 // Elliptic arc needs the angles to be adjusted such that the scaling transformation is compensated.
-                α = α * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
                 sinα = Math.Sin(α);
                 if (Math.Abs(sinα) > 1E-10)
                 {
@@ -151,7 +145,7 @@ namespace PdfSharp.Drawing
                         α = 3 * Math.PI / 2 - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
                 }
                 //α = Calc.πHalf - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
-                β = β * Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
                 sinβ = Math.Sin(β);
                 if (Math.Abs(sinβ) > 1E-10)
                 {
@@ -200,10 +194,10 @@ namespace PdfSharp.Drawing
             // Normalize the angles
             double α = startAngle;
             if (α < 0)
-                α = α + (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
+                α += (1 + Math.Floor((Math.Abs(α) / 360))) * 360;
             else if (α > 360)
-                α = α - Math.Floor(α / 360) * 360;
-            Debug.Assert(α >= 0 && α <= 360);
+                α -= Math.Floor(α / 360) * 360;
+            Debug.Assert(α is >= 0 and <= 360);
 
             double β = sweepAngle;
             if (β < -360)
@@ -221,7 +215,7 @@ namespace PdfSharp.Drawing
 
             β = α + β;
             if (β < 0)
-                β = β + (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
+                β += (1 + Math.Floor((Math.Abs(β) / 360))) * 360;
 
             bool clockwise = sweepAngle > 0;
             int startQuadrant = Quatrant(α, true, clockwise);
@@ -276,7 +270,7 @@ namespace PdfSharp.Drawing
         {
             Debug.Assert(φ >= 0);
             if (φ > 360)
-                φ = φ - Math.Floor(φ / 360) * 360;
+                φ -= Math.Floor(φ / 360) * 360;
 
             int quadrant = (int)(φ / 90);
             if (quadrant * 90 == φ)
@@ -294,10 +288,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         static void AppendPartialArcQuadrant(List<XPoint> points, double x, double y, double width, double height, double α, double β, PathStart pathStart, XMatrix matrix)
         {
-            Debug.Assert(α >= 0 && α <= 360);
+            Debug.Assert(α is >= 0 and <= 360);
             Debug.Assert(β >= 0);
             if (β > 360)
-                β = β - Math.Floor(β / 360) * 360;
+                β -= Math.Floor(β / 360) * 360;
             Debug.Assert(Math.Abs(α - β) <= 90);
 
             // Scanling factor
@@ -329,17 +323,17 @@ namespace PdfSharp.Drawing
             if (width == height)
             {
                 // Circular arc needs no correction.
-                α = α * Calc.Deg2Rad;
-                β = β * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
             }
             else
             {
                 // Elliptic arc needs the angles to be adjusted such that the scaling transformation is compensated.
-                α = α * Calc.Deg2Rad;
+                α *= Calc.Deg2Rad;
                 sinα = Math.Sin(α);
                 if (Math.Abs(sinα) > 1E-10)
                     α = Calc.πHalf - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
-                β = β * Calc.Deg2Rad;
+                β *= Calc.Deg2Rad;
                 sinβ = Math.Sin(β);
                 if (Math.Abs(sinβ) > 1E-10)
                     β = Calc.πHalf - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));

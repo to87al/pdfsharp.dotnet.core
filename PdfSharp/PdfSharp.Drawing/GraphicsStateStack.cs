@@ -28,71 +28,69 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Represents a stack of XGraphicsState and XGraphicsContainer objects.
-  /// </summary>
-  internal class GraphicsStateStack
-  {
-    public GraphicsStateStack(XGraphics gfx)
+    /// <summary>
+    /// Represents a stack of XGraphicsState and XGraphicsContainer objects.
+    /// </summary>
+    internal class GraphicsStateStack
     {
-      this.current = new InternalGraphicsState(gfx);
+        public GraphicsStateStack(XGraphics gfx)
+        {
+            this.current = new InternalGraphicsState(gfx);
+        }
+
+        public int Count
+        {
+            get { return this.stack.Count; }
+        }
+
+        public void Push(InternalGraphicsState state)
+        {
+            this.stack.Push(state);
+            InternalGraphicsState.Pushed();
+        }
+
+        public int Restore(InternalGraphicsState state)
+        {
+            if (!this.stack.Contains(state))
+                throw new ArgumentException("State not on stack.", "state");
+            if (state.invalid)
+                throw new ArgumentException("State already restored.", "state");
+
+            int count = 1;
+            InternalGraphicsState top = (InternalGraphicsState)this.stack.Pop();
+            top.Popped();
+            while (top != state)
+            {
+                count++;
+                state.invalid = true;
+                top = (InternalGraphicsState)this.stack.Pop();
+                top.Popped();
+            }
+            state.invalid = true;
+            return count;
+        }
+
+        public InternalGraphicsState Current
+        {
+            get
+            {
+                if (this.stack.Count == 0)
+                    return this.current;
+                return this.stack.Peek();
+            }
+        }
+
+        readonly InternalGraphicsState current;
+        readonly Stack<InternalGraphicsState> stack = new Stack<InternalGraphicsState>();
     }
-
-    public int Count
-    {
-      get { return this.stack.Count; }
-    }
-
-    public void Push(InternalGraphicsState state)
-    {
-      this.stack.Push(state);
-      state.Pushed();
-    }
-
-    public int Restore(InternalGraphicsState state)
-    {
-      if (!this.stack.Contains(state))
-        throw new ArgumentException("State not on stack.", "state");
-      if (state.invalid)
-        throw new ArgumentException("State already restored.", "state");
-
-      int count = 1;
-      InternalGraphicsState top = (InternalGraphicsState)this.stack.Pop();
-      top.Popped();
-      while (top != state)
-      {
-        count++;
-        state.invalid = true;
-        top = (InternalGraphicsState)this.stack.Pop();
-        top.Popped();
-      }
-      state.invalid = true;
-      return count;
-    }
-
-    public InternalGraphicsState Current
-    {
-      get
-      {
-        if (this.stack.Count == 0)
-          return this.current;
-        return this.stack.Peek();
-      }
-    }
-    InternalGraphicsState current;
-
-    Stack<InternalGraphicsState> stack = new Stack<InternalGraphicsState>();
-  }
 }

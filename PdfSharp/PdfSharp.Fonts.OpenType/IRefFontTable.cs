@@ -27,41 +27,32 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using PdfSharp.Drawing;
-using PdfSharp.Internal;
-
-using Fixed = System.Int32;
-using FWord = System.Int16;
-using UFWord = System.UInt16;
 
 namespace PdfSharp.Fonts.OpenType
 {
-  /// <summary>
-  /// Represents an indirect reference to an existing font table in a font image.
-  /// Used to create binary copies of an existing font table that is not modified.
-  /// </summary>
-  internal class IRefFontTable : OpenTypeFontTable
-  {
-    public IRefFontTable(FontData fontData, OpenTypeFontTable fontTable)
-      : base(null, fontTable.DirectoryEntry.Tag)
-    {
-      this.fontData = fontData;
-      this.irefDirectoryEntry = fontTable.DirectoryEntry;
-    }
-
-    TableDirectoryEntry irefDirectoryEntry;
-
     /// <summary>
-    /// Prepares the font table to be compiled into its binary representation.
+    /// Represents an indirect reference to an existing font table in a font image.
+    /// Used to create binary copies of an existing font table that is not modified.
     /// </summary>
-    public override void PrepareForCompilation()
+    internal class IRefFontTable : OpenTypeFontTable
     {
-      base.PrepareForCompilation();
-      DirectoryEntry.Length = this.irefDirectoryEntry.Length;
-      DirectoryEntry.CheckSum = this.irefDirectoryEntry.CheckSum;
+        public IRefFontTable(FontData fontData, OpenTypeFontTable fontTable)
+          : base(null, fontTable.DirectoryEntry.Tag)
+        {
+            this.fontData = fontData;
+            this.irefDirectoryEntry = fontTable.DirectoryEntry;
+        }
+
+        readonly TableDirectoryEntry irefDirectoryEntry;
+
+        /// <summary>
+        /// Prepares the font table to be compiled into its binary representation.
+        /// </summary>
+        public override void PrepareForCompilation()
+        {
+            base.PrepareForCompilation();
+            DirectoryEntry.Length = this.irefDirectoryEntry.Length;
+            DirectoryEntry.CheckSum = this.irefDirectoryEntry.CheckSum;
 #if DEBUG
       // Check the checksum algorithm
       if (DirectoryEntry.Tag != TableTagNames.Head)
@@ -74,14 +65,14 @@ namespace PdfSharp.Fonts.OpenType
         //Debug.Assert(checkSum1 == checkSum2, "Bug in checksum algorithm.");
       }
 #endif
-    }
+        }
 
-    /// <summary>
-    /// Converts the font into its binary representation.
-    /// </summary>
-    public override void Write(OpenTypeFontWriter writer)
-    {
-      writer.Write(this.irefDirectoryEntry.FontTable.fontData.Data, this.irefDirectoryEntry.Offset, this.irefDirectoryEntry.PaddedLength);
+        /// <summary>
+        /// Converts the font into its binary representation.
+        /// </summary>
+        public override void Write(OpenTypeFontWriter writer)
+        {
+            writer.Write(this.irefDirectoryEntry.FontTable.fontData.Data, this.irefDirectoryEntry.Offset, this.irefDirectoryEntry.PaddedLength);
+        }
     }
-  }
 }

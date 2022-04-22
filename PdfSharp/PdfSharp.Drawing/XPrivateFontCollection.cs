@@ -28,12 +28,7 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Globalization;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.InteropServices;
 #if GDI
 using System.Drawing;
 using System.Drawing.Text;
@@ -41,51 +36,49 @@ using System.Drawing.Text;
 #if WPF
 using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
-using PdfSharp.Fonts.OpenType;
 
 namespace PdfSharp.Drawing
 {
-  ///<summary>
-  /// Makes fonts that are not installed on the system available within the current application domain.
-  /// </summary>
-  public sealed class XPrivateFontCollection : IDisposable
-  {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="XPrivateFontCollection"/> class.
+    ///<summary>
+    /// Makes fonts that are not installed on the system available within the current application domain.
     /// </summary>
-    public XPrivateFontCollection()
+    public sealed class XPrivateFontCollection : IDisposable
     {
-      //// HACK: Use one global PrivateFontCollection in GDI+
-      //// TODO: Make a list of it
-      //if (s_global != null)
-      //  throw new InvalidOperationException("Because of limitations in GDI+ you can only have one instance of XPrivateFontCollection in your application.");
-    }
-    internal static XPrivateFontCollection s_global = new XPrivateFontCollection();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XPrivateFontCollection"/> class.
+        /// </summary>
+        public XPrivateFontCollection()
+        {
+            //// HACK: Use one global PrivateFontCollection in GDI+
+            //// TODO: Make a list of it
+            //if (s_global != null)
+            //  throw new InvalidOperationException("Because of limitations in GDI+ you can only have one instance of XPrivateFontCollection in your application.");
+        }
+        internal static XPrivateFontCollection s_global = new XPrivateFontCollection();
 
-    //static XPrivateFontCollection()
-    //{
-    //  // HACK: Use one global PrivateFontCollection in GDI+
-    //  // TODO: Make a list of it
-    //  if (global != null)
-    //    throw new InvalidOperationException("Because of limitations in GDI+ you can only have one instance of XPrivateFontCollection in your application.");
-    //  global = this;
-    //}
-    //internal static XPrivateFontCollection global;
+        //static XPrivateFontCollection()
+        //{
+        //  // HACK: Use one global PrivateFontCollection in GDI+
+        //  // TODO: Make a list of it
+        //  if (global != null)
+        //    throw new InvalidOperationException("Because of limitations in GDI+ you can only have one instance of XPrivateFontCollection in your application.");
+        //  global = this;
+        //}
+        //internal static XPrivateFontCollection global;
 
-    /// <summary>
-    /// Disposes all fonts from the collection.
-    /// </summary>
-    public void Dispose()
-    {
+        /// <summary>
+        /// Disposes all fonts from the collection.
+        /// </summary>
+        public void Dispose()
+        {
 #if GDI
       //privateFonts.Clear();
       this.privateFontCollection.Dispose();
       this.privateFontCollection = new PrivateFontCollection();
 #endif
-      s_global = null;
-      //GC.SuppressFinalize(this);
-    }
+            s_global = null;
+            //GC.SuppressFinalize(this);
+        }
 
 #if GDI
     internal static PrivateFontCollection GlobalPrivateFontCollection
@@ -105,26 +98,26 @@ namespace PdfSharp.Drawing
     PrivateFontCollection privateFontCollection = new PrivateFontCollection();
 #endif
 
-    /// <summary>
-    /// Gets the global font collection.
-    /// </summary>
-    public static XPrivateFontCollection Global
-    {
-      get { return s_global; }
-    }
+        /// <summary>
+        /// Gets the global font collection.
+        /// </summary>
+        public static XPrivateFontCollection Global
+        {
+            get { return s_global; }
+        }
 
-    /// <summary>
-    /// Sets a new global font collection and returns the previous one, or null if no previous one exists.
-    /// </summary>
-    public static XPrivateFontCollection SetGlobalFontCollection(XPrivateFontCollection fontCollection)
-    {
-      if (fontCollection==null)
-        throw new ArgumentNullException("fontCollection");
+        /// <summary>
+        /// Sets a new global font collection and returns the previous one, or null if no previous one exists.
+        /// </summary>
+        public static XPrivateFontCollection SetGlobalFontCollection(XPrivateFontCollection fontCollection)
+        {
+            if (fontCollection == null)
+                throw new ArgumentNullException("fontCollection");
 
-      XPrivateFontCollection old = s_global;
-      s_global = fontCollection;
-      return old;
-    }
+            XPrivateFontCollection old = s_global;
+            s_global = fontCollection;
+            return old;
+        }
 
 #if GDI
     /// <summary>
@@ -150,27 +143,27 @@ namespace PdfSharp.Drawing
     }
 #endif
 
-    //    /// <summary>
-    //    /// Adds the glyph typeface to this collection.
-    //    /// </summary>
-    //    public void AddGlyphTypeface(XGlyphTypeface glyphTypeface)
-    //    {
-    //      if (glyphTypeface == null)
-    //        throw new ArgumentNullException("glyphTypeface");
+        //    /// <summary>
+        //    /// Adds the glyph typeface to this collection.
+        //    /// </summary>
+        //    public void AddGlyphTypeface(XGlyphTypeface glyphTypeface)
+        //    {
+        //      if (glyphTypeface == null)
+        //        throw new ArgumentNullException("glyphTypeface");
 
-    //#if GDI
-    //      // Add to GDI+ PrivateFontCollection
-    //      byte[] data = glyphTypeface.FontData.Data;
-    //      int length = data.Length;
+        //#if GDI
+        //      // Add to GDI+ PrivateFontCollection
+        //      byte[] data = glyphTypeface.FontData.Data;
+        //      int length = data.Length;
 
-    //      // Do it w/o unsafe code (do it like VB programmers do): 
-    //      IntPtr ip = Marshal.AllocCoTaskMem(length);
-    //      Marshal.Copy(data, 0, ip, length);
-    //      this.privateFontCollection.AddMemoryFont(ip, length);
-    //      Marshal.FreeCoTaskMem(ip);
-    //      privateFonts.Add(glyphTypeface);
-    //#endif
-    //    }
+        //      // Do it w/o unsafe code (do it like VB programmers do): 
+        //      IntPtr ip = Marshal.AllocCoTaskMem(length);
+        //      Marshal.Copy(data, 0, ip, length);
+        //      this.privateFontCollection.AddMemoryFont(ip, length);
+        //      Marshal.FreeCoTaskMem(ip);
+        //      privateFonts.Add(glyphTypeface);
+        //#endif
+        //    }
 
 #if GDI
     /// <summary>
@@ -203,41 +196,41 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    /// <summary>
-    /// Initializes a new instance of the FontFamily class from the specified font family name and an optional base uniform resource identifier (URI) value.
-    /// Sample: Add(new Uri("pack://application:,,,/"), "./myFonts/#FontFamilyName");)
-    /// </summary>
-    /// <param name="baseUri">Specifies the base URI that is used to resolve familyName.</param>
-    /// <param name="familyName">The family name or names that comprise the new FontFamily. Multiple family names should be separated by commas.</param>
-    public void Add(Uri baseUri, string familyName)
-    {
-      // TODO: What means 'Multiple family names should be separated by commas.'?
-      // does not work
+        /// <summary>
+        /// Initializes a new instance of the FontFamily class from the specified font family name and an optional base uniform resource identifier (URI) value.
+        /// Sample: Add(new Uri("pack://application:,,,/"), "./myFonts/#FontFamilyName");)
+        /// </summary>
+        /// <param name="baseUri">Specifies the base URI that is used to resolve familyName.</param>
+        /// <param name="familyName">The family name or names that comprise the new FontFamily. Multiple family names should be separated by commas.</param>
+        public void Add(Uri baseUri, string familyName)
+        {
+            // TODO: What means 'Multiple family names should be separated by commas.'?
+            // does not work
 
-      if (String.IsNullOrEmpty(familyName))
-        throw new ArgumentNullException("familyName");
-      if (familyName.Contains(","))
-        throw new NotImplementedException("Only one family name is supported.");
+            if (String.IsNullOrEmpty(familyName))
+                throw new ArgumentNullException("familyName");
+            if (familyName.Contains(","))
+                throw new NotImplementedException("Only one family name is supported.");
 
-      // family name starts right of '#'
-      int idxHash = familyName.IndexOf('#');
-      if (idxHash < 0)
-        throw new ArgumentException("Family name must contain a '#'. Example './#MyFontFamilyName'", "familyName");
+            // family name starts right of '#'
+            int idxHash = familyName.IndexOf('#');
+            if (idxHash < 0)
+                throw new ArgumentException("Family name must contain a '#'. Example './#MyFontFamilyName'", "familyName");
 
-      string key = familyName.Substring(idxHash + 1);
-      if (String.IsNullOrEmpty(key))
-        throw new ArgumentException("familyName has invalid format.");
+            string key = familyName.Substring(idxHash + 1);
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentException("familyName has invalid format.");
 
-      if (this.fontFamilies.ContainsKey(key))
-        throw new ArgumentException("An entry with the specified family name already exists.");
+            if (this.fontFamilies.ContainsKey(key))
+                throw new ArgumentException("An entry with the specified family name already exists.");
 
 #if !SILVERLIGHT
-      System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(baseUri, familyName);
+            System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(baseUri, familyName);
 #else
       System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(familyName);
 #endif
 
-      // Check whether font data really exists
+            // Check whether font data really exists
 #if DEBUG && !SILVERLIGHT
       ICollection<Typeface> list = fontFamily.GetTypefaces();
       foreach (Typeface typeFace in list)
@@ -249,8 +242,8 @@ namespace PdfSharp.Drawing
       }
 #endif
 
-      this.fontFamilies.Add(key, fontFamily);
-    }
+            this.fontFamilies.Add(key, fontFamily);
+        }
 #endif
 
 #if GDI
@@ -277,15 +270,15 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    internal static Typeface TryFindTypeface(string name, XFontStyle style, out System.Windows.Media.FontFamily fontFamily)
-    {
-      if (s_global.fontFamilies.TryGetValue(name, out fontFamily))
-      {
-        Typeface typeface = FontHelper.CreateTypeface(fontFamily, style);
-        return typeface;
-      }
-      return null;
-    }
+        internal static Typeface TryFindTypeface(string name, XFontStyle style, out System.Windows.Media.FontFamily fontFamily)
+        {
+            if (s_global.fontFamilies.TryGetValue(name, out fontFamily))
+            {
+                Typeface typeface = FontHelper.CreateTypeface(fontFamily, style);
+                return typeface;
+            }
+            return null;
+        }
 #endif
 
 #if GDI___
@@ -333,7 +326,7 @@ namespace PdfSharp.Drawing
     //List<XGlyphTypeface> privateFonts = new List<XGlyphTypeface>();
 #endif
 #if WPF
-    readonly Dictionary<string, System.Windows.Media.FontFamily> fontFamilies = new Dictionary<string, System.Windows.Media.FontFamily>(StringComparer.InvariantCultureIgnoreCase);
+        readonly Dictionary<string, System.Windows.Media.FontFamily> fontFamilies = new Dictionary<string, System.Windows.Media.FontFamily>(StringComparer.InvariantCultureIgnoreCase);
 #endif
-  }
+    }
 }

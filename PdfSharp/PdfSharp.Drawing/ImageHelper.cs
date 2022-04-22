@@ -27,33 +27,21 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Collections.Generic;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 #endif
-using PdfSharp.Internal;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing.Pdf;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Helper class for processing image files.
-  /// </summary>
-  static class ImageHelper
-  {
+    /// <summary>
+    /// Helper class for processing image files.
+    /// </summary>
+    static class ImageHelper
+    {
 #if WPF && GDI
     /// <summary>
     /// Creates a WPF bitmap source from an GDI image.
@@ -138,5 +126,5 @@ namespace PdfSharp.Drawing
       return bitmapSource;
     }
 #endif
-  }
+    }
 }

@@ -28,142 +28,134 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
 using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
 using PdfSharp.Fonts.OpenType;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Specifies a physical font face that corresponds to a font file on the disk.
-  /// </summary>
-  //[DebuggerDisplay("'{Name}', {Size}")]
-  public class XGlyphTypeface
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="XGlyphTypeface"/> class from the specified font file.
+    /// Specifies a physical font face that corresponds to a font file on the disk.
     /// </summary>
-    public XGlyphTypeface(string filename)
+    //[DebuggerDisplay("'{Name}', {Size}")]
+    public class XGlyphTypeface
     {
-      if (String.IsNullOrEmpty(filename))
-        throw new ArgumentNullException("filename");
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XGlyphTypeface"/> class from the specified font file.
+        /// </summary>
+        public XGlyphTypeface(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+                throw new ArgumentNullException("filename");
 
-      FileStream stream = null;
-      try
-      {
-        stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-        int length = (int)stream.Length;
-        byte[] data = new byte[length];
-        stream.Read(data, 0, length);
-        Initialize(data);
-      }
-      finally
-      {
-        if (stream != null)
-          stream.Close();
-      }
-    }
+            FileStream stream = null;
+            try
+            {
+                stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+                int length = (int)stream.Length;
+                byte[] data = new byte[length];
+                stream.Read(data, 0, length);
+                Initialize(data);
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+        }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="XGlyphTypeface"/> class from the specified font bytes.
-    /// </summary>
-    public XGlyphTypeface(byte[] data)
-    {
-      if (data == null)
-        throw new ArgumentNullException("data");
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XGlyphTypeface"/> class from the specified font bytes.
+        /// </summary>
+        public XGlyphTypeface(byte[] data)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
 
-      Initialize(data);
-    }
+            Initialize(data);
+        }
 
-    void Initialize(byte[] data)
-    {
-      // Cache data and return a FontData
-      this.fontData = FontDataStock.Global.RegisterFontData(data);
-    }
+        void Initialize(byte[] data)
+        {
+            // Cache data and return a FontData
+            this.fontData = FontDataStock.Global.RegisterFontData(data);
+        }
 
-    internal FontData FontData
-    {
-      get { return this.fontData; }
-    }
-    private FontData fontData;
+        internal FontData FontData
+        {
+            get { return this.fontData; }
+        }
+        private FontData fontData;
 
-    /// <summary>
-    /// Gets the English family name of the font.
-    /// </summary>
-    public string FamilyName
-    {
-      get { return "Times"; }
-    }
+        /// <summary>
+        /// Gets the English family name of the font.
+        /// </summary>
+        public static string FamilyName
+        {
+            get { return "Times"; }
+        }
 
-    /// <summary>
-    /// Gets a value indicating whether the font weight is bold.
-    /// </summary>
-    public bool IsBold
-    {
-      get { return false; }
-    }
+        /// <summary>
+        /// Gets a value indicating whether the font weight is bold.
+        /// </summary>
+        public static bool IsBold
+        {
+            get { return false; }
+        }
 
-    /// <summary>
-    /// Gets a value indicating whether the font style is italic.
-    /// </summary>
-    public bool IsItalic
-    {
-      get { return false; }
-    }
+        /// <summary>
+        /// Gets a value indicating whether the font style is italic.
+        /// </summary>
+        public static bool IsItalic
+        {
+            get { return false; }
+        }
 
-    //internal byte[] GetData()
-    //{
-    //  return this.data;
-    //}
-    //private byte[] data;
+        //internal byte[] GetData()
+        //{
+        //  return this.data;
+        //}
+        //private byte[] data;
 
 
-    //public XPrivateFont(string fontName,
-    //  bool bold,
-    //  bool italic,
-    //  byte[] data,
-    //  int length)
-    //{
-    //  this.FontName = fontName;
-    //  this.Bold = bold;
-    //  this.Italic = italic;
-    //  this.Data = data;
-    //  this.Length = length;
-    //}
+        //public XPrivateFont(string fontName,
+        //  bool bold,
+        //  bool italic,
+        //  byte[] data,
+        //  int length)
+        //{
+        //  this.FontName = fontName;
+        //  this.Bold = bold;
+        //  this.Italic = italic;
+        //  this.Data = data;
+        //  this.Length = length;
+        //}
 
-    //internal string FontName;
-    //internal bool Bold;
-    //internal bool Italic;
-    //internal byte[] Data;
-    //internal int Length;
+        //internal string FontName;
+        //internal bool Bold;
+        //internal bool Italic;
+        //internal byte[] Data;
+        //internal int Length;
 
-    //public int GetFontData(ref byte[] data,
-    //   int length)
-    //{
-    //  if (length == this.Length)
-    //  {
-    //    // Copy the data:
-    //    //Data.CopyTo(data, 0);
-    //    Array.Copy(Data, data, length);
-    //  }
-    //  return this.Length;
-    //}
+        //public int GetFontData(ref byte[] data,
+        //   int length)
+        //{
+        //  if (length == this.Length)
+        //  {
+        //    // Copy the data:
+        //    //Data.CopyTo(data, 0);
+        //    Array.Copy(Data, data, length);
+        //  }
+        //  return this.Length;
+        //}
 
 #if true_
-    #region Constructors 
+        #region Constructors 
 
         /// <summary> 
         /// Creates an uninitialized GlyphTypeface object. Caller should call ISupportInitialize.BeginInit() 
@@ -261,7 +253,7 @@ namespace PdfSharp.Drawing
             _initializationState = InitializationState.IsInitialized; // fully initialized 
         }
 
-    #endregion Constructors
+        #endregion Constructors
  
         //------------------------------------------------------
         // 
@@ -269,7 +261,7 @@ namespace PdfSharp.Drawing
         //
         //----------------------------------------------------- 
 
-    #region Public Methods
+        #region Public Methods
 
         /// <summary> 
         /// Return hash code for this GlyphTypeface.
@@ -425,7 +417,7 @@ namespace PdfSharp.Drawing
             }
         } 
 
-    #endregion Public Methods 
+        #endregion Public Methods 
  
         //------------------------------------------------------
         // 
@@ -433,7 +425,7 @@ namespace PdfSharp.Drawing
         //
         //------------------------------------------------------
  
-    #region Public Properties
+        #region Public Properties
  
         /// <summary> 
         /// Returns the original Uri of this glyph typeface object.
@@ -952,7 +944,7 @@ namespace PdfSharp.Drawing
             }
         } 
 
-    #region ITypefaceMetrics implementation
+        #region ITypefaceMetrics implementation
 
         /// <summary> 
         /// Distance from baseline to top of English capital, relative to em size.
@@ -1034,13 +1026,13 @@ namespace PdfSharp.Drawing
             } 
         }
 
-    #endregion
+        #endregion
  
 
         // The next several properties return non CLS-compliant types.  This is 
         // tracked by bug 1792236.  For now, suppress the compiler warning. 
         //
-#pragma warning disable 3003 
+#pragma warning disable 3003
 
         /// <summary>
         /// Returns advance width for a given glyph.
@@ -1157,7 +1149,7 @@ namespace PdfSharp.Drawing
             } 
         } 
 
-#pragma warning restore 3003 
+#pragma warning restore 3003
 
         /// <summary>
         /// Returns algorithmic font style simulations to be applied to the GlyphTypeface.
@@ -1189,7 +1181,7 @@ namespace PdfSharp.Drawing
             }
         }
  
-    #endregion Public Properties
+        #endregion Public Properties
  
         //----------------------------------------------------- 
         //
@@ -1197,7 +1189,7 @@ namespace PdfSharp.Drawing
         //
         //------------------------------------------------------
 
-    #region Internal Methods 
+        #region Internal Methods 
 
         /// <summary> 
         /// Returns the nominal advance width for a glyph. 
@@ -1776,7 +1768,7 @@ namespace PdfSharp.Drawing
         } 
 
  
-    #endregion Internal Methods 
+        #endregion Internal Methods 
 
         //----------------------------------------------------- 
         //
@@ -1784,7 +1776,7 @@ namespace PdfSharp.Drawing
         //
         //----------------------------------------------------- 
 
-    #region Internal Properties 
+        #region Internal Properties 
  
         internal FontSource FontSource
         { 
@@ -1863,7 +1855,7 @@ namespace PdfSharp.Drawing
             }
         }
 
-    #endregion Internal Properties 
+        #endregion Internal Properties 
 
         //----------------------------------------------------- 
         // 
@@ -1871,7 +1863,7 @@ namespace PdfSharp.Drawing
         // 
         //------------------------------------------------------
 
-    #region Private Methods
+        #region Private Methods
  
         private static bool OnCurve(byte flag)
         { 
@@ -1894,9 +1886,9 @@ namespace PdfSharp.Drawing
             return renderingFlags;
         } 
  
-    #endregion Private Methods
+        #endregion Private Methods
  
-    #region ISupportInitialize interface
+        #region ISupportInitialize interface
 
         void ISupportInitialize.BeginInit()
         { 
@@ -1950,7 +1942,7 @@ namespace PdfSharp.Drawing
             } 
         }
  
-    #endregion
+        #endregion
 
         //-----------------------------------------------------
         // 
@@ -1958,7 +1950,7 @@ namespace PdfSharp.Drawing
         // 
         //------------------------------------------------------ 
 
-    #region Private Nested Classes 
+        #region Private Nested Classes 
 
         private delegate double GlyphAccessor(ushort glyphIndex);
 
@@ -1974,7 +1966,7 @@ namespace PdfSharp.Drawing
                 _numberOfGlyphs = numberOfGlyphs; 
             }
  
-    #region IDictionary<ushort,double> Members 
+        #region IDictionary<ushort,double> Members 
 
             public void Add(ushort key, double value) 
             {
@@ -2027,9 +2019,9 @@ namespace PdfSharp.Drawing
                 }
             } 
 
-    #endregion 
+        #endregion
  
-    #region ICollection<KeyValuePair<ushort,double>> Members
+        #region ICollection<KeyValuePair<ushort,double>> Members
  
             public void Add(KeyValuePair<ushort, double> item)
             {
@@ -2085,9 +2077,9 @@ namespace PdfSharp.Drawing
                 throw new NotSupportedException(); 
             }
  
-    #endregion
+        #endregion
 
-    #region IEnumerable<KeyValuePair<ushort,double>> Members
+        #region IEnumerable<KeyValuePair<ushort,double>> Members
  
             public IEnumerator<KeyValuePair<ushort, double>> GetEnumerator()
             { 
@@ -2095,16 +2087,16 @@ namespace PdfSharp.Drawing
                     yield return new KeyValuePair<ushort, double>(i, this[i]);
             } 
 
-    #endregion
+        #endregion
 
-    #region IEnumerable Members 
+        #region IEnumerable Members 
 
             IEnumerator IEnumerable.GetEnumerator() 
             { 
                 return ((IEnumerable<KeyValuePair<ushort, double>>)this).GetEnumerator();
             } 
 
-    #endregion
+        #endregion
 
             private class ValueCollection : ICollection<double> 
             {
@@ -2113,7 +2105,7 @@ namespace PdfSharp.Drawing
                     _glyphIndexer = glyphIndexer;
                 } 
 
-    #region ICollection<double> Members
+        #region ICollection<double> Members
 
                 public void Add(double item) 
                 {
@@ -2174,9 +2166,9 @@ namespace PdfSharp.Drawing
                     throw new NotSupportedException(); 
                 } 
 
-    #endregion 
+        #endregion
 
-    #region IEnumerable<double> Members
+        #region IEnumerable<double> Members
 
                 public IEnumerator<double> GetEnumerator() 
                 {
@@ -2184,16 +2176,16 @@ namespace PdfSharp.Drawing
                         yield return _glyphIndexer[i]; 
                 }
  
-    #endregion
+        #endregion
 
-    #region IEnumerable Members
+        #region IEnumerable Members
  
                 IEnumerator IEnumerable.GetEnumerator()
                 { 
                     return ((IEnumerable<double>)this).GetEnumerator(); 
                 }
  
-    #endregion
+        #endregion
 
                 private GlyphIndexer _glyphIndexer;
             } 
@@ -2202,7 +2194,7 @@ namespace PdfSharp.Drawing
             private ushort _numberOfGlyphs; 
         }
  
-    #endregion Private Nested Classes
+        #endregion Private Nested Classes
 
         //------------------------------------------------------
         // 
@@ -2210,7 +2202,7 @@ namespace PdfSharp.Drawing
         // 
         //----------------------------------------------------- 
 
-    #region Private Fields 
+        #region Private Fields 
 
         private FontFaceLayoutInfo  _fontFace;
 
@@ -2266,7 +2258,7 @@ namespace PdfSharp.Drawing
             IsInitialized,
         } 
 
-    #endregion Private Fields
+        #endregion Private Fields
 #endif
-  }
+    }
 }

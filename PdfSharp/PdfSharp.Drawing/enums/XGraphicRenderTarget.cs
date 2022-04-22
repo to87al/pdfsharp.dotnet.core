@@ -27,22 +27,21 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System.Diagnostics;
 namespace PdfSharp.Drawing
 {
-  ///<summary>
-  /// Determines whether rendering based on GDI+ or WPF. For internal use only.
-  /// </summary>
-  enum XGraphicTargetContext
-  {
-    /// <summary>
-    /// Renders using GDI+.
+    ///<summary>
+    /// Determines whether rendering based on GDI+ or WPF. For internal use only.
     /// </summary>
-    GDI = 1,
+    enum XGraphicTargetContext
+    {
+        /// <summary>
+        /// Renders using GDI+.
+        /// </summary>
+        GDI = 1,
 
-    /// <summary>
-    /// Renders using WPF (including Silverlight).
-    /// </summary>
-    WPF = 2,
-  }
+        /// <summary>
+        /// Renders using WPF (including Silverlight).
+        /// </summary>
+        WPF = 2,
+    }
 }

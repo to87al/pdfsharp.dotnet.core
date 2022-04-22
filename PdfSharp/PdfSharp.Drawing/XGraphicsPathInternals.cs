@@ -27,30 +27,28 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows;
 using System.Windows.Media;
 #endif
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Provides access to the internal data structures of XGraphicsPath.
-  /// This class prevents the public interface from pollution with internal functions.
-  /// </summary>
-  public sealed class XGraphicsPathInternals
-  {
-    internal XGraphicsPathInternals(XGraphicsPath path)
+    /// <summary>
+    /// Provides access to the internal data structures of XGraphicsPath.
+    /// This class prevents the public interface from pollution with internal functions.
+    /// </summary>
+    public sealed class XGraphicsPathInternals
     {
-      this.path = path;
-    }
-    XGraphicsPath path;
+        internal XGraphicsPathInternals(XGraphicsPath path)
+        {
+            this.path = path;
+        }
+
+        readonly XGraphicsPath path;
 
 #if GDI
     /// <summary>
@@ -63,13 +61,13 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    /// <summary>
-    /// Gets the underlying WPF path geometry object.
-    /// </summary>
-    public PathGeometry WpfPath
-    {
-      get { return this.path.pathGeometry; }
-    }
+        /// <summary>
+        /// Gets the underlying WPF path geometry object.
+        /// </summary>
+        public PathGeometry WpfPath
+        {
+            get { return this.path.pathGeometry; }
+        }
 #endif
-  }
+    }
 }

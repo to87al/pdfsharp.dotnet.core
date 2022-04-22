@@ -27,7 +27,6 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -38,115 +37,115 @@ using System.Windows.Media;
 
 namespace PdfSharp.Drawing
 {
-  // In GDI+ the functions Save/Restore, BeginContainer/EndContainer, Transform, SetClip and ResetClip
-  // can be combined in any order. E.g. you can set a clip region, save the graphics state, empty the
-  // clip region and draw without clipping. Then you can restore to the previous clip region. With PDF
-  // this behavior is hard to implement. To solve this problem I first an automaton that keeps track
-  // of all clipping paths and the current transformation when the clip path was set. The automation
-  // manages a PDF graphics state stack to calculate the desired bahaviour. It also takes into consideration
-  // not to multiply with inverse matrixes when the user sets a new transformation matrix.
-  // After the design works on pager I decided not to implement it because it is much to large-scale.
-  // Instead I lay down some rules how to use the XGraphics class.
-  //
-  // * Before you set a transformation matrix save the graphics state (Save) or begin a new container
-  //   (BeginContainer).
-  // 
-  // * Instead of resetting the transformation matrix, call Restore or EndContainer. If you reset the
-  //   transformation, in PDF must be multiplied with the inverse matrix. That leads to round off errors
-  //   because in PDF file only 3 digits are used and Acrobat internally uses fixed point numbers (until
-  //   versioin 6 or 7 I think).
-  //
-  // * When no clip path is defined, you can set or intersect a new path.
-  //
-  // * When a clip path is already defined, you can always intersect with a new one (wich leads in general
-  //   to a smaller clip region).
-  //
-  // * When a clip path is already defined, you can only reset it to the empty region (ResetClip) when
-  //   the graphics state stack is at the same position as it had when the clip path was defined. Otherwise
-  //   an error occurs.
-  //
-  // Keeping these rules leads to easy to read code and best results in PDF output.
-
-  /// <summary>
-  /// Represents the internal state of an XGraphics object.
-  /// </summary>
-  internal class InternalGraphicsState
-  {
-    public InternalGraphicsState(XGraphics gfx)
-    {
-      this.gfx = gfx;
-    }
-
-    public InternalGraphicsState(XGraphics gfx, XGraphicsState state)
-    {
-      this.gfx = gfx;
-      this.state = state;
-      state.InternalState = this;
-      //#if GDI
-      //      //GdiGraphicsState = state.GdiState;
-      //      this.gfx = gfx;
-      //      this.state = state;
-      //      state.InternalState = this;
-      //#endif
-      //#if WPF
-      //      this.gfx = gfx;
-      //      this.state = state;
-      //      state.InternalState = this;
-      //#endif
-    }
-
-    public InternalGraphicsState(XGraphics gfx, XGraphicsContainer container)
-    {
-      this.gfx = gfx;
-      container.InternalState = this;
-      //#if GDI
-      //      //GdiGraphicsState = container.GdiState;
-      //      this.gfx = gfx;
-      //      container.InternalState = this;
-      //#endif
-      //#if WPF
-      //      this.gfx = gfx;
-      //      container.InternalState = this;
-      //#endif
-    }
+    // In GDI+ the functions Save/Restore, BeginContainer/EndContainer, Transform, SetClip and ResetClip
+    // can be combined in any order. E.g. you can set a clip region, save the graphics state, empty the
+    // clip region and draw without clipping. Then you can restore to the previous clip region. With PDF
+    // this behavior is hard to implement. To solve this problem I first an automaton that keeps track
+    // of all clipping paths and the current transformation when the clip path was set. The automation
+    // manages a PDF graphics state stack to calculate the desired bahaviour. It also takes into consideration
+    // not to multiply with inverse matrixes when the user sets a new transformation matrix.
+    // After the design works on pager I decided not to implement it because it is much to large-scale.
+    // Instead I lay down some rules how to use the XGraphics class.
+    //
+    // * Before you set a transformation matrix save the graphics state (Save) or begin a new container
+    //   (BeginContainer).
+    // 
+    // * Instead of resetting the transformation matrix, call Restore or EndContainer. If you reset the
+    //   transformation, in PDF must be multiplied with the inverse matrix. That leads to round off errors
+    //   because in PDF file only 3 digits are used and Acrobat internally uses fixed point numbers (until
+    //   versioin 6 or 7 I think).
+    //
+    // * When no clip path is defined, you can set or intersect a new path.
+    //
+    // * When a clip path is already defined, you can always intersect with a new one (wich leads in general
+    //   to a smaller clip region).
+    //
+    // * When a clip path is already defined, you can only reset it to the empty region (ResetClip) when
+    //   the graphics state stack is at the same position as it had when the clip path was defined. Otherwise
+    //   an error occurs.
+    //
+    // Keeping these rules leads to easy to read code and best results in PDF output.
 
     /// <summary>
-    /// Gets or sets the current transformation matrix.
+    /// Represents the internal state of an XGraphics object.
     /// </summary>
-    public XMatrix Transform
+    internal class InternalGraphicsState
     {
-      get { return this.transform; }
-      set { this.transform = value; }
-    }
-    XMatrix transform = new XMatrix();  //XMatrix.Identity;
+        public InternalGraphicsState(XGraphics gfx)
+        {
+            this.gfx = gfx;
+        }
 
-    public void Pushed()
-    {
+        public InternalGraphicsState(XGraphics gfx, XGraphicsState state)
+        {
+            this.gfx = gfx;
+            this.state = state;
+            state.InternalState = this;
+            //#if GDI
+            //      //GdiGraphicsState = state.GdiState;
+            //      this.gfx = gfx;
+            //      this.state = state;
+            //      state.InternalState = this;
+            //#endif
+            //#if WPF
+            //      this.gfx = gfx;
+            //      this.state = state;
+            //      state.InternalState = this;
+            //#endif
+        }
+
+        public InternalGraphicsState(XGraphics gfx, XGraphicsContainer container)
+        {
+            this.gfx = gfx;
+            container.InternalState = this;
+            //#if GDI
+            //      //GdiGraphicsState = container.GdiState;
+            //      this.gfx = gfx;
+            //      container.InternalState = this;
+            //#endif
+            //#if WPF
+            //      this.gfx = gfx;
+            //      container.InternalState = this;
+            //#endif
+        }
+
+        /// <summary>
+        /// Gets or sets the current transformation matrix.
+        /// </summary>
+        public XMatrix Transform
+        {
+            get { return this.transform; }
+            set { this.transform = value; }
+        }
+        XMatrix transform = new XMatrix();  //XMatrix.Identity;
+
+        public static void Pushed()
+        {
 #if GDI
 #endif
 #if WPF
 #endif
-    }
+        }
 
-    public void Popped()
-    {
-      this.invalid = true;
+        public void Popped()
+        {
+            this.invalid = true;
 #if GDI
 #endif
 #if WPF
-      if (this.gfx.targetContext == XGraphicTargetContext.WPF)
-      {
-        for (int idx = 0; idx < this.transformPushLevel; idx++)
-          this.gfx.dc.Pop();
-        this.transformPushLevel = 0;
-        for (int idx = 0; idx < this.geometryPushLevel; idx++)
-          this.gfx.dc.Pop();
-        this.geometryPushLevel = 0;
-      }
+            if (this.gfx.targetContext == XGraphicTargetContext.WPF)
+            {
+                for (int idx = 0; idx < this.transformPushLevel; idx++)
+                    this.gfx.dc.Pop();
+                this.transformPushLevel = 0;
+                for (int idx = 0; idx < this.geometryPushLevel; idx++)
+                    this.gfx.dc.Pop();
+                this.geometryPushLevel = 0;
+            }
 #endif
-    }
+        }
 
-    internal bool invalid;
+        internal bool invalid;
 
 #if GDI_
     /// <summary>
@@ -156,27 +155,27 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    public void SetTransform(MatrixTransform transform)
-    {
-      this.gfx.dc.PushTransform(transform);
-      this.transformPushLevel++;
-    }
-    int transformPushLevel;
+        public void SetTransform(MatrixTransform transform)
+        {
+            this.gfx.dc.PushTransform(transform);
+            this.transformPushLevel++;
+        }
+        int transformPushLevel;
 
-    public void SetClip(Geometry geometry)
-    {
-      this.gfx.dc.PushClip(geometry);
-      this.geometryPushLevel++;
-    }
-    int geometryPushLevel;
+        public void SetClip(Geometry geometry)
+        {
+            this.gfx.dc.PushClip(geometry);
+            this.geometryPushLevel++;
+        }
+        int geometryPushLevel;
 
 #endif
 
-    internal XGraphics gfx;
-    internal XGraphicsState state;
-    // /// <summary>
-    // /// The GDI+ GraphicsContainer if contructed from XGraphicsContainer.
-    // /// </summary>
-    // public GraphicsContainer GdiGraphicsContainer;
-  }
+        internal XGraphics gfx;
+        internal XGraphicsState state;
+        // /// <summary>
+        // /// The GDI+ GraphicsContainer if contructed from XGraphicsContainer.
+        // /// </summary>
+        // public GraphicsContainer GdiGraphicsContainer;
+    }
 }

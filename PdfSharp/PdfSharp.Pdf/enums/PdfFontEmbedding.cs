@@ -29,35 +29,35 @@
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Specifies the embedding options of an XFont when converted into PDF.
-  /// </summary>
-  public enum PdfFontEmbedding
-  {
     /// <summary>
-    /// Unicode fonts are embedded, WinAnsi fonts are not embedded.
+    /// Specifies the embedding options of an XFont when converted into PDF.
     /// </summary>
-    Default,
+    public enum PdfFontEmbedding
+    {
+        /// <summary>
+        /// Unicode fonts are embedded, WinAnsi fonts are not embedded.
+        /// </summary>
+        Default,
 
-    /// <summary>
-    /// Fonts are not embedded.
-    /// </summary>
-    None,
+        /// <summary>
+        /// Fonts are not embedded.
+        /// </summary>
+        None,
 
-    /// <summary>
-    /// All fonts are embedded.
-    /// </summary>
-    Always,
+        /// <summary>
+        /// All fonts are embedded.
+        /// </summary>
+        Always,
 
-    /// <summary>
-    /// Not yet implemented.
-    /// </summary>
-    Automatic,
-  }
+        /// <summary>
+        /// Not yet implemented.
+        /// </summary>
+        Automatic,
+    }
 
-  class DocumentFontOptions
-  {
-    //public int SubsettingLimit;
-    //public int SubSetMinSize;
-  }
+    class DocumentFontOptions
+    {
+        //public int SubsettingLimit;
+        //public int SubSetMinSize;
+    }
 }

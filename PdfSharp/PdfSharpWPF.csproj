@@ -15,7 +15,7 @@
 		<RepositoryUrl>https://github.com/to87al/pdfsharp.dotnet.core.git</RepositoryUrl>
 		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 		<PlatformTarget>x64</PlatformTarget>
-		<Version>$(VersionPrefix)1.0.3</Version>
+		<Version>$(VersionPrefix)1.0.4</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

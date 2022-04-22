@@ -27,72 +27,68 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using PdfSharp.Pdf.Internal;
 
 namespace PdfSharp.Pdf.AcroForms
 {
-  /// <summary>
-  /// Represents the list box field.
-  /// </summary>
-  public sealed class PdfListBoxField : PdfChoiceField
-  {
     /// <summary>
-    /// Initializes a new instance of PdfListBoxField.
+    /// Represents the list box field.
     /// </summary>
-    internal PdfListBoxField(PdfDocument document) : base(document)
+    public sealed class PdfListBoxField : PdfChoiceField
     {
-    }
-
-    internal PdfListBoxField(PdfDictionary dict) : base(dict)
-    {
-    }
-
-    /// <summary>
-    /// Gets or sets the index of the selected item
-    /// </summary>
-    public int SelectedIndex
-    {
-      get
-      {
-        string value = Elements.GetString(Keys.V);
-        return IndexInOptArray(value);
-      }
-      set
-      {
-        string key = ValueInOptArray(value);
-        Elements.SetString(Keys.V, key);
-      }
-    }
-
-    /// <summary>
-    /// Predefined keys of this dictionary. 
-    /// The description comes from PDF 1.4 Reference.
-    /// </summary>
-    public new class Keys : PdfAcroField.Keys
-    {
-      // List boxes have no additional entries.
-
-      internal static DictionaryMeta Meta
-      {
-        get
+        /// <summary>
+        /// Initializes a new instance of PdfListBoxField.
+        /// </summary>
+        internal PdfListBoxField(PdfDocument document) : base(document)
         {
-          if (Keys.meta == null)
-            Keys.meta = CreateMeta(typeof(Keys));
-          return Keys.meta;
         }
-      }
-      static DictionaryMeta meta;
-    }
 
-    /// <summary>
-    /// Gets the KeysMeta of this dictionary type.
-    /// </summary>
-    internal override DictionaryMeta Meta
-    {
-      get {return Keys.Meta;}
+        internal PdfListBoxField(PdfDictionary dict) : base(dict)
+        {
+        }
+
+        /// <summary>
+        /// Gets or sets the index of the selected item
+        /// </summary>
+        public int SelectedIndex
+        {
+            get
+            {
+                string value = Elements.GetString(Keys.V);
+                return IndexInOptArray(value);
+            }
+            set
+            {
+                string key = ValueInOptArray(value);
+                Elements.SetString(Keys.V, key);
+            }
+        }
+
+        /// <summary>
+        /// Predefined keys of this dictionary. 
+        /// The description comes from PDF 1.4 Reference.
+        /// </summary>
+        public new class Keys : PdfAcroField.Keys
+        {
+            // List boxes have no additional entries.
+
+            internal static DictionaryMeta Meta
+            {
+                get
+                {
+                    if (Keys.meta == null)
+                        Keys.meta = CreateMeta(typeof(Keys));
+                    return Keys.meta;
+                }
+            }
+            static DictionaryMeta meta;
+        }
+
+        /// <summary>
+        /// Gets the KeysMeta of this dictionary type.
+        /// </summary>
+        internal override DictionaryMeta Meta
+        {
+            get { return Keys.Meta; }
+        }
     }
-  }
 }

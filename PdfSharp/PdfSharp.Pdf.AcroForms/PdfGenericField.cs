@@ -27,53 +27,49 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using PdfSharp.Pdf.Internal;
 
 namespace PdfSharp.Pdf.AcroForms
 {
-  /// <summary>
-  /// Represents a generic field. Used for AcroForm dictionaries unknown to PDFsharp.
-  /// </summary>
-  public sealed class PdfGenericField : PdfAcroField
-  {
     /// <summary>
-    /// Initializes a new instance of PdfGenericField.
+    /// Represents a generic field. Used for AcroForm dictionaries unknown to PDFsharp.
     /// </summary>
-    internal PdfGenericField(PdfDocument document) : base(document)
+    public sealed class PdfGenericField : PdfAcroField
     {
-    }
-
-    internal PdfGenericField(PdfDictionary dict) : base(dict)
-    {
-    }
-
-    /// <summary>
-    /// Predefined keys of this dictionary. 
-    /// The description comes from PDF 1.4 Reference.
-    /// </summary>
-    public new class Keys : PdfAcroField.Keys
-    {
-      internal static DictionaryMeta Meta
-      {
-        get
+        /// <summary>
+        /// Initializes a new instance of PdfGenericField.
+        /// </summary>
+        internal PdfGenericField(PdfDocument document) : base(document)
         {
-          if (Keys.meta == null)
-            Keys.meta = CreateMeta(typeof(Keys));
-          return Keys.meta;
         }
-      }
-      static DictionaryMeta meta;
-    }
 
-    /// <summary>
-    /// Gets the KeysMeta of this dictionary type.
-    /// </summary>
-    internal override DictionaryMeta Meta
-    {
-      get {return Keys.Meta;}
+        internal PdfGenericField(PdfDictionary dict) : base(dict)
+        {
+        }
+
+        /// <summary>
+        /// Predefined keys of this dictionary. 
+        /// The description comes from PDF 1.4 Reference.
+        /// </summary>
+        public new class Keys : PdfAcroField.Keys
+        {
+            internal static DictionaryMeta Meta
+            {
+                get
+                {
+                    if (Keys.meta == null)
+                        Keys.meta = CreateMeta(typeof(Keys));
+                    return Keys.meta;
+                }
+            }
+            static DictionaryMeta meta;
+        }
+
+        /// <summary>
+        /// Gets the KeysMeta of this dictionary type.
+        /// </summary>
+        internal override DictionaryMeta Meta
+        {
+            get { return Keys.Meta; }
+        }
     }
-  }
 }

@@ -27,83 +27,79 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
 using PdfSharp.Pdf.Annotations;
-using PdfSharp.Pdf.Internal;
 
 namespace PdfSharp.Pdf.AcroForms
 {
-  /// <summary>
-  /// Represents the check box field.
-  /// </summary>
-  public sealed class PdfCheckBoxField : PdfButtonField
-  {
     /// <summary>
-    /// Initializes a new instance of PdfCheckBoxField.
+    /// Represents the check box field.
     /// </summary>
-    internal PdfCheckBoxField(PdfDocument document) : base(document)
+    public sealed class PdfCheckBoxField : PdfButtonField
     {
-      this.document = document;
-    }
-
-    internal PdfCheckBoxField(PdfDictionary dict) : base(dict)
-    {
-    }
-
-    /// <summary>
-    /// Indicates whether the field is checked.
-    /// </summary>
-    public bool Checked
-    { 
-      get
-      {
-        string value = Elements.GetString(Keys.V);
-        return value.Length != 0 && value != "/Off";
-      }
-      set 
-      {
-        string name = value ? GetNonOffValue() : "/Off";
-        Elements.SetName(Keys.V, name);
-        Elements.SetName(PdfAnnotation.Keys.AS, name);
-      }
-    }
-
-    /// <summary>
-    /// Predefined keys of this dictionary. 
-    /// The description comes from PDF 1.4 Reference.
-    /// </summary>
-    public new class Keys : PdfButtonField.Keys
-    {
-      /// <summary>
-      /// (Optional; inheritable; PDF 1.4) A text string to be used in place of the V entry for the
-      /// value of the field.
-      /// </summary>
-      [KeyInfo(KeyType.TextString | KeyType.Optional)]
-      public const string Opt = "/Opt";
-  
-      /// <summary>
-      /// Gets the KeysMeta for these keys.
-      /// </summary>
-      internal static DictionaryMeta Meta
-      {
-        get
+        /// <summary>
+        /// Initializes a new instance of PdfCheckBoxField.
+        /// </summary>
+        internal PdfCheckBoxField(PdfDocument document) : base(document)
         {
-          if (Keys.meta == null)
-            Keys.meta = CreateMeta(typeof(Keys));
-          return Keys.meta;
+            this.document = document;
         }
-      }
-      static DictionaryMeta meta;
-    }
 
-    /// <summary>
-    /// Gets the KeysMeta of this dictionary type.
-    /// </summary>
-    internal override DictionaryMeta Meta
-    {
-      get {return Keys.Meta;}
+        internal PdfCheckBoxField(PdfDictionary dict) : base(dict)
+        {
+        }
+
+        /// <summary>
+        /// Indicates whether the field is checked.
+        /// </summary>
+        public bool Checked
+        {
+            get
+            {
+                string value = Elements.GetString(Keys.V);
+                return value.Length != 0 && value != "/Off";
+            }
+            set
+            {
+                string name = value ? GetNonOffValue() : "/Off";
+                Elements.SetName(Keys.V, name);
+                Elements.SetName(PdfAnnotation.Keys.AS, name);
+            }
+        }
+
+        /// <summary>
+        /// Predefined keys of this dictionary. 
+        /// The description comes from PDF 1.4 Reference.
+        /// </summary>
+        public new class Keys : PdfButtonField.Keys
+        {
+            /// <summary>
+            /// (Optional; inheritable; PDF 1.4) A text string to be used in place of the V entry for the
+            /// value of the field.
+            /// </summary>
+            [KeyInfo(KeyType.TextString | KeyType.Optional)]
+            public const string Opt = "/Opt";
+
+            /// <summary>
+            /// Gets the KeysMeta for these keys.
+            /// </summary>
+            internal static DictionaryMeta Meta
+            {
+                get
+                {
+                    if (Keys.meta == null)
+                        Keys.meta = CreateMeta(typeof(Keys));
+                    return Keys.meta;
+                }
+            }
+            static DictionaryMeta meta;
+        }
+
+        /// <summary>
+        /// Gets the KeysMeta of this dictionary type.
+        /// </summary>
+        internal override DictionaryMeta Meta
+        {
+            get { return Keys.Meta; }
+        }
     }
-  }
 }

@@ -28,58 +28,57 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 
 namespace PdfSharp.Drawing.BarCodes
 {
-  /// <summary>
-  /// Imlpementation of the Code 3 of 9 bar code.
-  /// </summary>
-  public class Code3of9Standard : ThickThinBarCode
-  {
     /// <summary>
-    /// Initializes a new instance of Standard3of9.
+    /// Imlpementation of the Code 3 of 9 bar code.
     /// </summary>
-    public Code3of9Standard()
-      : base("", XSize.Empty, CodeDirection.LeftToRight)
+    public class Code3of9Standard : ThickThinBarCode
     {
-    }
+        /// <summary>
+        /// Initializes a new instance of Standard3of9.
+        /// </summary>
+        public Code3of9Standard()
+          : base("", XSize.Empty, CodeDirection.LeftToRight)
+        {
+        }
 
-    /// <summary>
-    /// Initializes a new instance of Standard3of9.
-    /// </summary>
-    public Code3of9Standard(string code)
-      : base(code, XSize.Empty, CodeDirection.LeftToRight)
-    {
-    }
+        /// <summary>
+        /// Initializes a new instance of Standard3of9.
+        /// </summary>
+        public Code3of9Standard(string code)
+          : base(code, XSize.Empty, CodeDirection.LeftToRight)
+        {
+        }
 
-    /// <summary>
-    /// Initializes a new instance of Standard3of9.
-    /// </summary>
-    public Code3of9Standard(string code, XSize size)
-      : base(code, size, CodeDirection.LeftToRight)
-    {
-    }
+        /// <summary>
+        /// Initializes a new instance of Standard3of9.
+        /// </summary>
+        public Code3of9Standard(string code, XSize size)
+          : base(code, size, CodeDirection.LeftToRight)
+        {
+        }
 
-    /// <summary>
-    /// Initializes a new instance of Standard3of9.
-    /// </summary>
-    public Code3of9Standard(string code, XSize size, CodeDirection direction)
-      : base(code, size, direction)
-    {
-    }
+        /// <summary>
+        /// Initializes a new instance of Standard3of9.
+        /// </summary>
+        public Code3of9Standard(string code, XSize size, CodeDirection direction)
+          : base(code, size, direction)
+        {
+        }
 
-    /// <summary>
-    /// Returns an array of size 9 that represents the thick (true) and thin (false) lines and spaces
-    /// representing the specified digit.
-    /// </summary>
-    /// <param name="ch">The character to represent.</param>
-    private static bool[] ThickThinLines(char ch)
-    {
-      return Lines["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%*".IndexOf(ch)];
-    }
-    static bool[][] Lines = new bool[][]
-    {
+        /// <summary>
+        /// Returns an array of size 9 that represents the thick (true) and thin (false) lines and spaces
+        /// representing the specified digit.
+        /// </summary>
+        /// <param name="ch">The character to represent.</param>
+        private static bool[] ThickThinLines(char ch)
+        {
+            return Lines["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%*".IndexOf(ch)];
+        }
+        static readonly bool[][] Lines = new bool[][]
+        {
       // '0'
       new bool[] {false, false, false, true, true, false, true, false, false},
       // '1'
@@ -168,108 +167,108 @@ namespace PdfSharp.Drawing.BarCodes
       new bool[] {false, false, false, true, false, true, false, true, false},
       // '*'
       new bool[] {false, true, false, false, true, false, true, false, false},
-   };
+       };
 
 
-    /// <summary>
-    /// Calculates the thick and thin line widths,
-    /// taking into account the required rendering size.
-    /// </summary>
-    internal override void CalcThinBarWidth(BarCodeRenderInfo info)
-    {
-      /*
-       * The total width is the sum of the following parts:
-       * Starting lines      = 3 * thick + 7 * thin
-       *  +
-       * Code Representation = (3 * thick + 7 * thin) * code.Length
-       *  +
-       * Stopping lines      =  3 * thick + 6 * thin
-       * 
-       * with r = relation ( = thick / thin), this results in
-       * 
-       * Total width = (13 + 6 * r + (3 * r + 7) * code.Length) * thin
-       */
-      double thinLineAmount = 13 + 6 * this.wideNarrowRatio + (3 * this.wideNarrowRatio + 7) * this.text.Length;
-      info.ThinBarWidth = this.Size.Width / thinLineAmount;
+        /// <summary>
+        /// Calculates the thick and thin line widths,
+        /// taking into account the required rendering size.
+        /// </summary>
+        internal override void CalcThinBarWidth(BarCodeRenderInfo info)
+        {
+            /*
+             * The total width is the sum of the following parts:
+             * Starting lines      = 3 * thick + 7 * thin
+             *  +
+             * Code Representation = (3 * thick + 7 * thin) * code.Length
+             *  +
+             * Stopping lines      =  3 * thick + 6 * thin
+             * 
+             * with r = relation ( = thick / thin), this results in
+             * 
+             * Total width = (13 + 6 * r + (3 * r + 7) * code.Length) * thin
+             */
+            double thinLineAmount = 13 + 6 * this.wideNarrowRatio + (3 * this.wideNarrowRatio + 7) * this.text.Length;
+            info.ThinBarWidth = this.Size.Width / thinLineAmount;
+        }
+
+        /// <summary>
+        /// Checks the code to be convertible into an standard 3 of 9 bar code.
+        /// </summary>
+        /// <param name="text">The code to be checked.</param>
+        protected override void CheckCode(string text)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
+
+            if (text.Length == 0)
+                throw new ArgumentException(BcgSR.Invalid3Of9Code(text));
+
+            foreach (char ch in text)
+            {
+                if ("0123456789ABCDEFGHIJKLMNOP'QRSTUVWXYZ-. $/+%*".IndexOf(ch) < 0)
+                    throw new ArgumentException(BcgSR.Invalid3Of9Code(text));
+            }
+        }
+
+        /// <summary>
+        /// Renders the bar code.
+        /// </summary>
+        protected internal override void Render(XGraphics gfx, XBrush brush, XFont font, XPoint position)
+        {
+            XGraphicsState state = gfx.Save();
+
+            BarCodeRenderInfo info = new BarCodeRenderInfo(gfx, brush, font, position);
+            InitRendering(info);
+            info.CurrPosInString = 0;
+            //info.CurrPos = info.Center - this.size / 2;
+            info.CurrPos = position - CodeBase.CalcDistance(AnchorType.TopLeft, this.anchor, this.size);
+
+            if (TurboBit)
+                RenderTurboBit(info, true);
+            RenderStart(info);
+            while (info.CurrPosInString < this.text.Length)
+            {
+                RenderNextChar(info);
+                RenderGap(info, false);
+            }
+            RenderStop(info);
+            if (TurboBit)
+                RenderTurboBit(info, false);
+            if (TextLocation != TextLocation.None)
+                RenderText(info);
+
+            gfx.Restore(state);
+        }
+
+        private void RenderNextChar(BarCodeRenderInfo info)
+        {
+            RenderChar(info, this.text[info.CurrPosInString]);
+            ++info.CurrPosInString;
+        }
+
+        private void RenderChar(BarCodeRenderInfo info, char ch)
+        {
+            bool[] thickThinLines = ThickThinLines(ch);
+            int idx = 0;
+            while (idx < 9)
+            {
+                RenderBar(info, thickThinLines[idx]);
+                if (idx < 8)
+                    RenderGap(info, thickThinLines[idx + 1]);
+                idx += 2;
+            }
+        }
+
+        private void RenderStart(BarCodeRenderInfo info)
+        {
+            RenderChar(info, '*');
+            RenderGap(info, false);
+        }
+
+        private void RenderStop(BarCodeRenderInfo info)
+        {
+            RenderChar(info, '*');
+        }
     }
-
-    /// <summary>
-    /// Checks the code to be convertible into an standard 3 of 9 bar code.
-    /// </summary>
-    /// <param name="text">The code to be checked.</param>
-    protected override void CheckCode(string text)
-    {
-      if (text == null)
-        throw new ArgumentNullException("text");
-
-      if (text.Length == 0)
-        throw new ArgumentException(BcgSR.Invalid3Of9Code(text));
-
-      foreach (char ch in text)
-      {
-        if ("0123456789ABCDEFGHIJKLMNOP'QRSTUVWXYZ-. $/+%*".IndexOf(ch) < 0)
-          throw new ArgumentException(BcgSR.Invalid3Of9Code(text));
-      }
-    }
-
-    /// <summary>
-    /// Renders the bar code.
-    /// </summary>
-    protected internal override void Render(XGraphics gfx, XBrush brush, XFont font, XPoint position)
-    {
-      XGraphicsState state = gfx.Save();
-
-      BarCodeRenderInfo info = new BarCodeRenderInfo(gfx, brush, font, position);
-      InitRendering(info);
-      info.CurrPosInString = 0;
-      //info.CurrPos = info.Center - this.size / 2;
-      info.CurrPos = position - CodeBase.CalcDistance(AnchorType.TopLeft, this.anchor, this.size);
-
-      if (TurboBit)
-        RenderTurboBit(info, true);
-      RenderStart(info);
-      while (info.CurrPosInString < this.text.Length)
-      {
-        RenderNextChar(info);
-        RenderGap(info, false);
-      }
-      RenderStop(info);
-      if (TurboBit)
-        RenderTurboBit(info, false);
-      if (TextLocation != TextLocation.None)
-        RenderText(info);
-
-      gfx.Restore(state);
-    }
-
-    private void RenderNextChar(BarCodeRenderInfo info)
-    {
-      RenderChar(info, this.text[info.CurrPosInString]);
-      ++info.CurrPosInString;
-    }
-
-    private void RenderChar(BarCodeRenderInfo info, char ch)
-    {
-      bool[] thickThinLines = ThickThinLines(ch);
-      int idx = 0;
-      while (idx < 9)
-      {
-        RenderBar(info, thickThinLines[idx]);
-        if (idx < 8)
-          RenderGap(info, thickThinLines[idx + 1]);
-        idx += 2;
-      }
-    }
-
-    private void RenderStart(BarCodeRenderInfo info)
-    {
-      RenderChar(info, '*');
-      RenderGap(info, false);
-    }
-
-    private void RenderStop(BarCodeRenderInfo info)
-    {
-      RenderChar(info, '*');
-    }
-  }
 }

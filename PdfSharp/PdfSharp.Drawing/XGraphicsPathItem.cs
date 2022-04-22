@@ -27,29 +27,26 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Text;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
 
 namespace PdfSharp.Drawing
 {
 #if true
-  /// <summary>
-  /// Represents a segment of a path defined by a type and a set of points.
-  /// </summary>
-  internal sealed class XGraphicsPathItem
-  {
-    public XGraphicsPathItem(XGraphicsPathItemType type)
+    /// <summary>
+    /// Represents a segment of a path defined by a type and a set of points.
+    /// </summary>
+    internal sealed class XGraphicsPathItem
     {
-      this.type   = type;
-      this.points = null;
-    }
+        public XGraphicsPathItem(XGraphicsPathItemType type)
+        {
+            this.type = type;
+            this.points = null;
+        }
 
 #if GDI
     public XGraphicsPathItem(XGraphicsPathItemType type, params PointF[] points)
@@ -58,22 +55,22 @@ namespace PdfSharp.Drawing
       this.points = XGraphics.MakeXPointArray(points);
     }
 #endif
-    
-    public XGraphicsPathItem(XGraphicsPathItemType type, params XPoint[] points)
-    {
-      this.type   = type;
-      this.points = (XPoint[])points.Clone();
-    }
 
-    public XGraphicsPathItem Clone()
-    {
-      XGraphicsPathItem item = MemberwiseClone() as XGraphicsPathItem;
-      item.points = this.points.Clone() as XPoint[];
-      return item;
-    }
+        public XGraphicsPathItem(XGraphicsPathItemType type, params XPoint[] points)
+        {
+            this.type = type;
+            this.points = (XPoint[])points.Clone();
+        }
 
-    public XGraphicsPathItemType type;
-    public XPoint[] points;
-  }
+        public XGraphicsPathItem Clone()
+        {
+            XGraphicsPathItem item = MemberwiseClone() as XGraphicsPathItem;
+            item.points = this.points.Clone() as XPoint[];
+            return item;
+        }
+
+        public XGraphicsPathItemType type;
+        public XPoint[] points;
+    }
 #endif
 }

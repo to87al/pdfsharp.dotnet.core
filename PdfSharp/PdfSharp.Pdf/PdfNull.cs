@@ -27,42 +27,37 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Represents a indirect reference that is not in the cross reference table.
-  /// </summary>
-  public sealed class PdfNull : PdfItem
-  {
-    PdfNull()
-    { }
-
     /// <summary>
-    /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+    /// Represents a indirect reference that is not in the cross reference table.
     /// </summary>
-    /// <returns>
-    /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-    /// </returns>
-    public override string ToString()
+    public sealed class PdfNull : PdfItem
     {
-      return "null";
-    }
+        PdfNull()
+        { }
 
-    internal override void WriteObject(PdfSharp.Pdf.IO.PdfWriter writer)
-    {
-      // Implementet because it must be overridden.
-      writer.WriteRaw(" null ");
-    }
+        /// <summary>
+        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        /// </returns>
+        public override string ToString()
+        {
+            return "null";
+        }
 
-    /// <summary>
-    /// The only instance of this class.
-    /// </summary>
-    public static readonly PdfNull Value = new PdfNull();
-  }
+        internal override void WriteObject(PdfSharp.Pdf.IO.PdfWriter writer)
+        {
+            // Implementet because it must be overridden.
+            writer.WriteRaw(" null ");
+        }
+
+        /// <summary>
+        /// The only instance of this class.
+        /// </summary>
+        public static readonly PdfNull Value = new PdfNull();
+    }
 }

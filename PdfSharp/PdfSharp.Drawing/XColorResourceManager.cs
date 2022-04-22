@@ -28,41 +28,39 @@
 #endregion
 
 using System;
-using System.Globalization;
 using System.ComponentModel;
+using System.Globalization;
 using System.Threading;
 #if GDI
 using System.Drawing;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Manages the localization of the color class.
-  /// </summary>
-  public class XColorResourceManager
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="XColorResourceManager"/> class.
+    /// Manages the localization of the color class.
     /// </summary>
-    public XColorResourceManager()
-      : this(Thread.CurrentThread.CurrentUICulture)
-    { }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="XColorResourceManager"/> class.
-    /// </summary>
-    /// <param name="cultureInfo">The culture info.</param>
-    public XColorResourceManager(CultureInfo cultureInfo)
+    public class XColorResourceManager
     {
-      this.cultureInfo = cultureInfo;
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XColorResourceManager"/> class.
+        /// </summary>
+        public XColorResourceManager()
+          : this(Thread.CurrentThread.CurrentUICulture)
+        { }
 
-    CultureInfo cultureInfo;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XColorResourceManager"/> class.
+        /// </summary>
+        /// <param name="cultureInfo">The culture info.</param>
+        public XColorResourceManager(CultureInfo cultureInfo)
+        {
+            this.cultureInfo = cultureInfo;
+        }
+
+        readonly CultureInfo cultureInfo;
 
 #if DEBUG_
     static public void Test()
@@ -95,75 +93,75 @@ namespace PdfSharp.Drawing
     }
 #endif
 
-    /// <summary>
-    /// Gets a known color from an ARGB value. Throws an ArgumentException if the value is not a known color.
-    /// </summary>
-    public static XKnownColor GetKnownColor(uint argb)
-    {
-      XKnownColor knownColor = XKnownColorTable.GetKnownColor(argb);
-      if ((int)knownColor == -1)
-        throw new ArgumentException("The argument is not a known color", "argb");
-      return knownColor;
-    }
+        /// <summary>
+        /// Gets a known color from an ARGB value. Throws an ArgumentException if the value is not a known color.
+        /// </summary>
+        public static XKnownColor GetKnownColor(uint argb)
+        {
+            XKnownColor knownColor = XKnownColorTable.GetKnownColor(argb);
+            if ((int)knownColor == -1)
+                throw new ArgumentException("The argument is not a known color", "argb");
+            return knownColor;
+        }
 
-    /// <summary>
-    /// Gets all known colors.
-    /// </summary>
-    /// <param name="includeTransparent">Indicates whether to include the color Transparent.</param>
-    public static XKnownColor[] GetKnownColors(bool includeTransparent)
-    {
-      int count = colorInfos.Length;
-      XKnownColor[] knownColor = new XKnownColor[count - (includeTransparent ? 0 : 1)];
-      for (int idxIn = includeTransparent ? 0 : 1, idxOut = 0; idxIn < count; idxIn++, idxOut++)
-        knownColor[idxOut] = colorInfos[idxIn].knownColor;
-      return knownColor;
-    }
+        /// <summary>
+        /// Gets all known colors.
+        /// </summary>
+        /// <param name="includeTransparent">Indicates whether to include the color Transparent.</param>
+        public static XKnownColor[] GetKnownColors(bool includeTransparent)
+        {
+            int count = colorInfos.Length;
+            XKnownColor[] knownColor = new XKnownColor[count - (includeTransparent ? 0 : 1)];
+            for (int idxIn = includeTransparent ? 0 : 1, idxOut = 0; idxIn < count; idxIn++, idxOut++)
+                knownColor[idxOut] = colorInfos[idxIn].knownColor;
+            return knownColor;
+        }
 
-    /// <summary>
-    /// Converts a known color to a localized color name.
-    /// </summary>
-    public string ToColorName(XKnownColor knownColor)
-    {
-      ColorResourceInfo colorInfo = GetColorInfo(knownColor);
+        /// <summary>
+        /// Converts a known color to a localized color name.
+        /// </summary>
+        public string ToColorName(XKnownColor knownColor)
+        {
+            ColorResourceInfo colorInfo = GetColorInfo(knownColor);
 
-      // Currently German only
-      if (this.cultureInfo.TwoLetterISOLanguageName == "de")
-        return colorInfo.NameDE;
+            // Currently German only
+            if (this.cultureInfo.TwoLetterISOLanguageName == "de")
+                return colorInfo.NameDE;
 
-      return colorInfo.Name;
-    }
+            return colorInfo.Name;
+        }
 
-    /// <summary>
-    /// Converts a color to a localized color name or an ARGB value.
-    /// </summary>
-    public string ToColorName(XColor color)
-    {
-      string name;
-      if (color.IsKnownColor)
-        name = ToColorName(XKnownColorTable.GetKnownColor(color.Argb));
-      else
-        name = String.Format("{0}, {1}, {2}, {3}", (int)(255 * color.A), color.R, color.G, color.B);
-      return name;
-    }
+        /// <summary>
+        /// Converts a color to a localized color name or an ARGB value.
+        /// </summary>
+        public string ToColorName(XColor color)
+        {
+            string name;
+            if (color.IsKnownColor)
+                name = ToColorName(XKnownColorTable.GetKnownColor(color.Argb));
+            else
+                name = String.Format("{0}, {1}, {2}, {3}", (int)(255 * color.A), color.R, color.G, color.B);
+            return name;
+        }
 
-    static ColorResourceInfo GetColorInfo(XKnownColor knownColor)
-    {
-      for (int idx = 0; idx < colorInfos.Length; idx++)
-      {
-        ColorResourceInfo colorInfo = colorInfos[idx];
-        if (colorInfo.knownColor == knownColor)
-          return colorInfo;
-      }
-      throw new InvalidEnumArgumentException("Enum is not an XKnownColor.");
-    }
+        static ColorResourceInfo GetColorInfo(XKnownColor knownColor)
+        {
+            for (int idx = 0; idx < colorInfos.Length; idx++)
+            {
+                ColorResourceInfo colorInfo = colorInfos[idx];
+                if (colorInfo.knownColor == knownColor)
+                    return colorInfo;
+            }
+            throw new InvalidEnumArgumentException("Enum is not an XKnownColor.");
+        }
 
-    // I found no official translation for the 140 pre-defined colors. Some folks made their own translations.
-    // http://unnecessary.de/wuest/farbtab/farbtabelle-w.html
-    // http://blog.patrickkempf.de/archives/2004/04/10/html-farben/
-    // http://www.grafikwunder.de/Grafikecke/Farbtabelle/farbtabelle-006.php
-    // Silke changed some German translations (women know more colors than men :-)
-    internal static ColorResourceInfo[] colorInfos = new ColorResourceInfo[]
-    {
+        // I found no official translation for the 140 pre-defined colors. Some folks made their own translations.
+        // http://unnecessary.de/wuest/farbtab/farbtabelle-w.html
+        // http://blog.patrickkempf.de/archives/2004/04/10/html-farben/
+        // http://www.grafikwunder.de/Grafikecke/Farbtabelle/farbtabelle-006.php
+        // Silke changed some German translations (women know more colors than men :-)
+        internal static ColorResourceInfo[] colorInfos = new ColorResourceInfo[]
+        {
       new ColorResourceInfo(XKnownColor.Transparent, XColors.Transparent, 0x00FFFFFF, "Transparent", "Transparent"),
       new ColorResourceInfo(XKnownColor.Black, XColors.Black, 0xFF000000, "Black", "Schwarz"),
       new ColorResourceInfo(XKnownColor.DarkSlateGray, XColors.DarkSlateGray, 0xFF8FBC8F, "Darkslategray", "Dunkles Schiefergrau"),
@@ -335,23 +333,23 @@ namespace PdfSharp.Drawing
       new ColorResourceInfo(XKnownColor.YellowGreen, XColors.YellowGreen, 0xFF9ACD32, "Yellowgreen", "Gelbgrün"),
       new ColorResourceInfo(XKnownColor.Chartreuse, XColors.Chartreuse, 0xFF7FFF00, "Chartreuse", "Hellgrün"),
       new ColorResourceInfo(XKnownColor.GreenYellow, XColors.GreenYellow, 0xFFADFF2F, "Greenyellow", "Grüngelb"),
-    };
+        };
 
-    internal struct ColorResourceInfo
-    {
-      public ColorResourceInfo(XKnownColor knownColor, XColor color, uint argb, string name, string nameDE)
-      {
-        this.knownColor = knownColor;
-        this.color = color;
-        this.Argb = argb;
-        this.Name = name;
-        this.NameDE = nameDE;
-      }
-      public XKnownColor knownColor;
-      public XColor color;
-      public uint Argb;
-      public string Name;
-      public string NameDE;
+        internal struct ColorResourceInfo
+        {
+            public ColorResourceInfo(XKnownColor knownColor, XColor color, uint argb, string name, string nameDE)
+            {
+                this.knownColor = knownColor;
+                this.color = color;
+                this.Argb = argb;
+                this.Name = name;
+                this.NameDE = nameDE;
+            }
+            public XKnownColor knownColor;
+            public XColor color;
+            public uint Argb;
+            public string Name;
+            public string NameDE;
+        }
     }
-  }
 }

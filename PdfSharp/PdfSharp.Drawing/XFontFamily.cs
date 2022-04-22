@@ -27,30 +27,24 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Pdf;
-using PdfSharp.Fonts.OpenType;
 
 // WPFHACK
 #pragma warning disable 162
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Defines a group of type faces having a similar basic design and certain variations in styles.
-  /// </summary>
-  public sealed class XFontFamily
-  {
-    internal XFontFamily() { }
+    /// <summary>
+    /// Defines a group of type faces having a similar basic design and certain variations in styles.
+    /// </summary>
+    public sealed class XFontFamily
+    {
+        internal XFontFamily() { }
 
 #if GDI
     internal XFontFamily(System.Drawing.FontFamily family)
@@ -64,63 +58,63 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    internal XFontFamily(System.Windows.Media.FontFamily family)
-    {
-      this.name = family.Source;
-      // HACK
-      int idxHash = this.name.LastIndexOf('#');
-      if (idxHash > 0)
-        this.name = this.name.Substring(idxHash + 1);
-      this.wpfFamily = family;
+        internal XFontFamily(System.Windows.Media.FontFamily family)
+        {
+            this.name = family.Source;
+            // HACK
+            int idxHash = this.name.LastIndexOf('#');
+            if (idxHash > 0)
+                this.name = this.name.Substring(idxHash + 1);
+            this.wpfFamily = family;
 #if GDI
       this.gdiFamily = new System.Drawing.FontFamily(family.Source);
 #endif
-    }
+        }
 #endif
 
-    //internal FontFamily();
-    //public FontFamily(GenericFontFamilies genericFamily);
-    //internal FontFamily(IntPtr family);
+        //internal FontFamily();
+        //public FontFamily(GenericFontFamilies genericFamily);
+        //internal FontFamily(IntPtr family);
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="XFontFamily"/> class.
-    /// </summary>
-    /// <param name="name">The family name of a font.</param>
-    public XFontFamily(string name)
-    {
-      this.name = name;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XFontFamily"/> class.
+        /// </summary>
+        /// <param name="name">The family name of a font.</param>
+        public XFontFamily(string name)
+        {
+            this.name = name;
 #if GDI
       this.gdiFamily = new System.Drawing.FontFamily(name);
 #endif
 #if WPF
-      this.wpfFamily = new System.Windows.Media.FontFamily(name);
+            this.wpfFamily = new System.Windows.Media.FontFamily(name);
 #endif
-    }
+        }
 
-    //public FontFamily(string name, FontCollection fontCollection);
+        //public FontFamily(string name, FontCollection fontCollection);
 
-    //public override bool Equals(object obj);
+        //public override bool Equals(object obj);
 
 
-    /// <summary>
-    /// Gets the name of the font family.
-    /// </summary>
-    public string Name
-    {
-      get { return this.name; }
-    }
-    readonly string name;
+        /// <summary>
+        /// Gets the name of the font family.
+        /// </summary>
+        public string Name
+        {
+            get { return this.name; }
+        }
+        readonly string name;
 
-    /// <summary>
-    /// Returns the cell ascent, in design units, of the XFontFamily object of the specified style.
-    /// </summary>
-    public int GetCellAscent(XFontStyle style)
-    {
+        /// <summary>
+        /// Returns the cell ascent, in design units, of the XFontFamily object of the specified style.
+        /// </summary>
+        public int GetCellAscent(XFontStyle style)
+        {
 #if GDI && !WPF
       return this.gdiFamily.GetCellAscent((FontStyle)style);
 #endif
 #if WPF && !GDI
-      return FontHelper.GetWpfValue(this, style, GWV.GetCellAscent);
+            return FontHelper.GetWpfValue(this, style, GWV.GetCellAscent);
 #endif
 #if WPF && GDI
 #if DEBUG
@@ -130,18 +124,18 @@ namespace PdfSharp.Drawing
 #endif
       return FontHelper.GetWpfValue(this, style, GWV.GetCellAscent);
 #endif
-    }
+        }
 
-    /// <summary>
-    /// Returns the cell descent, in design units, of the XFontFamily object of the specified style.
-    /// </summary>
-    public int GetCellDescent(XFontStyle style)
-    {
+        /// <summary>
+        /// Returns the cell descent, in design units, of the XFontFamily object of the specified style.
+        /// </summary>
+        public int GetCellDescent(XFontStyle style)
+        {
 #if GDI && !WPF
       return this.gdiFamily.GetCellDescent((FontStyle)style);
 #endif
 #if WPF && !GDI
-      return FontHelper.GetWpfValue(this, style, GWV.GetCellDescent);
+            return FontHelper.GetWpfValue(this, style, GWV.GetCellDescent);
 #endif
 #if WPF && GDI
 #if DEBUG
@@ -151,13 +145,13 @@ namespace PdfSharp.Drawing
 #endif
       return FontHelper.GetWpfValue(this, style, GWV.GetCellDescent);
 #endif
-    }
+        }
 
-    /// <summary>
-    /// Gets the height, in font design units, of the em square for the specified style.
-    /// </summary>
-    public int GetEmHeight(XFontStyle style)
-    {
+        /// <summary>
+        /// Gets the height, in font design units, of the em square for the specified style.
+        /// </summary>
+        public int GetEmHeight(XFontStyle style)
+        {
 #if GDI && !WPF
 #if DEBUG
       int gdiResult = this.gdiFamily.GetEmHeight((FontStyle)style);
@@ -166,7 +160,7 @@ namespace PdfSharp.Drawing
       return this.gdiFamily.GetEmHeight((FontStyle)style);
 #endif
 #if WPF && !GDI
-      return FontHelper.GetWpfValue(this, style, GWV.GetEmHeight);
+            return FontHelper.GetWpfValue(this, style, GWV.GetEmHeight);
 #endif
 #if WPF && GDI
 #if DEBUG
@@ -176,21 +170,21 @@ namespace PdfSharp.Drawing
 #endif
       return FontHelper.GetWpfValue(this, style, GWV.GetEmHeight);
 #endif
-    }
+        }
 
-    //public override int GetHashCode();
+        //public override int GetHashCode();
 
-    /// <summary>
-    /// Returns the line spacing, in design units, of the FontFamily object of the specified style.
-    /// The line spacing is the vertical distance between the base lines of two consecutive lines of text.
-    /// </summary>
-    public int GetLineSpacing(XFontStyle style)
-    {
+        /// <summary>
+        /// Returns the line spacing, in design units, of the FontFamily object of the specified style.
+        /// The line spacing is the vertical distance between the base lines of two consecutive lines of text.
+        /// </summary>
+        public int GetLineSpacing(XFontStyle style)
+        {
 #if GDI && !WPF
       return this.gdiFamily.GetLineSpacing((FontStyle)style);
 #endif
 #if WPF && !GDI
-      return FontHelper.GetWpfValue(this, style, GWV.GetLineSpacing);
+            return FontHelper.GetWpfValue(this, style, GWV.GetLineSpacing);
 #endif
 #if WPF && GDI
 #if DEBUG
@@ -200,20 +194,20 @@ namespace PdfSharp.Drawing
 #endif
       return FontHelper.GetWpfValue(this, style, GWV.GetLineSpacing);
 #endif
-    }
+        }
 
-    //public string GetName(int language);
+        //public string GetName(int language);
 
-    /// <summary>
-    /// Indicates whether the specified FontStyle enumeration is available.
-    /// </summary>
-    public bool IsStyleAvailable(XFontStyle style)
-    {
+        /// <summary>
+        /// Indicates whether the specified FontStyle enumeration is available.
+        /// </summary>
+        public bool IsStyleAvailable(XFontStyle style)
+        {
 #if GDI && !WPF
       return this.gdiFamily.IsStyleAvailable((FontStyle)style);
 #endif
 #if WPF && !GDI
-      return FontHelper.IsStyleAvailable(this, style);
+            return FontHelper.IsStyleAvailable(this, style);
 #endif
 #if WPF && GDI
 #if DEBUG
@@ -224,21 +218,21 @@ namespace PdfSharp.Drawing
 #endif
       return FontHelper.IsStyleAvailable(this, style);
 #endif
-    }
+        }
 
-    //internal void SetNative(IntPtr native);
-    //public override string ToString();
-    //
-    //// Properties
-    //private static int CurrentLanguage { get; }
+        //internal void SetNative(IntPtr native);
+        //public override string ToString();
+        //
+        //// Properties
+        //private static int CurrentLanguage { get; }
 
-    /// <summary>
-    /// Returns an array that contains all the FontFamily objects associated with the current graphics context.
-    /// </summary>
-    public static XFontFamily[] Families
-    {
-      get
-      {
+        /// <summary>
+        /// Returns an array that contains all the FontFamily objects associated with the current graphics context.
+        /// </summary>
+        public static XFontFamily[] Families
+        {
+            get
+            {
 #if GDI
         System.Drawing.FontFamily[] families = System.Drawing.FontFamily.Families;
         int count = families.Length;
@@ -248,20 +242,20 @@ namespace PdfSharp.Drawing
         return result;
 #endif
 #if WPF
-        //System.Windows.Media.Fonts.GetFontFamilies(
-        // TODOWPF: not very important
-        return null;
+                //System.Windows.Media.Fonts.GetFontFamilies(
+                // TODOWPF: not very important
+                return null;
 #endif
-      }
-    }
+            }
+        }
 
-    /// <summary>
-    /// Returns an array that contains all the FontFamily objects available for the specified 
-    /// graphics context.
-    /// </summary>
-    public static XFontFamily[] GetFamilies(XGraphics graphics)
-    {
-      XFontFamily[] result;
+        /// <summary>
+        /// Returns an array that contains all the FontFamily objects available for the specified 
+        /// graphics context.
+        /// </summary>
+        public static XFontFamily[] GetFamilies(XGraphics graphics)
+        {
+            XFontFamily[] result;
 #if GDI
       System.Drawing.FontFamily[] families = null;
       //families = System.Drawing.FontFamily.GetFamilies(graphics.gfx);
@@ -272,16 +266,16 @@ namespace PdfSharp.Drawing
         result[idx] = new XFontFamily(families[idx]);
 #endif
 #if WPF
-      // TODOWPF: not very important
-      result = null;
+            // TODOWPF: not very important
+            result = null;
 #endif
-      return result;
-    }
+            return result;
+        }
 
-    //public static FontFamily GenericMonospace { get; }
-    //public static FontFamily GenericSansSerif { get; }
-    //public static FontFamily GenericSerif { get; }
-    //public string Name { get; }
+        //public static FontFamily GenericMonospace { get; }
+        //public static FontFamily GenericSansSerif { get; }
+        //public static FontFamily GenericSerif { get; }
+        //public string Name { get; }
 
 #if GDI
     /// <summary>
@@ -291,10 +285,10 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-    /// <summary>
-    /// WPF object.
-    /// </summary>
-    internal System.Windows.Media.FontFamily wpfFamily;
+        /// <summary>
+        /// WPF object.
+        /// </summary>
+        internal System.Windows.Media.FontFamily wpfFamily;
 #endif
-  }
+    }
 }

@@ -30,115 +30,111 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Pdf;
 
 namespace PdfSharp.Pdf.IO
 {
-  /// <summary>
-  /// Represents the stack for the shift-reduce parser. It seems that it is only needed for
-  /// reduction of indirect references.
-  /// </summary>
-  internal class ShiftStack
-  {
-    // TODO: make Lexer.PeekChars(20) and scan for 'R' to detect indirect references
-
-    public ShiftStack()
-    {
-      this.items = new List<PdfItem>();
-    }
-
-    public PdfItem[] ToArray(int start, int length)
-    {
-      PdfItem[] items = new PdfItem[length];
-      for (int i = 0, j = start; i < length; i++, j++)
-        items[i] = (PdfItem)this.items[j];
-      return items;
-    }
-
     /// <summary>
-    /// Gets the stack pointer index.
+    /// Represents the stack for the shift-reduce parser. It seems that it is only needed for
+    /// reduction of indirect references.
     /// </summary>
-    public int SP
+    internal class ShiftStack
     {
-      get {return this.sp;}
+        // TODO: make Lexer.PeekChars(20) and scan for 'R' to detect indirect references
+
+        public ShiftStack()
+        {
+            this.items = new List<PdfItem>();
+        }
+
+        public PdfItem[] ToArray(int start, int length)
+        {
+            PdfItem[] items = new PdfItem[length];
+            for (int i = 0, j = start; i < length; i++, j++)
+                items[i] = (PdfItem)this.items[j];
+            return items;
+        }
+
+        /// <summary>
+        /// Gets the stack pointer index.
+        /// </summary>
+        public int SP
+        {
+            get { return this.sp; }
+        }
+
+        /// <summary>
+        /// Gets the value at the specified index. Valid index is in range 0 up to sp-1.
+        /// </summary>
+        public PdfItem this[int index]
+        {
+            get
+            {
+                if (index >= this.sp)
+                    throw new ArgumentOutOfRangeException("index", index, "Value greater than stack index.");
+                return (PdfItem)this.items[index];
+            }
+        }
+
+        /// <summary>
+        /// Gets an item relative to the current stack pointer. The index must be a negative value (-1, -2, etc.).
+        /// </summary>
+        public PdfItem GetItem(int relativeIndex)
+        {
+            if (relativeIndex >= 0 || -relativeIndex > this.sp)
+                throw new ArgumentOutOfRangeException("index", relativeIndex, "Value out of stack range.");
+            return (PdfItem)this.items[this.sp + relativeIndex];
+        }
+
+        /// <summary>
+        /// Gets an item relative to the current stack pointer. The index must be a negative value (-1, -2, etc.).
+        /// </summary>
+        public int GetInteger(int relativeIndex)
+        {
+            if (relativeIndex >= 0 || -relativeIndex > this.sp)
+                throw new ArgumentOutOfRangeException("index", relativeIndex, "Value out of stack range.");
+            return ((PdfInteger)this.items[this.sp + relativeIndex]).Value;
+        }
+
+        /// <summary>
+        /// Pushes the specified item onto the stack.
+        /// </summary>
+        public void Shift(PdfItem item)
+        {
+            Debug.Assert(item != null);
+            this.items.Add(item);
+            this.sp++;
+        }
+
+        /// <summary>
+        /// Replaces the last 'count' items with the specified item.
+        /// </summary>
+        public void Reduce(int count)
+        {
+            if (count > this.sp)
+                throw new ArgumentException("count causes stack underflow.");
+            this.items.RemoveRange(this.sp - count, count);
+            this.sp -= count;
+        }
+
+        /// <summary>
+        /// Replaces the last 'count' items with the specified item.
+        /// </summary>
+        public void Reduce(PdfItem item, int count)
+        {
+            Debug.Assert(item != null);
+            Reduce(count);
+            this.items.Add(item);
+            this.sp++;
+        }
+
+        /// <summary>
+        /// The stack pointer index. Points to the next free item.
+        /// </summary>
+        int sp;
+
+        /// <summary>
+        /// An array representing the stack.
+        /// </summary>
+        readonly List<PdfItem> items;
     }
-
-    /// <summary>
-    /// Gets the value at the specified index. Valid index is in range 0 up to sp-1.
-    /// </summary>
-    public PdfItem this[int index]
-    {
-      get 
-      {
-        if (index >= this.sp)
-          throw new ArgumentOutOfRangeException("index", index, "Value greater than stack index.");
-        return (PdfItem)this.items[index];
-      }
-    }
-
-    /// <summary>
-    /// Gets an item relative to the current stack pointer. The index must be a negative value (-1, -2, etc.).
-    /// </summary>
-    public PdfItem GetItem(int relativeIndex)
-    {
-      if (relativeIndex >= 0 || -relativeIndex > this.sp)
-        throw new ArgumentOutOfRangeException("index", relativeIndex, "Value out of stack range.");
-      return (PdfItem)this.items[this.sp + relativeIndex];
-    }
-
-    /// <summary>
-    /// Gets an item relative to the current stack pointer. The index must be a negative value (-1, -2, etc.).
-    /// </summary>
-    public int GetInteger(int relativeIndex)
-    {
-      if (relativeIndex >= 0 || -relativeIndex > this.sp)
-        throw new ArgumentOutOfRangeException("index", relativeIndex, "Value out of stack range.");
-      return ((PdfInteger)this.items[this.sp + relativeIndex]).Value;
-    }
-
-    /// <summary>
-    /// Pushes the specified item onto the stack.
-    /// </summary>
-    public void Shift(PdfItem item)
-    {
-      Debug.Assert(item != null);
-      this.items.Add(item);
-      this.sp++;
-    }
-
-    /// <summary>
-    /// Replaces the last 'count' items with the specified item.
-    /// </summary>
-    public void Reduce(int count)
-    {
-      if (count > this.sp)
-        throw new ArgumentException("count causes stack underflow.");
-      this.items.RemoveRange(this.sp - count, count);
-      this.sp -= count;
-    }
-
-    /// <summary>
-    /// Replaces the last 'count' items with the specified item.
-    /// </summary>
-    public void Reduce(PdfItem item, int count)
-    {
-      Debug.Assert(item != null);
-      Reduce(count);
-      this.items.Add(item);
-      this.sp++;
-    }
-
-    /// <summary>
-    /// The stack pointer index. Points to the next free item.
-    /// </summary>
-    int sp;
-
-    /// <summary>
-    /// An array representing the stack.
-    /// </summary>
-    List<PdfItem> items;
-  }
 }

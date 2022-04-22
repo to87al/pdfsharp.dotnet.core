@@ -27,176 +27,172 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
 using PdfSharp.Drawing;
-using PdfSharp.Internal;
 using PdfSharp.Fonts;
 using PdfSharp.Fonts.OpenType;
-using PdfSharp.Pdf.Advanced;
-using PdfSharp.Pdf.Filters;
+using System.Diagnostics;
+using System.Text;
 
 namespace PdfSharp.Pdf.Advanced
 {
-  /// <summary>
-  /// Represents a composite font. Used for Unicode encoding.
-  /// </summary>
-  internal sealed class PdfType0Font : PdfFont
-  {
-    public PdfType0Font(PdfDocument document)
-      : base(document)
+    /// <summary>
+    /// Represents a composite font. Used for Unicode encoding.
+    /// </summary>
+    internal sealed class PdfType0Font : PdfFont
     {
-    }
-
-    public PdfType0Font(PdfDocument document, XFont font, bool vertical)
-      : base(document)
-    {
-      Elements.SetName(Keys.Type, "/Font");
-      Elements.SetName(Keys.Subtype, "/Type0");
-      Elements.SetName(Keys.Encoding, vertical ? "/Identity-V" : "/Identity-H");
-
-      OpenTypeDescriptor ttDescriptor = (OpenTypeDescriptor)FontDescriptorStock.Global.CreateDescriptor(font);
-      this.fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
-      this.fontOptions = font.PdfOptions;
-      Debug.Assert(this.fontOptions != null);
-
-      this.cmapInfo = new CMapInfo(ttDescriptor);
-      this.descendantFont = new PdfCIDFont(document, this.fontDescriptor, font);
-      this.descendantFont.CMapInfo = this.cmapInfo;
-
-      // Create ToUnicode map
-      this.toUnicode = new PdfToUnicodeMap(document, this.cmapInfo);
-      document.Internals.AddObject(toUnicode);
-      Elements.Add(Keys.ToUnicode, toUnicode);
-
-      //if (this.fontOptions.BaseFont != "")
-      //{
-      //  BaseFont = this.fontOptions.BaseFont;
-      //}
-      //else
-      {
-        BaseFont = font.Name.Replace(" ", "");
-        switch (font.Style & (XFontStyle.Bold | XFontStyle.Italic))
+        public PdfType0Font(PdfDocument document)
+          : base(document)
         {
-          case XFontStyle.Bold:
-            this.BaseFont += ",Bold";
-            break;
-
-          case XFontStyle.Italic:
-            this.BaseFont += ",Italic";
-            break;
-
-          case XFontStyle.Bold | XFontStyle.Italic:
-            this.BaseFont += ",BoldItalic";
-            break;
         }
-      }
-      // CID fonts are always embedded
-      BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
 
-      this.fontDescriptor.FontName = BaseFont;
-      this.descendantFont.BaseFont = BaseFont;
+        public PdfType0Font(PdfDocument document, XFont font, bool vertical)
+          : base(document)
+        {
+            Elements.SetName(Keys.Type, "/Font");
+            Elements.SetName(Keys.Subtype, "/Type0");
+            Elements.SetName(Keys.Encoding, vertical ? "/Identity-V" : "/Identity-H");
 
-      PdfArray descendantFonts = new PdfArray(document);
-      Owner.irefTable.Add(descendantFont);
-      descendantFonts.Elements.Add(descendantFont.Reference);
-      Elements[Keys.DescendantFonts] = descendantFonts;
-    }
+            OpenTypeDescriptor ttDescriptor = (OpenTypeDescriptor)FontDescriptorStock.Global.CreateDescriptor(font);
+            this.fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
+            this.fontOptions = font.PdfOptions;
+            Debug.Assert(this.fontOptions != null);
 
-    public PdfType0Font(PdfDocument document, string idName, byte[] fontData, bool vertical)
-      : base(document)
-    {
-      Elements.SetName(Keys.Type, "/Font");
-      Elements.SetName(Keys.Subtype, "/Type0");
-      Elements.SetName(Keys.Encoding, vertical ? "/Identity-V" : "/Identity-H");
+            this.cmapInfo = new CMapInfo(ttDescriptor);
+            this.descendantFont = new PdfCIDFont(document, this.fontDescriptor, font);
+            this.descendantFont.CMapInfo = this.cmapInfo;
 
-      OpenTypeDescriptor ttDescriptor = (OpenTypeDescriptor)FontDescriptorStock.Global.CreateDescriptor(idName, fontData);
-      this.fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
-      this.fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode, PdfFontEmbedding.Always);
-      Debug.Assert(this.fontOptions != null);
+            // Create ToUnicode map
+            this.toUnicode = new PdfToUnicodeMap(document, this.cmapInfo);
+            document.Internals.AddObject(toUnicode);
+            Elements.Add(Keys.ToUnicode, toUnicode);
 
-      this.cmapInfo = new CMapInfo(ttDescriptor);
-      this.descendantFont = new PdfCIDFont(document, this.fontDescriptor, fontData);
-      this.descendantFont.CMapInfo = this.cmapInfo;
+            //if (this.fontOptions.BaseFont != "")
+            //{
+            //  BaseFont = this.fontOptions.BaseFont;
+            //}
+            //else
+            {
+                BaseFont = font.Name.Replace(" ", "");
+                switch (font.Style & (XFontStyle.Bold | XFontStyle.Italic))
+                {
+                    case XFontStyle.Bold:
+                        this.BaseFont += ",Bold";
+                        break;
 
-      // Create ToUnicode map
-      this.toUnicode = new PdfToUnicodeMap(document, this.cmapInfo);
-      document.Internals.AddObject(toUnicode);
-      Elements.Add(Keys.ToUnicode, toUnicode);
+                    case XFontStyle.Italic:
+                        this.BaseFont += ",Italic";
+                        break;
 
-      BaseFont = ttDescriptor.FontName.Replace(" ", "");
-        //switch (font.Style & (XFontStyle.Bold | XFontStyle.Italic))
-        //{
-        //  case XFontStyle.Bold:
-        //    this.BaseFont += ",Bold";
-        //    break;
+                    case XFontStyle.Bold | XFontStyle.Italic:
+                        this.BaseFont += ",BoldItalic";
+                        break;
+                }
+            }
+            // CID fonts are always embedded
+            BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
 
-        //  case XFontStyle.Italic:
-        //    this.BaseFont += ",Italic";
-        //    break;
+            this.fontDescriptor.FontName = BaseFont;
+            this.descendantFont.BaseFont = BaseFont;
 
-        //  case XFontStyle.Bold | XFontStyle.Italic:
-        //    this.BaseFont += ",BoldItalic";
-        //    break;
-        //}
+            PdfArray descendantFonts = new PdfArray(document);
+            Owner.irefTable.Add(descendantFont);
+            descendantFonts.Elements.Add(descendantFont.Reference);
+            Elements[Keys.DescendantFonts] = descendantFonts;
+        }
 
-      // CID fonts are always embedded
-      if (!BaseFont.Contains("+"))  // HACK in PdfType0Font
-        BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
+        public PdfType0Font(PdfDocument document, string idName, byte[] fontData, bool vertical)
+          : base(document)
+        {
+            Elements.SetName(Keys.Type, "/Font");
+            Elements.SetName(Keys.Subtype, "/Type0");
+            Elements.SetName(Keys.Encoding, vertical ? "/Identity-V" : "/Identity-H");
 
-      this.fontDescriptor.FontName = BaseFont;
-      this.descendantFont.BaseFont = BaseFont;
+            OpenTypeDescriptor ttDescriptor = (OpenTypeDescriptor)FontDescriptorStock.Global.CreateDescriptor(idName, fontData);
+            this.fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
+            this.fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode, PdfFontEmbedding.Always);
+            Debug.Assert(this.fontOptions != null);
 
-      PdfArray descendantFonts = new PdfArray(document);
-      Owner.irefTable.Add(descendantFont);
-      descendantFonts.Elements.Add(descendantFont.Reference);
-      Elements[Keys.DescendantFonts] = descendantFonts;
-    }
+            this.cmapInfo = new CMapInfo(ttDescriptor);
+            this.descendantFont = new PdfCIDFont(document, this.fontDescriptor, fontData);
+            this.descendantFont.CMapInfo = this.cmapInfo;
 
-    XPdfFontOptions FontOptions
-    {
-      get { return this.fontOptions; }
-    }
-    XPdfFontOptions fontOptions;
+            // Create ToUnicode map
+            this.toUnicode = new PdfToUnicodeMap(document, this.cmapInfo);
+            document.Internals.AddObject(toUnicode);
+            Elements.Add(Keys.ToUnicode, toUnicode);
 
-    public string BaseFont
-    {
-      get { return Elements.GetName(Keys.BaseFont); }
-      set { Elements.SetName(Keys.BaseFont, value); }
-    }
+            BaseFont = ttDescriptor.FontName.Replace(" ", "");
+            //switch (font.Style & (XFontStyle.Bold | XFontStyle.Italic))
+            //{
+            //  case XFontStyle.Bold:
+            //    this.BaseFont += ",Bold";
+            //    break;
 
-    internal PdfCIDFont DescendantFont
-    {
-      get { return this.descendantFont; }
-    }
-    PdfCIDFont descendantFont;
+            //  case XFontStyle.Italic:
+            //    this.BaseFont += ",Italic";
+            //    break;
 
-    internal override void PrepareForSave()
-    {
-      base.PrepareForSave();
+            //  case XFontStyle.Bold | XFontStyle.Italic:
+            //    this.BaseFont += ",BoldItalic";
+            //    break;
+            //}
+
+            // CID fonts are always embedded
+            if (!BaseFont.Contains("+"))  // HACK in PdfType0Font
+                BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
+
+            this.fontDescriptor.FontName = BaseFont;
+            this.descendantFont.BaseFont = BaseFont;
+
+            PdfArray descendantFonts = new PdfArray(document);
+            Owner.irefTable.Add(descendantFont);
+            descendantFonts.Elements.Add(descendantFont.Reference);
+            Elements[Keys.DescendantFonts] = descendantFonts;
+        }
+
+        XPdfFontOptions FontOptions
+        {
+            get { return this.fontOptions; }
+        }
+
+        readonly XPdfFontOptions fontOptions;
+
+        public string BaseFont
+        {
+            get { return Elements.GetName(Keys.BaseFont); }
+            set { Elements.SetName(Keys.BaseFont, value); }
+        }
+
+        internal PdfCIDFont DescendantFont
+        {
+            get { return this.descendantFont; }
+        }
+
+        readonly PdfCIDFont descendantFont;
+
+        internal override void PrepareForSave()
+        {
+            base.PrepareForSave();
 
 #if true
-      // use GetGlyphIndices to create the widths array
-      OpenTypeDescriptor descriptor = (OpenTypeDescriptor)this.fontDescriptor.descriptor;
-      StringBuilder w = new StringBuilder("[");
-      if (this.cmapInfo != null)
-      {
-        int[] glyphIndices = this.cmapInfo.GetGlyphIndices();
-        int count = glyphIndices.Length;
-        int[] glyphWidths = new int[count];
+            // use GetGlyphIndices to create the widths array
+            OpenTypeDescriptor descriptor = (OpenTypeDescriptor)this.fontDescriptor.descriptor;
+            StringBuilder w = new StringBuilder("[");
+            if (this.cmapInfo != null)
+            {
+                int[] glyphIndices = this.cmapInfo.GetGlyphIndices();
+                int count = glyphIndices.Length;
+                int[] glyphWidths = new int[count];
 
-        for (int idx = 0; idx < count; idx++)
-          glyphWidths[idx] = descriptor.GlyphIndexToPdfWidth(glyphIndices[idx]);
+                for (int idx = 0; idx < count; idx++)
+                    glyphWidths[idx] = descriptor.GlyphIndexToPdfWidth(glyphIndices[idx]);
 
-        //TODO: optimize order of indices
+                //TODO: optimize order of indices
 
-        for (int idx = 0; idx < count; idx++)
-          w.AppendFormat("{0}[{1}]", glyphIndices[idx], glyphWidths[idx]);
-        w.Append("]");
-        this.descendantFont.Elements.SetValue(PdfCIDFont.Keys.W, new PdfLiteral(w.ToString()));
+                for (int idx = 0; idx < count; idx++)
+                    w.AppendFormat("{0}[{1}]", glyphIndices[idx], glyphWidths[idx]);
+                w.Append("]");
+                this.descendantFont.Elements.SetValue(PdfCIDFont.Keys.W, new PdfLiteral(w.ToString()));
 #else
       TrueTypeDescriptor descriptor = (TrueTypeDescriptor)this.fontDescriptor.descriptor;
       bool symbol = descriptor.fontData.cmap.symbol;
@@ -233,87 +229,87 @@ namespace PdfSharp.Pdf.Advanced
         w.Append("]");
         this.descendantFont.Elements.SetValue(PdfCIDFont.Keys.W, new PdfLiteral(w.ToString()));
 #endif
-      }
+            }
 
-      this.descendantFont.PrepareForSave();
-      this.toUnicode.PrepareForSave();
-    }
-
-    /// <summary>
-    /// Predefined keys of this dictionary.
-    /// </summary>
-    public new sealed class Keys : PdfFont.Keys
-    {
-      /// <summary>
-      /// (Required) The type of PDF object that this dictionary describes;
-      /// must be Font for a font dictionary.
-      /// </summary>
-      [KeyInfo(KeyType.Name | KeyType.Required, FixedValue = "Font")]
-      public new const string Type = "/Type";
-
-      /// <summary>
-      /// (Required) The type of font; must be Type0 for a Type 0 font.
-      /// </summary>
-      [KeyInfo(KeyType.Name | KeyType.Required)]
-      public new const string Subtype = "/Subtype";
-
-      /// <summary>
-      /// (Required) The PostScript name of the font. In principle, this is an arbitrary
-      /// name, since there is no font program associated directly with a Type 0 font
-      /// dictionary. The conventions described here ensure maximum compatibility
-      /// with existing Acrobat products.
-      /// If the descendant is a Type 0 CIDFont, this name should be the concatenation
-      /// of the CIDFont’s BaseFont name, a hyphen, and the CMap name given in the
-      /// Encoding entry (or the CMapName entry in the CMap). If the descendant is a
-      /// Type 2 CIDFont, this name should be the same as the CIDFont’s BaseFont name.
-      /// </summary>
-      [KeyInfo(KeyType.Name | KeyType.Required)]
-      public new const string BaseFont = "/BaseFont";
-
-      /// <summary>
-      /// (Required) The name of a predefined CMap, or a stream containing a CMap
-      /// that maps character codes to font numbers and CIDs. If the descendant is a
-      /// Type 2 CIDFont whose associated TrueType font program is not embedded
-      /// in the PDF file, the Encoding entry must be a predefined CMap name.
-      /// </summary>
-      [KeyInfo(KeyType.StreamOrName | KeyType.Required)]
-      public const string Encoding = "/Encoding";
-
-      /// <summary>
-      /// (Required) A one-element array specifying the CIDFont dictionary that is the
-      /// descendant of this Type 0 font.
-      /// </summary>
-      [KeyInfo(KeyType.Array | KeyType.Required)]
-      public const string DescendantFonts = "/DescendantFonts";
-
-      /// <summary>
-      /// ((Optional) A stream containing a CMap file that maps character codes to
-      /// Unicode values.
-      /// </summary>
-      [KeyInfo(KeyType.Stream | KeyType.Optional)]
-      public const string ToUnicode = "/ToUnicode";
-
-      /// <summary>
-      /// Gets the KeysMeta for these keys.
-      /// </summary>
-      internal static DictionaryMeta Meta
-      {
-        get
-        {
-          if (Keys.meta == null)
-            Keys.meta = CreateMeta(typeof(Keys));
-          return Keys.meta;
+            this.descendantFont.PrepareForSave();
+            this.toUnicode.PrepareForSave();
         }
-      }
-      static DictionaryMeta meta;
-    }
 
-    /// <summary>
-    /// Gets the KeysMeta of this dictionary type.
-    /// </summary>
-    internal override DictionaryMeta Meta
-    {
-      get { return Keys.Meta; }
+        /// <summary>
+        /// Predefined keys of this dictionary.
+        /// </summary>
+        public new sealed class Keys : PdfFont.Keys
+        {
+            /// <summary>
+            /// (Required) The type of PDF object that this dictionary describes;
+            /// must be Font for a font dictionary.
+            /// </summary>
+            [KeyInfo(KeyType.Name | KeyType.Required, FixedValue = "Font")]
+            public new const string Type = "/Type";
+
+            /// <summary>
+            /// (Required) The type of font; must be Type0 for a Type 0 font.
+            /// </summary>
+            [KeyInfo(KeyType.Name | KeyType.Required)]
+            public new const string Subtype = "/Subtype";
+
+            /// <summary>
+            /// (Required) The PostScript name of the font. In principle, this is an arbitrary
+            /// name, since there is no font program associated directly with a Type 0 font
+            /// dictionary. The conventions described here ensure maximum compatibility
+            /// with existing Acrobat products.
+            /// If the descendant is a Type 0 CIDFont, this name should be the concatenation
+            /// of the CIDFont’s BaseFont name, a hyphen, and the CMap name given in the
+            /// Encoding entry (or the CMapName entry in the CMap). If the descendant is a
+            /// Type 2 CIDFont, this name should be the same as the CIDFont’s BaseFont name.
+            /// </summary>
+            [KeyInfo(KeyType.Name | KeyType.Required)]
+            public new const string BaseFont = "/BaseFont";
+
+            /// <summary>
+            /// (Required) The name of a predefined CMap, or a stream containing a CMap
+            /// that maps character codes to font numbers and CIDs. If the descendant is a
+            /// Type 2 CIDFont whose associated TrueType font program is not embedded
+            /// in the PDF file, the Encoding entry must be a predefined CMap name.
+            /// </summary>
+            [KeyInfo(KeyType.StreamOrName | KeyType.Required)]
+            public const string Encoding = "/Encoding";
+
+            /// <summary>
+            /// (Required) A one-element array specifying the CIDFont dictionary that is the
+            /// descendant of this Type 0 font.
+            /// </summary>
+            [KeyInfo(KeyType.Array | KeyType.Required)]
+            public const string DescendantFonts = "/DescendantFonts";
+
+            /// <summary>
+            /// ((Optional) A stream containing a CMap file that maps character codes to
+            /// Unicode values.
+            /// </summary>
+            [KeyInfo(KeyType.Stream | KeyType.Optional)]
+            public const string ToUnicode = "/ToUnicode";
+
+            /// <summary>
+            /// Gets the KeysMeta for these keys.
+            /// </summary>
+            internal static DictionaryMeta Meta
+            {
+                get
+                {
+                    if (Keys.meta == null)
+                        Keys.meta = CreateMeta(typeof(Keys));
+                    return Keys.meta;
+                }
+            }
+            static DictionaryMeta meta;
+        }
+
+        /// <summary>
+        /// Gets the KeysMeta of this dictionary type.
+        /// </summary>
+        internal override DictionaryMeta Meta
+        {
+            get { return Keys.Meta; }
+        }
     }
-  }
 }

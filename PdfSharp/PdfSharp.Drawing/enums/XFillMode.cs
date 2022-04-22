@@ -29,19 +29,19 @@
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Specifies how the interior of a closed path is filled.
-  /// </summary>
-  public enum XFillMode  // same values as System.Drawing.FillMode
-  {
     /// <summary>
-    /// Specifies the alternate fill mode. Called the 'odd-even rule' in PDF terminology.
+    /// Specifies how the interior of a closed path is filled.
     /// </summary>
-    Alternate = 0,
+    public enum XFillMode  // same values as System.Drawing.FillMode
+    {
+        /// <summary>
+        /// Specifies the alternate fill mode. Called the 'odd-even rule' in PDF terminology.
+        /// </summary>
+        Alternate = 0,
 
-    /// <summary>
-    /// Specifies the winding fill mode. Called the 'nonzero winding number rule' in PDF terminology.
-    /// </summary>
-    Winding = 1,
-  }
+        /// <summary>
+        /// Specifies the winding fill mode. Called the 'nonzero winding number rule' in PDF terminology.
+        /// </summary>
+        Winding = 1,
+    }
 }

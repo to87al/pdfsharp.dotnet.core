@@ -29,19 +29,19 @@
 
 namespace PdfSharp.Drawing.Pdf
 {
-  /// <summary>
-  /// Indicates whether we are within a BT/ET block.
-  /// </summary>
-  public enum StreamMode
-  {
     /// <summary>
-    /// Graphic mode. This is default.
+    /// Indicates whether we are within a BT/ET block.
     /// </summary>
-    Graphic,
+    public enum StreamMode
+    {
+        /// <summary>
+        /// Graphic mode. This is default.
+        /// </summary>
+        Graphic,
 
-    /// <summary>
-    /// Text mode.
-    /// </summary>
-    Text,
-  }
+        /// <summary>
+        /// Text mode.
+        /// </summary>
+        Text,
+    }
 }

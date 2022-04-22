@@ -27,189 +27,184 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Text;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Represents an abstract drawing surface for PdfPages.
-  /// </summary>
-  internal interface IXGraphicsRenderer
-  {
-    void Close();
-
-    #region Drawing
-
     /// <summary>
-    /// Fills the entire drawing surface with the specified color.
+    /// Represents an abstract drawing surface for PdfPages.
     /// </summary>
-    void Clear(XColor color);
+    internal interface IXGraphicsRenderer
+    {
+        void Close();
 
-    /// <summary>
-    /// Draws a straight line.
-    /// </summary>
-    void DrawLine(XPen pen, double x1, double y1, double x2, double y2);
+        #region Drawing
 
-    /// <summary>
-    /// Draws a series of straight lines.
-    /// </summary>
-    void DrawLines(XPen pen, XPoint[] points);
+        /// <summary>
+        /// Fills the entire drawing surface with the specified color.
+        /// </summary>
+        void Clear(XColor color);
 
-    /// <summary>
-    /// Draws a Bézier spline.
-    /// </summary>
-    void DrawBezier(XPen pen, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
+        /// <summary>
+        /// Draws a straight line.
+        /// </summary>
+        void DrawLine(XPen pen, double x1, double y1, double x2, double y2);
 
-    /// <summary>
-    /// Draws a series of Bézier splines.
-    /// </summary>
-    void DrawBeziers(XPen pen, XPoint[] points);
+        /// <summary>
+        /// Draws a series of straight lines.
+        /// </summary>
+        void DrawLines(XPen pen, XPoint[] points);
 
-    /// <summary>
-    /// Draws a cardinal spline.
-    /// </summary>
-    void DrawCurve(XPen pen, XPoint[] points, double tension);
+        /// <summary>
+        /// Draws a Bézier spline.
+        /// </summary>
+        void DrawBezier(XPen pen, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
 
-    /// <summary>
-    /// Draws an arc.
-    /// </summary>
-    void DrawArc(XPen pen, double x, double y, double width, double height, double startAngle, double sweepAngle);
+        /// <summary>
+        /// Draws a series of Bézier splines.
+        /// </summary>
+        void DrawBeziers(XPen pen, XPoint[] points);
 
-    /// <summary>
-    /// Draws a rectangle.
-    /// </summary>
-    void DrawRectangle(XPen pen, XBrush brush, double x, double y, double width, double height);
+        /// <summary>
+        /// Draws a cardinal spline.
+        /// </summary>
+        void DrawCurve(XPen pen, XPoint[] points, double tension);
 
-    /// <summary>
-    /// Draws a series of rectangles.
-    /// </summary>
-    void DrawRectangles(XPen pen, XBrush brush, XRect[] rects);
+        /// <summary>
+        /// Draws an arc.
+        /// </summary>
+        void DrawArc(XPen pen, double x, double y, double width, double height, double startAngle, double sweepAngle);
 
-    /// <summary>
-    /// Draws a rectangle with rounded corners.
-    /// </summary>
-    void DrawRoundedRectangle(XPen pen, XBrush brush, double x, double y, double width, double height, double ellipseWidth, double ellipseHeight);
+        /// <summary>
+        /// Draws a rectangle.
+        /// </summary>
+        void DrawRectangle(XPen pen, XBrush brush, double x, double y, double width, double height);
 
-    /// <summary>
-    /// Draws an ellipse.
-    /// </summary>
-    void DrawEllipse(XPen pen, XBrush brush, double x, double y, double width, double height);
+        /// <summary>
+        /// Draws a series of rectangles.
+        /// </summary>
+        void DrawRectangles(XPen pen, XBrush brush, XRect[] rects);
 
-    /// <summary>
-    /// Draws a polygon.
-    /// </summary>
-    void DrawPolygon(XPen pen, XBrush brush, XPoint[] points, XFillMode fillmode);
+        /// <summary>
+        /// Draws a rectangle with rounded corners.
+        /// </summary>
+        void DrawRoundedRectangle(XPen pen, XBrush brush, double x, double y, double width, double height, double ellipseWidth, double ellipseHeight);
 
-    /// <summary>
-    /// Draws a pie.
-    /// </summary>
-    void DrawPie(XPen pen, XBrush brush, double x, double y, double width, double height, double startAngle, double sweepAngle);
+        /// <summary>
+        /// Draws an ellipse.
+        /// </summary>
+        void DrawEllipse(XPen pen, XBrush brush, double x, double y, double width, double height);
 
-    /// <summary>
-    /// Draws a cardinal spline.
-    /// </summary>
-    void DrawClosedCurve(XPen pen, XBrush brush, XPoint[] points, double tension, XFillMode fillmode);
+        /// <summary>
+        /// Draws a polygon.
+        /// </summary>
+        void DrawPolygon(XPen pen, XBrush brush, XPoint[] points, XFillMode fillmode);
 
-    /// <summary>
-    /// Draws a graphical path.
-    /// </summary>
-    void DrawPath(XPen pen, XBrush brush, XGraphicsPath path);
+        /// <summary>
+        /// Draws a pie.
+        /// </summary>
+        void DrawPie(XPen pen, XBrush brush, double x, double y, double width, double height, double startAngle, double sweepAngle);
 
-    /// <summary>
-    /// Draws a series of glyphs identified by the specified text and font.
-    /// </summary>
-    void DrawString(string s, XFont font, XBrush brush, XRect layoutRectangle, XStringFormat format);
+        /// <summary>
+        /// Draws a cardinal spline.
+        /// </summary>
+        void DrawClosedCurve(XPen pen, XBrush brush, XPoint[] points, double tension, XFillMode fillmode);
 
-    /// <summary>
-    /// Draws an image.
-    /// </summary>
-    void DrawImage(XImage image, double x, double y, double width, double height);
-    void DrawImage(XImage image, XRect destRect, XRect srcRect, XGraphicsUnit srcUnit);
+        /// <summary>
+        /// Draws a graphical path.
+        /// </summary>
+        void DrawPath(XPen pen, XBrush brush, XGraphicsPath path);
 
-    #endregion
+        /// <summary>
+        /// Draws a series of glyphs identified by the specified text and font.
+        /// </summary>
+        void DrawString(string s, XFont font, XBrush brush, XRect layoutRectangle, XStringFormat format);
 
-    #region Save and Restore
+        /// <summary>
+        /// Draws an image.
+        /// </summary>
+        void DrawImage(XImage image, double x, double y, double width, double height);
+        void DrawImage(XImage image, XRect destRect, XRect srcRect, XGraphicsUnit srcUnit);
 
-    /// <summary>
-    /// Saves the current graphics state without changing it.
-    /// </summary>
-    void Save(XGraphicsState state);
+        #endregion
 
-    /// <summary>
-    /// Restores the specified graphics state.
-    /// </summary>
-    void Restore(XGraphicsState state);
+        #region Save and Restore
 
-    /// <summary>
-    /// 
-    /// </summary>
-    void BeginContainer(XGraphicsContainer container, XRect dstrect, XRect srcrect, XGraphicsUnit unit);
+        /// <summary>
+        /// Saves the current graphics state without changing it.
+        /// </summary>
+        void Save(XGraphicsState state);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    void EndContainer(XGraphicsContainer container);
+        /// <summary>
+        /// Restores the specified graphics state.
+        /// </summary>
+        void Restore(XGraphicsState state);
 
-    #endregion
+        /// <summary>
+        /// 
+        /// </summary>
+        void BeginContainer(XGraphicsContainer container, XRect dstrect, XRect srcrect, XGraphicsUnit unit);
 
-    #region Transformation
+        /// <summary>
+        /// 
+        /// </summary>
+        void EndContainer(XGraphicsContainer container);
 
-    //void TranslateTransform(double dx, double dy, XMatrixOrder order);
-    //void ScaleTransform(double scaleX, double scaleY, XMatrixOrder order);
-    //void ScaleTransform(double scaleXY, XMatrixOrder order);
-    //void RotateTransform(double angle, XMatrixOrder order);
-    //void MultiplyTransform(XMatrix matrix, XMatrixOrder order);
+        #endregion
 
-    /// <summary>
-    /// Sets all values that influence the page transformation.
-    /// </summary>
-    void SetPageTransform(XPageDirection direction, XPoint origion, XGraphicsUnit unit);
+        #region Transformation
 
-    /// <summary>
-    /// Gets or sets the transformation matrix.
-    /// </summary>
-    XMatrix Transform {/*get;*/ set;}
+        //void TranslateTransform(double dx, double dy, XMatrixOrder order);
+        //void ScaleTransform(double scaleX, double scaleY, XMatrixOrder order);
+        //void ScaleTransform(double scaleXY, XMatrixOrder order);
+        //void RotateTransform(double angle, XMatrixOrder order);
+        //void MultiplyTransform(XMatrix matrix, XMatrixOrder order);
 
-    #endregion
+        /// <summary>
+        /// Sets all values that influence the page transformation.
+        /// </summary>
+        void SetPageTransform(XPageDirection direction, XPoint origion, XGraphicsUnit unit);
 
-    #region Clipping
+        /// <summary>
+        /// Gets or sets the transformation matrix.
+        /// </summary>
+        XMatrix Transform {/*get;*/ set; }
 
-    void SetClip(XGraphicsPath path, XCombineMode combineMode);
-    
-    void ResetClip();
+        #endregion
 
-    //public void SetClip(GraphicsPath path);
-    //public void SetClip(Graphics g);
-    //public void SetClip(Rectangle rect);
-    //public void SetClip(XRect rect);
-    //public void SetClip(GraphicsPath path, CombineMode combineMode);
-    //public void SetClip(Graphics g, CombineMode combineMode);
-    //public void SetClip(Rectangle rect, CombineMode combineMode);
-    //public void SetClip(XRect rect, CombineMode combineMode);
-    //public void SetClip(Region region, CombineMode combineMode);
-    //public void ExcludeClip(Rectangle rect);
-    //public void ExcludeClip(Region region);
-    //public void IntersectClip(Rectangle rect);
-    //public void IntersectClip(XRect rect);
-    //public void IntersectClip(Region region);
+        #region Clipping
 
-    #endregion
+        void SetClip(XGraphicsPath path, XCombineMode combineMode);
 
-    #region Miscellaneous
-    /// <summary>
-    /// Writes a comment to the output stream. Comments have no effect on the rendering of the output.
-    /// </summary>
-    void WriteComment(string comment);
-    #endregion
-  }
+        void ResetClip();
+
+        //public void SetClip(GraphicsPath path);
+        //public void SetClip(Graphics g);
+        //public void SetClip(Rectangle rect);
+        //public void SetClip(XRect rect);
+        //public void SetClip(GraphicsPath path, CombineMode combineMode);
+        //public void SetClip(Graphics g, CombineMode combineMode);
+        //public void SetClip(Rectangle rect, CombineMode combineMode);
+        //public void SetClip(XRect rect, CombineMode combineMode);
+        //public void SetClip(Region region, CombineMode combineMode);
+        //public void ExcludeClip(Rectangle rect);
+        //public void ExcludeClip(Region region);
+        //public void IntersectClip(Rectangle rect);
+        //public void IntersectClip(XRect rect);
+        //public void IntersectClip(Region region);
+
+        #endregion
+
+        #region Miscellaneous
+        /// <summary>
+        /// Writes a comment to the output stream. Comments have no effect on the rendering of the output.
+        /// </summary>
+        void WriteComment(string comment);
+        #endregion
+    }
 }

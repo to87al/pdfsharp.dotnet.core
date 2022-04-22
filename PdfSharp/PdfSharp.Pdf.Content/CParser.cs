@@ -27,125 +27,119 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Reflection;
-using System.Text;
-using System.IO;
-using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Content.Objects;
+using System.Diagnostics;
 
 namespace PdfSharp.Pdf.Content
 {
-  /// <summary>
-  /// Provides the functionality to parse PDF content streams.
-  /// </summary>
-  internal sealed class CParser
-  {
-    PdfPage page;
-    CLexer lexer;
-
-    public CParser(PdfPage page)
-    {
-      this.page = page;
-      PdfContent content = page.Contents.CreateSingleContent();
-      byte[] bytes = content.Stream.Value;
-      this.lexer = new CLexer(bytes);
-    }
-
-    public CParser(byte[] content)
-    {
-      this.lexer = new CLexer(content);
-    }
-
-    public CSymbol Symbol
-    {
-      get { return this.lexer.Symbol; }
-    }
-
-    public CSequence ReadContent()
-    {
-      CSequence sequence = new CSequence();
-      ParseObject(sequence, CSymbol.Eof);
-
-      return sequence;
-    }
-
     /// <summary>
-    /// Parses whatever comes until the specified stop symbol is reached.
+    /// Provides the functionality to parse PDF content streams.
     /// </summary>
-    void ParseObject(CSequence sequence, CSymbol stop)
+    internal sealed class CParser
     {
-      CSymbol symbol;
-      while ((symbol = ScanNextToken()) != CSymbol.Eof)
-      {
-        if (symbol == stop)
-          return;
+        readonly PdfPage page;
+        readonly CLexer lexer;
 
-        switch (symbol)
+        public CParser(PdfPage page)
         {
-          case CSymbol.Comment:
-            // ignore comments
-            break;
-
-          case CSymbol.Integer:
-            CInteger n = new CInteger();
-            n.Value = this.lexer.TokenToInteger;
-            this.operands.Add(n);
-            break;
-
-          case CSymbol.Real:
-            CReal r = new CReal();
-            r.Value = this.lexer.TokenToReal;
-            this.operands.Add(r);
-            break;
-
-          case CSymbol.String:
-          case CSymbol.HexString:
-          case CSymbol.UnicodeString:
-          case CSymbol.UnicodeHexString:
-            CString s = new CString();
-            s.Value = this.lexer.Token;
-            this.operands.Add(s);
-            break;
-
-          case CSymbol.Name:
-            CName name = new CName();
-            name.Name = this.lexer.Token;
-            this.operands.Add(name);
-            break;
-
-          case CSymbol.Operator:
-            COperator op = CreateOperator();
-            this.operands.Clear();
-            sequence.Add(op);
-            break;
-
-          case CSymbol.BeginArray:
-            CArray array = new CArray();
-            Debug.Assert(this.operands.Count == 0, "Array within array...");
-            ParseObject(array, CSymbol.EndArray);
-            array.Add(this.operands);
-            this.operands.Clear();
-            this.operands.Add((CObject)array);
-            break;
-
-          case CSymbol.EndArray:
-            throw new ContentReaderException("Unexpected: ']'");
+            this.page = page;
+            PdfContent content = page.Contents.CreateSingleContent();
+            byte[] bytes = content.Stream.Value;
+            this.lexer = new CLexer(bytes);
         }
-      }
-    }
 
-    COperator CreateOperator()
-    {
-      string name = this.lexer.Token;
-      COperator op = OpCodes.OperatorFromName(name);
-      if (op.OpCode.OpCodeName== OpCodeName.ID)
-      {
-        this.lexer.ScanInlineImage();
-      }
+        public CParser(byte[] content)
+        {
+            this.lexer = new CLexer(content);
+        }
+
+        public CSymbol Symbol
+        {
+            get { return this.lexer.Symbol; }
+        }
+
+        public CSequence ReadContent()
+        {
+            CSequence sequence = new CSequence();
+            ParseObject(sequence, CSymbol.Eof);
+
+            return sequence;
+        }
+
+        /// <summary>
+        /// Parses whatever comes until the specified stop symbol is reached.
+        /// </summary>
+        void ParseObject(CSequence sequence, CSymbol stop)
+        {
+            CSymbol symbol;
+            while ((symbol = ScanNextToken()) != CSymbol.Eof)
+            {
+                if (symbol == stop)
+                    return;
+
+                switch (symbol)
+                {
+                    case CSymbol.Comment:
+                        // ignore comments
+                        break;
+
+                    case CSymbol.Integer:
+                        CInteger n = new CInteger();
+                        n.Value = this.lexer.TokenToInteger;
+                        this.operands.Add(n);
+                        break;
+
+                    case CSymbol.Real:
+                        CReal r = new CReal();
+                        r.Value = this.lexer.TokenToReal;
+                        this.operands.Add(r);
+                        break;
+
+                    case CSymbol.String:
+                    case CSymbol.HexString:
+                    case CSymbol.UnicodeString:
+                    case CSymbol.UnicodeHexString:
+                        CString s = new CString();
+                        s.Value = this.lexer.Token;
+                        this.operands.Add(s);
+                        break;
+
+                    case CSymbol.Name:
+                        CName name = new CName();
+                        name.Name = this.lexer.Token;
+                        this.operands.Add(name);
+                        break;
+
+                    case CSymbol.Operator:
+                        COperator op = CreateOperator();
+                        this.operands.Clear();
+                        sequence.Add(op);
+                        break;
+
+                    case CSymbol.BeginArray:
+                        CArray array = new CArray();
+                        Debug.Assert(this.operands.Count == 0, "Array within array...");
+                        ParseObject(array, CSymbol.EndArray);
+                        array.Add(this.operands);
+                        this.operands.Clear();
+                        this.operands.Add((CObject)array);
+                        break;
+
+                    case CSymbol.EndArray:
+                        throw new ContentReaderException("Unexpected: ']'");
+                }
+            }
+        }
+
+        COperator CreateOperator()
+        {
+            string name = this.lexer.Token;
+            COperator op = OpCodes.OperatorFromName(name);
+            if (op.OpCode.OpCodeName == OpCodeName.ID)
+            {
+                this.lexer.ScanInlineImage();
+            }
 
 #if DEBUG
       if (op.OpCode.Operands != -1 && op.OpCode.Operands != this.operands.Count)
@@ -157,33 +151,33 @@ namespace PdfSharp.Pdf.Content
         }
       }
 #endif
-      op.Operands.Add(this.operands);
-      return op;
-    }
+            op.Operands.Add(this.operands);
+            return op;
+        }
 
-    CSymbol ScanNextToken()
-    {
-      return this.lexer.ScanNextToken();
-    }
+        CSymbol ScanNextToken()
+        {
+            return this.lexer.ScanNextToken();
+        }
 
-    CSymbol ScanNextToken(out string token)
-    {
-      CSymbol symbol = this.lexer.ScanNextToken();
-      token = this.lexer.Token;
-      return symbol;
-    }
+        CSymbol ScanNextToken(out string token)
+        {
+            CSymbol symbol = this.lexer.ScanNextToken();
+            token = this.lexer.Token;
+            return symbol;
+        }
 
-    /// <summary>
-    /// Reads the next symbol that must be the specified one.
-    /// </summary>
-    CSymbol ReadSymbol(CSymbol symbol)
-    {
-      CSymbol current = this.lexer.ScanNextToken();
-      if (symbol != current)
-        throw new ContentReaderException(PSSR.UnexpectedToken(this.lexer.Token));
-      return current;
-    }
+        /// <summary>
+        /// Reads the next symbol that must be the specified one.
+        /// </summary>
+        CSymbol ReadSymbol(CSymbol symbol)
+        {
+            CSymbol current = this.lexer.ScanNextToken();
+            if (symbol != current)
+                throw new ContentReaderException(PSSR.UnexpectedToken(this.lexer.Token));
+            return current;
+        }
 
-    CSequence operands = new CSequence();
-  }
+        readonly CSequence operands = new CSequence();
+    }
 }

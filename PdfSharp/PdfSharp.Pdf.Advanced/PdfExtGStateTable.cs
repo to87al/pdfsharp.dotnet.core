@@ -27,14 +27,8 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using System.IO;
-using PdfSharp.Drawing;
-using PdfSharp.Internal;
 
 namespace PdfSharp.Pdf.Advanced
 {
@@ -138,8 +132,8 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Maps from alpha values (range "0" to "1000") to PdfExtGState objects.
         /// </summary>
-        Dictionary<string, PdfExtGState> alphaValues = new Dictionary<string, PdfExtGState>();
-        Dictionary<string, PdfExtGState> strokeAlphaValues = new Dictionary<string, PdfExtGState>();
-        Dictionary<string, PdfExtGState> nonStrokeAlphaValues = new Dictionary<string, PdfExtGState>();
+        readonly Dictionary<string, PdfExtGState> alphaValues = new Dictionary<string, PdfExtGState>();
+        readonly Dictionary<string, PdfExtGState> strokeAlphaValues = new Dictionary<string, PdfExtGState>();
+        readonly Dictionary<string, PdfExtGState> nonStrokeAlphaValues = new Dictionary<string, PdfExtGState>();
     }
 }

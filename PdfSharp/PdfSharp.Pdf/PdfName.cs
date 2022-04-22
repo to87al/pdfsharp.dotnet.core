@@ -27,93 +27,90 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
+using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
-using PdfSharp.Pdf.IO;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Represents a PDF name value.
-  /// </summary>
-  [DebuggerDisplay("({Value})")]
-  public sealed class PdfName : PdfItem
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PdfName"/> class.
+    /// Represents a PDF name value.
     /// </summary>
-    public PdfName()
+    [DebuggerDisplay("({Value})")]
+    public sealed class PdfName : PdfItem
     {
-      this.value = "/";  // Empty name.
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfName"/> class.
+        /// </summary>
+        public PdfName()
+        {
+            this.value = "/";  // Empty name.
+        }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PdfName"/> class.
-    /// </summary>
-    public PdfName(string value)
-    {
-      if (value == null)
-        throw new ArgumentNullException("value");
-      if (value.Length == 0 || value[0] != '/')
-        throw new ArgumentException(PSSR.NameMustStartWithSlash);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfName"/> class.
+        /// </summary>
+        public PdfName(string value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+            if (value.Length == 0 || value[0] != '/')
+                throw new ArgumentException(PSSR.NameMustStartWithSlash);
 
-      this.value = value;
-    }
+            this.value = value;
+        }
 
-    /// <summary>
-    /// Determines whether the specified object is equal to this name.
-    /// </summary>
-    public override bool Equals(object obj)
-    {
-      return this.value.Equals(obj);
-    }
+        /// <summary>
+        /// Determines whether the specified object is equal to this name.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return this.value.Equals(obj);
+        }
 
-    /// <summary>
-    /// Returns the hash code for this instance.
-    /// </summary>
-    public override int GetHashCode()
-    {
-      return this.value.GetHashCode();
-    }
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode();
+        }
 
-    /// <summary>
-    /// Gets the name as a string.
-    /// </summary>
-    public string Value
-    {
-      // This class must behave like a value type. Therefore it cannot be changed (like System.String).
-      get { return this.value; }
-    }
-    string value;
+        /// <summary>
+        /// Gets the name as a string.
+        /// </summary>
+        public string Value
+        {
+            // This class must behave like a value type. Therefore it cannot be changed (like System.String).
+            get { return this.value; }
+        }
 
-    /// <summary>
-    /// Returns the name. The string always begins with a slash.
-    /// </summary>
-    public override string ToString()
-    {
-      return this.value;
-    }
+        readonly string value;
 
-    /// <summary>
-    /// Determines whether the specified name and string are equal.
-    /// </summary>
-    public static bool operator ==(PdfName name, string str)
-    {
-      return name.value == str;
-    }
+        /// <summary>
+        /// Returns the name. The string always begins with a slash.
+        /// </summary>
+        public override string ToString()
+        {
+            return this.value;
+        }
 
-    /// <summary>
-    /// Determines whether the specified name and string are not equal.
-    /// </summary>
-    public static bool operator !=(PdfName name, string str)
-    {
-      return name.value != str;
-    }
+        /// <summary>
+        /// Determines whether the specified name and string are equal.
+        /// </summary>
+        public static bool operator ==(PdfName name, string str)
+        {
+            return name.value == str;
+        }
+
+        /// <summary>
+        /// Determines whether the specified name and string are not equal.
+        /// </summary>
+        public static bool operator !=(PdfName name, string str)
+        {
+            return name.value != str;
+        }
 
 #if leads_to_ambiguity
     public static bool operator ==(string str, PdfName name)
@@ -137,54 +134,54 @@ namespace PdfSharp.Pdf
     }
 #endif
 
-    /// <summary>
-    /// Represents the empty name.
-    /// </summary>
-    public static readonly PdfName Empty = new PdfName("/");
+        /// <summary>
+        /// Represents the empty name.
+        /// </summary>
+        public static readonly PdfName Empty = new PdfName("/");
 
-    /// <summary>
-    /// Writes the name including the leading slash.
-    /// </summary>
-    internal override void WriteObject(PdfWriter writer)
-    {
-      // TODO: what if unicode character are part of the name? 
-      writer.Write(this);
-    }
-
-    /// <summary>
-    /// Gets the comparer for this type.
-    /// </summary>
-    public static PdfXNameComparer Comparer
-    {
-      get { return new PdfXNameComparer(); }
-    }
-
-    /// <summary>
-    /// Implements a comparer that compares PdfName objects.
-    /// </summary>
-    public class PdfXNameComparer : IComparer<PdfName>
-    {
-      /// <summary>
-      /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
-      /// </summary>
-      /// <param name="x">The first object to compare.</param>
-      /// <param name="y">The second object to compare.</param>
-      public int Compare(PdfName x, PdfName y)
-      {
-        PdfName l = x; // as PdfName;
-        PdfName r = y; // as PdfName;
-        if (l != null)
+        /// <summary>
+        /// Writes the name including the leading slash.
+        /// </summary>
+        internal override void WriteObject(PdfWriter writer)
         {
-          if (r != null)
-            return l.value.CompareTo(r.value);
-          else
-            return -1;
+            // TODO: what if unicode character are part of the name? 
+            writer.Write(this);
         }
-        else if (r != null)
-          return 1;
-        else
-          return 0;
-      }
+
+        /// <summary>
+        /// Gets the comparer for this type.
+        /// </summary>
+        public static PdfXNameComparer Comparer
+        {
+            get { return new PdfXNameComparer(); }
+        }
+
+        /// <summary>
+        /// Implements a comparer that compares PdfName objects.
+        /// </summary>
+        public class PdfXNameComparer : IComparer<PdfName>
+        {
+            /// <summary>
+            /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+            /// </summary>
+            /// <param name="x">The first object to compare.</param>
+            /// <param name="y">The second object to compare.</param>
+            public int Compare(PdfName x, PdfName y)
+            {
+                PdfName l = x; // as PdfName;
+                PdfName r = y; // as PdfName;
+                if (l != null)
+                {
+                    if (r != null)
+                        return l.value.CompareTo(r.value);
+                    else
+                        return -1;
+                }
+                else if (r != null)
+                    return 1;
+                else
+                    return 0;
+            }
+        }
     }
-  }
 }

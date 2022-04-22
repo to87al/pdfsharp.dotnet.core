@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace PdfSharp.Xps.Rendering
+﻿namespace PdfSharp.Xps.Rendering
 {
-  enum RenderMode
-  {
-    Default,
+    enum RenderMode
+    {
+        Default,
 
-    SoftMask,
- }
+        SoftMask,
+    }
 }

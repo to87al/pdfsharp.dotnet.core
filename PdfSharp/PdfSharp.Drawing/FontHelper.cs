@@ -29,9 +29,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 //#if GDI
 //using System.Drawing;
 //using System.Drawing.Drawing2D;
@@ -39,84 +37,78 @@ using System.IO;
 //#endif
 #if WPF
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing.Pdf;
 using PdfSharp.Fonts;
-using PdfSharp.Fonts.OpenType;
-using PdfSharp.Pdf.Advanced;
 
 namespace PdfSharp.Drawing
 {
 #if WPF
-  /// <summary>
-  /// The Get WPF Value flags.
-  /// </summary>
-  enum GWV
-  {
-    GetCellAscent,
-    GetCellDescent,
-    GetEmHeight,
-    GetLineSpacing,
-    //IsStyleAvailable
-  }
-
-  /// <summary>
-  /// Helper class for fonts.
-  /// </summary>
-  static class FontHelper
-  {
-    //private const string testFontName = "Times New Roman";
-    //const string testFontName = "Segoe Condensed";
-    //const string testFontName = "Frutiger LT 45 Light";
-
-    //static FontHelper()
-    //{
-    //  FontFamily fontFamily = new FontFamily(testFontName);
-    //  s_typefaces = new List<Typeface>(fontFamily.GetTypefaces());
-    //}
-
-    //private static List<Typeface> s_typefaces;
+    /// <summary>
+    /// The Get WPF Value flags.
+    /// </summary>
+    enum GWV
+    {
+        GetCellAscent,
+        GetCellDescent,
+        GetEmHeight,
+        GetLineSpacing,
+        //IsStyleAvailable
+    }
 
     /// <summary>
-    /// Creates a typeface.
+    /// Helper class for fonts.
     /// </summary>
-    public static Typeface CreateTypeface(FontFamily family, XFontStyle style)
+    static class FontHelper
     {
-      // BUG: does not work with fonts that have others than the four default styles
-      FontStyle fontStyle = FontStyleFromStyle(style);
-      FontWeight fontWeight = FontWeightFromStyle(style);
-      Typeface typeface = new Typeface(family, fontStyle, fontWeight, FontStretches.Normal);
+        //private const string testFontName = "Times New Roman";
+        //const string testFontName = "Segoe Condensed";
+        //const string testFontName = "Frutiger LT 45 Light";
 
-      //List<Typeface> typefaces = new List<Typeface>(fontFamily.GetTypefaces());
-      //typefaces.GetType();
-      //Typeface typeface = typefaces[3];
+        //static FontHelper()
+        //{
+        //  FontFamily fontFamily = new FontFamily(testFontName);
+        //  s_typefaces = new List<Typeface>(fontFamily.GetTypefaces());
+        //}
 
-      return typeface;
-    }
+        //private static List<Typeface> s_typefaces;
+
+        /// <summary>
+        /// Creates a typeface.
+        /// </summary>
+        public static Typeface CreateTypeface(FontFamily family, XFontStyle style)
+        {
+            // BUG: does not work with fonts that have others than the four default styles
+            FontStyle fontStyle = FontStyleFromStyle(style);
+            FontWeight fontWeight = FontWeightFromStyle(style);
+            Typeface typeface = new Typeface(family, fontStyle, fontWeight, FontStretches.Normal);
+
+            //List<Typeface> typefaces = new List<Typeface>(fontFamily.GetTypefaces());
+            //typefaces.GetType();
+            //Typeface typeface = typefaces[3];
+
+            return typeface;
+        }
 
 #if !SILVERLIGHT
-    /// <summary>
-    /// Creates the formatted text.
-    /// </summary>
-    public static FormattedText CreateFormattedText(string text, Typeface typeface, double emSize, Brush brush)
-    {
-      //FontFamily fontFamily = new FontFamily(testFontName);
-      //typeface = new Typeface(fontFamily, FontStyles.Normal, FontWeights.Bold, FontStretches.Condensed);
-      //List<Typeface> typefaces = new List<Typeface>(fontFamily.GetTypefaces());
-      //typefaces.GetType();
-      //typeface = s_typefaces[0];
+        /// <summary>
+        /// Creates the formatted text.
+        /// </summary>
+        public static FormattedText CreateFormattedText(string text, Typeface typeface, double emSize, Brush brush)
+        {
+            //FontFamily fontFamily = new FontFamily(testFontName);
+            //typeface = new Typeface(fontFamily, FontStyles.Normal, FontWeights.Bold, FontStretches.Condensed);
+            //List<Typeface> typefaces = new List<Typeface>(fontFamily.GetTypefaces());
+            //typefaces.GetType();
+            //typeface = s_typefaces[0];
 
-      // BUG: does not work with fonts that have others than the four default styles
-      FormattedText formattedText = new FormattedText(text, new CultureInfo("en-us"), FlowDirection.LeftToRight, typeface, emSize, brush);
-      //formattedText.SetFontWeight(FontWeights.Bold);
-      //formattedText.SetFontStyle(FontStyles.Oblique);
-      //formattedText.SetFontStretch(FontStretches.Condensed);
-      return formattedText;
-    }
+            // BUG: does not work with fonts that have others than the four default styles
+            FormattedText formattedText = new FormattedText(text, new CultureInfo("en-us"), FlowDirection.LeftToRight, typeface, emSize, brush, 1.25);
+            //formattedText.SetFontWeight(FontWeights.Bold);
+            //formattedText.SetFontStyle(FontStyles.Oblique);
+            //formattedText.SetFontStretch(FontStretches.Condensed);
+            return formattedText;
+        }
 #endif
 
 #if SILVERLIGHT
@@ -135,107 +127,74 @@ namespace PdfSharp.Drawing
     }
 #endif
 
-    /// <summary>
-    /// Simple hack to make it work...
-    /// </summary>
-    public static FontStyle FontStyleFromStyle(XFontStyle style)
-    {
-      switch (style & XFontStyle.BoldItalic)  // mask out Underline and Strikeout
-      {
-        case XFontStyle.Regular:
-          return FontStyles.Normal;
-
-        case XFontStyle.Bold:
-          return FontStyles.Normal;
-
-        case XFontStyle.Italic:
-          return FontStyles.Italic;
-
-        case XFontStyle.BoldItalic:
-          return FontStyles.Italic;
-      }
-      return FontStyles.Normal;
-    }
-
-    /// <summary>
-    /// Simple hack to make it work...
-    /// </summary>
-    public static FontWeight FontWeightFromStyle(XFontStyle style)
-    {
-      switch (style)
-      {
-        case XFontStyle.Regular:
-          return FontWeights.Normal;
-
-        case XFontStyle.Bold:
-          return FontWeights.Bold;
-
-        case XFontStyle.Italic:
-          return FontWeights.Normal;
-
-        case XFontStyle.BoldItalic:
-          return FontWeights.Bold;
-      }
-      return FontWeights.Normal;
-    }
-
-    public static int GetWpfValue(XFontFamily family, XFontStyle style, GWV value)
-    {
-      FontDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(family, style);
-      XFontMetrics metrics = descriptor.FontMetrics;
-
-      switch (value)
-      {
-        case GWV.GetCellAscent:
-          return metrics.Ascent;
-
-        case GWV.GetCellDescent:
-          return Math.Abs(metrics.Descent);
-
-        case GWV.GetEmHeight:
-          //return (int)metrics.CapHeight;
-          return metrics.UnitsPerEm;
-
-        case GWV.GetLineSpacing:
-          return metrics.Ascent + Math.Abs(metrics.Descent) + metrics.Leading;
-
-        default:
-          throw new InvalidOperationException("Unknown GWV value.");
-        // DELETE
-        //case GWV.IsStyleAvailable:
-        //  style &= XFontStyle.Regular | XFontStyle.Bold | XFontStyle.Italic | XFontStyle.BoldItalic; // same as XFontStyle.BoldItalic
-        //  List<Typeface> s_typefaces = new List<Typeface>(family.wpfFamily.GetTypefaces());
-        //  foreach (Typeface typeface in s_typefaces)
-        //  {
-        //  }
-        //  Debugger.Break();
-        ////typeface.Style = FontStyles.
-      }
-    }
-
-    /// <summary>
-    /// Determines whether the style is available as a glyph type face in the specified font family, i.e. the specified style is not simulated.
-    /// </summary>
-    public static bool IsStyleAvailable(XFontFamily family, XFontStyle style)
-    {
-#if !SILVERLIGHT
-      // TODOWPF: check for correctness
-      FontDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(family, style);
-      XFontMetrics metrics = descriptor.FontMetrics;
-
-      style &= XFontStyle.Regular | XFontStyle.Bold | XFontStyle.Italic | XFontStyle.BoldItalic; // same as XFontStyle.BoldItalic
-      List<Typeface> typefaces = new List<Typeface>(family.wpfFamily.GetTypefaces());
-      foreach (Typeface typeface in typefaces)
-      {
-        bool available = false;
-        GlyphTypeface glyphTypeface;
-        if (typeface.TryGetGlyphTypeface(out glyphTypeface))
+        /// <summary>
+        /// Simple hack to make it work...
+        /// </summary>
+        public static FontStyle FontStyleFromStyle(XFontStyle style)
         {
+            return (style & XFontStyle.BoldItalic) switch  // mask out Underline and Strikeout
+            {
+                XFontStyle.Regular => FontStyles.Normal,
+                XFontStyle.Bold => FontStyles.Normal,
+                XFontStyle.Italic => FontStyles.Italic,
+                XFontStyle.BoldItalic => FontStyles.Italic,
+                _ => FontStyles.Normal,
+            };
+        }
+
+        /// <summary>
+        /// Simple hack to make it work...
+        /// </summary>
+        public static FontWeight FontWeightFromStyle(XFontStyle style)
+        {
+            return style switch
+            {
+                XFontStyle.Regular => FontWeights.Normal,
+                XFontStyle.Bold => FontWeights.Bold,
+                XFontStyle.Italic => FontWeights.Normal,
+                XFontStyle.BoldItalic => FontWeights.Bold,
+                _ => FontWeights.Normal,
+            };
+        }
+
+        public static int GetWpfValue(XFontFamily family, XFontStyle style, GWV value)
+        {
+            FontDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(family, style);
+            XFontMetrics metrics = descriptor.FontMetrics;
+
+            return value switch
+            {
+                GWV.GetCellAscent => metrics.Ascent,
+                GWV.GetCellDescent => Math.Abs(metrics.Descent),
+                GWV.GetEmHeight => metrics.UnitsPerEm,//return (int)metrics.CapHeight;
+                GWV.GetLineSpacing => metrics.Ascent + Math.Abs(metrics.Descent) + metrics.Leading,
+                _ => throw new InvalidOperationException("Unknown GWV value."),
+            };
+        }
+
+        /// <summary>
+        /// Determines whether the style is available as a glyph type face in the specified font family, i.e. the specified style is not simulated.
+        /// </summary>
+        public static bool IsStyleAvailable(XFontFamily family, XFontStyle style)
+        {
+#if !SILVERLIGHT
+            // TODOWPF: check for correctness
+            FontDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(family, style);
+            XFontMetrics metrics = descriptor.FontMetrics;
+
+            style &= XFontStyle.Regular | XFontStyle.Bold | XFontStyle.Italic | XFontStyle.BoldItalic; // same as XFontStyle.BoldItalic
+            List<Typeface> typefaces = new List<Typeface>(family.wpfFamily.GetTypefaces());
+            foreach (Typeface typeface in typefaces)
+            {
+                bool available = false;
+                GlyphTypeface glyphTypeface;
+                if (typeface.TryGetGlyphTypeface(out glyphTypeface))
+                {
 #if DEBUG
           glyphTypeface.GetType();
 #endif
-          available = true;
-        }
+                    available = true;
+                }
 
 #if DEBUG_ // 
         int weightClass = typeface.Weight.ToOpenTypeWeight();
@@ -255,14 +214,14 @@ namespace PdfSharp.Drawing
             break;
         }
 #endif
-        if (available)
-          return true;
-      }
-      return false;
+                if (available)
+                    return true;
+            }
+            return false;
 #else
       return true; // AGHACK
 #endif
+        }
     }
-  }
 #endif
 }

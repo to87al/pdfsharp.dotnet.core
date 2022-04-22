@@ -29,29 +29,29 @@
 
 namespace PdfSharp.Drawing.BarCodes
 {
-  /// <summary>
-  /// Specifies the type of the bar code.
-  /// </summary>
-  public enum CodeType
-  {
     /// <summary>
-    /// The standard 2 of 5 interleaved bar code.
+    /// Specifies the type of the bar code.
     /// </summary>
-    Code2of5Interleaved,
+    public enum CodeType
+    {
+        /// <summary>
+        /// The standard 2 of 5 interleaved bar code.
+        /// </summary>
+        Code2of5Interleaved,
 
-    /// <summary>
-    /// The standard 3 of 9 bar code.
-    /// </summary>
-    Code3of9Standard,
+        /// <summary>
+        /// The standard 3 of 9 bar code.
+        /// </summary>
+        Code3of9Standard,
 
-    /// <summary>
-    /// The OMR code.
-    /// </summary>
-    Omr,
-    
-    /// <summary>
-    /// The data matrix code.
-    /// </summary>
-    DataMatrix,
-  }
+        /// <summary>
+        /// The OMR code.
+        /// </summary>
+        Omr,
+
+        /// <summary>
+        /// The data matrix code.
+        /// </summary>
+        DataMatrix,
+    }
 }

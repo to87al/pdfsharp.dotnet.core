@@ -28,62 +28,59 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using PdfSharp.Internal;
-using PdfSharp.Pdf.Internal;
 
 namespace PdfSharp.Pdf.Filters
 {
-  /// <summary>
-  /// Implements the ASCIIHexDecode filter.
-  /// </summary>
-  public class ASCIIHexDecode : Filter
-  {
     /// <summary>
-    /// Encodes the specified data.
+    /// Implements the ASCIIHexDecode filter.
     /// </summary>
-    public override byte[] Encode(byte[] data)
+    public class ASCIIHexDecode : Filter
     {
-      if (data == null)
-        throw new ArgumentNullException("data");
+        /// <summary>
+        /// Encodes the specified data.
+        /// </summary>
+        public override byte[] Encode(byte[] data)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
 
-      int count = data.Length;
-      byte[] bytes = new byte[2 * count];
-      for (int i = 0, j = 0; i < count; i++)
-      {
-        byte b = data[i];
-        bytes[j++] = (byte)((b >> 4) + ((b >> 4) < 10 ? (byte)'0' : (byte)('A' - 10)));
-        bytes[j++] = (byte)((b & 0xF) + ((b & 0xF) < 10 ? (byte)'0' : (byte)('A' - 10)));
-      }
-      return bytes;
+            int count = data.Length;
+            byte[] bytes = new byte[2 * count];
+            for (int i = 0, j = 0; i < count; i++)
+            {
+                byte b = data[i];
+                bytes[j++] = (byte)((b >> 4) + ((b >> 4) < 10 ? (byte)'0' : (byte)('A' - 10)));
+                bytes[j++] = (byte)((b & 0xF) + ((b & 0xF) < 10 ? (byte)'0' : (byte)('A' - 10)));
+            }
+            return bytes;
+        }
+
+        /// <summary>
+        /// Decodes the specified data.
+        /// </summary>
+        public override byte[] Decode(byte[] data, FilterParms parms)
+        {
+            if (data == null)
+                throw new ArgumentNullException("data");
+
+            data = RemoveWhiteSpace(data);
+            int count = data.Length;
+            if (count % 2 == 1)
+            {
+                count++;
+                byte[] temp = data;
+                data = new byte[count];
+                temp.CopyTo(data, 0);
+            }
+            count <<= 2;
+            byte[] bytes = new byte[count];
+            for (int i = 0, j = 0; i < count; i++)
+            {
+                byte hi = data[j++];
+                byte lo = data[j++];
+                bytes[i] = (byte)((hi > '9' ? hi - 'A' : hi - '0') * 16 + (lo > '9' ? lo - 'A' : lo - '0'));
+            }
+            return bytes;
+        }
     }
-
-    /// <summary>
-    /// Decodes the specified data.
-    /// </summary>
-    public override byte[] Decode(byte[] data, FilterParms parms)
-    {
-      if (data == null)
-        throw new ArgumentNullException("data");
-
-      data = RemoveWhiteSpace(data);
-      int count = data.Length;
-      if (count % 2 == 1)
-      {
-        count++;
-        byte[] temp = data;
-        data = new byte[count];
-        temp.CopyTo(data, 0);
-      }
-      count <<= 2;
-      byte[] bytes = new byte[count];
-      for (int i = 0, j = 0; i < count; i++)
-      {
-        byte hi = data[j++];
-        byte lo = data[j++];
-        bytes[i] = (byte)((hi > '9' ? hi - 'A' : hi - '0') * 16 + (lo > '9' ? lo - 'A' : lo - '0'));
-      }
-      return bytes;
-    }
-  }
 }

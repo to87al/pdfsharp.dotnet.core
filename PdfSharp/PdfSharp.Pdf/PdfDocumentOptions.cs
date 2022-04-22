@@ -27,58 +27,52 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Holds information how to handle the document when it is saved as PDF stream.
-  /// </summary>
-  public sealed class PdfDocumentOptions
-  {
-    internal PdfDocumentOptions(PdfDocument document)
-    {
-      //this.deflateContents = true;
-      //this.writeProcedureSets = true;
-    }
-
     /// <summary>
-    /// Gets or sets the color mode.
+    /// Holds information how to handle the document when it is saved as PDF stream.
     /// </summary>
-    public PdfColorMode ColorMode
+    public sealed class PdfDocumentOptions
     {
-      get { return this.colorMode; }
-      set { this.colorMode = value; }
-    }
-    PdfColorMode colorMode;
+        internal PdfDocumentOptions(PdfDocument document)
+        {
+            //this.deflateContents = true;
+            //this.writeProcedureSets = true;
+        }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether to compress content streams of PDF pages.
-    /// </summary>
-    public bool CompressContentStreams
-    {
-      get { return this.compressContentStreams; }
-      set { this.compressContentStreams = value; }
-    }
+        /// <summary>
+        /// Gets or sets the color mode.
+        /// </summary>
+        public PdfColorMode ColorMode
+        {
+            get { return this.colorMode; }
+            set { this.colorMode = value; }
+        }
+        PdfColorMode colorMode;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to compress content streams of PDF pages.
+        /// </summary>
+        public bool CompressContentStreams
+        {
+            get { return this.compressContentStreams; }
+            set { this.compressContentStreams = value; }
+        }
 #if DEBUG
     bool compressContentStreams = false;
 #else
-    bool compressContentStreams = true;
+        bool compressContentStreams = true;
 #endif
 
-    /// <summary>
-    /// Gets or sets a value indicating that all objects are not compressed.
-    /// </summary>
-    public bool NoCompression
-    {
-      get { return this.noCompression; }
-      set { this.noCompression = value; }
+        /// <summary>
+        /// Gets or sets a value indicating that all objects are not compressed.
+        /// </summary>
+        public bool NoCompression
+        {
+            get { return this.noCompression; }
+            set { this.noCompression = value; }
+        }
+        bool noCompression;
     }
-    bool noCompression;
-  }
 }

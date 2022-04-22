@@ -28,366 +28,297 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Globalization;
 
 namespace PdfSharp.Drawing
 {
-  /// <summary>
-  /// Represents a value and its unit of measure. The structure converts implicitly from and to
-  /// double with a value measured in point.
-  /// </summary>
-  public struct XUnit : IFormattable
-  {
-    internal const double PointFactor = 1;
-    internal const double InchFactor = 72;
-    internal const double MillimeterFactor = 72 / 25.4;
-    internal const double CentimeterFactor = 72 / 2.54;
-    internal const double PresentationFactor = 72 / 96.0;
-
-    internal const double PointFactorWpf = 96 / 72.0;
-    internal const double InchFactorWpf = 96;
-    internal const double MillimeterFactorWpf = 96 / 25.4;
-    internal const double CentimeterFactorWpf = 96 / 2.54;
-    internal const double PresentationFactorWpf = 1;
-
     /// <summary>
-    /// Initializes a new instance of the XUnit class with type set to point.
+    /// Represents a value and its unit of measure. The structure converts implicitly from and to
+    /// double with a value measured in point.
     /// </summary>
-    public XUnit(double point)
+    public struct XUnit : IFormattable
     {
-      this.value = point;
-      this.type = XGraphicsUnit.Point;
-    }
+        internal const double PointFactor = 1;
+        internal const double InchFactor = 72;
+        internal const double MillimeterFactor = 72 / 25.4;
+        internal const double CentimeterFactor = 72 / 2.54;
+        internal const double PresentationFactor = 72 / 96.0;
 
-    /// <summary>
-    /// Initializes a new instance of the XUnit class.
-    /// </summary>
-    public XUnit(double value, XGraphicsUnit type)
-    {
-      if (!Enum.IsDefined(typeof(XGraphicsUnit), type))
+        internal const double PointFactorWpf = 96 / 72.0;
+        internal const double InchFactorWpf = 96;
+        internal const double MillimeterFactorWpf = 96 / 25.4;
+        internal const double CentimeterFactorWpf = 96 / 2.54;
+        internal const double PresentationFactorWpf = 1;
+
+        /// <summary>
+        /// Initializes a new instance of the XUnit class with type set to point.
+        /// </summary>
+        public XUnit(double point)
+        {
+            this.value = point;
+            this.type = XGraphicsUnit.Point;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the XUnit class.
+        /// </summary>
+        public XUnit(double value, XGraphicsUnit type)
+        {
+            if (!Enum.IsDefined(typeof(XGraphicsUnit), type))
 #if !SILVERLIGHT
-        throw new System.ComponentModel.InvalidEnumArgumentException("type");
+                throw new System.ComponentModel.InvalidEnumArgumentException("type");
 #else
         throw new ArgumentException("type");
 #endif
 
-      this.value = value;
-      this.type = type;
-    }
-
-    /// <summary>
-    /// Gets the raw value of the object without any conversion.
-    /// To determine the XGraphicsUnit use property <code>Type</code>.
-    /// To get the value in point use the implicit conversion to double.
-    /// </summary>
-    public double Value
-    {
-      get { return this.value; }
-    }
-
-    /// <summary>
-    /// Gets the unit of measure.
-    /// </summary>
-    public XGraphicsUnit Type
-    {
-      get { return this.type; }
-    }
-
-    /// <summary>
-    /// Gets or sets the value in point.
-    /// </summary>
-    public double Point
-    {
-      get
-      {
-        switch (type)
-        {
-          case XGraphicsUnit.Point:
-            return this.value;
-
-          case XGraphicsUnit.Inch:
-            return this.value * 72;
-
-          case XGraphicsUnit.Millimeter:
-            return this.value * 72 / 25.4;
-
-          case XGraphicsUnit.Centimeter:
-            return this.value * 72 / 2.54;
-
-          case XGraphicsUnit.Presentation:
-            return this.value * 72 / 96;
-
-          default:
-            throw new InvalidCastException();
+            this.value = value;
+            this.type = type;
         }
-      }
-      set
-      {
-        this.value = value;
-        this.type = XGraphicsUnit.Point;
-      }
-    }
 
-    /// <summary>
-    /// Gets or sets the value in inch.
-    /// </summary>
-    public double Inch
-    {
-      get
-      {
-        switch (type)
+        /// <summary>
+        /// Gets the raw value of the object without any conversion.
+        /// To determine the XGraphicsUnit use property <code>Type</code>.
+        /// To get the value in point use the implicit conversion to double.
+        /// </summary>
+        public double Value
         {
-          case XGraphicsUnit.Point:
-            return this.value / 72;
-
-          case XGraphicsUnit.Inch:
-            return this.value;
-
-          case XGraphicsUnit.Millimeter:
-            return this.value / 25.4;
-
-          case XGraphicsUnit.Centimeter:
-            return this.value / 2.54;
-
-          case XGraphicsUnit.Presentation:
-            return this.value / 96;
-
-          default:
-            throw new InvalidCastException();
+            get { return this.value; }
         }
-      }
-      set
-      {
-        this.value = value;
-        this.type = XGraphicsUnit.Inch;
-      }
-    }
 
-    /// <summary>
-    /// Gets or sets the value in millimeter.
-    /// </summary>
-    public double Millimeter
-    {
-      get
-      {
-        switch (this.type)
+        /// <summary>
+        /// Gets the unit of measure.
+        /// </summary>
+        public XGraphicsUnit Type
         {
-          case XGraphicsUnit.Point:
-            return this.value * 25.4 / 72;
-
-          case XGraphicsUnit.Inch:
-            return this.value * 25.4;
-
-          case XGraphicsUnit.Millimeter:
-            return this.value;
-
-          case XGraphicsUnit.Centimeter:
-            return this.value * 10;
-
-          case XGraphicsUnit.Presentation:
-            return this.value * 25.4 / 96;
-
-          default:
-            throw new InvalidCastException();
+            get { return this.type; }
         }
-      }
-      set
-      {
-        this.value = value;
-        this.type = XGraphicsUnit.Millimeter;
-      }
-    }
 
-    /// <summary>
-    /// Gets or sets the value in centimeter.
-    /// </summary>
-    public double Centimeter
-    {
-      get
-      {
-        switch (type)
+        /// <summary>
+        /// Gets or sets the value in point.
+        /// </summary>
+        public double Point
         {
-          case XGraphicsUnit.Point:
-            return this.value * 2.54 / 72;
-
-          case XGraphicsUnit.Inch:
-            return this.value * 2.54;
-
-          case XGraphicsUnit.Millimeter:
-            return this.value / 10;
-
-          case XGraphicsUnit.Centimeter:
-            return this.value;
-
-          case XGraphicsUnit.Presentation:
-            return this.value * 2.54 / 96;
-
-          default:
-            throw new InvalidCastException();
+            get
+            {
+                return type switch
+                {
+                    XGraphicsUnit.Point => this.value,
+                    XGraphicsUnit.Inch => this.value * 72,
+                    XGraphicsUnit.Millimeter => this.value * 72 / 25.4,
+                    XGraphicsUnit.Centimeter => this.value * 72 / 2.54,
+                    XGraphicsUnit.Presentation => this.value * 72 / 96,
+                    _ => throw new InvalidCastException(),
+                };
+            }
+            set
+            {
+                this.value = value;
+                this.type = XGraphicsUnit.Point;
+            }
         }
-      }
-      set
-      {
-        this.value = value;
-        this.type = XGraphicsUnit.Centimeter;
-      }
-    }
 
-    /// <summary>
-    /// Gets or sets the value in presentation units (1/96 inch).
-    /// </summary>
-    public double Presentation
-    {
-      get
-      {
-        switch (type)
+        /// <summary>
+        /// Gets or sets the value in inch.
+        /// </summary>
+        public double Inch
         {
-          case XGraphicsUnit.Point:
-            return this.value * 96 / 72;
-
-          case XGraphicsUnit.Inch:
-            return this.value * 96;
-
-          case XGraphicsUnit.Millimeter:
-            return this.value * 96 / 25.4;
-
-          case XGraphicsUnit.Centimeter:
-            return this.value * 96 / 2.54;
-
-          case XGraphicsUnit.Presentation:
-            return this.value;
-
-          default:
-            throw new InvalidCastException();
+            get
+            {
+                return type switch
+                {
+                    XGraphicsUnit.Point => this.value / 72,
+                    XGraphicsUnit.Inch => this.value,
+                    XGraphicsUnit.Millimeter => this.value / 25.4,
+                    XGraphicsUnit.Centimeter => this.value / 2.54,
+                    XGraphicsUnit.Presentation => this.value / 96,
+                    _ => throw new InvalidCastException(),
+                };
+            }
+            set
+            {
+                this.value = value;
+                this.type = XGraphicsUnit.Inch;
+            }
         }
-      }
-      set
-      {
-        this.value = value;
-        this.type = XGraphicsUnit.Point;
-      }
-    }
 
-    /// <summary>
-    /// Returns the object as string using the format information.
-    /// The unit of measure is appended to the end of the string.
-    /// </summary>
-    public string ToString(IFormatProvider formatProvider)
-    {
-      string valuestring;
-      valuestring = this.value.ToString(formatProvider) + GetSuffix();
-      return valuestring;
-    }
+        /// <summary>
+        /// Gets or sets the value in millimeter.
+        /// </summary>
+        public double Millimeter
+        {
+            get
+            {
+                return this.type switch
+                {
+                    XGraphicsUnit.Point => this.value * 25.4 / 72,
+                    XGraphicsUnit.Inch => this.value * 25.4,
+                    XGraphicsUnit.Millimeter => this.value,
+                    XGraphicsUnit.Centimeter => this.value * 10,
+                    XGraphicsUnit.Presentation => this.value * 25.4 / 96,
+                    _ => throw new InvalidCastException(),
+                };
+            }
+            set
+            {
+                this.value = value;
+                this.type = XGraphicsUnit.Millimeter;
+            }
+        }
 
-    /// <summary>
-    /// Returns the object as string using the specified format and format information.
-    /// The unit of measure is appended to the end of the string.
-    /// </summary>
-    string IFormattable.ToString(string format, IFormatProvider formatProvider)
-    {
-      string valuestring;
-      valuestring = this.value.ToString(format, formatProvider) + GetSuffix();
-      return valuestring;
-    }
+        /// <summary>
+        /// Gets or sets the value in centimeter.
+        /// </summary>
+        public double Centimeter
+        {
+            get
+            {
+                return type switch
+                {
+                    XGraphicsUnit.Point => this.value * 2.54 / 72,
+                    XGraphicsUnit.Inch => this.value * 2.54,
+                    XGraphicsUnit.Millimeter => this.value / 10,
+                    XGraphicsUnit.Centimeter => this.value,
+                    XGraphicsUnit.Presentation => this.value * 2.54 / 96,
+                    _ => throw new InvalidCastException(),
+                };
+            }
+            set
+            {
+                this.value = value;
+                this.type = XGraphicsUnit.Centimeter;
+            }
+        }
 
-    /// <summary>
-    /// Returns the object as string. The unit of measure is appended to the end of the string.
-    /// </summary>
-    public override string ToString()
-    {
-      string valuestring;
-      valuestring = this.value.ToString(CultureInfo.InvariantCulture) + GetSuffix();
-      return valuestring;
-    }
+        /// <summary>
+        /// Gets or sets the value in presentation units (1/96 inch).
+        /// </summary>
+        public double Presentation
+        {
+            get
+            {
+                return type switch
+                {
+                    XGraphicsUnit.Point => this.value * 96 / 72,
+                    XGraphicsUnit.Inch => this.value * 96,
+                    XGraphicsUnit.Millimeter => this.value * 96 / 25.4,
+                    XGraphicsUnit.Centimeter => this.value * 96 / 2.54,
+                    XGraphicsUnit.Presentation => this.value,
+                    _ => throw new InvalidCastException(),
+                };
+            }
+            set
+            {
+                this.value = value;
+                this.type = XGraphicsUnit.Point;
+            }
+        }
 
-    /// <summary>
-    /// Returns the unit of measure of the object as a string like 'pt', 'cm', or 'in'.
-    /// </summary>
-    string GetSuffix()
-    {
-      switch (type)
-      {
-        case XGraphicsUnit.Point:
-          return "pt";
+        /// <summary>
+        /// Returns the object as string using the format information.
+        /// The unit of measure is appended to the end of the string.
+        /// </summary>
+        public string ToString(IFormatProvider formatProvider)
+        {
+            string valuestring;
+            valuestring = this.value.ToString(formatProvider) + GetSuffix();
+            return valuestring;
+        }
 
-        case XGraphicsUnit.Inch:
-          return "in";
+        /// <summary>
+        /// Returns the object as string using the specified format and format information.
+        /// The unit of measure is appended to the end of the string.
+        /// </summary>
+        string IFormattable.ToString(string format, IFormatProvider formatProvider)
+        {
+            string valuestring;
+            valuestring = this.value.ToString(format, formatProvider) + GetSuffix();
+            return valuestring;
+        }
 
-        case XGraphicsUnit.Millimeter:
-          return "mm";
+        /// <summary>
+        /// Returns the object as string. The unit of measure is appended to the end of the string.
+        /// </summary>
+        public override string ToString()
+        {
+            string valuestring;
+            valuestring = this.value.ToString(CultureInfo.InvariantCulture) + GetSuffix();
+            return valuestring;
+        }
 
-        case XGraphicsUnit.Centimeter:
-          return "cm";
+        /// <summary>
+        /// Returns the unit of measure of the object as a string like 'pt', 'cm', or 'in'.
+        /// </summary>
+        string GetSuffix()
+        {
+            return type switch
+            {
+                XGraphicsUnit.Point => "pt",
+                XGraphicsUnit.Inch => "in",
+                XGraphicsUnit.Millimeter => "mm",
+                XGraphicsUnit.Centimeter => "cm",
+                XGraphicsUnit.Presentation => "pu",
+                //case XGraphicsUnit.Pica:
+                //  return "pc";
+                //case XGraphicsUnit.Line:
+                //  return "li";
+                _ => throw new InvalidCastException(),
+            };
+        }
 
-        case XGraphicsUnit.Presentation:
-          return "pu";
+        /// <summary>
+        /// Returns an XUnit object. Sets type to point.
+        /// </summary>
+        public static XUnit FromPoint(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Point;
+            return unit;
+        }
 
-        //case XGraphicsUnit.Pica:
-        //  return "pc";
+        /// <summary>
+        /// Returns an XUnit object. Sets type to inch.
+        /// </summary>
+        public static XUnit FromInch(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Inch;
+            return unit;
+        }
 
-        //case XGraphicsUnit.Line:
-        //  return "li";
+        /// <summary>
+        /// Returns an XUnit object. Sets type to millimeters.
+        /// </summary>
+        public static XUnit FromMillimeter(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Millimeter;
+            return unit;
+        }
 
-        default:
-          throw new InvalidCastException();
-      }
-    }
+        /// <summary>
+        /// Returns an XUnit object. Sets type to centimeters.
+        /// </summary>
+        public static XUnit FromCentimeter(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Centimeter;
+            return unit;
+        }
 
-    /// <summary>
-    /// Returns an XUnit object. Sets type to point.
-    /// </summary>
-    public static XUnit FromPoint(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Point;
-      return unit;
-    }
-
-    /// <summary>
-    /// Returns an XUnit object. Sets type to inch.
-    /// </summary>
-    public static XUnit FromInch(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Inch;
-      return unit;
-    }
-
-    /// <summary>
-    /// Returns an XUnit object. Sets type to millimeters.
-    /// </summary>
-    public static XUnit FromMillimeter(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Millimeter;
-      return unit;
-    }
-
-    /// <summary>
-    /// Returns an XUnit object. Sets type to centimeters.
-    /// </summary>
-    public static XUnit FromCentimeter(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Centimeter;
-      return unit;
-    }
-
-    /// <summary>
-    /// Returns an XUnit object. Sets type to Presentation.
-    /// </summary>
-    public static XUnit FromPresentation(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Presentation;
-      return unit;
-    }
+        /// <summary>
+        /// Returns an XUnit object. Sets type to Presentation.
+        /// </summary>
+        public static XUnit FromPresentation(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Presentation;
+            return unit;
+        }
 
 #if deferred
     ///// <summary>
@@ -413,212 +344,195 @@ namespace PdfSharp.Drawing
     //}
 #endif
 
-    /// <summary>
-    /// Converts a string to an XUnit object.
-    /// If the string contains a suffix like 'cm' or 'in' the object will be converted
-    /// to the appropriate type, otherwise point is assumed.
-    /// </summary>
-    public static implicit operator XUnit(string value)
-    {
-      XUnit unit;
-      value = value.Trim();
+        /// <summary>
+        /// Converts a string to an XUnit object.
+        /// If the string contains a suffix like 'cm' or 'in' the object will be converted
+        /// to the appropriate type, otherwise point is assumed.
+        /// </summary>
+        public static implicit operator XUnit(string value)
+        {
+            XUnit unit;
+            value = value.Trim();
 
-      // HACK for Germans...
-      value = value.Replace(',', '.');
+            // HACK for Germans...
+            value = value.Replace(',', '.');
 
-      int count = value.Length;
-      int valLen = 0;
-      for (; valLen < count; )
-      {
-        char ch = value[valLen];
-        if (ch == '.' || ch == '-' || ch == '+' || Char.IsNumber(ch))
-          valLen++;
-        else
-          break;
-      }
+            int count = value.Length;
+            int valLen = 0;
+            for (; valLen < count;)
+            {
+                char ch = value[valLen];
+                if (ch == '.' || ch == '-' || ch == '+' || Char.IsNumber(ch))
+                    valLen++;
+                else
+                    break;
+            }
 
-      try
-      {
-        unit.value = Double.Parse(value.Substring(0, valLen).Trim(), CultureInfo.InvariantCulture);
-      }
-      catch (Exception ex)
-      {
-        unit.value = 1;
-        string message = String.Format("String '{0}' is not a valid value for structure 'XUnit'.", value);
-        throw new ArgumentException(message, ex);
-      }
+            try
+            {
+                unit.value = Double.Parse(value.Substring(0, valLen).Trim(), CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+                unit.value = 1;
+                string message = String.Format("String '{0}' is not a valid value for structure 'XUnit'.", value);
+                throw new ArgumentException(message, ex);
+            }
 
-      string typeStr = value.Substring(valLen).Trim().ToLower();
-      unit.type = XGraphicsUnit.Point;
-      switch (typeStr)
-      {
-        case "cm":
-          unit.type = XGraphicsUnit.Centimeter;
-          break;
+            string typeStr = value.Substring(valLen).Trim().ToLower();
+            unit.type = XGraphicsUnit.Point;
+            unit.type = typeStr switch
+            {
+                "cm" => XGraphicsUnit.Centimeter,
+                "in" => XGraphicsUnit.Inch,
+                "mm" => XGraphicsUnit.Millimeter,
+                //case "pc":
+                //  unit.type = XGraphicsUnit.Pica;
+                //  break;
+                //
+                //case "li":
+                //  unit.type = XGraphicsUnit.Line;
+                //  break;
+                "" or "pt" => XGraphicsUnit.Point,
+                // presentation units
+                "pu" => XGraphicsUnit.Presentation,
+                _ => throw new ArgumentException("Unknown unit type: '" + typeStr + "'"),
+            };
+            return unit;
+        }
 
-        case "in":
-          unit.type = XGraphicsUnit.Inch;
-          break;
+        /// <summary>
+        /// Converts an int to an XUnit object with type set to point.
+        /// </summary>
+        public static implicit operator XUnit(int value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Point;
+            return unit;
+        }
 
-        case "mm":
-          unit.type = XGraphicsUnit.Millimeter;
-          break;
+        /// <summary>
+        /// Converts a double to an XUnit object with type set to point.
+        /// </summary>
+        public static implicit operator XUnit(double value)
+        {
+            XUnit unit;
+            unit.value = value;
+            unit.type = XGraphicsUnit.Point;
+            return unit;
+        }
 
-        //case "pc":
-        //  unit.type = XGraphicsUnit.Pica;
-        //  break;
-        //
-        //case "li":
-        //  unit.type = XGraphicsUnit.Line;
-        //  break;
+        /// <summary>
+        /// Returns a double value as point.
+        /// </summary>
+        public static implicit operator double(XUnit value)
+        {
+            return value.Point;
+        }
 
-        case "":
-        case "pt":
-          unit.type = XGraphicsUnit.Point;
-          break;
+        /// <summary>
+        /// Memberwise comparison. To compare by value, 
+        /// use code like Math.Abs(a.Pt - b.Pt) &lt; 1e5.
+        /// </summary>
+        public static bool operator ==(XUnit value1, XUnit value2)
+        {
+            return value1.type == value2.type && value1.value == value2.value;
+        }
 
-        case "pu":  // presentation units
-          unit.type = XGraphicsUnit.Presentation;
-          break;
+        /// <summary>
+        /// Memberwise comparison. To compare by value, 
+        /// use code like Math.Abs(a.Pt - b.Pt) &lt; 1e5.
+        /// </summary>
+        public static bool operator !=(XUnit value1, XUnit value2)
+        {
+            return !(value1 == value2);
+        }
 
-        default:
-          throw new ArgumentException("Unknown unit type: '" + typeStr + "'");
-      }
-      return unit;
-    }
+        /// <summary>
+        /// Calls base class Equals.
+        /// </summary>
+        public override bool Equals(Object obj)
+        {
+            if (obj is XUnit)
+                return this == (XUnit)obj;
+            return false;
+        }
 
-    /// <summary>
-    /// Converts an int to an XUnit object with type set to point.
-    /// </summary>
-    public static implicit operator XUnit(int value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Point;
-      return unit;
-    }
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return this.value.GetHashCode() ^ this.type.GetHashCode();
+        }
 
-    /// <summary>
-    /// Converts a double to an XUnit object with type set to point.
-    /// </summary>
-    public static implicit operator XUnit(double value)
-    {
-      XUnit unit;
-      unit.value = value;
-      unit.type = XGraphicsUnit.Point;
-      return unit;
-    }
+        /// <summary>
+        /// This member is intended to be used by XmlDomainObjectReader only.
+        /// </summary>
+        public static XUnit Parse(string value)
+        {
+            XUnit unit = value;
+            return unit;
+        }
 
-    /// <summary>
-    /// Returns a double value as point.
-    /// </summary>
-    public static implicit operator double(XUnit value)
-    {
-      return value.Point;
-    }
+        /// <summary>
+        /// Converts an existing object from one unit into another unit type.
+        /// </summary>
+        public void ConvertType(XGraphicsUnit type)
+        {
+            if (this.type == type)
+                return;
 
-    /// <summary>
-    /// Memberwise comparison. To compare by value, 
-    /// use code like Math.Abs(a.Pt - b.Pt) &lt; 1e5.
-    /// </summary>
-    public static bool operator ==(XUnit value1, XUnit value2)
-    {
-      return value1.type == value2.type && value1.value == value2.value;
-    }
+            switch (type)
+            {
+                case XGraphicsUnit.Point:
+                    this.value = Point;
+                    this.type = XGraphicsUnit.Point;
+                    break;
 
-    /// <summary>
-    /// Memberwise comparison. To compare by value, 
-    /// use code like Math.Abs(a.Pt - b.Pt) &lt; 1e5.
-    /// </summary>
-    public static bool operator !=(XUnit value1, XUnit value2)
-    {
-      return !(value1 == value2);
-    }
+                case XGraphicsUnit.Inch:
+                    this.value = Inch;
+                    this.type = XGraphicsUnit.Inch;
+                    break;
 
-    /// <summary>
-    /// Calls base class Equals.
-    /// </summary>
-    public override bool Equals(Object obj)
-    {
-      if (obj is XUnit)
-        return this == (XUnit)obj;
-      return false;
-    }
+                case XGraphicsUnit.Centimeter:
+                    this.value = Centimeter;
+                    this.type = XGraphicsUnit.Centimeter;
+                    break;
 
-    /// <summary>
-    /// Returns the hash code for this instance.
-    /// </summary>
-    public override int GetHashCode()
-    {
-      return this.value.GetHashCode() ^ this.type.GetHashCode();
-    }
+                case XGraphicsUnit.Millimeter:
+                    this.value = Millimeter;
+                    this.type = XGraphicsUnit.Millimeter;
+                    break;
 
-    /// <summary>
-    /// This member is intended to be used by XmlDomainObjectReader only.
-    /// </summary>
-    public static XUnit Parse(string value)
-    {
-      XUnit unit = value;
-      return unit;
-    }
+                case XGraphicsUnit.Presentation:
+                    this.value = Presentation;
+                    this.type = XGraphicsUnit.Presentation;
+                    break;
 
-    /// <summary>
-    /// Converts an existing object from one unit into another unit type.
-    /// </summary>
-    public void ConvertType(XGraphicsUnit type)
-    {
-      if (this.type == type)
-        return;
+                //        case XGraphicsUnit.Pica:
+                //          this.value = this.Pc;
+                //          this.type = XGraphicsUnit.Pica;
+                //          break;
+                //        
+                //        case XGraphicsUnit.Line:
+                //          this.value = this.Li;
+                //          this.type = XGraphicsUnit.Line;
+                //          break;
 
-      switch (type)
-      {
-        case XGraphicsUnit.Point:
-          this.value = Point;
-          this.type = XGraphicsUnit.Point;
-          break;
+                default:
+                    throw new ArgumentException("Unknown unit type: '" + type + "'");
+            }
+        }
 
-        case XGraphicsUnit.Inch:
-          this.value = Inch;
-          this.type = XGraphicsUnit.Inch;
-          break;
+        /// <summary>
+        /// Represents a unit with all values zero.
+        /// </summary>
+        public static readonly XUnit Zero;
 
-        case XGraphicsUnit.Centimeter:
-          this.value = Centimeter;
-          this.type = XGraphicsUnit.Centimeter;
-          break;
-
-        case XGraphicsUnit.Millimeter:
-          this.value = Millimeter;
-          this.type = XGraphicsUnit.Millimeter;
-          break;
-
-        case XGraphicsUnit.Presentation:
-          this.value = Presentation;
-          this.type = XGraphicsUnit.Presentation;
-          break;
-
-        //        case XGraphicsUnit.Pica:
-        //          this.value = this.Pc;
-        //          this.type = XGraphicsUnit.Pica;
-        //          break;
-        //        
-        //        case XGraphicsUnit.Line:
-        //          this.value = this.Li;
-        //          this.type = XGraphicsUnit.Line;
-        //          break;
-
-        default:
-          throw new ArgumentException("Unknown unit type: '" + type + "'");
-      }
-    }
-
-    /// <summary>
-    /// Represents a unit with all values zero.
-    /// </summary>
-    public static readonly XUnit Zero;
-
-    double value;
-    XGraphicsUnit type;
+        double value;
+        XGraphicsUnit type;
 
 #if true_
     /// <summary>
@@ -640,5 +554,5 @@ namespace PdfSharp.Drawing
       v.GetType();
     }
 #endif
-  }
+    }
 }

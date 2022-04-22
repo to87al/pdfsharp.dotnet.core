@@ -31,30 +31,30 @@ using System;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Specifies the font style for the outline (bookmark) text.
-  /// </summary>
-  [Flags]
-  public enum PdfOutlineStyle
-  {
     /// <summary>
-    /// Regular font.
+    /// Specifies the font style for the outline (bookmark) text.
     /// </summary>
-    Regular = 0,
+    [Flags]
+    public enum PdfOutlineStyle
+    {
+        /// <summary>
+        /// Regular font.
+        /// </summary>
+        Regular = 0,
 
-    /// <summary>
-    /// Italic font.
-    /// </summary>
-    Italic = 1,
+        /// <summary>
+        /// Italic font.
+        /// </summary>
+        Italic = 1,
 
-    /// <summary>
-    /// Bold font.
-    /// </summary>
-    Bold = 2,
+        /// <summary>
+        /// Bold font.
+        /// </summary>
+        Bold = 2,
 
-    /// <summary>
-    /// Bold and italic font.
-    /// </summary>
-    BoldItalic = 3,
-  }
+        /// <summary>
+        /// Bold and italic font.
+        /// </summary>
+        BoldItalic = 3,
+    }
 }

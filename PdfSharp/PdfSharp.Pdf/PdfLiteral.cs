@@ -27,76 +27,71 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.Globalization;
-using System.Text;
-using System.IO;
 using PdfSharp.Drawing;
-using PdfSharp.Internal;
-using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf.Internal;
+using PdfSharp.Pdf.IO;
+using System;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Represents text that is written 'as it is' into the PDF stream. This class can lead to invalid PDF files.
-  /// E.g. strings in a literal are not encrypted when the document is saved with a password.
-  /// </summary>
-  public sealed class PdfLiteral : PdfItem
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PdfLiteral"/> class.
+    /// Represents text that is written 'as it is' into the PDF stream. This class can lead to invalid PDF files.
+    /// E.g. strings in a literal are not encrypted when the document is saved with a password.
     /// </summary>
-    public PdfLiteral()
+    public sealed class PdfLiteral : PdfItem
     {
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfLiteral"/> class.
+        /// </summary>
+        public PdfLiteral()
+        {
+        }
 
-    /// <summary>
-    /// Initializes a new instance with the specified string.
-    /// </summary>
-    public PdfLiteral(string value)
-    {
-      this.value = value;
-    }
+        /// <summary>
+        /// Initializes a new instance with the specified string.
+        /// </summary>
+        public PdfLiteral(string value)
+        {
+            this.value = value;
+        }
 
-    /// <summary>
-    /// Initializes a new instance with the culture invariant formatted specified arguments.
-    /// </summary>
-    public PdfLiteral(string format, params object[] args)
-    {
-      this.value = PdfEncoders.Format(format, args);
-    }
+        /// <summary>
+        /// Initializes a new instance with the culture invariant formatted specified arguments.
+        /// </summary>
+        public PdfLiteral(string format, params object[] args)
+        {
+            this.value = PdfEncoders.Format(format, args);
+        }
 
-    /// <summary>
-    /// Creates a literal from an XMatrix
-    /// </summary>
-    public static PdfLiteral FromMatrix(XMatrix matrix)
-    {
-      return new PdfLiteral("[" + PdfEncoders.ToString(matrix) + "]");
-    }
+        /// <summary>
+        /// Creates a literal from an XMatrix
+        /// </summary>
+        public static PdfLiteral FromMatrix(XMatrix matrix)
+        {
+            return new PdfLiteral("[" + PdfEncoders.ToString(matrix) + "]");
+        }
 
-    /// <summary>
-    /// Gets the value as litaral string.
-    /// </summary>
-    public string Value
-    {
-      // This class must behave like a value type. Therefore it cannot be changed (like System.String).
-      get { return this.value; }
-    }
-    readonly string value = String.Empty;
+        /// <summary>
+        /// Gets the value as litaral string.
+        /// </summary>
+        public string Value
+        {
+            // This class must behave like a value type. Therefore it cannot be changed (like System.String).
+            get { return this.value; }
+        }
+        readonly string value = String.Empty;
 
-    /// <summary>
-    /// Returns a string that represents the current value.
-    /// </summary>
-    public override string ToString()
-    {
-      return this.value;
-    }
+        /// <summary>
+        /// Returns a string that represents the current value.
+        /// </summary>
+        public override string ToString()
+        {
+            return this.value;
+        }
 
-    internal override void WriteObject(PdfWriter writer)
-    {
-      writer.Write(this);
+        internal override void WriteObject(PdfWriter writer)
+        {
+            writer.Write(this);
+        }
     }
-  }
 }

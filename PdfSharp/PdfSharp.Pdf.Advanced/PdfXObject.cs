@@ -27,43 +27,34 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
 #if GDI
 using System.Drawing;
 using System.Drawing.Imaging;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Drawing;
-using PdfSharp.Fonts.OpenType;
-using PdfSharp.Internal;
 
 namespace PdfSharp.Pdf.Advanced
 {
-  /// <summary>
-  /// Base class for all PDF external objects.
-  /// </summary>
-  public abstract class PdfXObject : PdfDictionary
-  {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PdfXObject"/> class.
+    /// Base class for all PDF external objects.
     /// </summary>
-    /// <param name="document">The document that owns the object.</param>
-    public PdfXObject(PdfDocument document)
-      : base(document)
+    public abstract class PdfXObject : PdfDictionary
     {
-    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfXObject"/> class.
+        /// </summary>
+        /// <param name="document">The document that owns the object.</param>
+        public PdfXObject(PdfDocument document)
+          : base(document)
+        {
+        }
 
-    /// <summary>
-    /// Predefined keys of this dictionary.
-    /// </summary>
-    public class Keys : PdfDictionary.PdfStream.Keys
-    {
+        /// <summary>
+        /// Predefined keys of this dictionary.
+        /// </summary>
+        public class Keys : PdfDictionary.PdfStream.Keys
+        {
+        }
     }
-  }
 }

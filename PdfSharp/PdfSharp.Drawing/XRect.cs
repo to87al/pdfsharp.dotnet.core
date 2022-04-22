@@ -30,14 +30,12 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 #if GDI
 using System.Drawing;
 #endif
 #if WPF
 using System.Windows;
-using System.Windows.Media;
 #endif
 using PdfSharp.Internal;
 
@@ -190,7 +188,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public override bool Equals(object o)
         {
-            if ((o == null) || !(o is XRect))
+            if (o is null or not XRect)
                 return false;
             XRect rect = (XRect)o;
             return Equals(this, rect);

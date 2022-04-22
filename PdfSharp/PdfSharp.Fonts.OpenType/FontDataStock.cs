@@ -28,118 +28,115 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
-using PdfSharp.Drawing;
-using PdfSharp.Fonts.OpenType;
+using System.Diagnostics;
 
 namespace PdfSharp.Fonts.OpenType
 {
-  /// <summary>
-  /// Global table of TrueType font faces.
-  /// </summary>
-  class FontDataStock  // TODO: rename
-  {
-    FontDataStock()
-    {
-      this.fontDataTable = new Dictionary<string, FontData>();
-    }
-
-    public FontData RegisterFontData(byte[] data)
-    {
-      uint checksum = CalcChecksum(data);
-      string key = String.Format("??{0:X}", checksum);
-
-      FontData fontData;
-      if (!this.fontDataTable.TryGetValue(key, out fontData))
-      {
-        lock (typeof(FontDataStock))
-        {
-          // may be created by other thread meanwhile
-          if (!this.fontDataTable.TryGetValue(key, out fontData))
-          {
-            fontData = new FontData(data);
-            this.fontDataTable.Add(key, fontData);
-            this.lastEntry = fontData;
-          }
-        }
-      }
-      return fontData;
-    }
-    private FontData lastEntry;
-
-    public bool UnregisterFontData(FontData fontData)
-    {
-      Debug.Assert(false);
-      return false;
-    }
-
-    internal FontData[] GetFontDataList()
-    {
-      int count = fontDataTable.Values.Count;
-      FontData[] fontDataArray = new FontData[count];
-      fontDataTable.Values.CopyTo(fontDataArray, 0);
-      return fontDataArray;
-    }
-
-    //internal FontData FindFont(XTypefaceHack typeface)
-    //{
-    //  // HACK: 
-    //  if (this.fontDataTable.Count > 1)
-    //    return this.lastEntry;
-    //  return null;
-    //}
-
     /// <summary>
-    /// Calculates an Adler32 checksum.
+    /// Global table of TrueType font faces.
     /// </summary>
-    static uint CalcChecksum(byte[] buffer)
+    class FontDataStock  // TODO: rename
     {
-      if (buffer == null)
-        throw new ArgumentNullException("buffer");
-
-      const uint BASE = 65521; // largest prime smaller than 65536
-      uint s1 = 0;
-      uint s2 = 0;
-      int length = buffer.Length;
-      int offset = 0;
-      while (length > 0)
-      {
-        int n = 3800;
-        if (n > length)
-          n = length;
-        length -= n;
-        while (--n >= 0)
+        FontDataStock()
         {
-          s1 = s1 + (uint)(buffer[offset++] & 0xFF);
-          s2 = s2 + s1;
+            this.fontDataTable = new Dictionary<string, FontData>();
         }
-        s1 %= BASE;
-        s2 %= BASE;
-      }
-      return (s2 << 16) | s1;
-    }
 
-    /// <summary>
-    /// Gets the singleton.
-    /// </summary>
-    public static FontDataStock Global
-    {
-      get
-      {
-        if (global == null)
+        public FontData RegisterFontData(byte[] data)
         {
-          lock (typeof(FontDataStock))
-          {
-            if (global == null)
-              global = new FontDataStock();
-          }
-        }
-        return global;
-      }
-    }
-    static FontDataStock global;
+            uint checksum = CalcChecksum(data);
+            string key = String.Format("??{0:X}", checksum);
 
-    Dictionary<string, FontData> fontDataTable;
-  }
+            FontData fontData;
+            if (!this.fontDataTable.TryGetValue(key, out fontData))
+            {
+                lock (typeof(FontDataStock))
+                {
+                    // may be created by other thread meanwhile
+                    if (!this.fontDataTable.TryGetValue(key, out fontData))
+                    {
+                        fontData = new FontData(data);
+                        this.fontDataTable.Add(key, fontData);
+                        this.lastEntry = fontData;
+                    }
+                }
+            }
+            return fontData;
+        }
+        private FontData lastEntry;
+
+        public static bool UnregisterFontData(FontData fontData)
+        {
+            Debug.Assert(false);
+            return false;
+        }
+
+        internal FontData[] GetFontDataList()
+        {
+            int count = fontDataTable.Values.Count;
+            FontData[] fontDataArray = new FontData[count];
+            fontDataTable.Values.CopyTo(fontDataArray, 0);
+            return fontDataArray;
+        }
+
+        //internal FontData FindFont(XTypefaceHack typeface)
+        //{
+        //  // HACK: 
+        //  if (this.fontDataTable.Count > 1)
+        //    return this.lastEntry;
+        //  return null;
+        //}
+
+        /// <summary>
+        /// Calculates an Adler32 checksum.
+        /// </summary>
+        static uint CalcChecksum(byte[] buffer)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException("buffer");
+
+            const uint BASE = 65521; // largest prime smaller than 65536
+            uint s1 = 0;
+            uint s2 = 0;
+            int length = buffer.Length;
+            int offset = 0;
+            while (length > 0)
+            {
+                int n = 3800;
+                if (n > length)
+                    n = length;
+                length -= n;
+                while (--n >= 0)
+                {
+                    s1 += (uint)(buffer[offset++] & 0xFF);
+                    s2 += s1;
+                }
+                s1 %= BASE;
+                s2 %= BASE;
+            }
+            return (s2 << 16) | s1;
+        }
+
+        /// <summary>
+        /// Gets the singleton.
+        /// </summary>
+        public static FontDataStock Global
+        {
+            get
+            {
+                if (global == null)
+                {
+                    lock (typeof(FontDataStock))
+                    {
+                        if (global == null)
+                            global = new FontDataStock();
+                    }
+                }
+                return global;
+            }
+        }
+        static FontDataStock global;
+        readonly Dictionary<string, FontData> fontDataTable;
+    }
 }

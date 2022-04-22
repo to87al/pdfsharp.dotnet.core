@@ -28,47 +28,39 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using PdfSharp.Drawing;
-using PdfSharp.Internal;
-
-using Fixed = System.Int32;
-using FWord = System.Int16;
-using UFWord = System.UInt16;
 
 namespace PdfSharp.Fonts.OpenType
 {
-  /// <summary>
-  /// Generic font table. Not yet used
-  /// </summary>
-  internal class GenericFontTable : OpenTypeFontTable
-  {
-    public GenericFontTable(OpenTypeFontTable fontTable)
-      : base(null, "xxxx")
+    /// <summary>
+    /// Generic font table. Not yet used
+    /// </summary>
+    internal class GenericFontTable : OpenTypeFontTable
     {
-      DirectoryEntry.Tag = fontTable.DirectoryEntry.Tag;
-      int length = fontTable.DirectoryEntry.Length;
-      if (length > 0)
-      {
-        this.table = new byte[length];
-        Buffer.BlockCopy(fontTable.FontData.Data, fontTable.DirectoryEntry.Offset, this.table, 0, length);
-      }
-    }
+        public GenericFontTable(OpenTypeFontTable fontTable)
+          : base(null, "xxxx")
+        {
+            DirectoryEntry.Tag = fontTable.DirectoryEntry.Tag;
+            int length = fontTable.DirectoryEntry.Length;
+            if (length > 0)
+            {
+                this.table = new byte[length];
+                Buffer.BlockCopy(fontTable.FontData.Data, fontTable.DirectoryEntry.Offset, this.table, 0, length);
+            }
+        }
 
-    public GenericFontTable(FontData fontData, string tag)
-      : base(fontData, tag)
-    {
-      this.fontData = fontData;
-    }
+        public GenericFontTable(FontData fontData, string tag)
+          : base(fontData, tag)
+        {
+            this.fontData = fontData;
+        }
 
-    protected override OpenTypeFontTable DeepCopy()
-    {
-      GenericFontTable fontTable = (GenericFontTable)base.DeepCopy();
-      fontTable.table = (byte[])this.table.Clone();
-      return fontTable;
-    }
+        protected override OpenTypeFontTable DeepCopy()
+        {
+            GenericFontTable fontTable = (GenericFontTable)base.DeepCopy();
+            fontTable.table = (byte[])this.table.Clone();
+            return fontTable;
+        }
 
-    byte[] table;
-  }
+        byte[] table;
+    }
 }

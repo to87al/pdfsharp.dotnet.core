@@ -27,48 +27,43 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Collections;
-using System.Text;
-using System.IO;
-using PdfSharp.Internal;
 using PdfSharp.Pdf.IO;
+using System;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// The base class of all PDF objects and simple types.
-  /// </summary>
-  public abstract class PdfItem : ICloneable
-  {
-    // All simple types (i.e. derived from PdfItem but not from PdfObject) must be immutable.
-
-    object ICloneable.Clone()
-    {
-      return Copy();
-    }
-
     /// <summary>
-    /// Creates a copy of this object.
+    /// The base class of all PDF objects and simple types.
     /// </summary>
-    public PdfItem Clone()
+    public abstract class PdfItem : ICloneable
     {
-      return (PdfItem)Copy();
-    }
+        // All simple types (i.e. derived from PdfItem but not from PdfObject) must be immutable.
 
-    /// <summary>
-    /// Implements the copy mechanism. Must be overridden in derived classes.
-    /// </summary>
-    protected virtual object Copy()
-    {
-      return MemberwiseClone();
-    }
+        object ICloneable.Clone()
+        {
+            return Copy();
+        }
 
-    /// <summary>
-    /// When overridden in a derived class, appends a raw string representation of this object
-    /// to the specified PdfWriter.
-    /// </summary>
-    internal abstract void WriteObject(PdfWriter writer);
-  }
+        /// <summary>
+        /// Creates a copy of this object.
+        /// </summary>
+        public PdfItem Clone()
+        {
+            return (PdfItem)Copy();
+        }
+
+        /// <summary>
+        /// Implements the copy mechanism. Must be overridden in derived classes.
+        /// </summary>
+        protected virtual object Copy()
+        {
+            return MemberwiseClone();
+        }
+
+        /// <summary>
+        /// When overridden in a derived class, appends a raw string representation of this object
+        /// to the specified PdfWriter.
+        /// </summary>
+        internal abstract void WriteObject(PdfWriter writer);
+    }
 }

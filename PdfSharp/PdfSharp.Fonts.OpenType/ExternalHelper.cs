@@ -27,51 +27,43 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
 #if GDI
 using System.Drawing;
 using System.Drawing.Drawing2D;
 #endif
 #if WPF
-using System.Windows;
-using System.Windows.Media;
 #endif
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.Internal;
 using PdfSharp.Drawing;
 
 namespace PdfSharp.Fonts.OpenType
 {
-  /// <summary>
-  /// PDFsharp internal stuff.
-  /// For more information see Andrew Schulman "Undocumented PDFsharp"  :-))
-  /// </summary>
-  public static class ExternalHelper
-  {
     /// <summary>
-    /// This is an external helper function.
+    /// PDFsharp internal stuff.
+    /// For more information see Andrew Schulman "Undocumented PDFsharp"  :-))
     /// </summary>
-    public static byte[] F74167FFE4044F53B28A4AF049E9EF25(XFont font, XPdfFontOptions options, bool subset)
+    public static class ExternalHelper
     {
-      byte[] data = null;
-      if (subset)
-      {
-        OpenTypeDescriptor descriptor = new OpenTypeDescriptor(font, options);
-        FontData image = descriptor.fontData;
-        CMapInfo cmapInfo = new CMapInfo(descriptor);
-        cmapInfo.AddAnsiChars();
-        image = image.CreateFontSubSet(cmapInfo.GlyphIndices, false);
-        data = image.Data;
-      }
-      else
-      {
-        FontData fontData = new FontData(font, options);
-        data = fontData.Data;
-      }
-      return data;
+        /// <summary>
+        /// This is an external helper function.
+        /// </summary>
+        public static byte[] F74167FFE4044F53B28A4AF049E9EF25(XFont font, XPdfFontOptions options, bool subset)
+        {
+            byte[] data = null;
+            if (subset)
+            {
+                OpenTypeDescriptor descriptor = new OpenTypeDescriptor(font, options);
+                FontData image = descriptor.fontData;
+                CMapInfo cmapInfo = new CMapInfo(descriptor);
+                cmapInfo.AddAnsiChars();
+                image = image.CreateFontSubSet(cmapInfo.GlyphIndices, false);
+                data = image.Data;
+            }
+            else
+            {
+                FontData fontData = new FontData(font, options);
+                data = fontData.Data;
+            }
+            return data;
+        }
     }
-  }
 }

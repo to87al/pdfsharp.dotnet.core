@@ -27,39 +27,38 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using PdfSharp.Pdf.Content.Objects;
 
 namespace PdfSharp.Pdf.Content
 {
-  /// <summary>
-  /// Represents the functionality for reading PDF content streams.
-  /// </summary>
-  public sealed class ContentReader
-  {
-    // Makes this class static
-    ContentReader() { }
-
     /// <summary>
-    /// Reads the content stream(s) of the specified page.
+    /// Represents the functionality for reading PDF content streams.
     /// </summary>
-    /// <param name="page">The page.</param>
-    static public CSequence ReadContent(PdfPage page)
+    public sealed class ContentReader
     {
-      CParser parser = new CParser(page);
-      CSequence sequence = parser.ReadContent();
-      return sequence;
-    }
+        // Makes this class static
+        ContentReader() { }
 
-    /// <summary>
-    /// Reads the specified content.
-    /// </summary>
-    /// <param name="content">The content.</param>
-    static public CSequence ReadContent(byte[] content)
-    {
-      CParser parser = new CParser(content);
-      CSequence sequence = parser.ReadContent();
-      return sequence;
+        /// <summary>
+        /// Reads the content stream(s) of the specified page.
+        /// </summary>
+        /// <param name="page">The page.</param>
+        static public CSequence ReadContent(PdfPage page)
+        {
+            CParser parser = new CParser(page);
+            CSequence sequence = parser.ReadContent();
+            return sequence;
+        }
+
+        /// <summary>
+        /// Reads the specified content.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        static public CSequence ReadContent(byte[] content)
+        {
+            CParser parser = new CParser(content);
+            CSequence sequence = parser.ReadContent();
+            return sequence;
+        }
     }
-  }
 }

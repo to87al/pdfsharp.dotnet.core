@@ -27,9 +27,6 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Text;
 using System.IO;
 #if NET_ZIP
 using System.IO.Compression;
@@ -40,20 +37,20 @@ using PdfSharp.SharpZipLib.Zip.Compression.Streams;
 
 namespace PdfSharp.Pdf.Filters
 {
-  /// <summary>
-  /// Implements the FlateDecode filter by wrapping SharpZipLib.
-  /// </summary>
-  public class FlateDecode : Filter
-  {
     /// <summary>
-    /// Encodes the specified data.
+    /// Implements the FlateDecode filter by wrapping SharpZipLib.
     /// </summary>
-    public override byte[] Encode(byte[] data)
+    public class FlateDecode : Filter
     {
-      MemoryStream ms = new MemoryStream();
+        /// <summary>
+        /// Encodes the specified data.
+        /// </summary>
+        public override byte[] Encode(byte[] data)
+        {
+            MemoryStream ms = new MemoryStream();
 
-      // DeflateStream/GZipStream does not work immediately and I have not the leisure to work it out.
-      // So I keep on using SharpZipLib even with .NET 2.0.
+            // DeflateStream/GZipStream does not work immediately and I have not the leisure to work it out.
+            // So I keep on using SharpZipLib even with .NET 2.0.
 #if NET_ZIP
       // See http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=97064
       // 
@@ -123,21 +120,21 @@ namespace PdfSharp.Pdf.Filters
       zip.Write(data, 0, data.Length);
       zip.Close();
 #else
-      DeflaterOutputStream zip = new DeflaterOutputStream(ms, new Deflater(Deflater.DEFAULT_COMPRESSION, false));
-      zip.Write(data, 0, data.Length);
-      zip.Finish();
+            DeflaterOutputStream zip = new DeflaterOutputStream(ms, new Deflater(Deflater.DEFAULT_COMPRESSION, false));
+            zip.Write(data, 0, data.Length);
+            zip.Finish();
 #endif
-      ms.Capacity = (int)ms.Length;
-      return ms.GetBuffer();
-    }
+            ms.Capacity = (int)ms.Length;
+            return ms.GetBuffer();
+        }
 
-    /// <summary>
-    /// Decodes the specified data.
-    /// </summary>
-    public override byte[] Decode(byte[] data, FilterParms parms)
-    {
-      MemoryStream msInput = new MemoryStream(data);
-      MemoryStream msOutput = new MemoryStream();
+        /// <summary>
+        /// Decodes the specified data.
+        /// </summary>
+        public override byte[] Decode(byte[] data, FilterParms parms)
+        {
+            MemoryStream msInput = new MemoryStream(data);
+            MemoryStream msOutput = new MemoryStream();
 #if NET_ZIP
       // See http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=97064
       // It seems to work when skipping the first two bytes.
@@ -165,25 +162,25 @@ namespace PdfSharp.Pdf.Filters
       }
       return null;
 #else
-      InflaterInputStream iis = new InflaterInputStream(msInput, new Inflater(false));
-      int cbRead;
-      byte[] abResult = new byte[32768];
-      do
-      {
-        cbRead = iis.Read(abResult, 0, abResult.Length);
-        if (cbRead > 0)
-          msOutput.Write(abResult, 0, cbRead);
-      }
-      while (cbRead > 0);
-      iis.Close();
-      msOutput.Flush();
-      if (msOutput.Length >= 0)
-      {
-        msOutput.Capacity = (int)msOutput.Length;
-        return msOutput.GetBuffer();
-      }
-      return null;
+            InflaterInputStream iis = new InflaterInputStream(msInput, new Inflater(false));
+            int cbRead;
+            byte[] abResult = new byte[32768];
+            do
+            {
+                cbRead = iis.Read(abResult, 0, abResult.Length);
+                if (cbRead > 0)
+                    msOutput.Write(abResult, 0, cbRead);
+            }
+            while (cbRead > 0);
+            iis.Close();
+            msOutput.Flush();
+            if (msOutput.Length >= 0)
+            {
+                msOutput.Capacity = (int)msOutput.Length;
+                return msOutput.GetBuffer();
+            }
+            return null;
 #endif
+        }
     }
-  }
 }

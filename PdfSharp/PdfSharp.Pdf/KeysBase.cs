@@ -28,21 +28,19 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Collections;
 
 namespace PdfSharp.Pdf
 {
-  /// <summary>
-  /// Base class for all dictionary Keys classes.
-  /// </summary>
-  public class KeysBase
-  {
-    // public KeysBase() { }
-
-    internal static DictionaryMeta CreateMeta(Type type)
+    /// <summary>
+    /// Base class for all dictionary Keys classes.
+    /// </summary>
+    public class KeysBase
     {
-      return new DictionaryMeta(type);
+        // public KeysBase() { }
+
+        internal static DictionaryMeta CreateMeta(Type type)
+        {
+            return new DictionaryMeta(type);
+        }
     }
-  }
 }

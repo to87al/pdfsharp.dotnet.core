@@ -29,18 +29,12 @@
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Collections;
-using System.Text;
 #if GDI
 using System.Drawing;
 #endif
 #if WPF
-using System.Windows.Media;
 #endif
-using PdfSharp.Internal;
 using PdfSharp.Drawing;
-using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf.Internal;
@@ -143,7 +137,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal PdfRectangle(PdfItem item)
         {
-            if (item == null || item is PdfNull)
+            if (item is null or PdfNull)
                 return;
 
             if (item is PdfReference)
@@ -240,7 +234,8 @@ namespace PdfSharp.Pdf
         {
             get { return this.x1; }
         }
-        double x1;
+
+        readonly double x1;
 
         /// <summary>
         /// Gets or sets the y-coordinate of the first corner of this PdfRectangle.
@@ -249,7 +244,8 @@ namespace PdfSharp.Pdf
         {
             get { return this.y1; }
         }
-        double y1;
+
+        readonly double y1;
 
         /// <summary>
         /// Gets or sets the x-coordinate of the second corner of this PdfRectangle.
@@ -258,7 +254,8 @@ namespace PdfSharp.Pdf
         {
             get { return this.x2; }
         }
-        double x2;
+
+        readonly double x2;
 
         /// <summary>
         /// Gets or sets the y-coordinate of the second corner of this PdfRectangle.
@@ -267,7 +264,8 @@ namespace PdfSharp.Pdf
         {
             get { return this.y2; }
         }
-        double y2;
+
+        readonly double y2;
 
         /// <summary>
         /// Gets X2 - X1.
