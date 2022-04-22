@@ -4,17 +4,18 @@
 		<TargetFramework>net6.0-windows7.0</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>PdfSharpWPF.dotNet.Core</PackageId>
+		<PackageId>PdfSharp.WPF.Xps</PackageId>
 		<Description>.NET 6 port of PDFSharp-WPF: A .NET library for processing PDF.</Description>
 		<PackageTags>PDF, PDFsharp, creation</PackageTags>
-		<Authors>empira Software GmbH, Łukasz Ząbik</Authors>
+		<Authors>RIS</Authors>
 		<PackageProjectUrl>http://www.pdfsharp.net/</PackageProjectUrl>
 		<PackageLicenseExpression></PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENCE.md</PackageLicenseFile>
-		<RepositoryUrl>https://github.com/lzabik/pdfsharp.dotnet.core.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/to87al/pdfsharp.dotnet.core.git</RepositoryUrl>
 		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 		<PlatformTarget>x64</PlatformTarget>
+		<Version>$(VersionPrefix)1.0.3</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,12 +34,17 @@
 		<EmbeddedResource Remove="Resources\**" />
 		<None Remove="PdfSharp.XPS.Test\**" />
 		<None Remove="Resources\**" />
+		<Page Remove="PdfSharp.XPS.Test\**" />
+		<Page Remove="Resources\**" />
+
+		<Compile Remove="PdfSharp.Xps.XpsModel\enums\**" />
+		<EmbeddedResource Remove="PdfSharp.Xps.XpsModel\enums\**" />
+		<None Remove="PdfSharp.Xps.XpsModel\enums\**" />
 		<None Include="..\LICENCE.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<Page Remove="PdfSharp.XPS.Test\**" />
-		<Page Remove="Resources\**" />
+		<Page Remove="PdfSharp.Xps.XpsModel\enums\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -46,7 +52,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<Compile Include="PdfSharp.Xps.XpsModel\enums\ColorType.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
 
 </Project>
