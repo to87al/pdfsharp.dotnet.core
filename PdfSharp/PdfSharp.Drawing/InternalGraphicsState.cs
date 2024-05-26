@@ -117,7 +117,7 @@ namespace PdfSharp.Drawing
             get { return this.transform; }
             set { this.transform = value; }
         }
-        XMatrix transform = new XMatrix();  //XMatrix.Identity;
+        XMatrix transform = new();  //XMatrix.Identity;
 
         public static void Pushed()
         {

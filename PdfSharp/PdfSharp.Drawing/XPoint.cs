@@ -119,7 +119,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
             if (o is null or not XPoint)
                 return false;
@@ -130,7 +130,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Indicates whether this instance and a specified point are equal.
         /// </summary>
-        public bool Equals(XPoint value)
+        public readonly bool Equals(XPoint value)
         {
             return Equals(this, value);
         }
@@ -149,9 +149,9 @@ namespace PdfSharp.Drawing
         public static XPoint Parse(string source)
         {
             CultureInfo cultureInfo = CultureInfo.InvariantCulture;
-            TokenizerHelper helper = new TokenizerHelper(source, cultureInfo);
+            TokenizerHelper helper = new(source, cultureInfo);
             string str = helper.NextTokenRequired();
-            XPoint point = new XPoint(Convert.ToDouble(str, cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo));
+            XPoint point = new(Convert.ToDouble(str, cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo));
             helper.LastTokenRequired();
             return point;
         }
@@ -161,8 +161,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XPoint[] ParsePoints(string value)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
+            ArgumentNullException.ThrowIfNull(value);
             // TODO: Reflect reliabel implementation from Avalon
             // TODOWPF
             string[] values = value.Split(' ');
@@ -178,7 +177,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double X
         {
-            get { return this.x; }
+            readonly get { return this.x; }
             set { this.x = value; }
         }
 
@@ -187,7 +186,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Y
         {
-            get { return this.y; }
+            readonly get { return this.y; }
             set { this.y = value; }
         }
 
@@ -205,7 +204,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Converts this XPoint to a System.Windows.Point.
         /// </summary>
-        public System.Windows.Point ToPoint()
+        public readonly System.Windows.Point ToPoint()
         {
             return new System.Windows.Point(this.x, this.y);
         }
@@ -238,10 +237,10 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Implements ToString.
         /// </summary>
-        internal string ConvertToString(string format, IFormatProvider provider)
+        internal readonly string ConvertToString(string format, IFormatProvider provider)
         {
             char numericListSeparator = TokenizerHelper.GetNumericListSeparator(provider);
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", new object[] { numericListSeparator, this.x, this.y });
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, this.x, this.y]);
         }
 
         /// <summary>
@@ -258,7 +257,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         [Browsable(false)]
         [Obsolete("Use '== new XPoint()'")]
-        public bool IsEmpty // DELETE: 09-12-31
+        public readonly bool IsEmpty // DELETE: 09-12-31
         {
             get { return this.x == 0 && this.y == 0; }
         }
@@ -410,7 +409,7 @@ namespace PdfSharp.Drawing
         /// For convergence with WPF use new XPoint(), not XPoint.Empty
         /// </summary>
         [Obsolete("For convergence with WPF use new XPoint(), not XPoint.Empty")]
-        public static readonly XPoint Empty = new XPoint();  // DELETE: 09-12-31
+        public static readonly XPoint Empty = new();  // DELETE: 09-12-31
 
         internal double x;
         internal double y;

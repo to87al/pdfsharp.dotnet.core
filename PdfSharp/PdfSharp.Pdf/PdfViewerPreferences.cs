@@ -40,13 +40,6 @@ namespace PdfSharp.Pdf
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PdfViewerPreferences"/> class.
-        /// </summary>
-        PdfViewerPreferences(PdfDictionary dict)
-          : base(dict)
-        { }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to hide the viewer application’s tool
         ///  bars when the document is active.
         /// </summary>
@@ -292,8 +285,7 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

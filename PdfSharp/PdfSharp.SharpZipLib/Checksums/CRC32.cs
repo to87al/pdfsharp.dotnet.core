@@ -68,7 +68,7 @@ namespace PdfSharp.SharpZipLib.Checksums
     {
         readonly static uint CrcSeed = 0xFFFFFFFF;
 
-        readonly static uint[] CrcTable = new uint[] {
+        readonly static uint[] CrcTable = [
             0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419,
             0x706AF48F, 0xE963A535, 0x9E6495A3, 0x0EDB8832, 0x79DCB8A4,
             0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07,
@@ -121,7 +121,7 @@ namespace PdfSharp.SharpZipLib.Checksums
             0xCDD70693, 0x54DE5729, 0x23D967BF, 0xB3667A2E, 0xC4614AB8,
             0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B,
             0x2D02EF8D
-        };
+        ];
 
         internal static uint ComputeCrc32(uint oldCrc, byte bval)
         {
@@ -194,10 +194,7 @@ namespace PdfSharp.SharpZipLib.Checksums
         /// </param>
         public void Update(byte[] buf, int off, int len)
         {
-            if (buf == null)
-            {
-                throw new ArgumentNullException("buf");
-            }
+            ArgumentNullException.ThrowIfNull(buf);
 
             if (off < 0 || len < 0 || off + len > buf.Length)
             {

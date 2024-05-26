@@ -40,7 +40,7 @@ namespace PdfSharp.Fonts.OpenType
     {
         FontDataStock()
         {
-            this.fontDataTable = new Dictionary<string, FontData>();
+            this.fontDataTable = [];
         }
 
         public FontData RegisterFontData(byte[] data)
@@ -48,8 +48,7 @@ namespace PdfSharp.Fonts.OpenType
             uint checksum = CalcChecksum(data);
             string key = String.Format("??{0:X}", checksum);
 
-            FontData fontData;
-            if (!this.fontDataTable.TryGetValue(key, out fontData))
+            if (!this.fontDataTable.TryGetValue(key, out FontData fontData))
             {
                 lock (typeof(FontDataStock))
                 {
@@ -93,8 +92,7 @@ namespace PdfSharp.Fonts.OpenType
         /// </summary>
         static uint CalcChecksum(byte[] buffer)
         {
-            if (buffer == null)
-                throw new ArgumentNullException("buffer");
+            ArgumentNullException.ThrowIfNull(buffer);
 
             const uint BASE = 65521; // largest prime smaller than 65536
             uint s1 = 0;
@@ -129,8 +127,7 @@ namespace PdfSharp.Fonts.OpenType
                 {
                     lock (typeof(FontDataStock))
                     {
-                        if (global == null)
-                            global = new FontDataStock();
+                        global ??= new FontDataStock();
                     }
                 }
                 return global;

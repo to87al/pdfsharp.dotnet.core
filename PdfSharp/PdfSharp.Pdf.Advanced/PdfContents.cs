@@ -55,8 +55,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 // Convert the references from PdfDictionary to PdfContent
                 PdfItem item = Elements[idx];
-                PdfReference iref = item as PdfReference;
-                if (iref != null && iref.Value is PdfDictionary)
+                if (item is PdfReference iref && iref.Value is PdfDictionary)
                 {
                     // The following line is correct!
                     new PdfContent((PdfDictionary)iref.Value);
@@ -74,7 +73,7 @@ namespace PdfSharp.Pdf.Advanced
             Debug.Assert(this.Owner != null);
 
             SetModified();
-            PdfContent content = new PdfContent(this.Owner);
+            PdfContent content = new(this.Owner);
             Owner.irefTable.Add(content);
             Debug.Assert(content.Reference != null);
             Elements.Add(content.Reference);
@@ -89,7 +88,7 @@ namespace PdfSharp.Pdf.Advanced
             Debug.Assert(this.Owner != null);
 
             SetModified();
-            PdfContent content = new PdfContent(this.Owner);
+            PdfContent content = new(this.Owner);
             Owner.irefTable.Add(content);
             Debug.Assert(content.Reference != null);
             Elements.Insert(0, content.Reference);
@@ -102,7 +101,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfContent CreateSingleContent()
         {
-            byte[] bytes = new byte[0];
+            byte[] bytes = [];
             byte[] bytes1;
             byte[] bytes2;
             foreach (PdfItem iref in Elements)
@@ -115,7 +114,7 @@ namespace PdfSharp.Pdf.Advanced
                 bytes[bytes1.Length] = (byte)'\n';
                 bytes2.CopyTo(bytes, bytes1.Length + 1);
             }
-            PdfContent content = new PdfContent(this.Owner);
+            PdfContent content = new(this.Owner);
             content.Stream = new PdfDictionary.PdfStream(bytes, content);
             return content;
         }

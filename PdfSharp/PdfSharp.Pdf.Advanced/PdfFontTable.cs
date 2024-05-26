@@ -73,8 +73,7 @@ namespace PdfSharp.Pdf.Advanced
                 selector = new FontSelector(font);
                 font.selector = selector;
             }
-            PdfFont pdfFont;
-            if (!this.fonts.TryGetValue(selector, out pdfFont))
+            if (!this.fonts.TryGetValue(selector, out PdfFont pdfFont))
             {
                 if (font.Unicode)
                     pdfFont = new PdfType0Font(this.owner, font, font.IsVertical);
@@ -184,9 +183,8 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfFont GetFont(string idName, byte[] fontData)
         {
-            PdfFontTable.FontSelector selector = new FontSelector(idName);
-            PdfFont pdfFont;
-            if (!this.fonts.TryGetValue(selector, out pdfFont))
+            PdfFontTable.FontSelector selector = new(idName);
+            if (!this.fonts.TryGetValue(selector, out PdfFont pdfFont))
             {
                 //if (font.Unicode)
                 pdfFont = new PdfType0Font(this.owner, idName, fontData, false);
@@ -206,16 +204,15 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfFont TryGetFont(string idName)
         {
-            FontSelector selector = new FontSelector(idName);
-            PdfFont pdfFont;
-            this.fonts.TryGetValue(selector, out pdfFont);
+            FontSelector selector = new(idName);
+            this.fonts.TryGetValue(selector, out PdfFont pdfFont);
             return pdfFont;
         }
 
         /// <summary>
         /// Map from PdfFontSelector to PdfFont.
         /// </summary>
-        readonly Dictionary<FontSelector, PdfFont> fonts = new Dictionary<FontSelector, PdfFont>();
+        readonly Dictionary<FontSelector, PdfFont> fonts = [];
 
         public void PrepareForSave()
         {
@@ -321,8 +318,7 @@ namespace PdfSharp.Pdf.Advanced
 
             public static bool operator ==(FontSelector selector1, FontSelector selector2)
             {
-                if (!Object.ReferenceEquals(selector1, null))
-                    selector1.Equals(selector2);
+                selector1?.Equals(selector2);
                 return Object.ReferenceEquals(selector2, null);
             }
 

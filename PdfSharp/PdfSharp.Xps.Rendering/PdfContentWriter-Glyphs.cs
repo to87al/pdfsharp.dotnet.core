@@ -40,7 +40,7 @@ namespace PdfSharp.Xps.Rendering
             if (glyphs.OpacityMask != null)
                 WriteOpacityMask(glyphs.OpacityMask);
 
-            XMatrix textMatrix = new XMatrix();
+            XMatrix textMatrix = new();
 
             textMatrix.TranslatePrepend(glyphs.OriginX, glyphs.OriginY);
             glyphs.OriginX = glyphs.OriginY = 0; // HACK: do not change model
@@ -148,7 +148,7 @@ namespace PdfSharp.Xps.Rendering
             if (glyphs.IsSideways)
             {
                 textMatrix.RotateAtPrepend(-90, new XPoint(x, y));
-                XPoint pos = new XPoint(x, y);
+                XPoint pos = new(x, y);
                 AdjustTextMatrix(ref pos);
                 //WriteTextTransform(textMatrix);
                 WriteLiteral("{0} Tj\n", text);
@@ -199,21 +199,6 @@ namespace PdfSharp.Xps.Rendering
             }
         }
 
-        private static void WriteGlyphs_None(Glyphs glyphs, string text)
-        {
-            // TODO:
-        }
-
-        private static void WriteGlyphs_DistanceOnly(Glyphs glyphs, string text)
-        {
-            // TODO:
-        }
-
-        private static void WriteGlyphs_GlyphIndicesAndDistanceOnly(Glyphs glyphs, string text)
-        {
-            // TODO:
-        }
-
         /// <summary>
         /// This is just a draft to see what to do in detail.
         /// </summary>
@@ -237,9 +222,8 @@ namespace PdfSharp.Xps.Rendering
 
             bool RightToLeft = glyphs.BidiLevel % 2 == 1;  // TODOWPF: why is this a level?? what means "bidirectional nesting"?
 
-            GlyphIndices indices = new GlyphIndices(glyphs.Indices);
-            if (indices == null)
-                indices = new GlyphIndices();
+            GlyphIndices indices = new(glyphs.Indices);
+            indices ??= new GlyphIndices();
             int codeIdx = 0;
             int codeCount = String.IsNullOrEmpty(unicodeString) ? 0 : unicodeString.Length;
             int glyphCount = indices.Count;
@@ -252,9 +236,9 @@ namespace PdfSharp.Xps.Rendering
 
             double x = glyphs.OriginX;
             double y = glyphs.OriginY;
-            XPoint pos = new XPoint(x, y); // accumulation may lead to rounding error -> check it!
+            XPoint pos = new(x, y); // accumulation may lead to rounding error -> check it!
 
-            StringBuilder outputText = new StringBuilder();
+            StringBuilder outputText = new();
             double accumulatedWidth = 0;
             int outputGlyphCount = 0;
             bool mustRender = false;
@@ -262,13 +246,13 @@ namespace PdfSharp.Xps.Rendering
 
             do
             {
-                GlyphIndices.GlyphMapping clusterMapping = new GlyphIndices.GlyphMapping(42);
+                GlyphIndices.GlyphMapping clusterMapping = new(42);
                 if (glyphIdx < glyphCount)
                     clusterMapping = indices[glyphIdx];
 
                 for (int clusterGlyphIdx = 0; clusterGlyphIdx < clusterMapping.ClusterGlyphCount; clusterGlyphIdx++)
                 {
-                    GlyphIndices.GlyphMapping mapping = new GlyphIndices.GlyphMapping(42);
+                    GlyphIndices.GlyphMapping mapping = new(42);
                     if (glyphIdx + clusterGlyphIdx < glyphCount)
                         mapping = indices[glyphIdx + clusterGlyphIdx];
 
@@ -325,7 +309,7 @@ namespace PdfSharp.Xps.Rendering
                         double width = descriptor.GlyphIndexToPdfWidth(glyphIndex);
                         if (!PdfSharp.Internal.DoubleUtil.IsNaN(mapping.AdvanceWidth))
                             width = mapping.AdvanceWidth * 10;
-                        pos = new XPoint(accumulatedWidth + width * boldSimulationFactor / 1000 * glyphs.FontRenderingEmSize, 0);
+                        pos = new XPoint(accumulatedWidth + (width * boldSimulationFactor / 1000 * glyphs.FontRenderingEmSize), 0);
 
                         // reset values
                         accumulatedWidth = 0;
@@ -374,9 +358,8 @@ namespace PdfSharp.Xps.Rendering
 
             bool RightToLeft = glyphs.BidiLevel % 2 == 1;  // TODOWPF: why is this a level?? what means "bidirectional nesting"?
 
-            GlyphIndices indices = new GlyphIndices(glyphs.Indices);
-            if (indices == null)
-                indices = new GlyphIndices();
+            GlyphIndices indices = new(glyphs.Indices);
+            indices ??= new GlyphIndices();
             int codeIdx = 0;
             int codeCount = String.IsNullOrEmpty(unicodeString) ? 0 : unicodeString.Length;
             int glyphCount = indices.Count;
@@ -389,11 +372,11 @@ namespace PdfSharp.Xps.Rendering
 
             double x = glyphs.OriginX;
             double y = glyphs.OriginY;
-            XPoint pos = new XPoint(x, y); // accumulation may lead to rounding error -> check it!
+            XPoint pos = new(x, y); // accumulation may lead to rounding error -> check it!
             double uOffset = 0;
             double vOffset = 0;
 
-            StringBuilder outputText = new StringBuilder();
+            StringBuilder outputText = new();
             double accumulatedWidth = 0;
             int outputGlyphCount = 0;
             bool mustRender = false;
@@ -401,13 +384,13 @@ namespace PdfSharp.Xps.Rendering
 
             do
             {
-                GlyphIndices.GlyphMapping clusterMapping = new GlyphIndices.GlyphMapping(42);
+                GlyphIndices.GlyphMapping clusterMapping = new(42);
                 if (glyphIdx < glyphCount)
                     clusterMapping = indices[glyphIdx];
 
                 for (int clusterGlyphIdx = 0; clusterGlyphIdx < clusterMapping.ClusterGlyphCount; clusterGlyphIdx++)
                 {
-                    GlyphIndices.GlyphMapping mapping = new GlyphIndices.GlyphMapping(42);
+                    GlyphIndices.GlyphMapping mapping = new(42);
                     if (glyphIdx + clusterGlyphIdx < glyphCount)
                         mapping = indices[glyphIdx + clusterGlyphIdx];
 
@@ -505,7 +488,7 @@ namespace PdfSharp.Xps.Rendering
                         double width = descriptor.GlyphIndexToPdfWidth(glyphIndex);
                         if (!PdfSharp.Internal.DoubleUtil.IsNaN(mapping.AdvanceWidth))
                             width = mapping.AdvanceWidth * 10;
-                        pos = new XPoint(accumulatedWidth + width * boldSimulationFactor / 1000 * glyphs.FontRenderingEmSize, 0);
+                        pos = new XPoint(accumulatedWidth + (width * boldSimulationFactor / 1000 * glyphs.FontRenderingEmSize), 0);
 
                         // reset values
                         accumulatedWidth = 0;

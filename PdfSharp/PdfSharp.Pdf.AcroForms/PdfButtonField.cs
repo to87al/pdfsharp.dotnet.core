@@ -61,11 +61,9 @@ namespace PdfSharp.Pdf.AcroForms
             // Try to get the information from the appearance dictionaray.
             // Just return the first key that is not /Off.
             // I'm not sure what is the right solution to get this value.
-            PdfDictionary ap = Elements[PdfAnnotation.Keys.AP] as PdfDictionary;
-            if (ap != null)
+            if (Elements[PdfAnnotation.Keys.AP] is PdfDictionary ap)
             {
-                PdfDictionary n = ap.Elements["/N"] as PdfDictionary;
-                if (n != null)
+                if (ap.Elements["/N"] is PdfDictionary n)
                 {
                     foreach (string name in n.Elements.Keys)
                         if (name != "/Off")

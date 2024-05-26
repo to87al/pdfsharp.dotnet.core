@@ -236,9 +236,7 @@ namespace PdfSharp.Pdf.IO
                 if (ch == '#')
                 {
                     ScanNextChar();
-                    char[] hex = new char[2];
-                    hex[0] = this.currChar;
-                    hex[1] = this.nextChar;
+                    char[] hex = [this.currChar, this.nextChar];
                     ScanNextChar();
                     // TODO Check syntax
                     ch = (char)(ushort)int.Parse(new string(hex), NumberStyles.AllowHexSpecifier);
@@ -421,11 +419,11 @@ namespace PdfSharp.Pdf.IO
                                             if (Char.IsDigit(this.nextChar))
                                             {
                                                 Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
-                                                n = n * 8 + ScanNextChar() - '0';
+                                                n = (n * 8) + ScanNextChar() - '0';
                                                 if (Char.IsDigit(this.nextChar))
                                                 {
                                                     Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
-                                                    n = n * 8 + ScanNextChar() - '0';
+                                                    n = (n * 8) + ScanNextChar() - '0';
                                                 }
                                             }
                                             ch = (char)n;
@@ -652,11 +650,11 @@ namespace PdfSharp.Pdf.IO
                                             if (Char.IsDigit(this.nextChar))
                                             {
                                                 Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
-                                                n = n * 8 + ScanNextChar() - '0';
+                                                n = (n * 8) + ScanNextChar() - '0';
                                                 if (Char.IsDigit(this.nextChar))
                                                 {
                                                     Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
-                                                    n = n * 8 + ScanNextChar() - '0';
+                                                    n = (n * 8) + ScanNextChar() - '0';
                                                 }
                                             }
                                             ch = (char)n;
@@ -718,7 +716,7 @@ namespace PdfSharp.Pdf.IO
                 Debug.Assert(count % 2 == 0);
                 this.token.Length = 0;
                 for (int idx = 2; idx < count; idx += 2)
-                    this.token.Append((char)(chars[idx] * 256 + chars[idx + 1]));
+                    this.token.Append((char)((chars[idx] * 256) + chars[idx + 1]));
             }
             return this.symbol = Symbol.HexString;
         }
@@ -755,14 +753,6 @@ namespace PdfSharp.Pdf.IO
                 }
             }
             return currChar;
-        }
-
-        /// <summary>
-        /// Resets the current token to the empty string.
-        /// </summary>
-        void ClearToken()
-        {
-            this.token.Length = 0;
         }
 
         /// <summary>

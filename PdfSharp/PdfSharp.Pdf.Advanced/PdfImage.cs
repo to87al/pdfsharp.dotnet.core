@@ -144,13 +144,13 @@ namespace PdfSharp.Pdf.Advanced
                 memory.Close();
             }
 
-            FlateDecode fd = new FlateDecode();
+            FlateDecode fd = new();
             byte[] imageDataCompressed = fd.Encode(imageBits);
             if (imageDataCompressed.Length < imageBits.Length)
             {
                 Stream = new PdfStream(imageDataCompressed, this);
                 Elements[Keys.Length] = new PdfInteger(imageDataCompressed.Length);
-                PdfArray arrayFilters = new PdfArray(document);
+                PdfArray arrayFilters = new(document);
                 arrayFilters.Elements.Add(new PdfName("/FlateDecode"));
                 arrayFilters.Elements.Add(new PdfName("/DCTDecode"));
                 Elements[Keys.Filter] = arrayFilters;
@@ -316,12 +316,12 @@ namespace PdfSharp.Pdf.Advanced
 
         private static int ReadWord(byte[] ab, int offset)
         {
-            return ab[offset] + 256 * ab[offset + 1];
+            return ab[offset] + (256 * ab[offset + 1]);
         }
 
         private static int ReadDWord(byte[] ab, int offset)
         {
-            return ReadWord(ab, offset) + 0x10000 * ReadWord(ab, offset + 2);
+            return ReadWord(ab, offset) + (0x10000 * ReadWord(ab, offset + 2));
         }
 
         /// <summary>
@@ -336,14 +336,14 @@ namespace PdfSharp.Pdf.Advanced
       image.image.Save("$$$.bmp", ImageFormat.Bmp);
 #endif
             int pdfVersion = Owner.Version;
-            MemoryStream memory = new MemoryStream();
+            MemoryStream memory = new();
 #if GDI
       image.gdiImage.Save(memory, ImageFormat.Bmp);
 #endif
 #if WPF
 #if !SILVERLIGHT
             // WPFTHHO: Bitte prüfen
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+            BmpBitmapEncoder encoder = new();
             encoder.Frames.Add(BitmapFrame.Create(image.wpfImage));
             encoder.Save(memory);
 #else
@@ -442,13 +442,13 @@ namespace PdfSharp.Pdf.Advanced
                     throw new NotImplementedException("Image format not supported (grayscales).");
                 }
 
-                FlateDecode fd = new FlateDecode();
+                FlateDecode fd = new();
                 if (hasMask)
                 {
                     // monochrome mask is either sufficient or
                     // provided for compatibility with older reader versions
                     byte[] maskDataCompressed = fd.Encode(mask.MaskData);
-                    PdfDictionary pdfMask = new PdfDictionary(document);
+                    PdfDictionary pdfMask = new(document);
                     pdfMask.Elements.SetName(Keys.Type, "/XObject");
                     pdfMask.Elements.SetName(Keys.Subtype, "/Image");
 
@@ -466,7 +466,7 @@ namespace PdfSharp.Pdf.Advanced
                 {
                     // The image provides an alpha mask (requires Arcrobat 5.0 or higher)
                     byte[] alphaMaskCompressed = fd.Encode(alphaMask);
-                    PdfDictionary smask = new PdfDictionary(document);
+                    PdfDictionary smask = new(document);
                     smask.Elements.SetName(Keys.Type, "/XObject");
                     smask.Elements.SetName(Keys.Subtype, "/Image");
 
@@ -521,14 +521,14 @@ namespace PdfSharp.Pdf.Advanced
             int firstMaskColor = -1, lastMaskColor = -1;
             bool segmentedColorMask = false;
 
-            MemoryStream memory = new MemoryStream();
+            MemoryStream memory = new();
 #if GDI
       image.gdiImage.Save(memory, ImageFormat.Bmp);
 #endif
 #if WPF
 #if !SILVERLIGHT
             // WPFTHHO: StL: keine Ahnung ob das so stimmt.
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+            BmpBitmapEncoder encoder = new();
             encoder.Frames.Add(BitmapFrame.Create(image.wpfImage));
             encoder.Save(memory);
 #else
@@ -588,21 +588,21 @@ namespace PdfSharp.Pdf.Advanced
                     throw new NotImplementedException("ReadIndexedMemoryBitmap: unsupported format #3");
                 }
 
-                MonochromeMask mask = new MonochromeMask(width, height);
+                MonochromeMask mask = new(width, height);
 
                 bool isGray = bits == 8 && (paletteColors == 256 || paletteColors == 0);
                 int isBitonal = 0; // 0: false; >0: true; <0: true (inverted)
                 byte[] paletteData = new byte[3 * paletteColors];
                 for (int color = 0; color < paletteColors; ++color)
                 {
-                    paletteData[3 * color] = imageBits[bytesColorPaletteOffset + 4 * color + 2];
-                    paletteData[3 * color + 1] = imageBits[bytesColorPaletteOffset + 4 * color + 1];
-                    paletteData[3 * color + 2] = imageBits[bytesColorPaletteOffset + 4 * color + 0];
+                    paletteData[3 * color] = imageBits[bytesColorPaletteOffset + (4 * color) + 2];
+                    paletteData[(3 * color) + 1] = imageBits[bytesColorPaletteOffset + (4 * color) + 1];
+                    paletteData[(3 * color) + 2] = imageBits[bytesColorPaletteOffset + (4 * color) + 0];
                     if (isGray)
-                        isGray = paletteData[3 * color] == paletteData[3 * color + 1] &&
-                          paletteData[3 * color] == paletteData[3 * color + 2];
+                        isGray = paletteData[3 * color] == paletteData[(3 * color) + 1] &&
+                          paletteData[3 * color] == paletteData[(3 * color) + 2];
 
-                    if (imageBits[bytesColorPaletteOffset + 4 * color + 3] < 128)
+                    if (imageBits[bytesColorPaletteOffset + (4 * color) + 3] < 128)
                     {
                         // We treat this as transparency:
                         if (firstMaskColor == -1)
@@ -645,7 +645,7 @@ namespace PdfSharp.Pdf.Advanced
                 // if (segmentedColorMask = true)
                 // { ... }
 
-                FlateDecode fd = new FlateDecode();
+                FlateDecode fd = new();
                 PdfDictionary colorPalette = null;
                 if (isBitonal == 0 && !isGray)
                 {
@@ -668,7 +668,7 @@ namespace PdfSharp.Pdf.Advanced
                 }
 
                 bool isFaxEncoding = false;
-                byte[] imageData = new byte[((width * bits + 7) / 8) * height];
+                byte[] imageData = new byte[(((width * bits) + 7) / 8) * height];
                 byte[] imageDataFax = null;
                 int k = 0;
 
@@ -717,11 +717,11 @@ namespace PdfSharp.Pdf.Advanced
                     int bytesOffsetRead = 0;
                     if (bits is 8 or 4 or 1)
                     {
-                        int bytesPerLine = (width * bits + 7) / 8;
+                        int bytesPerLine = ((width * bits) + 7) / 8;
                         for (int y = 0; y < height; ++y)
                         {
                             mask.StartLine(y);
-                            int bytesOffsetWrite = (height - 1 - y) * ((width * bits + 7) / 8);
+                            int bytesOffsetWrite = (height - 1 - y) * (((width * bits) + 7) / 8);
                             for (int x = 0; x < bytesPerLine; ++x)
                             {
                                 if (isGray)
@@ -779,7 +779,7 @@ namespace PdfSharp.Pdf.Advanced
                     // Color mask requires Reader 4.0 or higher:
                     if (!segmentedColorMask && pdfVersion >= 13)
                     {
-                        PdfArray array = new PdfArray(document);
+                        PdfArray array = new(document);
                         array.Elements.Add(new PdfInteger(firstMaskColor));
                         array.Elements.Add(new PdfInteger(lastMaskColor));
                         Elements[Keys.Mask] = array;
@@ -788,7 +788,7 @@ namespace PdfSharp.Pdf.Advanced
                     {
                         // Monochrome mask
                         byte[] maskDataCompressed = fd.Encode(mask.MaskData);
-                        PdfDictionary pdfMask = new PdfDictionary(document);
+                        PdfDictionary pdfMask = new(document);
                         pdfMask.Elements.SetName(Keys.Type, "/XObject");
                         pdfMask.Elements.SetName(Keys.Subtype, "/Image");
 
@@ -821,7 +821,7 @@ namespace PdfSharp.Pdf.Advanced
                         Elements[Keys.Length] = new PdfInteger(imageDataFax.Length);
                         Elements[Keys.Filter] = new PdfName("/CCITTFaxDecode");
                         //PdfArray array2 = new PdfArray(this.document);
-                        PdfDictionary dictionary = new PdfDictionary();
+                        PdfDictionary dictionary = new();
                         if (k != 0)
                             dictionary.Elements.Add("/K", new PdfInteger(k));
                         if (isBitonal < 0)
@@ -836,16 +836,16 @@ namespace PdfSharp.Pdf.Advanced
                     {
                         Stream = new PdfStream(imageDataFaxCompressed, this);
                         Elements[Keys.Length] = new PdfInteger(imageDataFaxCompressed.Length);
-                        PdfArray arrayFilters = new PdfArray(document);
+                        PdfArray arrayFilters = new(document);
                         arrayFilters.Elements.Add(new PdfName("/FlateDecode"));
                         arrayFilters.Elements.Add(new PdfName("/CCITTFaxDecode"));
                         Elements[Keys.Filter] = arrayFilters;
-                        PdfArray arrayDecodeParms = new PdfArray(document);
+                        PdfArray arrayDecodeParms = new(document);
 
-                        PdfDictionary dictFlateDecodeParms = new PdfDictionary();
+                        PdfDictionary dictFlateDecodeParms = new();
                         //dictFlateDecodeParms.Elements.Add("/Columns", new PdfInteger(1));
 
-                        PdfDictionary dictCcittFaxDecodeParms = new PdfDictionary();
+                        PdfDictionary dictCcittFaxDecodeParms = new();
                         if (k != 0)
                             dictCcittFaxDecodeParms.Elements.Add("/K", new PdfInteger(k));
                         if (isBitonal < 0)
@@ -877,7 +877,7 @@ namespace PdfSharp.Pdf.Advanced
                 if ((usesCcittEncoding && isBitonal == 0) ||
                   (!usesCcittEncoding && isBitonal <= 0 && !isGray))
                 {
-                    PdfArray arrayColorSpace = new PdfArray(document);
+                    PdfArray arrayColorSpace = new(document);
                     arrayColorSpace.Elements.Add(new PdfName("/Indexed"));
                     arrayColorSpace.Elements.Add(new PdfName("/DeviceRGB"));
                     arrayColorSpace.Elements.Add(new PdfInteger(paletteColors - 1));

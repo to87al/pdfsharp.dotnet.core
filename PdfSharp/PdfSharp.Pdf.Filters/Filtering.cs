@@ -43,33 +43,29 @@ namespace PdfSharp.Pdf.Filters
         public static Filter GetFilter(string filterName)
         {
             if (filterName.StartsWith("/"))
-                filterName = filterName.Substring(1);
+                filterName = filterName[1..];
 
             // Some tools use abbreviations
             switch (filterName)
             {
                 case "ASCIIHexDecode":
                 case "AHx":
-                    if (Filtering.asciiHexDecode == null)
-                        Filtering.asciiHexDecode = new ASCIIHexDecode();
+                    Filtering.asciiHexDecode ??= new ASCIIHexDecode();
                     return Filtering.asciiHexDecode;
 
                 case "ASCII85Decode":
                 case "A85":
-                    if (Filtering.ascii85Decode == null)
-                        Filtering.ascii85Decode = new ASCII85Decode();
+                    Filtering.ascii85Decode ??= new ASCII85Decode();
                     return Filtering.ascii85Decode;
 
                 case "LZWDecode":
                 case "LZW":
-                    if (Filtering.lzwDecode == null)
-                        Filtering.lzwDecode = new LzwDecode();
+                    Filtering.lzwDecode ??= new LzwDecode();
                     return Filtering.lzwDecode;
 
                 case "FlateDecode":
                 case "Fl":
-                    if (Filtering.flateDecode == null)
-                        Filtering.flateDecode = new FlateDecode();
+                    Filtering.flateDecode ??= new FlateDecode();
                     return Filtering.flateDecode;
 
                 //case "RunLengthDecode":
@@ -121,8 +117,7 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                if (Filtering.asciiHexDecode == null)
-                    Filtering.asciiHexDecode = new ASCIIHexDecode();
+                Filtering.asciiHexDecode ??= new ASCIIHexDecode();
                 return Filtering.asciiHexDecode;
             }
         }
@@ -135,8 +130,7 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                if (Filtering.ascii85Decode == null)
-                    Filtering.ascii85Decode = new ASCII85Decode();
+                Filtering.ascii85Decode ??= new ASCII85Decode();
                 return Filtering.ascii85Decode;
             }
         }
@@ -149,8 +143,7 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                if (Filtering.lzwDecode == null)
-                    Filtering.lzwDecode = new LzwDecode();
+                Filtering.lzwDecode ??= new LzwDecode();
                 return Filtering.lzwDecode;
             }
         }
@@ -163,8 +156,7 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                if (Filtering.flateDecode == null)
-                    Filtering.flateDecode = new FlateDecode();
+                Filtering.flateDecode ??= new FlateDecode();
                 return Filtering.flateDecode;
             }
         }

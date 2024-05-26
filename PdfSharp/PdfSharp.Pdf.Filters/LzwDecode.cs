@@ -53,7 +53,7 @@ namespace PdfSharp.Pdf.Filters
             if (data[0] == 0x00 && data[1] == 0x01)
                 throw new Exception("LZW flavour not supported.");
 
-            MemoryStream outputStream = new MemoryStream();
+            MemoryStream outputStream = new();
 
             InitializeDictionary();
 
@@ -172,7 +172,7 @@ namespace PdfSharp.Pdf.Filters
             }
         }
 
-        readonly int[] andTable = { 511, 1023, 2047, 4095 };
+        readonly int[] andTable = [511, 1023, 2047, 4095];
         byte[][] stringTable;
         byte[] data;
         int tableIndex, bitsToGet = 9;

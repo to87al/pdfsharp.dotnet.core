@@ -222,7 +222,7 @@ namespace PdfSharp.Pdf.IO
             WriteSeparator(CharCat.Delimiter, '/');
             string name = value.Value;
 
-            StringBuilder pdf = new StringBuilder("/");
+            StringBuilder pdf = new("/");
             for (int idx = 1; idx < name.Length; idx++)
             {
                 char ch = name[idx];
@@ -314,8 +314,7 @@ namespace PdfSharp.Pdf.IO
             if (indirect)
             {
                 WriteObjectAddress(value);
-                if (this.securityHandler != null)
-                    this.securityHandler.SetHashKey(value.ObjectID);
+                this.securityHandler?.SetHashKey(value.ObjectID);
             }
             this.stack.Add(new StackItem(value));
             if (indirect)
@@ -476,7 +475,7 @@ namespace PdfSharp.Pdf.IO
 
         public void WriteFileHeader(PdfDocument document)
         {
-            StringBuilder header = new StringBuilder("%PDF-");
+            StringBuilder header = new("%PDF-");
             int version = document.version;
             header.Append((version / 10).ToString(CultureInfo.InvariantCulture) + "." + (version % 10).ToString(CultureInfo.InvariantCulture) + "\n%\xD3\xF4\xCC\xE1\n");
             WriteRaw(header.ToString());
@@ -648,7 +647,7 @@ namespace PdfSharp.Pdf.IO
             public bool HasStream;
         }
 
-        readonly List<StackItem> stack = new List<StackItem>();
+        readonly List<StackItem> stack = [];
         int commentPosition;
     }
 }

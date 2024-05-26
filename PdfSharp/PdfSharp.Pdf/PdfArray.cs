@@ -80,8 +80,7 @@ namespace PdfSharp.Pdf
         protected PdfArray(PdfArray array)
           : base(array)
         {
-            if (array.elements != null)
-                array.elements.SetOwner(this);
+            array.elements?.SetOwner(this);
         }
 
         /// <summary>
@@ -120,8 +119,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.elements == null)
-                    this.elements = new ArrayElements(this);
+                this.elements ??= new ArrayElements(this);
                 return this.elements;
             }
         }
@@ -144,12 +142,12 @@ namespace PdfSharp.Pdf
         /// </summary>
         public override string ToString()
         {
-            StringBuilder pdf = new StringBuilder();
+            StringBuilder pdf = new();
             pdf.Append("[ ");
             int count = Elements.Count;
             for (int idx = 0; idx < count; idx++)
                 pdf.Append(Elements[idx].ToString() + " ");
-            pdf.Append("]");
+            pdf.Append(']');
             return pdf.ToString();
         }
 
@@ -175,7 +173,7 @@ namespace PdfSharp.Pdf
 
             internal ArrayElements(PdfArray array)
             {
-                this.elements = new List<PdfItem>();
+                this.elements = [];
                 this.owner = array;
             }
 
@@ -213,7 +211,7 @@ namespace PdfSharp.Pdf
             public bool GetBoolean(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 object obj = this[index];
                 if (obj == null)
@@ -234,7 +232,7 @@ namespace PdfSharp.Pdf
             public int GetInteger(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 object obj = this[index];
                 if (obj == null)
@@ -255,7 +253,7 @@ namespace PdfSharp.Pdf
             public double GetReal(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 object obj = this[index];
                 if (obj == null)
@@ -280,7 +278,7 @@ namespace PdfSharp.Pdf
             public string GetString(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 object obj = this[index];
                 if (obj == null)
@@ -301,7 +299,7 @@ namespace PdfSharp.Pdf
             public string GetName(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 object obj = this[index];
                 if (obj == null)
@@ -320,7 +318,7 @@ namespace PdfSharp.Pdf
             public PdfObject GetIndirectObject(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 PdfItem item = this[index];
                 if (item is PdfReference)
@@ -335,7 +333,7 @@ namespace PdfSharp.Pdf
             public PdfObject GetObject(int index)
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.IndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.IndexOutOfRange);
 
                 PdfItem item = this[index];
                 if (item is PdfReference)
@@ -375,7 +373,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public PdfItem[] Items
             {
-                get { return this.elements.ToArray(); }
+                get { return [.. this.elements]; }
             }
 
             ///// <summary>
@@ -413,8 +411,7 @@ namespace PdfSharp.Pdf
                 get { return this.elements[index]; }
                 set
                 {
-                    if (value == null)
-                        throw new ArgumentNullException("value");
+                    ArgumentNullException.ThrowIfNull(value);
                     this.elements[index] = value;
                 }
             }
@@ -476,8 +473,7 @@ namespace PdfSharp.Pdf
                 //Debug.Assert((value is PdfObject && ((PdfObject)value).Reference == null) | !(value is PdfObject),
                 //  "You try to set an indirect object directly into an array.");
 
-                PdfObject obj = value as PdfObject;
-                if (obj != null && obj.IsIndirect)
+                if (value is PdfObject obj && obj.IsIndirect)
                     this.elements.Add(obj.Reference);
                 else
                     this.elements.Add(value);

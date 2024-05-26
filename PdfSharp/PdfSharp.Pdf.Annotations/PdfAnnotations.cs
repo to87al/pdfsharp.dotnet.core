@@ -116,8 +116,7 @@ namespace PdfSharp.Pdf.Annotations
                     Debug.Assert(item is PdfDictionary, "Dictionary expected.");
                     dict = (PdfDictionary)item;
                 }
-                PdfAnnotation annotation = dict as PdfAnnotation;
-                if (annotation == null)
+                if (dict is not PdfAnnotation annotation)
                 {
                     annotation = new PdfGenericAnnotation(dict);
                     if (iref == null)

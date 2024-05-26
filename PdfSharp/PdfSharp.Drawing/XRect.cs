@@ -186,7 +186,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Determines whether this instance and the specified object are equal.
         /// </summary>
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
             if (o is null or not XRect)
                 return false;
@@ -197,7 +197,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Determines whether this instance and the specified rect are equal.
         /// </summary>
-        public bool Equals(XRect value)
+        public readonly bool Equals(XRect value)
         {
             return Equals(this, value);
         }
@@ -219,7 +219,7 @@ namespace PdfSharp.Drawing
         {
             XRect empty;
             CultureInfo cultureInfo = CultureInfo.InvariantCulture;
-            TokenizerHelper helper = new TokenizerHelper(source, cultureInfo);
+            TokenizerHelper helper = new(source, cultureInfo);
             string str = helper.NextTokenRequired();
             if (str == "Empty")
                 empty = Empty;
@@ -258,7 +258,7 @@ namespace PdfSharp.Drawing
             if (IsEmpty)
                 return "Empty";
             char numericListSeparator = TokenizerHelper.GetNumericListSeparator(provider);
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}{0}{3:" + format + "}{0}{4:" + format + "}", new object[] { numericListSeparator, this.x, this.y, this.width, this.height });
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}{0}{3:" + format + "}{0}{4:" + format + "}", [numericListSeparator, this.x, this.y, this.width, this.height]);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
         /// </summary>
-        public bool IsEmpty
+        public readonly bool IsEmpty
         {
             get { return this.width < 0; }
         }
@@ -282,7 +282,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XPoint Location
         {
-            get { return new XPoint(this.x, this.y); }
+            readonly get { return new XPoint(this.x, this.y); }
             set
             {
                 if (IsEmpty)
@@ -323,7 +323,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double X
         {
-            get { return this.x; }
+            readonly get { return this.x; }
             set
             {
                 if (IsEmpty)
@@ -337,7 +337,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Y
         {
-            get { return this.y; }
+            readonly get { return this.y; }
             set
             {
                 if (IsEmpty)
@@ -351,7 +351,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Width
         {
-            get { return this.width; }
+            readonly get { return this.width; }
             set
             {
                 if (IsEmpty)
@@ -368,7 +368,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Height
         {
-            get { return this.height; }
+            readonly get { return this.height; }
             set
             {
                 if (IsEmpty)
@@ -382,7 +382,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets the x-axis value of the left side of the rectangle. 
         /// </summary>
-        public double Left
+        public readonly double Left
         {
             get { return this.x; }
         }
@@ -390,7 +390,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets the y-axis value of the top side of the rectangle. 
         /// </summary>
-        public double Top
+        public readonly double Top
         {
             get { return this.y; }
         }
@@ -457,9 +457,9 @@ namespace PdfSharp.Drawing
         /// Gets the center of the rectangle.
         /// </summary>
         //[Browsable(false)]
-        public XPoint Center
+        public readonly XPoint Center
         {
-            get { return new XPoint(this.x + this.width / 2, this.y + this.height / 2); }
+            get { return new XPoint(this.x + (this.width / 2), this.y + (this.height / 2)); }
         }
 
         /// <summary>
@@ -764,14 +764,14 @@ namespace PdfSharp.Drawing
         }
 #endif
 
-        bool ContainsInternal(double x, double y)
+        readonly bool ContainsInternal(double x, double y)
         {
             return x >= this.x && x - this.width <= this.x && y >= this.y && y - this.height <= this.y;
         }
 
         static XRect CreateEmptyRect()
         {
-            XRect rect = new XRect();
+            XRect rect = new();
             rect.x = double.PositiveInfinity;
             rect.y = double.PositiveInfinity;
             rect.width = double.NegativeInfinity;

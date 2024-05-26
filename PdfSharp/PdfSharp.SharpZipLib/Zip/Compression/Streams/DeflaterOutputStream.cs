@@ -298,14 +298,11 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
                 throw new ArgumentException("baseOutputStream", "must support writing");
             }
 
-            if (deflater == null)
-            {
-                throw new ArgumentNullException("deflater");
-            }
+            ArgumentNullException.ThrowIfNull(deflater);
 
             if (bufsize <= 0)
             {
-                throw new ArgumentOutOfRangeException("bufsize");
+                throw new ArgumentOutOfRangeException(nameof(bufsize));
             }
 
             this.baseOutputStream = baseOutputStream;
@@ -377,8 +374,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// </param>
         public override void WriteByte(byte bval)
         {
-            byte[] b = new byte[1];
-            b[0] = bval;
+            byte[] b = [bval];
             Write(b, 0, 1);
         }
 
@@ -462,11 +458,11 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// </summary>
         protected void InitializePassword(string password)
         {
-            keys = new uint[] {
+            keys = [
                 0x12345678,
                 0x23456789,
                 0x34567890
-            };
+            ];
 
             for (int i = 0; i < password.Length; ++i)
             {
@@ -481,7 +477,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         {
             keys[0] = Crc32.ComputeCrc32(keys[0], ch);
             keys[1] = keys[1] + (byte)keys[0];
-            keys[1] = keys[1] * 134775813 + 1;
+            keys[1] = (keys[1] * 134775813) + 1;
             keys[2] = Crc32.ComputeCrc32(keys[2], (byte)(keys[1] >> 24));
         }
         #endregion

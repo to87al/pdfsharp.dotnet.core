@@ -81,10 +81,9 @@ namespace PdfSharp.Pdf.Advanced
         public string GetDocumentID(int index)
         {
             if (index is < 0 or > 1)
-                throw new ArgumentOutOfRangeException("index", index, "Index must be 0 or 1.");
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index must be 0 or 1.");
 
-            PdfArray array = Elements[Keys.ID] as PdfArray;
-            if (array == null || array.Elements.Count < 2)
+            if (Elements[Keys.ID] is not PdfArray array || array.Elements.Count < 2)
                 return "";
             PdfItem item = array.Elements[index];
             if (item is PdfString)
@@ -98,10 +97,9 @@ namespace PdfSharp.Pdf.Advanced
         public void SetDocumentID(int index, string value)
         {
             if (index is < 0 or > 1)
-                throw new ArgumentOutOfRangeException("index", index, "Index must be 0 or 1.");
+                throw new ArgumentOutOfRangeException(nameof(index), index, "Index must be 0 or 1.");
 
-            PdfArray array = Elements[Keys.ID] as PdfArray;
-            if (array == null || array.Elements.Count < 2)
+            if (Elements[Keys.ID] is not PdfArray array || array.Elements.Count < 2)
                 array = CreateNewDocumentIDs();
             array.Elements[index] = new PdfString(value, PdfStringFlags.HexLiteral);
         }
@@ -111,7 +109,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal PdfArray CreateNewDocumentIDs()
         {
-            PdfArray array = new PdfArray(this.document);
+            PdfArray array = new(this.document);
             byte[] docID = Guid.NewGuid().ToByteArray();
             string id = PdfEncoders.RawEncoding.GetString(docID, 0, docID.Length);
             array.Elements.Add(new PdfString(id, PdfStringFlags.HexLiteral));
@@ -127,8 +125,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.securityHandler == null)
-                    this.securityHandler = (PdfStandardSecurityHandler)Elements.GetValue(Keys.Encrypt, VCF.CreateIndirect);
+                this.securityHandler ??= (PdfStandardSecurityHandler)Elements.GetValue(Keys.Encrypt, VCF.CreateIndirect);
                 return this.securityHandler;
             }
         }
@@ -164,8 +161,7 @@ namespace PdfSharp.Pdf.Advanced
         internal void Finish()
         {
             // \Root
-            PdfReference iref = document.trailer.Elements[PdfTrailer.Keys.Root] as PdfReference;
-            if (iref != null && iref.Value == null)
+            if (document.trailer.Elements[PdfTrailer.Keys.Root] is PdfReference iref && iref.Value == null)
             {
                 iref = document.irefTable[iref.ObjectID];
                 Debug.Assert(iref.Value != null);
@@ -266,8 +262,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

@@ -125,7 +125,7 @@ namespace PdfSharp.Pdf
         internal byte[] EncryptionValue
         {
             // TODO: Unicode case is not handled!
-            get { return this.value == null ? new byte[0] : PdfEncoders.RawEncoding.GetBytes(this.value); }
+            get { return this.value == null ? [] : PdfEncoders.RawEncoding.GetBytes(this.value); }
             set { this.value = PdfEncoders.RawEncoding.GetString(value, 0, value.Length); }
         }
 

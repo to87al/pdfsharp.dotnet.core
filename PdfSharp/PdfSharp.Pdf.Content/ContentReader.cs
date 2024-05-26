@@ -45,7 +45,7 @@ namespace PdfSharp.Pdf.Content
         /// <param name="page">The page.</param>
         static public CSequence ReadContent(PdfPage page)
         {
-            CParser parser = new CParser(page);
+            CParser parser = new(page);
             CSequence sequence = parser.ReadContent();
             return sequence;
         }
@@ -56,7 +56,7 @@ namespace PdfSharp.Pdf.Content
         /// <param name="content">The content.</param>
         static public CSequence ReadContent(byte[] content)
         {
-            CParser parser = new CParser(content);
+            CParser parser = new(content);
             CSequence sequence = parser.ReadContent();
             return sequence;
         }

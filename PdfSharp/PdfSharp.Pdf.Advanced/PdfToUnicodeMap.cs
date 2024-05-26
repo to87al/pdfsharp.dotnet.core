@@ -78,7 +78,7 @@ namespace PdfSharp.Pdf.Advanced
               "/CMapName /Adobe-Identity-UCS def /CMapType 2 def\n";
             string suffix = "endcmap CMapName currentdict /CMap defineresource pop end end";
 
-            Dictionary<int, char> glyphIndexToCharacter = new Dictionary<int, char>();
+            Dictionary<int, char> glyphIndexToCharacter = [];
             int lowIndex = 65536, hiIndex = -1;
             foreach (KeyValuePair<char, int> entry in this.cmapInfo.CharacterToGlyphIndex)
             {
@@ -89,9 +89,9 @@ namespace PdfSharp.Pdf.Advanced
                 glyphIndexToCharacter[index] = entry.Key;
             }
 
-            MemoryStream ms = new MemoryStream();
+            MemoryStream ms = new();
 #if !SILVERLIGHT
-            StreamWriter wrt = new StreamWriter(ms, Encoding.ASCII);
+            StreamWriter wrt = new(ms, Encoding.ASCII);
 #else
       StreamWriter wrt = new StreamWriter(ms, Encoding.UTF8);
 #endif

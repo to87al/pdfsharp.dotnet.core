@@ -61,7 +61,7 @@ namespace PdfSharp.Pdf.Content
 
         public CSequence ReadContent()
         {
-            CSequence sequence = new CSequence();
+            CSequence sequence = [];
             ParseObject(sequence, CSymbol.Eof);
 
             return sequence;
@@ -85,13 +85,13 @@ namespace PdfSharp.Pdf.Content
                         break;
 
                     case CSymbol.Integer:
-                        CInteger n = new CInteger();
+                        CInteger n = new();
                         n.Value = this.lexer.TokenToInteger;
                         this.operands.Add(n);
                         break;
 
                     case CSymbol.Real:
-                        CReal r = new CReal();
+                        CReal r = new();
                         r.Value = this.lexer.TokenToReal;
                         this.operands.Add(r);
                         break;
@@ -100,13 +100,13 @@ namespace PdfSharp.Pdf.Content
                     case CSymbol.HexString:
                     case CSymbol.UnicodeString:
                     case CSymbol.UnicodeHexString:
-                        CString s = new CString();
+                        CString s = new();
                         s.Value = this.lexer.Token;
                         this.operands.Add(s);
                         break;
 
                     case CSymbol.Name:
-                        CName name = new CName();
+                        CName name = new();
                         name.Name = this.lexer.Token;
                         this.operands.Add(name);
                         break;
@@ -118,7 +118,7 @@ namespace PdfSharp.Pdf.Content
                         break;
 
                     case CSymbol.BeginArray:
-                        CArray array = new CArray();
+                        CArray array = [];
                         Debug.Assert(this.operands.Count == 0, "Array within array...");
                         ParseObject(array, CSymbol.EndArray);
                         array.Add(this.operands);
@@ -160,24 +160,6 @@ namespace PdfSharp.Pdf.Content
             return this.lexer.ScanNextToken();
         }
 
-        CSymbol ScanNextToken(out string token)
-        {
-            CSymbol symbol = this.lexer.ScanNextToken();
-            token = this.lexer.Token;
-            return symbol;
-        }
-
-        /// <summary>
-        /// Reads the next symbol that must be the specified one.
-        /// </summary>
-        CSymbol ReadSymbol(CSymbol symbol)
-        {
-            CSymbol current = this.lexer.ScanNextToken();
-            if (symbol != current)
-                throw new ContentReaderException(PSSR.UnexpectedToken(this.lexer.Token));
-            return current;
-        }
-
-        readonly CSequence operands = new CSequence();
+        readonly CSequence operands = [];
     }
 }

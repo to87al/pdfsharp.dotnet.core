@@ -58,8 +58,7 @@ namespace PdfSharp.Pdf.Advanced
                 selector = new ImageSelector(image);
                 image.selector = selector;
             }
-            PdfImage pdfImage;
-            if (!this.images.TryGetValue(selector, out pdfImage))
+            if (!this.images.TryGetValue(selector, out PdfImage pdfImage))
             {
                 pdfImage = new PdfImage(this.owner, image);
                 //pdfImage.Document = this.document;
@@ -78,7 +77,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Map from ImageSelector to PdfImage.
         /// </summary>
-        readonly Dictionary<ImageSelector, PdfImage> images = new Dictionary<ImageSelector, PdfImage>();
+        readonly Dictionary<ImageSelector, PdfImage> images = [];
 
         /// <summary>
         /// A collection of information that uniquely identifies a particular PdfImage.
@@ -91,8 +90,7 @@ namespace PdfSharp.Pdf.Advanced
             public ImageSelector(XImage image)
             {
                 // HACK: implement a way to identify images when they are reused
-                if (image.path == null)
-                    image.path = Guid.NewGuid().ToString();
+                image.path ??= Guid.NewGuid().ToString();
 
                 // HACK: just use full path to identify
                 this.path = image.path.ToLower(CultureInfo.InvariantCulture);

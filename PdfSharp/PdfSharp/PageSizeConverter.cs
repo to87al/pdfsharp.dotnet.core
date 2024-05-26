@@ -113,7 +113,7 @@ namespace PdfSharp
                 PageSize.Statement => new XSize(396, 612),
                 // 8.5 x 13 inch²
                 PageSize.Size10x14 => new XSize(720, 1008),
-                _ => throw new ArgumentException("Invalid PageSize.", "value"),
+                _ => throw new ArgumentException("Invalid PageSize.", nameof(value)),
             };
         }
     }

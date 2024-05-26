@@ -167,10 +167,7 @@ namespace PdfSharp.SharpZipLib.Checksums
         /// </param>
         public void Update(byte[] buf, int off, int len)
         {
-            if (buf == null)
-            {
-                throw new ArgumentNullException("buf");
-            }
+            ArgumentNullException.ThrowIfNull(buf);
 
             if (off < 0 || len < 0 || off + len > buf.Length)
             {

@@ -67,7 +67,7 @@ namespace PdfSharp.Pdf.Annotations
         /// <param name="destinationPage">The one-based destination page number.</param>
         public static PdfLinkAnnotation CreateDocumentLink(PdfRectangle rect, int destinationPage)
         {
-            PdfLinkAnnotation link = new PdfLinkAnnotation();
+            PdfLinkAnnotation link = new();
             link.linkType = PdfLinkAnnotation.LinkType.Document;
             link.Rectangle = rect;
             link.destPage = destinationPage;
@@ -82,7 +82,7 @@ namespace PdfSharp.Pdf.Annotations
         /// </summary>
         public static PdfLinkAnnotation CreateWebLink(PdfRectangle rect, string url)
         {
-            PdfLinkAnnotation link = new PdfLinkAnnotation();
+            PdfLinkAnnotation link = new();
             link.linkType = PdfLinkAnnotation.LinkType.Web;
             link.Rectangle = rect;
             link.url = url;
@@ -94,7 +94,7 @@ namespace PdfSharp.Pdf.Annotations
         /// </summary>
         public static PdfLinkAnnotation CreateFileLink(PdfRectangle rect, string fileName)
         {
-            PdfLinkAnnotation link = new PdfLinkAnnotation();
+            PdfLinkAnnotation link = new();
             link.linkType = PdfLinkAnnotation.LinkType.File;
             // TODO: Adjust bleed box here (if possible)
             link.Rectangle = rect;
@@ -195,8 +195,7 @@ namespace PdfSharp.Pdf.Annotations
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

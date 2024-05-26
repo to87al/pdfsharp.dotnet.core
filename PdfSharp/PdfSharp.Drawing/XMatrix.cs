@@ -136,11 +136,11 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets an array of double values that represents the elements of this matrix.
         /// </summary>
-        public double[] GetElements()
+        public readonly double[] GetElements()
         {
             if (this.type == XMatrixTypes.Identity)
-                return new double[] { 1, 0, 0, 1, 0, 0 };
-            return new double[] { this.m11, this.m12, this.m21, this.m22, this.offsetX, this.offsetY };
+                return [1, 0, 0, 1, 0, 0];
+            return [this.m11, this.m12, this.m21, this.m22, this.offsetX, this.offsetY];
         }
 
         /// <summary>
@@ -214,21 +214,21 @@ namespace PdfSharp.Drawing
 
             if (order == XMatrixOrder.Append)
             {
-                this.m11 = t11 * matrix.M11 + t12 * matrix.M21;
-                this.m12 = t11 * matrix.M12 + t12 * matrix.M22;
-                this.m21 = t21 * matrix.M11 + t22 * matrix.M21;
-                this.m22 = t21 * matrix.M12 + t22 * matrix.M22;
-                this.offsetX = tdx * matrix.M11 + tdy * matrix.M21 + matrix.OffsetX;
-                this.offsetY = tdx * matrix.M12 + tdy * matrix.M22 + matrix.OffsetY;
+                this.m11 = (t11 * matrix.M11) + (t12 * matrix.M21);
+                this.m12 = (t11 * matrix.M12) + (t12 * matrix.M22);
+                this.m21 = (t21 * matrix.M11) + (t22 * matrix.M21);
+                this.m22 = (t21 * matrix.M12) + (t22 * matrix.M22);
+                this.offsetX = (tdx * matrix.M11) + (tdy * matrix.M21) + matrix.OffsetX;
+                this.offsetY = (tdx * matrix.M12) + (tdy * matrix.M22) + matrix.OffsetY;
             }
             else
             {
-                this.m11 = t11 * matrix.M11 + t21 * matrix.M12;
-                this.m12 = t12 * matrix.M11 + t22 * matrix.M12;
-                this.m21 = t11 * matrix.M21 + t21 * matrix.M22;
-                this.m22 = t12 * matrix.M21 + t22 * matrix.M22;
-                this.offsetX = t11 * matrix.OffsetX + t21 * matrix.OffsetY + tdx;
-                this.offsetY = t12 * matrix.OffsetX + t22 * matrix.OffsetY + tdy;
+                this.m11 = (t11 * matrix.M11) + (t21 * matrix.M12);
+                this.m12 = (t12 * matrix.M11) + (t22 * matrix.M12);
+                this.m21 = (t11 * matrix.M21) + (t21 * matrix.M22);
+                this.m22 = (t12 * matrix.M21) + (t22 * matrix.M22);
+                this.offsetX = (t11 * matrix.OffsetX) + (t21 * matrix.OffsetY) + tdx;
+                this.offsetY = (t12 * matrix.OffsetX) + (t22 * matrix.OffsetY) + tdy;
             }
             DeriveMatrixType();
         }
@@ -303,8 +303,8 @@ namespace PdfSharp.Drawing
             }
             else
             {
-                this.offsetX += offsetX * this.m11 + offsetY * this.m21;
-                this.offsetY += offsetX * this.m12 + offsetY * this.m22;
+                this.offsetX += (offsetX * this.m11) + (offsetY * this.m21);
+                this.offsetY += (offsetX * this.m12) + (offsetY * this.m22);
             }
             DeriveMatrixType();
         }
@@ -472,12 +472,12 @@ namespace PdfSharp.Drawing
                 double t22 = this.m22;
                 double tdx = this.offsetX;
                 double tdy = this.offsetY;
-                this.m11 = t11 * cos - t12 * sin;
-                this.m12 = t11 * sin + t12 * cos;
-                this.m21 = t21 * cos - t22 * sin;
-                this.m22 = t21 * sin + t22 * cos;
-                this.offsetX = tdx * cos - tdy * sin;
-                this.offsetY = tdx * sin + tdy * cos;
+                this.m11 = (t11 * cos) - (t12 * sin);
+                this.m12 = (t11 * sin) + (t12 * cos);
+                this.m21 = (t21 * cos) - (t22 * sin);
+                this.m22 = (t21 * sin) + (t22 * cos);
+                this.offsetX = (tdx * cos) - (tdy * sin);
+                this.offsetY = (tdx * sin) + (tdy * cos);
             }
             else
             {
@@ -485,10 +485,10 @@ namespace PdfSharp.Drawing
                 double t12 = this.m12;
                 double t21 = this.m21;
                 double t22 = this.m22;
-                this.m11 = t11 * cos + t21 * sin;
-                this.m12 = t12 * cos + t22 * sin;
-                this.m21 = -t11 * sin + t21 * cos;
-                this.m22 = -t12 * sin + t22 * cos;
+                this.m11 = (t11 * cos) + (t21 * sin);
+                this.m12 = (t12 * cos) + (t22 * sin);
+                this.m21 = (-t11 * sin) + (t21 * cos);
+                this.m22 = (-t12 * sin) + (t22 * cos);
             }
             DeriveMatrixType();
         }
@@ -690,8 +690,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void TransformPoints(XPoint[] points)
         {
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(points);
 
             if (IsIdentity)
                 return;
@@ -701,8 +700,8 @@ namespace PdfSharp.Drawing
             {
                 double x = points[idx].X;
                 double y = points[idx].Y;
-                points[idx].X = x * this.m11 + y * this.m21 + this.offsetX;
-                points[idx].Y = x * this.m12 + y * this.m22 + this.offsetY;
+                points[idx].X = (x * this.m11) + (y * this.m21) + this.offsetX;
+                points[idx].Y = (x * this.m12) + (y * this.m22) + this.offsetY;
             }
         }
 
@@ -735,8 +734,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void TransformPoints(System.Windows.Point[] points)
         {
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(points);
 
             if (IsIdentity)
                 return;
@@ -746,8 +744,8 @@ namespace PdfSharp.Drawing
             {
                 double x = points[idx].X;
                 double y = points[idx].Y;
-                points[idx].X = (int)(x * this.m11 + y * this.m21 + this.offsetX);
-                points[idx].Y = (int)(x * this.m12 + y * this.m22 + this.offsetY);
+                points[idx].X = (int)((x * this.m11) + (y * this.m21) + this.offsetX);
+                points[idx].Y = (int)((x * this.m12) + (y * this.m22) + this.offsetY);
             }
         }
 #endif
@@ -802,7 +800,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets the determinant of this matrix.
         /// </summary>
-        public double Determinant
+        public readonly double Determinant
         {
             get
             {
@@ -857,7 +855,7 @@ namespace PdfSharp.Drawing
                 default:
                     {
                         double detInvers = 1.0 / determinant;
-                        SetMatrix(this.m22 * detInvers, -this.m12 * detInvers, -this.m21 * detInvers, this.m11 * detInvers, (this.m21 * this.offsetY - this.offsetX * this.m22) * detInvers, (this.offsetX * this.m12 - this.m11 * this.offsetY) * detInvers, XMatrixTypes.Unknown);
+                        SetMatrix(this.m22 * detInvers, -this.m12 * detInvers, -this.m21 * detInvers, this.m11 * detInvers, ((this.m21 * this.offsetY) - (this.offsetX * this.m22)) * detInvers, ((this.offsetX * this.m12) - (this.m11 * this.offsetY)) * detInvers, XMatrixTypes.Unknown);
                         break;
                     }
             }
@@ -868,7 +866,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double M11
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 1.0;
@@ -892,7 +890,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double M12
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 0;
@@ -915,7 +913,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double M21
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 0;
@@ -938,7 +936,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double M22
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 1.0;
@@ -964,7 +962,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double OffsetX
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 0;
@@ -988,7 +986,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double OffsetY
         {
-            get
+            readonly get
             {
                 if (this.type == XMatrixTypes.Identity)
                     return 0;
@@ -1032,7 +1030,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Converts this matrix to a System.Drawing.Drawing2D.Matrix object.
         /// </summary>
-        public System.Windows.Media.Matrix ToWpfMatrix()
+        public readonly System.Windows.Media.Matrix ToWpfMatrix()
         {
             return new System.Windows.Media.Matrix(this.m11, this.m12, this.m21, this.m22, this.offsetX, this.offsetY);
         }
@@ -1127,7 +1125,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Determines whether this matrix is equal to the specified object.
         /// </summary>
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
             if (o is null or not XMatrix)
                 return false;
@@ -1138,7 +1136,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Determines whether this matrix is equal to the specified matrix.
         /// </summary>
-        public bool Equals(XMatrix value)
+        public readonly bool Equals(XMatrix value)
         {
             return Equals(this, value);
         }
@@ -1160,7 +1158,7 @@ namespace PdfSharp.Drawing
         {
             XMatrix identity;
             IFormatProvider cultureInfo = CultureInfo.InvariantCulture; //.GetCultureInfo("en-us");
-            TokenizerHelper helper = new TokenizerHelper(source, cultureInfo);
+            TokenizerHelper helper = new(source, cultureInfo);
             string str = helper.NextTokenRequired();
             identity = str == "Identity" ? Identity :
               new XMatrix(Convert.ToDouble(str, cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo), Convert.ToDouble(helper.NextTokenRequired(), cultureInfo));
@@ -1198,10 +1196,10 @@ namespace PdfSharp.Drawing
                 return "Identity";
 
             char numericListSeparator = TokenizerHelper.GetNumericListSeparator(provider);
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}{0}{3:" + format + "}{0}{4:" + format + "}{0}{5:" + format + "}{0}{6:" + format + "}", new object[] { numericListSeparator, this.m11, this.m12, this.m21, this.m22, this.offsetX, this.offsetY });
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}{0}{3:" + format + "}{0}{4:" + format + "}{0}{5:" + format + "}{0}{6:" + format + "}", [numericListSeparator, this.m11, this.m12, this.m21, this.m22, this.offsetX, this.offsetY]);
         }
 
-        internal void MultiplyVector(ref double x, ref double y)
+        internal readonly void MultiplyVector(ref double x, ref double y)
         {
             switch (this.type)
             {
@@ -1223,7 +1221,7 @@ namespace PdfSharp.Drawing
             y += d2;
         }
 
-        internal void MultiplyPoint(ref double x, ref double y)
+        internal readonly void MultiplyPoint(ref double x, ref double y)
         {
             switch (this.type)
             {
@@ -1262,7 +1260,7 @@ namespace PdfSharp.Drawing
 
         internal static XMatrix CreateRotationRadians(double angle, double centerX, double centerY)
         {
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             double sin = Math.Sin(angle);
             double cos = Math.Cos(angle);
             double offsetX = (centerX * (1.0 - cos)) + (centerY * sin);
@@ -1273,35 +1271,35 @@ namespace PdfSharp.Drawing
 
         internal static XMatrix CreateScaling(double scaleX, double scaleY, double centerX, double centerY)
         {
-            XMatrix matrix = new XMatrix();
-            matrix.SetMatrix(scaleX, 0, 0, scaleY, centerX - scaleX * centerX, centerY - scaleY * centerY, XMatrixTypes.Scaling | XMatrixTypes.Translation);
+            XMatrix matrix = new();
+            matrix.SetMatrix(scaleX, 0, 0, scaleY, centerX - (scaleX * centerX), centerY - (scaleY * centerY), XMatrixTypes.Scaling | XMatrixTypes.Translation);
             return matrix;
         }
 
         internal static XMatrix CreateScaling(double scaleX, double scaleY)
         {
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             matrix.SetMatrix(scaleX, 0, 0, scaleY, 0, 0, XMatrixTypes.Scaling);
             return matrix;
         }
 
         internal static XMatrix CreateSkewRadians(double skewX, double skewY)
         {
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             matrix.SetMatrix(1, Math.Tan(skewY), Math.Tan(skewX), 1, 0, 0, XMatrixTypes.Unknown);
             return matrix;
         }
 
         internal static XMatrix CreateTranslation(double offsetX, double offsetY)
         {
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             matrix.SetMatrix(1, 0, 0, 1, offsetX, offsetY, XMatrixTypes.Translation);
             return matrix;
         }
 
         static XMatrix CreateIdentity()
         {
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             matrix.SetMatrix(1, 0, 0, 1.0, 0, 0, XMatrixTypes.Identity);
             return matrix;
         }
@@ -1342,7 +1340,7 @@ namespace PdfSharp.Drawing
             }
         }
 
-        private bool IsDistinguishedIdentity
+        private readonly bool IsDistinguishedIdentity
         {
             get { return (this.type == XMatrixTypes.Identity); }
         }
@@ -1390,8 +1388,8 @@ namespace PdfSharp.Drawing
                         double num = matrix1.offsetX;
                         double num2 = matrix1.offsetY;
                         matrix1 = matrix2;
-                        matrix1.offsetX = num * matrix2.m11 + num2 * matrix2.m21 + matrix2.offsetX;
-                        matrix1.offsetY = num * matrix2.m12 + num2 * matrix2.m22 + matrix2.offsetY;
+                        matrix1.offsetX = (num * matrix2.m11) + (num2 * matrix2.m21) + matrix2.offsetX;
+                        matrix1.offsetY = (num * matrix2.m12) + (num2 * matrix2.m22) + matrix2.offsetY;
                         if (type2 == XMatrixTypes.Unknown)
                             matrix1.type = XMatrixTypes.Unknown;
                         else
@@ -1420,12 +1418,12 @@ namespace PdfSharp.Drawing
                             case 0x43:
                             case 0x44:
                                 matrix1 = new XMatrix(
-                                  matrix1.m11 * matrix2.m11 + matrix1.m12 * matrix2.m21,
-                                  matrix1.m11 * matrix2.m12 + matrix1.m12 * matrix2.m22,
-                                  matrix1.m21 * matrix2.m11 + matrix1.m22 * matrix2.m21,
-                                  matrix1.m21 * matrix2.m12 + matrix1.m22 * matrix2.m22,
-                                  matrix1.offsetX * matrix2.m11 + matrix1.offsetY * matrix2.m21 + matrix2.offsetX,
-                                  matrix1.offsetX * matrix2.m12 + matrix1.offsetY * matrix2.m22 + matrix2.offsetY);
+                                  (matrix1.m11 * matrix2.m11) + (matrix1.m12 * matrix2.m21),
+                                  (matrix1.m11 * matrix2.m12) + (matrix1.m12 * matrix2.m22),
+                                  (matrix1.m21 * matrix2.m11) + (matrix1.m22 * matrix2.m21),
+                                  (matrix1.m21 * matrix2.m12) + (matrix1.m22 * matrix2.m22),
+                                  (matrix1.offsetX * matrix2.m11) + (matrix1.offsetY * matrix2.m21) + matrix2.offsetX,
+                                  (matrix1.offsetX * matrix2.m12) + (matrix1.offsetY * matrix2.m22) + matrix2.offsetY);
                                 return;
 
                             case 50:
@@ -1438,8 +1436,8 @@ namespace PdfSharp.Drawing
                             case 0x33:
                                 matrix1.m11 *= matrix2.m11;
                                 matrix1.m22 *= matrix2.m22;
-                                matrix1.offsetX = matrix2.m11 * matrix1.offsetX + matrix2.offsetX;
-                                matrix1.offsetY = matrix2.m22 * matrix1.offsetY + matrix2.offsetY;
+                                matrix1.offsetX = (matrix2.m11 * matrix1.offsetX) + matrix2.offsetX;
+                                matrix1.offsetY = (matrix2.m22 * matrix1.offsetY) + matrix2.offsetY;
                                 return;
                         }
                     }

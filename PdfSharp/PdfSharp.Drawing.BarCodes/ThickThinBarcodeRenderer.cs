@@ -85,7 +85,7 @@ namespace PdfSharp.Drawing.BarCodes
             set
             {
                 if (value is > 3 or < 2)
-                    throw new ArgumentOutOfRangeException("value", BcgSR.Invalid2of5Relation);
+                    throw new ArgumentOutOfRangeException(nameof(value), BcgSR.Invalid2of5Relation);
                 this.wideNarrowRatio = value;
             }
         }
@@ -102,7 +102,7 @@ namespace PdfSharp.Drawing.BarCodes
             double height = Size.Height;
             if (TextLocation != TextLocation.None)
                 height *= 4.0 / 5;
-            XRect rect = new XRect(info.CurrPos.X, info.CurrPos.Y, barWidth, height);
+            XRect rect = new(info.CurrPos.X, info.CurrPos.Y, barWidth, height);
             info.Gfx.DrawRectangle(info.Brush, rect);
             info.CurrPos.X += barWidth;
         }
@@ -135,8 +135,7 @@ namespace PdfSharp.Drawing.BarCodes
 
         internal void RenderText(BarCodeRenderInfo info)
         {
-            if (info.Font == null)
-                info.Font = new XFont("Courier New", Size.Height / 6);
+            info.Font ??= new XFont("Courier New", Size.Height / 6);
             XPoint center = info.Position + CodeBase.CalcDistance(this.anchor, AnchorType.TopLeft, this.size);
             //center.Y += info.Font.Size;
             info.Gfx.DrawString(this.text, info.Font, info.Brush, new XRect(center, Size), XStringFormats.BottomCenter);

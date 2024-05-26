@@ -34,6 +34,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace PdfSharp.Pdf
 {
@@ -71,7 +72,7 @@ namespace PdfSharp.Pdf
             get
             {
                 if (index < 0 || index >= Count)
-                    throw new ArgumentOutOfRangeException("index", index, PSSR.PageIndexOutOfRange);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.PageIndexOutOfRange);
 
                 PdfDictionary dict = (PdfDictionary)((PdfReference)PagesArray.Elements[index]).Value;
                 if (dict is not PdfPage)
@@ -91,7 +92,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfPage Add()
         {
-            PdfPage page = new PdfPage();
+            PdfPage page = new();
             Insert(Count, page);
             return page;
         }
@@ -110,7 +111,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfPage Insert(int index)
         {
-            PdfPage page = new PdfPage();
+            PdfPage page = new();
             Insert(index, page);
             return page;
         }
@@ -121,8 +122,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfPage Insert(int index, PdfPage page)
         {
-            if (page == null)
-                throw new ArgumentNullException("page");
+            ArgumentNullException.ThrowIfNull(page);
 
             // Is the page already owned by this document
             if (page.Owner == Owner)
@@ -191,9 +191,9 @@ namespace PdfSharp.Pdf
         public void MovePage(int oldIndex, int newIndex)
         {
             if (oldIndex < 0 || oldIndex >= Count)
-                throw new ArgumentOutOfRangeException("oldIndex");
+                throw new ArgumentOutOfRangeException(nameof(oldIndex));
             if (newIndex < 0 || newIndex >= Count)
-                throw new ArgumentOutOfRangeException("newIndex");
+                throw new ArgumentOutOfRangeException(nameof(newIndex));
             if (oldIndex == newIndex)
                 return;
 
@@ -213,7 +213,7 @@ namespace PdfSharp.Pdf
             if (importPage.Owner.openMode != PdfDocumentOpenMode.Import)
                 throw new InvalidOperationException("A PDF document must be opened with PdfDocumentOpenMode.Import to import pages from it.");
 
-            PdfPage page = new PdfPage(this.document);
+            PdfPage page = new(this.document);
 
             CloneElement(page, importPage, PdfPage.Keys.Resources, false);
             CloneElement(page, importPage, PdfPage.Keys.Contents, false);
@@ -289,8 +289,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.pagesArray == null)
-                    this.pagesArray = (PdfArray)Elements.GetValue(Keys.Kids, VCF.Create);
+                this.pagesArray ??= (PdfArray)Elements.GetValue(Keys.Kids, VCF.Create);
                 return this.pagesArray;
             }
         }
@@ -309,14 +308,14 @@ namespace PdfSharp.Pdf
             //PdfDictionary[] pages = GetKids(xrefRoot, null);
 
             // Promote inheritable values down the page tree
-            PdfPage.InheritedValues values = new PdfPage.InheritedValues();
+            PdfPage.InheritedValues values = new();
             PdfPage.InheritValues(this, ref values);
             PdfDictionary[] pages = GetKids(Reference, values, null);
 
             // Replace /Pages in catalog by this object
             // xrefRoot.Value = this;
 
-            PdfArray array = new PdfArray(Owner);
+            PdfArray array = new(Owner);
             foreach (PdfDictionary page in pages)
             {
                 // Fix the parent
@@ -339,7 +338,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Recursively converts the page tree into a flat array.
         /// </summary>
-        PdfDictionary[] GetKids(PdfReference iref, PdfPage.InheritedValues values, PdfDictionary parent)
+        static PdfDictionary[] GetKids(PdfReference iref, PdfPage.InheritedValues values, PdfDictionary parent)
         {
             // TODO: inherit inheritable keys...
             PdfDictionary kid = (PdfDictionary)iref.Value;
@@ -347,27 +346,26 @@ namespace PdfSharp.Pdf
             if (kid.Elements.GetName(Keys.Type) == "/Page")
             {
                 PdfPage.InheritValues(kid, values);
-                return new PdfDictionary[] { kid };
+                return [kid];
             }
             else
             {
                 Debug.Assert(kid.Elements.GetName(Keys.Type) == "/Pages");
                 PdfPage.InheritValues(kid, ref values);
-                List<PdfDictionary> list = new List<PdfDictionary>();
-                PdfArray kids = kid.Elements["/Kids"] as PdfArray;
+                List<PdfDictionary> list = [];
                 //newTHHO 15.10.2007 begin
-                if (kids == null)
+                if (kid.Elements["/Kids"] is not PdfArray kids)
                 {
                     PdfReference xref3 = kid.Elements["/Kids"] as PdfReference;
                     kids = xref3.Value as PdfArray;
                 }
                 //newTHHO 15.10.2007 end
-                foreach (PdfReference xref2 in kids)
+                foreach (PdfReference xref2 in kids.Cast<PdfReference>())
                     list.AddRange(GetKids(xref2, values, kid));
                 int count = list.Count;
                 Debug.Assert(count == kid.Elements.GetInteger("/Count"));
                 //return (PdfDictionary[])list.ToArray(typeof(PdfDictionary));
-                return list.ToArray();
+                return [.. list];
             }
         }
 
@@ -485,8 +483,7 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

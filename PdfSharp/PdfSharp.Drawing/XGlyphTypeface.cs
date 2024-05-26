@@ -51,7 +51,7 @@ namespace PdfSharp.Drawing
         public XGlyphTypeface(string filename)
         {
             if (String.IsNullOrEmpty(filename))
-                throw new ArgumentNullException("filename");
+                throw new ArgumentNullException(nameof(filename));
 
             FileStream stream = null;
             try
@@ -64,8 +64,7 @@ namespace PdfSharp.Drawing
             }
             finally
             {
-                if (stream != null)
-                    stream.Close();
+                stream?.Close();
             }
         }
 
@@ -74,8 +73,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XGlyphTypeface(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
+            ArgumentNullException.ThrowIfNull(data);
 
             Initialize(data);
         }

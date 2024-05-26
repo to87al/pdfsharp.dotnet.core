@@ -94,7 +94,7 @@ namespace PdfSharp.Fonts.OpenType
                 {
                     string tag = String.Empty;
                     if (idName.IndexOf('+') == 6)
-                        tag = idName.Substring(0, 6);
+                        tag = idName[..6];
                     idName = tag + "+" + this.fontData.name.Name;
                     if (this.fontData.name.Style.Length != 0)
                         idName += "," + this.fontData.name.Style;
@@ -289,7 +289,7 @@ namespace PdfSharp.Fonts.OpenType
                 if (cmap.idRangeOffs[seg] == 0)
                     return (value + cmap.idDelta[seg]) & 0xFFFF;
 
-                int idx = cmap.idRangeOffs[seg] / 2 + (value - cmap.startCount[seg]) - (segCount - seg);
+                int idx = (cmap.idRangeOffs[seg] / 2) + (value - cmap.startCount[seg]) - (segCount - seg);
                 Debug.Assert(idx >= 0 && idx < cmap.glyphCount);
 
                 if (cmap.glyphIdArray[idx] == 0)

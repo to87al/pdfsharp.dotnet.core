@@ -100,7 +100,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
             if (o is null or not XSize)
                 return false;
@@ -111,7 +111,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Indicates whether this instance and a specified size are equal.
         /// </summary>
-        public bool Equals(XSize value)
+        public readonly bool Equals(XSize value)
         {
             return Equals(this, value);
         }
@@ -133,7 +133,7 @@ namespace PdfSharp.Drawing
         {
             XSize empty;
             CultureInfo cultureInfo = CultureInfo.InvariantCulture;
-            TokenizerHelper helper = new TokenizerHelper(source, cultureInfo);
+            TokenizerHelper helper = new(source, cultureInfo);
             string str = helper.NextTokenRequired();
             if (str == "Empty")
                 empty = Empty;
@@ -156,7 +156,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Converts this XSize to an XPoint.
         /// </summary>
-        public XPoint ToXPoint()
+        public readonly XPoint ToXPoint()
         {
             return new XPoint(this.width, this.height);
         }
@@ -164,7 +164,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Converts this XSize to an XVector.
         /// </summary>
-        public XVector ToXVector()
+        public readonly XVector ToXVector()
         {
             return new XVector(this.width, this.height);
         }
@@ -183,7 +183,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Converts this XSize to a System.Windows.Size.
         /// </summary>
-        public System.Windows.Size ToSize()
+        public readonly System.Windows.Size ToSize()
         {
             return new System.Windows.Size(this.width, this.height);
         }
@@ -258,7 +258,7 @@ namespace PdfSharp.Drawing
                 return "Empty";
 
             char numericListSeparator = TokenizerHelper.GetNumericListSeparator(provider);
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", new object[] { numericListSeparator, this.width, this.height });
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, this.width, this.height]);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
         /// </summary>
-        public bool IsEmpty
+        public readonly bool IsEmpty
         {
             get { return this.width < 0; }
         }
@@ -282,7 +282,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Width
         {
-            get { return this.width; }
+            readonly get { return this.width; }
             set
             {
                 if (IsEmpty)
@@ -298,7 +298,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Height
         {
-            get { return this.height; }
+            readonly get { return this.height; }
             set
             {
                 if (IsEmpty)
@@ -337,7 +337,7 @@ namespace PdfSharp.Drawing
 
         private static XSize CreateEmptySize()
         {
-            XSize size = new XSize();
+            XSize size = new();
             size.width = double.NegativeInfinity;
             size.height = double.NegativeInfinity;
             return size;

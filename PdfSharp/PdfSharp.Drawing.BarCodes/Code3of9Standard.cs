@@ -77,97 +77,97 @@ namespace PdfSharp.Drawing.BarCodes
         {
             return Lines["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%*".IndexOf(ch)];
         }
-        static readonly bool[][] Lines = new bool[][]
-        {
+        static readonly bool[][] Lines =
+        [
       // '0'
-      new bool[] {false, false, false, true, true, false, true, false, false},
+      [false, false, false, true, true, false, true, false, false],
       // '1'
-      new bool[] {true, false, false, true, false, false, false, false, true},
+      [true, false, false, true, false, false, false, false, true],
       // '2'
-      new bool[] {false, false, true, true, false, false, false, false, true},
+      [false, false, true, true, false, false, false, false, true],
       // '3'
-      new bool[] {true, false, true, true, false, false, false, false, false},
+      [true, false, true, true, false, false, false, false, false],
       // '4'
-      new bool[] {false, false, false, true, true, false, false, false, true},
+      [false, false, false, true, true, false, false, false, true],
       // '5'
-      new bool[] {true, false, false, true, true, false, false, false, false},
+      [true, false, false, true, true, false, false, false, false],
       // '6'
-      new bool[] {false, false, true, true, true, false, false, false, false},
+      [false, false, true, true, true, false, false, false, false],
       // '7'
-      new bool[] {false, false, false, true, false, false, true, false, true},
+      [false, false, false, true, false, false, true, false, true],
       // '8'
-      new bool[] {true, false, false, true, false, false, true, false, false},
+      [true, false, false, true, false, false, true, false, false],
       // '9'
-      new bool[] {false, false, true, true, false, false, true, false, false},
+      [false, false, true, true, false, false, true, false, false],
       // 'A'
-      new bool[] {true, false, false, false, false, true, false, false, true},
+      [true, false, false, false, false, true, false, false, true],
       // 'B'
-      new bool[] {false, false, true, false, false, true, false, false, true},
+      [false, false, true, false, false, true, false, false, true],
       // 'C'
-      new bool[] {true, false, true, false, false, true, false, false, false},
+      [true, false, true, false, false, true, false, false, false],
       // 'D'
-      new bool[] {false, false, false, false, true, true, false, false, true},
+      [false, false, false, false, true, true, false, false, true],
       // 'E'
-      new bool[] {true, false, false, false, true, true, false, false, false},
+      [true, false, false, false, true, true, false, false, false],
       // 'F'
-      new bool[] {false, false, true, false, true, true, false, false, false},
+      [false, false, true, false, true, true, false, false, false],
       // 'G'
-      new bool[] {false, false, false, false, false, true, true, false, true},
+      [false, false, false, false, false, true, true, false, true],
       // 'H'
-      new bool[] {true, false, false, false, false, true, true, false, false},
+      [true, false, false, false, false, true, true, false, false],
       // 'I'
-      new bool[] {false, false, true, false, false, true, true, false, false},
+      [false, false, true, false, false, true, true, false, false],
       // 'J'
-      new bool[] {false, false, false, false, true, true, true, false, false},
+      [false, false, false, false, true, true, true, false, false],
       // 'K'
-      new bool[] {true, false, false, false, false, false, false, true, true},
+      [true, false, false, false, false, false, false, true, true],
       // 'L'
-      new bool[] {false, false, true, false, false, false, false, true, true},
+      [false, false, true, false, false, false, false, true, true],
       // 'M'
-      new bool[] {true, false, true, false, false, false, false, true, false},
+      [true, false, true, false, false, false, false, true, false],
       // 'N'
-      new bool[] {false, false, false, false, true, false, false, true, true},
+      [false, false, false, false, true, false, false, true, true],
       // 'O'
-      new bool[] {true, false, false, false, true, false, false, true, false},
+      [true, false, false, false, true, false, false, true, false],
       // 'P':
-      new bool[] {false, false, true, false, true, false, false, true, false},
+      [false, false, true, false, true, false, false, true, false],
       // 'Q'
-      new bool[] {false, false, false, false, false, false, true, true, true},
+      [false, false, false, false, false, false, true, true, true],
       // 'R'
-      new bool[] {true, false, false, false, false, false, true, true, false},
+      [true, false, false, false, false, false, true, true, false],
       // 'S'
-      new bool[] {false, false, true, false, false, false, true, true, false},
+      [false, false, true, false, false, false, true, true, false],
       // 'T'
-      new bool[] {false, false, false, false, true, false, true, true, false},
+      [false, false, false, false, true, false, true, true, false],
       // 'U'
-      new bool[] {true, true, false, false, false, false, false, false, true},
+      [true, true, false, false, false, false, false, false, true],
       // 'V'
-      new bool[] {false, true, true, false, false, false, false, false, true},
+      [false, true, true, false, false, false, false, false, true],
       // 'W'
-      new bool[] {true, true, true, false, false, false, false, false, false},
+      [true, true, true, false, false, false, false, false, false],
       // 'X'
-      new bool[] {false, true, false, false, true, false, false, false, true},
+      [false, true, false, false, true, false, false, false, true],
       // 'Y'
-      new bool[] {true, true, false, false, true, false, false, false, false},
+      [true, true, false, false, true, false, false, false, false],
       // 'Z'
-      new bool[] {false, true, true, false, true, false, false, false, false},
+      [false, true, true, false, true, false, false, false, false],
       // '-'
-      new bool[] {false, true, false, false, false, false, true, false, true},
+      [false, true, false, false, false, false, true, false, true],
       // '.'
-      new bool[] {true, true, false, false, false, false, true, false, false},
+      [true, true, false, false, false, false, true, false, false],
       // ' '
-      new bool[] {false, true, true, false, false, false, true, false, false},
+      [false, true, true, false, false, false, true, false, false],
       // '$'
-      new bool[] {false, true, false, true, false, true, false, false, false},
+      [false, true, false, true, false, true, false, false, false],
       // '/'
-      new bool[] {false, true, false, true, false, false, false, true, false},
+      [false, true, false, true, false, false, false, true, false],
       // '+'
-      new bool[] {false, true, false, false, false, true, false, true, false},
+      [false, true, false, false, false, true, false, true, false],
       // '%'
-      new bool[] {false, false, false, true, false, true, false, true, false},
+      [false, false, false, true, false, true, false, true, false],
       // '*'
-      new bool[] {false, true, false, false, true, false, true, false, false},
-       };
+      [false, true, false, false, true, false, true, false, false],
+       ];
 
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace PdfSharp.Drawing.BarCodes
              * 
              * Total width = (13 + 6 * r + (3 * r + 7) * code.Length) * thin
              */
-            double thinLineAmount = 13 + 6 * this.wideNarrowRatio + (3 * this.wideNarrowRatio + 7) * this.text.Length;
+            double thinLineAmount = 13 + (6 * this.wideNarrowRatio) + (((3 * this.wideNarrowRatio) + 7) * this.text.Length);
             info.ThinBarWidth = this.Size.Width / thinLineAmount;
         }
 
@@ -198,8 +198,7 @@ namespace PdfSharp.Drawing.BarCodes
         /// <param name="text">The code to be checked.</param>
         protected override void CheckCode(string text)
         {
-            if (text == null)
-                throw new ArgumentNullException("text");
+            ArgumentNullException.ThrowIfNull(text);
 
             if (text.Length == 0)
                 throw new ArgumentException(BcgSR.Invalid3Of9Code(text));
@@ -218,7 +217,7 @@ namespace PdfSharp.Drawing.BarCodes
         {
             XGraphicsState state = gfx.Save();
 
-            BarCodeRenderInfo info = new BarCodeRenderInfo(gfx, brush, font, position);
+            BarCodeRenderInfo info = new(gfx, brush, font, position);
             InitRendering(info);
             info.CurrPosInString = 0;
             //info.CurrPos = info.Center - this.size / 2;

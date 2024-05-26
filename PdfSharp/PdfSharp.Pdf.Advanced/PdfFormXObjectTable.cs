@@ -72,13 +72,11 @@ namespace PdfSharp.Pdf.Advanced
                 form.pdfForm = null;
             }
 
-            XPdfForm pdfForm = form as XPdfForm;
-            if (pdfForm != null)
+            if (form is XPdfForm pdfForm)
             {
                 // Is the external PDF file from which is imported already known for the current document?
-                Selector selector = new Selector(form);
-                PdfImportedObjectTable importedObjectTable;
-                if (!this.forms.TryGetValue(selector, out importedObjectTable))
+                Selector selector = new(form);
+                if (!this.forms.TryGetValue(selector, out PdfImportedObjectTable importedObjectTable))
                 {
                     // No: Get the external document from the form and create ImportedObjectTable.
                     PdfDocument doc = pdfForm.ExternalDocument;
@@ -105,9 +103,8 @@ namespace PdfSharp.Pdf.Advanced
         public PdfImportedObjectTable GetImportedObjectTable(PdfPage page)
         {
             // Is the external PDF file from which is imported already known for the current document?
-            Selector selector = new Selector(page);
-            PdfImportedObjectTable importedObjectTable;
-            if (!this.forms.TryGetValue(selector, out importedObjectTable))
+            Selector selector = new(page);
+            if (!this.forms.TryGetValue(selector, out PdfImportedObjectTable importedObjectTable))
             {
                 importedObjectTable = new PdfImportedObjectTable(this.owner, page.Owner);
                 this.forms[selector] = importedObjectTable;
@@ -151,7 +148,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Map from Selector to PdfImportedObjectTable.
         /// </summary>
-        readonly Dictionary<Selector, PdfImportedObjectTable> forms = new Dictionary<Selector, PdfImportedObjectTable>();
+        readonly Dictionary<Selector, PdfImportedObjectTable> forms = [];
 
         /// <summary>
         /// A collection of information that uniquely identifies a particular ImportedObjectTable.

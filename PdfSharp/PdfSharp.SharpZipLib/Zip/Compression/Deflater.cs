@@ -204,7 +204,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             }
             else if (level < NO_COMPRESSION || level > BEST_COMPRESSION)
             {
-                throw new ArgumentOutOfRangeException("level");
+                throw new ArgumentOutOfRangeException(nameof(level));
             }
 
             pending = new DeflaterPending();
@@ -374,7 +374,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             }
             else if (lvl < NO_COMPRESSION || lvl > BEST_COMPRESSION)
             {
-                throw new ArgumentOutOfRangeException("lvl");
+                throw new ArgumentOutOfRangeException(nameof(lvl));
             }
 
             if (level != lvl)

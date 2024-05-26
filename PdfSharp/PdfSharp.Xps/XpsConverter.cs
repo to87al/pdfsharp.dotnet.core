@@ -26,10 +26,8 @@ namespace PdfSharp.Xps
         /// <param name="xpsDocument">The XPS document.</param>
         public XpsConverter(PdfDocument pdfDocument, XpsDocument xpsDocument)
         {
-            if (pdfDocument == null)
-                throw new ArgumentNullException("pdfDocument");
-            if (xpsDocument == null)
-                throw new ArgumentNullException("xpsDocument");
+            ArgumentNullException.ThrowIfNull(pdfDocument);
+            ArgumentNullException.ThrowIfNull(xpsDocument);
 
             this.pdfDocument = pdfDocument;
             this.xpsDocument = xpsDocument;
@@ -44,10 +42,9 @@ namespace PdfSharp.Xps
         /// <param name="xpsDocumentPath">The XPS document path.</param>
         public XpsConverter(PdfDocument pdfDocument, string xpsDocumentPath) // TODO: a constructor with an Uri
         {
-            if (pdfDocument == null)
-                throw new ArgumentNullException("pdfDocument");
+            ArgumentNullException.ThrowIfNull(pdfDocument);
             if (String.IsNullOrEmpty(xpsDocumentPath))
-                throw new ArgumentNullException("xpsDocumentPath");
+                throw new ArgumentNullException(nameof(xpsDocumentPath));
 
             this.pdfDocument = pdfDocument;
             this.xpsDocument = new XpsDocument(xpsDocumentPath, FileAccess.Read);
@@ -58,11 +55,6 @@ namespace PdfSharp.Xps
         private void Initialize()
         {
             this.context = new DocumentRenderingContext(this.pdfDocument);
-        }
-
-        private DocumentRenderingContext Context
-        {
-            get { return this.context; }
         }
 
         private DocumentRenderingContext context;
@@ -93,14 +85,14 @@ namespace PdfSharp.Xps
         public static void Convert(string xpsFilename)
         {
             if (String.IsNullOrEmpty(xpsFilename))
-                throw new ArgumentNullException("xpsFilename");
+                throw new ArgumentNullException(nameof(xpsFilename));
 
             if (!File.Exists(xpsFilename))
                 throw new FileNotFoundException("File not found.", xpsFilename);
 
             string pdfFilename = xpsFilename;
             if (IOPath.HasExtension(pdfFilename))
-                pdfFilename = pdfFilename.Substring(0, pdfFilename.LastIndexOf('.'));
+                pdfFilename = pdfFilename[..pdfFilename.LastIndexOf('.')];
             pdfFilename += ".pdf";
 
             Convert(xpsFilename, pdfFilename, 0);
@@ -122,8 +114,8 @@ namespace PdfSharp.Xps
             var apartment = System.Threading.Thread.CurrentThread.GetApartmentState();
             if (apartment != System.Threading.ApartmentState.STA)
             {
-                System.Threading.AutoResetEvent evCompleted = new AutoResetEvent(false);
-                Thread t = new Thread(new ParameterizedThreadStart((evt) =>
+                System.Threading.AutoResetEvent evCompleted = new(false);
+                Thread t = new(new ParameterizedThreadStart((evt) =>
                 {
                     try
                     {
@@ -150,11 +142,10 @@ namespace PdfSharp.Xps
         /// </summary>
         private static void DoConvert(XpsDocument xpsDocument, string pdfFilename, int docIndex)
         {
-            if (xpsDocument == null)
-                throw new ArgumentNullException("xpsDocument");
+            ArgumentNullException.ThrowIfNull(xpsDocument);
 
             if (String.IsNullOrEmpty(pdfFilename))
-                throw new ArgumentNullException("pdfFilename");
+                throw new ArgumentNullException(nameof(pdfFilename));
 
             var seq = xpsDocument.GetFixedDocumentSequence();
             var pdfDocument = new PdfDocument();
@@ -192,13 +183,13 @@ namespace PdfSharp.Xps
         public static void Convert(string xpsFilename, string pdfFilename, int docIndex, bool createComparisonDocument)
         {
             if (String.IsNullOrEmpty(xpsFilename))
-                throw new ArgumentNullException("xpsFilename");
+                throw new ArgumentNullException(nameof(xpsFilename));
 
             if (String.IsNullOrEmpty(pdfFilename))
             {
                 pdfFilename = xpsFilename;
                 if (IOPath.HasExtension(pdfFilename))
-                    pdfFilename = pdfFilename.Substring(0, pdfFilename.LastIndexOf('.'));
+                    pdfFilename = pdfFilename[..pdfFilename.LastIndexOf('.')];
                 pdfFilename += ".pdf";
             }
 
@@ -215,12 +206,9 @@ namespace PdfSharp.Xps
             {
                 using (var xpsDoc = new XpsDocument(xpsFilename, FileAccess.Read))
                 {
-                    var docSeq = xpsDoc.GetFixedDocumentSequence();
-                    if (docSeq == null)
-                        throw new InvalidOperationException("docSeq");
-
+                    var docSeq = xpsDoc.GetFixedDocumentSequence() ?? throw new InvalidOperationException("docSeq");
                     XPdfForm form = XPdfForm.FromFile(pdfFilename);
-                    PdfDocument pdfComparisonDocument = new PdfDocument();
+                    PdfDocument pdfComparisonDocument = new();
 
 
                     var pageIndex = 0;
@@ -266,7 +254,7 @@ namespace PdfSharp.Xps
 
                     string pdfComparisonFilename = pdfFilename;
                     if (IOPath.HasExtension(pdfComparisonFilename))
-                        pdfComparisonFilename = pdfComparisonFilename.Substring(0, pdfComparisonFilename.LastIndexOf('.'));
+                        pdfComparisonFilename = pdfComparisonFilename[..pdfComparisonFilename.LastIndexOf('.')];
                     pdfComparisonFilename += "-comparison.pdf";
 
                     pdfComparisonDocument.ViewerPreferences.FitWindow = true;
@@ -292,7 +280,7 @@ namespace PdfSharp.Xps
             {
                 DocumentPage docPage = docSeq.DocumentPaginator.GetPage(pageNum);
                 RenderTargetBitmap renderTarget =
-                  new RenderTargetBitmap((int)docPage.Size.Width,
+                  new((int)docPage.Size.Width,
                     (int)docPage.Size.Height,
                     96, // WPF (Avalon) units are 96dpi based    
                     96,
@@ -303,7 +291,7 @@ namespace PdfSharp.Xps
                 BitmapEncoder encoder = new BmpBitmapEncoder(); // Choose type here ie: JpegBitmapEncoder, etc   
                 encoder.Frames.Add(BitmapFrame.Create(renderTarget));
 
-                FileStream pageOutStream = new FileStream(xpsFileName + ".Page" + pageNum + ".bmp", FileMode.Create,
+                FileStream pageOutStream = new(xpsFileName + ".Page" + pageNum + ".bmp", FileMode.Create,
                   FileAccess.Write);
                 encoder.Save(pageOutStream);
                 pageOutStream.Close();
@@ -314,7 +302,7 @@ namespace PdfSharp.Xps
         {
             double pixelWidth = docPage.Size.Width * resolution / 96;
             double pixelHeight = docPage.Size.Height * resolution / 96;
-            RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)pixelWidth, (int)pixelHeight, resolution, resolution, PixelFormats.Default);
+            RenderTargetBitmap renderTarget = new((int)pixelWidth, (int)pixelHeight, resolution, resolution, PixelFormats.Default);
             renderTarget.Render(docPage.Visual);
 
             return renderTarget;

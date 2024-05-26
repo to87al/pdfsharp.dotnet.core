@@ -47,7 +47,7 @@ namespace PdfSharp.Pdf.Filters
         /// </summary>
         public override byte[] Encode(byte[] data)
         {
-            MemoryStream ms = new MemoryStream();
+            MemoryStream ms = new();
 
             // DeflateStream/GZipStream does not work immediately and I have not the leisure to work it out.
             // So I keep on using SharpZipLib even with .NET 2.0.
@@ -120,7 +120,7 @@ namespace PdfSharp.Pdf.Filters
       zip.Write(data, 0, data.Length);
       zip.Close();
 #else
-            DeflaterOutputStream zip = new DeflaterOutputStream(ms, new Deflater(Deflater.DEFAULT_COMPRESSION, false));
+            DeflaterOutputStream zip = new(ms, new Deflater(Deflater.DEFAULT_COMPRESSION, false));
             zip.Write(data, 0, data.Length);
             zip.Finish();
 #endif
@@ -133,8 +133,8 @@ namespace PdfSharp.Pdf.Filters
         /// </summary>
         public override byte[] Decode(byte[] data, FilterParms parms)
         {
-            MemoryStream msInput = new MemoryStream(data);
-            MemoryStream msOutput = new MemoryStream();
+            MemoryStream msInput = new(data);
+            MemoryStream msOutput = new();
 #if NET_ZIP
       // See http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=97064
       // It seems to work when skipping the first two bytes.
@@ -162,7 +162,7 @@ namespace PdfSharp.Pdf.Filters
       }
       return null;
 #else
-            InflaterInputStream iis = new InflaterInputStream(msInput, new Inflater(false));
+            InflaterInputStream iis = new(msInput, new Inflater(false));
             int cbRead;
             byte[] abResult = new byte[32768];
             do

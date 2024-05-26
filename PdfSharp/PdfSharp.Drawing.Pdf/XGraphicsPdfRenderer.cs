@@ -137,7 +137,7 @@ namespace PdfSharp.Drawing.Pdf
         /// </summary>
         public void DrawLine(XPen pen, double x1, double y1, double x2, double y2)
         {
-            DrawLines(pen, new XPoint[2] { new XPoint(x1, y1), new XPoint(x2, y2) });
+            DrawLines(pen, [new XPoint(x1, y1), new XPoint(x2, y2)]);
         }
 
         // ----- DrawLines ----------------------------------------------------------------------------
@@ -147,10 +147,8 @@ namespace PdfSharp.Drawing.Pdf
         /// </summary>
         public void DrawLines(XPen pen, XPoint[] points)
         {
-            if (pen == null)
-                throw new ArgumentNullException("pen");
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(pen);
+            ArgumentNullException.ThrowIfNull(points);
 
             int count = points.Length;
             if (count == 0)
@@ -168,24 +166,22 @@ namespace PdfSharp.Drawing.Pdf
 
         public void DrawBezier(XPen pen, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
         {
-            DrawBeziers(pen, new XPoint[4] { new XPoint(x1, y1), new XPoint(x2, y2), new XPoint(x3, y3), new XPoint(x4, y4) });
+            DrawBeziers(pen, [new XPoint(x1, y1), new XPoint(x2, y2), new XPoint(x3, y3), new XPoint(x4, y4)]);
         }
 
         // ----- DrawBeziers --------------------------------------------------------------------------
 
         public void DrawBeziers(XPen pen, XPoint[] points)
         {
-            if (pen == null)
-                throw new ArgumentNullException("pen");
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(pen);
+            ArgumentNullException.ThrowIfNull(points);
 
             int count = points.Length;
             if (count == 0)
                 return;
 
             if ((count - 1) % 3 != 0)
-                throw new ArgumentException("Invalid number of points for bezier curves. Number must fulfil 4+3n.", "points");
+                throw new ArgumentException("Invalid number of points for bezier curves. Number must fulfil 4+3n.", nameof(points));
 
             Realize(pen);
 
@@ -203,16 +199,14 @@ namespace PdfSharp.Drawing.Pdf
 
         public void DrawCurve(XPen pen, XPoint[] points, double tension)
         {
-            if (pen == null)
-                throw new ArgumentNullException("pen");
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(pen);
+            ArgumentNullException.ThrowIfNull(points);
 
             int count = points.Length;
             if (count == 0)
                 return;
             if (count < 2)
-                throw new ArgumentException("Not enough points", "points");
+                throw new ArgumentException("Not enough points", nameof(points));
 
             // See http://pubpages.unh.edu/~cs770/a5/cardinal.html
             tension /= 3;
@@ -239,8 +233,7 @@ namespace PdfSharp.Drawing.Pdf
 
         public void DrawArc(XPen pen, double x, double y, double width, double height, double startAngle, double sweepAngle)
         {
-            if (pen == null)
-                throw new ArgumentNullException("pen");
+            ArgumentNullException.ThrowIfNull(pen);
 
             Realize(pen);
 
@@ -282,7 +275,7 @@ namespace PdfSharp.Drawing.Pdf
 
         public void DrawRoundedRectangle(XPen pen, XBrush brush, double x, double y, double width, double height, double ellipseWidth, double ellipseHeight)
         {
-            XGraphicsPath path = new XGraphicsPath();
+            XGraphicsPath path = new();
             path.AddRoundedRectangle(x, y, width, height, ellipseWidth, ellipseHeight);
             DrawPath(pen, brush, path);
         }
@@ -298,7 +291,7 @@ namespace PdfSharp.Drawing.Pdf
             // Deeper but more difficult: http://www.tinaja.com/cubic01.asp
             // Petzold: 4/3 * tan(α / 4)
             const double κ = 0.5522847498;  // := 4/3 * (1 - cos(-π/4)) / sin(π/4)) <=> 4/3 * sqrt(2) - 1
-            XRect rect = new XRect(x, y, width, height);
+            XRect rect = new(x, y, width, height);
             double δx = rect.Width / 2;
             double δy = rect.Height / 2;
             double fx = δx * κ;
@@ -342,7 +335,7 @@ namespace PdfSharp.Drawing.Pdf
         {
             Realize(pen, brush);
 
-            AppendFormat("{0:0.####} {1:0.####} m\n", x + width / 2, y + height / 2);
+            AppendFormat("{0:0.####} {1:0.####} m\n", x + (width / 2), y + (height / 2));
             AppendPartialArc(x, y, width, height, startAngle, sweepAngle, PathStart.LineTo1st, new XMatrix());
             AppendStrokeFill(pen, brush, XFillMode.Alternate, true);
         }
@@ -355,7 +348,7 @@ namespace PdfSharp.Drawing.Pdf
             if (count == 0)
                 return;
             if (count < 2)
-                throw new ArgumentException("Not enough points", "points");
+                throw new ArgumentException("Not enough points", nameof(points));
 
             // Simply tried out. Not proofed why it is correct.
             tension /= 3;
@@ -384,7 +377,7 @@ namespace PdfSharp.Drawing.Pdf
         public void DrawPath(XPen pen, XBrush brush, XGraphicsPath path)
         {
             if (pen == null && brush == null)
-                throw new ArgumentNullException("pen");
+                throw new ArgumentNullException(nameof(pen));
 
 #if GDI && !WPF
       Realize(pen, brush);
@@ -423,7 +416,7 @@ namespace PdfSharp.Drawing.Pdf
             //double cyDescent = lineSpace * cellDescent / cellSpace;
             double cyAscent = lineSpace * font.cellAscent / font.cellSpace;
             double cyDescent = lineSpace * font.cellDescent / font.cellSpace;
-            double width = this.Gfx.MeasureString(s, font).Width;
+            double width = XGraphics.MeasureString(s, font).Width;
 
             bool bold = (font.Style & XFontStyle.Bold) != 0;
             bool italic = (font.Style & XFontStyle.Italic) != 0;
@@ -454,7 +447,7 @@ namespace PdfSharp.Drawing.Pdf
 
                     case XLineAlignment.Center:
                         // TODO use CapHeight. PDFlib also uses 3/4 of ascent
-                        y += (cyAscent * 3 / 4) / 2 + rect.Height / 2;
+                        y += ((cyAscent * 3 / 4) / 2) + (rect.Height / 2);
                         break;
 
                     case XLineAlignment.Far:
@@ -476,7 +469,7 @@ namespace PdfSharp.Drawing.Pdf
 
                     case XLineAlignment.Center:
                         // TODO use CapHeight. PDFlib also uses 3/4 of ascent
-                        y += -(cyAscent * 3 / 4) / 2 + rect.Height / 2;
+                        y += (-(cyAscent * 3 / 4) / 2) + (rect.Height / 2);
                         break;
 
                     case XLineAlignment.Far:
@@ -526,7 +519,7 @@ namespace PdfSharp.Drawing.Pdf
                 byte[] bytes = PdfEncoders.RawUnicodeEncoding.GetBytes(s);
                 bytes = PdfEncoders.FormatStringLiteral(bytes, true, false, true, null);
                 string text = PdfEncoders.RawEncoding.GetString(bytes, 0, bytes.Length);
-                XPoint pos = new XPoint(x, y);
+                XPoint pos = new(x, y);
                 AdjustTextMatrix(ref pos);
                 AppendFormat(
                   "{0:0.####} {1:0.####} Td {2} Tj\n", pos.x, pos.y, text);
@@ -535,7 +528,7 @@ namespace PdfSharp.Drawing.Pdf
             else
             {
                 byte[] bytes = PdfEncoders.WinAnsiEncoding.GetBytes(s);
-                XPoint pos = new XPoint(x, y);
+                XPoint pos = new(x, y);
                 AdjustTextMatrix(ref pos);
                 AppendFormat(
                   "{0:0.####} {1:0.####} Td {2} Tj\n", pos.x, pos.y,
@@ -919,18 +912,18 @@ namespace PdfSharp.Drawing.Pdf
                 {
                     if (currentQuadrant == startQuadrant && firstLoop)
                     {
-                        double ξ = currentQuadrant * 90 + (clockwise ? 90 : 0);
+                        double ξ = (currentQuadrant * 90) + (clockwise ? 90 : 0);
                         AppendPartialArcQuadrant(x, y, width, height, α, ξ, pathStart, matrix);
                     }
                     else if (currentQuadrant == endQuadrant)
                     {
-                        double ξ = currentQuadrant * 90 + (clockwise ? 0 : 90);
+                        double ξ = (currentQuadrant * 90) + (clockwise ? 0 : 90);
                         AppendPartialArcQuadrant(x, y, width, height, ξ, β, PathStart.Ignore1st, matrix);
                     }
                     else
                     {
-                        double ξ1 = currentQuadrant * 90 + (clockwise ? 0 : 90);
-                        double ξ2 = currentQuadrant * 90 + (clockwise ? 90 : 0);
+                        double ξ1 = (currentQuadrant * 90) + (clockwise ? 0 : 90);
+                        double ξ2 = (currentQuadrant * 90) + (clockwise ? 90 : 0);
                         AppendPartialArcQuadrant(x, y, width, height, ξ1, ξ2, PathStart.Ignore1st, matrix);
                     }
 
@@ -1040,21 +1033,21 @@ namespace PdfSharp.Drawing.Pdf
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        pt1 = matrix.Transform(new XPoint(x0 + δx * cosα, y0 + δy * sinα));
+                        pt1 = matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα)));
                         AppendFormat("{0:0.###} {1:0.###} m\n", pt1.x, pt1.y);
                         break;
 
                     case PathStart.LineTo1st:
-                        pt1 = matrix.Transform(new XPoint(x0 + δx * cosα, y0 + δy * sinα));
+                        pt1 = matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα)));
                         AppendFormat("{0:0.###} {1:0.###} l\n", pt1.x, pt1.y);
                         break;
 
                     case PathStart.Ignore1st:
                         break;
                 }
-                pt1 = matrix.Transform(new XPoint(x0 + δx * (cosα - κ * sinα), y0 + δy * (sinα + κ * cosα)));
-                pt2 = matrix.Transform(new XPoint(x0 + δx * (cosβ + κ * sinβ), y0 + δy * (sinβ - κ * cosβ)));
-                pt3 = matrix.Transform(new XPoint(x0 + δx * cosβ, y0 + δy * sinβ));
+                pt1 = matrix.Transform(new XPoint(x0 + (δx * (cosα - (κ * sinα))), y0 + (δy * (sinα + (κ * cosα)))));
+                pt2 = matrix.Transform(new XPoint(x0 + (δx * (cosβ + (κ * sinβ))), y0 + (δy * (sinβ - (κ * cosβ)))));
+                pt3 = matrix.Transform(new XPoint(x0 + (δx * cosβ), y0 + (δy * sinβ)));
                 AppendFormat("{0:0.###} {1:0.###} {2:0.###} {3:0.###} {4:0.###} {5:0.###} c\n",
                   pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y);
             }
@@ -1064,21 +1057,21 @@ namespace PdfSharp.Drawing.Pdf
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        pt1 = matrix.Transform(new XPoint(x0 - δx * cosα, y0 - δy * sinα));
+                        pt1 = matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα)));
                         AppendFormat("{0:0.###} {1:0.###} m\n", pt1.x, pt1.y);
                         break;
 
                     case PathStart.LineTo1st:
-                        pt1 = matrix.Transform(new XPoint(x0 - δx * cosα, y0 - δy * sinα));
+                        pt1 = matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα)));
                         AppendFormat("{0:0.###} {1:0.###} l\n", pt1.x, pt1.y);
                         break;
 
                     case PathStart.Ignore1st:
                         break;
                 }
-                pt1 = matrix.Transform(new XPoint(x0 - δx * (cosα - κ * sinα), y0 - δy * (sinα + κ * cosα)));
-                pt2 = matrix.Transform(new XPoint(x0 - δx * (cosβ + κ * sinβ), y0 - δy * (sinβ - κ * cosβ)));
-                pt3 = matrix.Transform(new XPoint(x0 - δx * cosβ, y0 - δy * sinβ));
+                pt1 = matrix.Transform(new XPoint(x0 - (δx * (cosα - (κ * sinα))), y0 - (δy * (sinα + (κ * cosα)))));
+                pt2 = matrix.Transform(new XPoint(x0 - (δx * (cosβ + (κ * sinβ))), y0 - (δy * (sinβ - (κ * cosβ)))));
+                pt3 = matrix.Transform(new XPoint(x0 - (δx * cosβ), y0 - (δy * sinβ)));
                 AppendFormat("{0:0.###} {1:0.###} {2:0.###} {3:0.###} {4:0.###} {5:0.###} c\n",
                   pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y);
             }
@@ -1091,9 +1084,8 @@ namespace PdfSharp.Drawing.Pdf
 #if true
             //AppendPartialArc(currentPoint, seg.Point, seg.RotationAngle, seg.Size, seg.IsLargeArc, seg.SweepDirection, PathStart.Ignore1st);
 
-            int pieces;
             PointCollection points = GeometryHelper.ArcToBezier(point1.X, point1.Y, size.Width, size.Height, rotationAngle, isLargeArc,
-              sweepDirection == SweepDirection.Clockwise, point2.X, point2.Y, out pieces);
+              sweepDirection == SweepDirection.Clockwise, point2.X, point2.Y, out int pieces);
 
             int count = points.Count;
             int start = count % 3 == 1 ? 1 : 0;
@@ -1127,8 +1119,8 @@ namespace PdfSharp.Drawing.Pdf
         void AppendCurveSegment(XPoint pt0, XPoint pt1, XPoint pt2, XPoint pt3, double tension3)
         {
             AppendFormat("{0:0.####} {1:0.####} {2:0.####} {3:0.####} {4:0.####} {5:0.####} c\n",
-              pt1.X + tension3 * (pt2.X - pt0.X), pt1.Y + tension3 * (pt2.Y - pt0.Y),
-              pt2.X - tension3 * (pt3.X - pt1.X), pt2.Y - tension3 * (pt3.Y - pt1.Y),
+              pt1.X + (tension3 * (pt2.X - pt0.X)), pt1.Y + (tension3 * (pt2.Y - pt0.Y)),
+              pt2.X - (tension3 * (pt3.X - pt1.X)), pt2.Y - (tension3 * (pt3.Y - pt1.Y)),
               pt2.X, pt2.Y);
         }
 
@@ -1197,7 +1189,7 @@ namespace PdfSharp.Drawing.Pdf
 #endif
             foreach (PathFigure figure in geometry.Figures)
             {
-                System.Windows.Point currentPoint = new System.Windows.Point();
+                System.Windows.Point currentPoint = new();
 
                 // Move to start point
                 currentPoint = figure.StartPoint;
@@ -1349,7 +1341,7 @@ namespace PdfSharp.Drawing.Pdf
                     {
                         // Take TrimBox into account
                         double pageHeight = Size.Height;
-                        XPoint trimOffset = new XPoint();
+                        XPoint trimOffset = new();
                         if (this.page != null && this.page.TrimMargins.AreSet)
                         {
                             pageHeight += this.page.TrimMargins.Top.Point + this.page.TrimMargins.Bottom.Point;
@@ -1479,14 +1471,6 @@ namespace PdfSharp.Drawing.Pdf
         void Realize(XPen pen)
         {
             Realize(pen, null);
-        }
-
-        /// <summary>
-        /// Makes the specified brush to the current graphics object.
-        /// </summary>
-        void Realize(XBrush brush)
-        {
-            Realize(null, brush);
         }
 
         /// <summary>
@@ -1712,7 +1696,7 @@ namespace PdfSharp.Drawing.Pdf
         /// <summary>
         /// The graphical state stack.
         /// </summary>
-        readonly Stack<PdfGraphicsState> gfxStateStack = new Stack<PdfGraphicsState>();
+        readonly Stack<PdfGraphicsState> gfxStateStack = new();
 
         #endregion
 

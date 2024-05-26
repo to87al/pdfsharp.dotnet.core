@@ -74,8 +74,7 @@ namespace PdfSharp.Pdf.IO
             FileStream stream = null;
             try
             {
-                int pageNumber;
-                string realPath = PdfSharp.Drawing.XPdfForm.ExtractPageNumber(path, out pageNumber);
+                string realPath = PdfSharp.Drawing.XPdfForm.ExtractPageNumber(path, out int pageNumber);
                 if (File.Exists(realPath)) // prevent unwanted exceptions during debugging
                 {
                     stream = new FileStream(realPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
@@ -89,8 +88,7 @@ namespace PdfSharp.Pdf.IO
             {
                 try
                 {
-                    if (stream != null)
-                        stream.Close();
+                    stream?.Close();
                 }
                 catch { }
             }
@@ -155,7 +153,7 @@ namespace PdfSharp.Pdf.IO
                         char major = header[ich + 4];
                         char minor = header[ich + 6];
                         if (major >= '1' && major < '2' && minor >= '0' && minor <= '9')
-                            return (major - '0') * 10 + (minor - '0');
+                            return ((major - '0') * 10) + (minor - '0');
                     }
                 }
             }
@@ -196,7 +194,7 @@ namespace PdfSharp.Pdf.IO
         public static PdfDocument Open(string path, string password, PdfDocumentOpenMode openmode, PdfPasswordProvider provider)
         {
             PdfDocument document;
-            Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            FileStream stream = new(path, FileMode.Open, FileAccess.Read);
             try
             {
                 document = PdfReader.Open(stream, password, openmode, provider);
@@ -207,8 +205,7 @@ namespace PdfSharp.Pdf.IO
             }
             finally
             {
-                if (stream != null)
-                    stream.Close();
+                stream?.Close();
             }
             return document;
         }
@@ -260,7 +257,7 @@ namespace PdfSharp.Pdf.IO
             PdfDocument document = null;
             try
             {
-                Lexer lexer = new Lexer(stream);
+                Lexer lexer = new(stream);
                 document = new PdfDocument(lexer);
                 document.state |= DocumentState.Imported;
                 document.openMode = openmode;
@@ -276,7 +273,7 @@ namespace PdfSharp.Pdf.IO
 
                 // Read all trailers
                 document.irefTable.IsUnderConstruction = true;
-                Parser parser = new Parser(document);
+                Parser parser = new(document);
                 document.trailer = parser.ReadTrailer();
 
                 document.irefTable.IsUnderConstruction = false;
@@ -297,7 +294,7 @@ namespace PdfSharp.Pdf.IO
                     {
                         if (passwordProvider != null)
                         {
-                            PdfPasswordProviderArgs args = new PdfPasswordProviderArgs();
+                            PdfPasswordProviderArgs args = new();
                             passwordProvider(args);
                             if (args.Abort)
                                 return null;
@@ -316,7 +313,7 @@ namespace PdfSharp.Pdf.IO
                     {
                         if (passwordProvider != null)
                         {
-                            PdfPasswordProviderArgs args = new PdfPasswordProviderArgs();
+                            PdfPasswordProviderArgs args = new();
                             passwordProvider(args);
                             if (args.Abort)
                                 return null;

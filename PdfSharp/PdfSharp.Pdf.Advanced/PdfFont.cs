@@ -110,14 +110,12 @@ namespace PdfSharp.Pdf.Advanced
 
         public void AddChars(string text)
         {
-            if (this.cmapInfo != null)
-                this.cmapInfo.AddChars(text);
+            this.cmapInfo?.AddChars(text);
         }
 
         public void AddGlyphIndices(string glyphIndices)
         {
-            if (this.cmapInfo != null)
-                this.cmapInfo.AddGlyphIndices(glyphIndices);
+            this.cmapInfo?.AddGlyphIndices(glyphIndices);
         }
 
         /// <summary>
@@ -147,13 +145,13 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public static string CreateEmbeddedFontSubsetName(string name)
         {
-            StringBuilder s = new StringBuilder(64);
+            StringBuilder s = new(64);
             byte[] bytes = Guid.NewGuid().ToByteArray();
             for (int idx = 0; idx < 6; idx++)
-                s.Append((char)('A' + bytes[idx] % 26));
+                s.Append((char)('A' + (bytes[idx] % 26)));
             s.Append('+');
-            if (name.StartsWith("/"))
-                s.Append(name.Substring(1));
+            if (name.StartsWith('/'))
+                s.Append(name.AsSpan(1));
             else
                 s.Append(name);
             return s.ToString();

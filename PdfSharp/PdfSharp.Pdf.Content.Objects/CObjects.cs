@@ -132,7 +132,7 @@ namespace PdfSharp.Pdf.Content.Objects  // TODO: split into single files
     [DebuggerDisplay("(count={Count})")]
     public class CSequence : CObject, IList<CObject>, ICollection<CObject>, IEnumerable<CObject>
     {
-        List<CObject> items = new List<CObject>();
+        List<CObject> items = [];
 
         /// <summary>
         /// Creates a new object that is a copy of the current instance.
@@ -310,7 +310,7 @@ namespace PdfSharp.Pdf.Content.Objects  // TODO: split into single files
         public byte[] ToContent()
         {
             Stream stream = new MemoryStream();
-            ContentWriter writer = new ContentWriter(stream);
+            ContentWriter writer = new(stream);
             WriteObject(writer);
             writer.Close(false);
 
@@ -327,7 +327,7 @@ namespace PdfSharp.Pdf.Content.Objects  // TODO: split into single files
         /// </summary>
         public override string ToString()
         {
-            StringBuilder s = new StringBuilder();
+            StringBuilder s = new();
 
             for (int idx = 0; idx < this.items.Count; idx++)
                 s.Append(this.items[idx].ToString());
@@ -586,7 +586,7 @@ namespace PdfSharp.Pdf.Content.Objects  // TODO: split into single files
         /// </summary>
         public override string ToString()
         {
-            StringBuilder s = new StringBuilder("(");
+            StringBuilder s = new("(");
             int length = this.value.Length;
             for (int ich = 0; ich < length; ich++)
             {
@@ -811,8 +811,7 @@ namespace PdfSharp.Pdf.Content.Objects  // TODO: split into single files
         {
             get
             {
-                if (this.seqence == null)
-                    this.seqence = new CSequence();
+                this.seqence ??= [];
                 return this.seqence;
             }
         }

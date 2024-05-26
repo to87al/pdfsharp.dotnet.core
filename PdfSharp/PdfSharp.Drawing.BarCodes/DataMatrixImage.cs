@@ -59,7 +59,7 @@ namespace PdfSharp.Drawing.BarCodes
     {
         public static XImage GenerateMatrixImage(string text, string encoding, int rows, int columns)
         {
-            DataMatrixImage dataMatrixImage = new DataMatrixImage(text, encoding, rows, columns);
+            DataMatrixImage dataMatrixImage = new(text, encoding, rows, columns);
             return dataMatrixImage.DrawMatrix();
         }
 
@@ -80,7 +80,7 @@ namespace PdfSharp.Drawing.BarCodes
         /// Possible ECC200 Matrixes
         /// </summary>
         static readonly Ecc200Block[] ecc200Sizes =
-        {
+        [
       new Ecc200Block( 10,  10, 10, 10,    3,   3,  5),    //
       new Ecc200Block( 12,  12, 12, 12,    5,   5,  7),    //
       new Ecc200Block(  8,  18,  8, 18,    5,   5,  7),    //
@@ -112,7 +112,7 @@ namespace PdfSharp.Drawing.BarCodes
       new Ecc200Block(132, 132, 22, 22, 1304, 163, 62),    //
       new Ecc200Block(144, 144, 24, 24, 1558, 156, 62),    // 156*4+155*2
       new Ecc200Block(  0,   0,  0,  0,    0,    0, 0)     // terminate
-    };
+    ];
 
         public XImage DrawMatrix()
         {
@@ -126,7 +126,7 @@ namespace PdfSharp.Drawing.BarCodes
         {
             int matrixColumns = this.columns;
             int matrixRows = this.rows;
-            Ecc200Block matrix = new Ecc200Block(0, 0, 0, 0, 0, 0, 0);
+            Ecc200Block matrix = new(0, 0, 0, 0, 0, 0, 0);
 
             foreach (Ecc200Block eccmatrix in ecc200Sizes)
             {
@@ -138,7 +138,7 @@ namespace PdfSharp.Drawing.BarCodes
             }
 
             char[] grid = new char[matrixColumns * matrixRows];
-            Random rand = new Random();
+            Random rand = new();
 
             for (int ccol = 0; ccol < matrixColumns; ccol++)
                 grid[ccol] = (char)1;
@@ -147,7 +147,7 @@ namespace PdfSharp.Drawing.BarCodes
             {
                 grid[rrows * matrixRows] = (char)1;
                 for (int ccol = 1; ccol < matrixColumns; ccol++)
-                    grid[rrows * matrixRows + ccol] = (char)rand.Next(2);
+                    grid[(rrows * matrixRows) + ccol] = (char)rand.Next(2);
             }
 
             if (grid == null || matrixColumns == 0)
@@ -168,7 +168,7 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         /// <param name="code">A hex string like "AB 08 C3...".</param>
         /// <param name="size">I.e. 26 for a 26x26 matrix</param>
-        public XImage CreateImage(char[] code, int size)//(string code, int size)
+        public static XImage CreateImage(char[] code, int size)//(string code, int size)
         {
             return CreateImage(code, size, size, 10);
         }
@@ -176,7 +176,7 @@ namespace PdfSharp.Drawing.BarCodes
         /// <summary>
         /// Creates a DataMatrix image object.
         /// </summary>
-        public XImage CreateImage(char[] code, int rows, int columns)
+        public static XImage CreateImage(char[] code, int rows, int columns)
         {
             return CreateImage(code, rows, columns, 10);
         }

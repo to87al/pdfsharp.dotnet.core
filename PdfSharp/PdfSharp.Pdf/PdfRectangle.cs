@@ -143,8 +143,7 @@ namespace PdfSharp.Pdf
             if (item is PdfReference)
                 item = ((PdfReference)item).Value;
 
-            PdfArray array = item as PdfArray;
-            if (array == null)
+            if (item is not PdfArray array)
                 throw new InvalidOperationException(PSSR.UnexpectedTokenInPdfFile);
 
             this.x1 = array.Elements.GetReal(0);
@@ -474,6 +473,6 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Represents an empty PdfRectangle.
         /// </summary>
-        public static readonly PdfRectangle Empty = new PdfRectangle();
+        public static readonly PdfRectangle Empty = new();
     }
 }

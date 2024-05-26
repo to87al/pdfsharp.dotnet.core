@@ -41,8 +41,7 @@ namespace PdfSharp.Pdf.Filters
         /// </summary>
         public override byte[] Encode(byte[] data)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
+            ArgumentNullException.ThrowIfNull(data);
 
             int count = data.Length;
             byte[] bytes = new byte[2 * count];
@@ -60,8 +59,7 @@ namespace PdfSharp.Pdf.Filters
         /// </summary>
         public override byte[] Decode(byte[] data, FilterParms parms)
         {
-            if (data == null)
-                throw new ArgumentNullException("data");
+            ArgumentNullException.ThrowIfNull(data);
 
             data = RemoveWhiteSpace(data);
             int count = data.Length;
@@ -78,7 +76,7 @@ namespace PdfSharp.Pdf.Filters
             {
                 byte hi = data[j++];
                 byte lo = data[j++];
-                bytes[i] = (byte)((hi > '9' ? hi - 'A' : hi - '0') * 16 + (lo > '9' ? lo - 'A' : lo - '0'));
+                bytes[i] = (byte)(((hi > '9' ? hi - 'A' : hi - '0') * 16) + (lo > '9' ? lo - 'A' : lo - '0'));
             }
             return bytes;
         }

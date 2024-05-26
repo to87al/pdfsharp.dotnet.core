@@ -53,7 +53,7 @@ namespace PdfSharp.Drawing
         public XTypefaceHack(string fontFamilyName, XFontStyle style, XFontWeight weight, XFontStretch stretch)
         {
             if (String.IsNullOrEmpty(fontFamilyName))
-                throw new ArgumentNullException("fontFamilyName");
+                throw new ArgumentNullException(nameof(fontFamilyName));
 
             this.fontFamilyName = fontFamilyName;
             this.style = style;

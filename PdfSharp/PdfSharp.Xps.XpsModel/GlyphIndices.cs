@@ -22,7 +22,7 @@ namespace PdfSharp.Xps.XpsModel
         /// </summary>
         public GlyphIndices()
         {
-            this.glyphMapping = new GlyphMapping[0];
+            this.glyphMapping = [];
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace PdfSharp.Xps.XpsModel
             /// <summary>
             /// Gets a value indicating whether the glyph index is not empty.
             /// </summary>
-            public bool HasGlyphIndex
+            public readonly bool HasGlyphIndex
             {
                 get { return GlyphIndex != -1; }
             }
@@ -155,7 +155,7 @@ namespace PdfSharp.Xps.XpsModel
             /// <summary>
             /// Gets a value indicating whether the AdvanceWidth is defined.
             /// </summary>
-            public bool HasAdvanceWidth
+            public readonly bool HasAdvanceWidth
             {
                 get { return !DoubleUtil.IsNaN(AdvanceWidth); }
             }
@@ -179,7 +179,7 @@ namespace PdfSharp.Xps.XpsModel
             /// <summary>
             /// Gets a value indicating whether the UOffset is defined.
             /// </summary>
-            public bool HasUOffset
+            public readonly bool HasUOffset
             {
                 get { return !DoubleUtil.IsNaN(UOffset); }
             }
@@ -187,7 +187,7 @@ namespace PdfSharp.Xps.XpsModel
             /// <summary>
             /// Gets a value indicating whether the VOffset is defined.
             /// </summary>
-            public bool HasVOffset
+            public readonly bool HasVOffset
             {
                 get { return !DoubleUtil.IsNaN(VOffset); }
             }
@@ -195,7 +195,7 @@ namespace PdfSharp.Xps.XpsModel
             /// <summary>
             /// Gets a value indicating whether at least one of AdvanceWidth, UOffset, or VOffset is defined.
             /// </summary>
-            public bool HasAdvanceWidthOrOffset
+            public readonly bool HasAdvanceWidthOrOffset
             {
                 get { return !DoubleUtil.IsNaN(AdvanceWidth) || !DoubleUtil.IsNaN(UOffset) || !DoubleUtil.IsNaN(VOffset); }
             }
@@ -209,7 +209,7 @@ namespace PdfSharp.Xps.XpsModel
     {
         public static GlyphIndices.GlyphMapping[] Parse(string indices)
         {
-            GlyphIndicesParser parser = new GlyphIndicesParser(indices);
+            GlyphIndicesParser parser = new(indices);
             return parser.Parse();
         }
 
@@ -219,10 +219,11 @@ namespace PdfSharp.Xps.XpsModel
         }
 
         readonly string indices;
+        internal static readonly char[] separator = ['(', ')', ':'];
 
         GlyphIndices.GlyphMapping[] Parse()
         {
-            string[] parts = this.indices.Split(new char[] { ';' });
+            string[] parts = this.indices.Split([';']);
             int count = parts.Length;
             GlyphIndices.GlyphMapping[] glyphMapping = new GlyphIndices.GlyphMapping[count];
 
@@ -234,7 +235,7 @@ namespace PdfSharp.Xps.XpsModel
 
         static GlyphIndices.GlyphMapping ParsePart(string parts)
         {
-            GlyphIndices.GlyphMapping mapping = new GlyphIndices.GlyphMapping(42);
+            GlyphIndices.GlyphMapping mapping = new(42);
             //mapping.ClusterCodeUnitCount = 1;
             //mapping.ClusterGlyphCount = 1;
             //mapping.GlyphIndex = -1;
@@ -253,7 +254,7 @@ namespace PdfSharp.Xps.XpsModel
                     // c
                     // (a:b)  - not possible
                     // (a)  - not possible
-                    string[] tempStr = commaSeparated[0].Split(new char[] { '(', ')', ':' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] tempStr = commaSeparated[0].Split(separator, StringSplitOptions.RemoveEmptyEntries);
                     // Last number is always the index
                     mapping.GlyphIndex = int.Parse(tempStr[^1]);
 

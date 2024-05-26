@@ -81,7 +81,7 @@ namespace PdfSharp.Drawing
             // BUG: does not work with fonts that have others than the four default styles
             FontStyle fontStyle = FontStyleFromStyle(style);
             FontWeight fontWeight = FontWeightFromStyle(style);
-            Typeface typeface = new Typeface(family, fontStyle, fontWeight, FontStretches.Normal);
+            Typeface typeface = new(family, fontStyle, fontWeight, FontStretches.Normal);
 
             //List<Typeface> typefaces = new List<Typeface>(fontFamily.GetTypefaces());
             //typefaces.GetType();
@@ -103,7 +103,7 @@ namespace PdfSharp.Drawing
             //typeface = s_typefaces[0];
 
             // BUG: does not work with fonts that have others than the four default styles
-            FormattedText formattedText = new FormattedText(text, new CultureInfo("en-us"), FlowDirection.LeftToRight, typeface, emSize, brush, 1.25);
+            FormattedText formattedText = new(text, new CultureInfo("en-us"), FlowDirection.LeftToRight, typeface, emSize, brush, 1.25);
             //formattedText.SetFontWeight(FontWeights.Bold);
             //formattedText.SetFontStyle(FontStyles.Oblique);
             //formattedText.SetFontStretch(FontStretches.Condensed);
@@ -183,12 +183,11 @@ namespace PdfSharp.Drawing
             XFontMetrics metrics = descriptor.FontMetrics;
 
             style &= XFontStyle.Regular | XFontStyle.Bold | XFontStyle.Italic | XFontStyle.BoldItalic; // same as XFontStyle.BoldItalic
-            List<Typeface> typefaces = new List<Typeface>(family.wpfFamily.GetTypefaces());
+            List<Typeface> typefaces = new(family.wpfFamily.GetTypefaces());
             foreach (Typeface typeface in typefaces)
             {
                 bool available = false;
-                GlyphTypeface glyphTypeface;
-                if (typeface.TryGetGlyphTypeface(out glyphTypeface))
+                if (typeface.TryGetGlyphTypeface(out GlyphTypeface glyphTypeface))
                 {
 #if DEBUG
           glyphTypeface.GetType();

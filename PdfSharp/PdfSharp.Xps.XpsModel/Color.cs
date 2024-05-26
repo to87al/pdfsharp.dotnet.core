@@ -11,7 +11,7 @@ namespace PdfSharp.Xps.XpsModel
     {
         public byte A
         {
-            get { return this.sRgbColor.a; }
+            readonly get { return this.sRgbColor.a; }
             set
             {
                 this.sRgbColor.a = value;
@@ -21,7 +21,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public byte R
         {
-            get { return this.sRgbColor.r; }
+            readonly get { return this.sRgbColor.r; }
             set
             {
                 this.sRgbColor.r = value;
@@ -31,7 +31,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public byte G
         {
-            get { return this.sRgbColor.g; }
+            readonly get { return this.sRgbColor.g; }
             set
             {
                 this.sRgbColor.g = value;
@@ -41,7 +41,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public byte B
         {
-            get { return this.sRgbColor.b; }
+            readonly get { return this.sRgbColor.b; }
             set
             {
                 this.sRgbColor.b = value;
@@ -51,7 +51,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public float ScA
         {
-            get { return this.scRgbColor.a; }
+            readonly get { return this.scRgbColor.a; }
             set
             {
                 this.scRgbColor.a = value;
@@ -66,7 +66,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public float ScR
         {
-            get { return this.scRgbColor.r; }
+            readonly get { return this.scRgbColor.r; }
             set
             {
                 this.scRgbColor.r = value;
@@ -76,7 +76,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public float ScG
         {
-            get { return this.scRgbColor.g; }
+            readonly get { return this.scRgbColor.g; }
             set
             {
                 this.scRgbColor.g = value;
@@ -86,7 +86,7 @@ namespace PdfSharp.Xps.XpsModel
 
         public float ScB
         {
-            get { return this.scRgbColor.b; }
+            readonly get { return this.scRgbColor.b; }
             set
             {
                 this.scRgbColor.b = value;
@@ -101,7 +101,7 @@ namespace PdfSharp.Xps.XpsModel
 
         internal static Color FromArgb(byte a, byte r, byte g, byte b)
         {
-            Color clr = new Color();
+            Color clr = new();
             clr.A = a;
             clr.R = r;
             clr.G = g;
@@ -111,15 +111,15 @@ namespace PdfSharp.Xps.XpsModel
 
         internal static Color Parse(string value)
         {
-            Color clr = new Color();
+            Color clr = new();
 
             int length = value.Length;
-            if (value.StartsWith("#"))
+            if (value.StartsWith('#'))
             {
                 if (length == 7)
                 {
                     clr.colorType = ColorType.scRGB;
-                    uint val = UInt32.Parse(value.Substring(1), NumberStyles.HexNumber);
+                    uint val = UInt32.Parse(value[1..], NumberStyles.HexNumber);
                     clr.A = 0xFF;
                     clr.R = (byte)((val >> 16) & 0xFF);
                     clr.G = (byte)((val >> 8) & 0xFF);
@@ -128,7 +128,7 @@ namespace PdfSharp.Xps.XpsModel
                 else if (length == 9)
                 {
                     clr.colorType = ColorType.scRGBwithAlpha;
-                    uint val = UInt32.Parse(value.Substring(1), NumberStyles.HexNumber);
+                    uint val = UInt32.Parse(value[1..], NumberStyles.HexNumber);
                     clr.A = (byte)((val >> 24) & 0xFF);
                     clr.R = (byte)((val >> 16) & 0xFF);
                     clr.G = (byte)((val >> 8) & 0xFF);
@@ -146,7 +146,7 @@ namespace PdfSharp.Xps.XpsModel
                 }
                 else if (value.StartsWith("sc#"))
                 {
-                    string[] xx = value.Substring(3).Split(',');
+                    string[] xx = value[3..].Split(',');
                     if (xx.Length == 3)
                     {
                         clr.ScR = float.Parse(xx[0], CultureInfo.InvariantCulture);

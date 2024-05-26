@@ -44,11 +44,6 @@ namespace PdfSharp.Pdf
         {
         }
 
-        PdfDocumentInformation(PdfDictionary dict)
-          : base(dict)
-        {
-        }
-
 
         /// <summary>
         /// Gets or sets the document's title.
@@ -194,8 +189,7 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

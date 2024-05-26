@@ -53,8 +53,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfName(string value)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
+            ArgumentNullException.ThrowIfNull(value);
             if (value.Length == 0 || value[0] != '/')
                 throw new ArgumentException(PSSR.NameMustStartWithSlash);
 
@@ -137,7 +136,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Represents the empty name.
         /// </summary>
-        public static readonly PdfName Empty = new PdfName("/");
+        public static readonly PdfName Empty = new("/");
 
         /// <summary>
         /// Writes the name including the leading slash.

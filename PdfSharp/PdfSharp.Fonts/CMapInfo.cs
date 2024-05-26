@@ -137,7 +137,7 @@ namespace PdfSharp.Fonts
 
         public char MinChar = Char.MaxValue;
         public char MaxChar = Char.MinValue;
-        public Dictionary<char, int> CharacterToGlyphIndex = new Dictionary<char, int>();
-        public Dictionary<int, object> GlyphIndices = new Dictionary<int, object>();
+        public Dictionary<char, int> CharacterToGlyphIndex = [];
+        public Dictionary<int, object> GlyphIndices = [];
     }
 }

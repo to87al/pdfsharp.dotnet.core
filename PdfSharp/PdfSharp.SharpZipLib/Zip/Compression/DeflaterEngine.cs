@@ -337,7 +337,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
 			 */
             while (lookahead < DeflaterConstants.MIN_LOOKAHEAD && inputOff < inputEnd)
             {
-                int more = 2 * WSIZE - lookahead - strstart;
+                int more = (2 * WSIZE) - lookahead - strstart;
 
                 if (more > inputEnd - inputOff)
                 {
@@ -388,7 +388,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                 niceLength = lookahead;
             }
 
-            if (DeflaterConstants.DEBUGGING && strstart > 2 * WSIZE - MIN_LOOKAHEAD)
+            if (DeflaterConstants.DEBUGGING && strstart > (2 * WSIZE) - MIN_LOOKAHEAD)
             {
                 throw new InvalidOperationException("need lookahead");
             }
@@ -529,7 +529,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     return false;
                 }
 
-                if (strstart > 2 * WSIZE - MIN_LOOKAHEAD)
+                if (strstart > (2 * WSIZE) - MIN_LOOKAHEAD)
                 {
                     /* slide window, as findLongestMatch needs this.
 					 * This should only happen when flushing and the window
@@ -630,7 +630,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     return false;
                 }
 
-                if (strstart >= 2 * WSIZE - MIN_LOOKAHEAD)
+                if (strstart >= (2 * WSIZE) - MIN_LOOKAHEAD)
                 {
                     /* slide window, as findLongestMatch need this.
 					 * This should only happen when flushing and the window

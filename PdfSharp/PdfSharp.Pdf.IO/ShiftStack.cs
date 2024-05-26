@@ -43,7 +43,7 @@ namespace PdfSharp.Pdf.IO
 
         public ShiftStack()
         {
-            this.items = new List<PdfItem>();
+            this.items = [];
         }
 
         public PdfItem[] ToArray(int start, int length)
@@ -70,7 +70,7 @@ namespace PdfSharp.Pdf.IO
             get
             {
                 if (index >= this.sp)
-                    throw new ArgumentOutOfRangeException("index", index, "Value greater than stack index.");
+                    throw new ArgumentOutOfRangeException(nameof(index), index, "Value greater than stack index.");
                 return (PdfItem)this.items[index];
             }
         }

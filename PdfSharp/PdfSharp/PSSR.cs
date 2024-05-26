@@ -83,8 +83,7 @@ namespace PdfSharp
 
         public static string Format(string format, params object[] args)
         {
-            if (format == null)
-                throw new ArgumentNullException("format");
+            ArgumentNullException.ThrowIfNull(format);
 
             string message;
             try

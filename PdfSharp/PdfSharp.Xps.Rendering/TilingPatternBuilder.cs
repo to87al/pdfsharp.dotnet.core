@@ -23,7 +23,7 @@ namespace PdfSharp.Xps.Rendering
         /// </summary>
         public static PdfTilingPattern BuildFromImageBrush(DocumentRenderingContext context, ImageBrush brush, XMatrix transform)
         {
-            TilingPatternBuilder builder = new TilingPatternBuilder(context);
+            TilingPatternBuilder builder = new(context);
             PdfTilingPattern pattern = builder.BuildPattern(brush, transform);
             return pattern;
         }
@@ -42,7 +42,7 @@ namespace PdfSharp.Xps.Rendering
         PdfTilingPattern BuildPattern(ImageBrush brush, XMatrix transform)
         {
             // Bounding box lays always at (0,0)
-            XRect bbox = new XRect(0, 0, brush.Viewport.Width, brush.Viewport.Height);
+            XRect bbox = new(0, 0, brush.Viewport.Width, brush.Viewport.Height);
 #if true
             XMatrix matrix = transform;
             matrix.Prepend(new XMatrix(1, 0, 0, 1, brush.Viewport.X, brush.Viewport.Y));
@@ -115,13 +115,13 @@ namespace PdfSharp.Xps.Rendering
             PdfFormXObject pdfForm = BuildForm(brush);
             //XRect viewBoxForm = new XRect(0, 0, 640, 480);
 
-            PdfContentWriter writer = new PdfContentWriter(Context, pattern);
+            PdfContentWriter writer = new(Context, pattern);
             writer.BeginContentRaw();
 
             // Acrobat 8 clips to bounding box, so do we
             //writer.WriteClip(bbox);
 
-            XMatrix transformation = new XMatrix();
+            XMatrix transformation = new();
             double dx = brush.Viewport.Width / brush.Viewbox.Width * 96 / pdfForm.DpiX;
             double dy = brush.Viewport.Height / brush.Viewbox.Height * 96 / pdfForm.DpiY;
             transformation = new XMatrix(dx, 0, 0, dy, 0, 0);
@@ -184,12 +184,12 @@ namespace PdfSharp.Xps.Rendering
 
             // view box in point
             // XRect box = new XRect(brush.Viewbox.X * 0.75, brush.Viewbox.Y * 0.75, brush.Viewbox.Width * 0.75, brush.Viewbox.Height * 0.75);
-            XRect box = new XRect(0, 0, width, height);
+            XRect box = new(0, 0, width, height);
 
             pdfForm.Elements.SetRectangle(PdfFormXObject.Keys.BBox, new PdfRectangle(0, height, width, 0));
             pdfForm.Elements.SetMatrix(PdfFormXObject.Keys.Matrix, new XMatrix());
 
-            PdfContentWriter writer = new PdfContentWriter(Context, pdfForm);
+            PdfContentWriter writer = new(Context, pdfForm);
 
             Debug.Assert(ximage != null);
 
@@ -200,7 +200,7 @@ namespace PdfSharp.Xps.Rendering
             writer.BeginContentRaw();
 
             string imageID = writer.Resources.AddImage(new PdfImage(Context.PdfDocument, ximage));
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             //double scaleX = brush.Viewport.Width / brush.Viewbox.Width * 4 / 3 * ximage.PointWidth;
             //double scaleY = brush.Viewport.Height / brush.Viewbox.Height * 4 / 3 * ximage.PointHeight;
             //matrix.TranslatePrepend(-brush.Viewbox.X, -brush.Viewbox.Y);
@@ -232,7 +232,7 @@ namespace PdfSharp.Xps.Rendering
         PdfTilingPattern BuildPattern(VisualBrush brush, XMatrix transform)
         {
             // Bounding box lays always at (0,0)
-            XRect bbox = new XRect(0, 0, brush.Viewport.Width, brush.Viewport.Height);
+            XRect bbox = new(0, 0, brush.Viewport.Width, brush.Viewport.Height);
 
             XMatrix matrix = transform;
             matrix.Prepend(new XMatrix(1, 0, 0, 1, brush.Viewport.X, brush.Viewport.Y));
@@ -304,7 +304,7 @@ namespace PdfSharp.Xps.Rendering
             // Acrobat 8 clips to bounding box, so do we
             //writer.WriteClip(bbox);
 
-            XMatrix transformation = new XMatrix();
+            XMatrix transformation = new();
             double dx = brush.Viewport.Width / brush.Viewbox.Width * 96 / pdfForm.DpiX;
             double dy = brush.Viewport.Height / brush.Viewbox.Height * 96 / pdfForm.DpiY;
             transformation = new XMatrix(dx, 0, 0, dy, 0, 0);

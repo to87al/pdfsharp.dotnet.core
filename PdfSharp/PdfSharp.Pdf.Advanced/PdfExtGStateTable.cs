@@ -50,8 +50,7 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGState(double alpha)
         {
             string key = MakeKey(alpha);
-            PdfExtGState extGState;
-            if (!this.alphaValues.TryGetValue(key, out extGState))
+            if (!this.alphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
                 extGState = new PdfExtGState(this.owner);
                 extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
@@ -68,8 +67,7 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGStateStroke(double alpha)
         {
             string key = MakeKey(alpha);
-            PdfExtGState extGState;
-            if (!this.strokeAlphaValues.TryGetValue(key, out extGState))
+            if (!this.strokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
                 extGState = new PdfExtGState(this.owner);
                 extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
@@ -85,8 +83,8 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGStateNonStroke(double alpha)
         {
             string key = MakeKey(alpha);
-            PdfExtGState extGState; ;
-            if (!this.nonStrokeAlphaValues.TryGetValue(key, out extGState))
+            ;
+            if (!this.nonStrokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
                 extGState = new PdfExtGState(this.owner);
                 extGState.Elements[PdfExtGState.Keys.ca] = new PdfReal(alpha);
@@ -132,8 +130,8 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Maps from alpha values (range "0" to "1000") to PdfExtGState objects.
         /// </summary>
-        readonly Dictionary<string, PdfExtGState> alphaValues = new Dictionary<string, PdfExtGState>();
-        readonly Dictionary<string, PdfExtGState> strokeAlphaValues = new Dictionary<string, PdfExtGState>();
-        readonly Dictionary<string, PdfExtGState> nonStrokeAlphaValues = new Dictionary<string, PdfExtGState>();
+        readonly Dictionary<string, PdfExtGState> alphaValues = [];
+        readonly Dictionary<string, PdfExtGState> strokeAlphaValues = [];
+        readonly Dictionary<string, PdfExtGState> nonStrokeAlphaValues = [];
     }
 }

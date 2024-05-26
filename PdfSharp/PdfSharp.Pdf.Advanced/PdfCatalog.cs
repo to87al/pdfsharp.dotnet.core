@@ -49,10 +49,6 @@ namespace PdfSharp.Pdf.Advanced
             this.version = "1.4";  // HACK in PdfCatalog
         }
 
-        PdfCatalog(PdfDictionary dictionary)
-          : base(dictionary)
-        { }
-
         /// <summary>
         /// Get or sets the version of the PDF specification to which the document conforms.
         /// </summary>
@@ -115,8 +111,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.viewerPreferences == null)
-                    this.viewerPreferences = (PdfViewerPreferences)Elements.GetValue(Keys.ViewerPreferences, VCF.CreateIndirect);
+                this.viewerPreferences ??= (PdfViewerPreferences)Elements.GetValue(Keys.ViewerPreferences, VCF.CreateIndirect);
                 return this.viewerPreferences;
             }
         }
@@ -129,8 +124,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.outline == null)
-                    this.outline = (PdfOutline)Elements.GetValue(Keys.Outlines, VCF.CreateIndirect);
+                this.outline ??= (PdfOutline)Elements.GetValue(Keys.Outlines, VCF.CreateIndirect);
                 return this.outline.Outlines;
             }
         }
@@ -143,8 +137,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.acroForm == null)
-                    this.acroForm = (PdfAcroForm)Elements.GetValue(Keys.AcroForm);
+                this.acroForm ??= (PdfAcroForm)Elements.GetValue(Keys.AcroForm);
                 return this.acroForm;
             }
         }
@@ -170,8 +163,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal override void PrepareForSave()
         {
-            if (this.pages != null)
-                this.pages.PrepareForSave();
+            this.pages?.PrepareForSave();
 
             if (this.outline != null && this.outline.Outlines.Count > 0)
             {
@@ -395,8 +387,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

@@ -58,10 +58,9 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public void SetupFromBrush(XLinearGradientBrush brush, XMatrix matrix)
         {
-            if (brush == null)
-                throw new ArgumentNullException("brush");
+            ArgumentNullException.ThrowIfNull(brush);
 
-            PdfShading shading = new PdfShading(this.document);
+            PdfShading shading = new(this.document);
             shading.SetupFromBrush(brush);
             Elements[Keys.Shading] = shading;
             //Elements[Keys.Matrix] = new PdfLiteral("[" + PdfEncoders.ToString(matrix) + "]");
@@ -116,8 +115,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

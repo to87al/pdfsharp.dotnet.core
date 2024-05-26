@@ -116,11 +116,6 @@ namespace PdfSharp.Pdf.Advanced
             FontEmbedding = font.PdfOptions.FontEmbedding;
         }
 
-        XPdfFontOptions FontOptions
-        {
-            get { return this.fontOptions; }
-        }
-
         readonly XPdfFontOptions fontOptions;
 
         public string BaseFont
@@ -169,7 +164,7 @@ namespace PdfSharp.Pdf.Advanced
         byte[] fontSubSet = fss.Process();
         fss.CompareBytes(fontSubSet, fontProgram);
 #endif
-                PdfDictionary fontStream = new PdfDictionary(this.Owner);
+                PdfDictionary fontStream = new(this.Owner);
                 this.Owner.Internals.AddObject(fontStream);
                 this.fontDescriptor.Elements[PdfFontDescriptor.Keys.FontFile2] = fontStream.Reference;
 
@@ -305,8 +300,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

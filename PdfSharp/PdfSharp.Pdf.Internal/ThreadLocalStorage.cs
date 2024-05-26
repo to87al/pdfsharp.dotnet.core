@@ -57,11 +57,10 @@ namespace PdfSharp.Pdf.Internal
 
         public PdfDocument GetDocument(string path)
         {
-            Debug.Assert(path.StartsWith("*") || Path.IsPathRooted(path), "Path must be full qualified.");
+            Debug.Assert(path.StartsWith('*') || Path.IsPathRooted(path), "Path must be full qualified.");
 
             PdfDocument document = null;
-            PdfDocument.DocumentHandle handle;
-            if (this.importedDocuments.TryGetValue(path, out handle))
+            if (this.importedDocuments.TryGetValue(path, out PdfDocument.DocumentHandle handle))
             {
                 document = handle.Target;
                 if (document == null)
@@ -79,13 +78,13 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                List<PdfDocument> list = new List<PdfDocument>();
+                List<PdfDocument> list = [];
                 foreach (PdfDocument.DocumentHandle handle in this.importedDocuments.Values)
                 {
                     if (handle.IsAlive)
                         list.Add(handle.Target);
                 }
-                return list.ToArray();
+                return [.. list];
             }
         }
 

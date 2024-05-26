@@ -158,7 +158,7 @@ namespace PdfSharp.Pdf
             get { return Elements.GetString(Keys.Title); }
             set
             {
-                PdfString s = new PdfString(value, PdfStringEncoding.PDFDocEncoding);
+                PdfString s = new(value, PdfStringEncoding.PDFDocEncoding);
                 Elements.SetValue(Keys.Title, s);
             }
         }
@@ -232,8 +232,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.outlines == null)
-                    this.outlines = new PdfOutlineCollection(this.Owner, this);
+                this.outlines ??= new PdfOutlineCollection(this.Owner, this);
                 return this.outlines;
             }
         }
@@ -358,8 +357,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void Add(PdfOutline outline)
             {
-                if (outline == null)
-                    throw new ArgumentNullException("outline");
+                ArgumentNullException.ThrowIfNull(outline);
 
                 if (!Object.ReferenceEquals(Owner, outline.DestinationPage.Owner))
                     throw new ArgumentException("Destination page must belong to this document.");
@@ -393,7 +391,7 @@ namespace PdfSharp.Pdf
             /// <param name="textColor">The color used to draw the outline text.</param>
             public PdfOutline Add(string title, PdfPage destinationPage, bool opened, PdfOutlineStyle style, XColor textColor)
             {
-                PdfOutline outline = new PdfOutline(title, destinationPage, opened, style, textColor);
+                PdfOutline outline = new(title, destinationPage, opened, style, textColor);
                 Add(outline);
                 return outline;
             }
@@ -407,7 +405,7 @@ namespace PdfSharp.Pdf
             /// <param name="style">The font style used to draw the outline text.</param>
             public PdfOutline Add(string title, PdfPage destinationPage, bool opened, PdfOutlineStyle style)
             {
-                PdfOutline outline = new PdfOutline(title, destinationPage, opened, style);
+                PdfOutline outline = new(title, destinationPage, opened, style);
                 Add(outline);
                 return outline;
             }
@@ -420,7 +418,7 @@ namespace PdfSharp.Pdf
             /// <param name="opened">Specifies whether the node is displayed expanded (opened) or collapsed.</param>
             public PdfOutline Add(string title, PdfPage destinationPage, bool opened)
             {
-                PdfOutline outline = new PdfOutline(title, destinationPage, opened);
+                PdfOutline outline = new(title, destinationPage, opened);
                 Add(outline);
                 return outline;
             }
@@ -432,7 +430,7 @@ namespace PdfSharp.Pdf
             /// <param name="destinationPage">The destination page.</param>
             public PdfOutline Add(string title, PdfPage destinationPage)
             {
-                PdfOutline outline = new PdfOutline(title, destinationPage);
+                PdfOutline outline = new(title, destinationPage);
                 Add(outline);
                 return outline;
             }
@@ -453,7 +451,7 @@ namespace PdfSharp.Pdf
                 get
                 {
                     if (index < 0 || index >= this.outlines.Count)
-                        throw new ArgumentOutOfRangeException("index", index, PSSR.OutlineIndexOutOfRange);
+                        throw new ArgumentOutOfRangeException(nameof(index), index, PSSR.OutlineIndexOutOfRange);
                     return (PdfOutline)this.outlines[index];
                 }
                 //set
@@ -473,7 +471,7 @@ namespace PdfSharp.Pdf
             }
 
             private readonly PdfOutline parent;
-            private readonly List<PdfOutline> outlines = new List<PdfOutline>();
+            private readonly List<PdfOutline> outlines = [];
         }
 
         /// <summary>
@@ -607,8 +605,7 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

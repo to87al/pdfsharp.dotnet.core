@@ -185,18 +185,17 @@ namespace PdfSharp.Drawing.BarCodes
 
             XPoint pos = position + CodeBase.CalcDistance(this.anchor, AnchorType.TopLeft, this.size);
 
-            if (this.matrixImage == null)
-                this.matrixImage = DataMatrixImage.GenerateMatrixImage(Text, Encoding, Rows, Columns);
+            this.matrixImage ??= DataMatrixImage.GenerateMatrixImage(Text, Encoding, Rows, Columns);
 
             if (QuietZone > 0)
             {
-                XSize sizeWithZone = new XSize(this.size.width, this.size.height);
-                sizeWithZone.width = sizeWithZone.width / (Columns + 2 * QuietZone) * Columns;
-                sizeWithZone.height = sizeWithZone.height / (Rows + 2 * QuietZone) * Rows;
+                XSize sizeWithZone = new(this.size.width, this.size.height);
+                sizeWithZone.width = sizeWithZone.width / (Columns + (2 * QuietZone)) * Columns;
+                sizeWithZone.height = sizeWithZone.height / (Rows + (2 * QuietZone)) * Rows;
 
-                XPoint posWithZone = new XPoint(pos.X, pos.Y);
-                posWithZone.X += size.width / (Columns + 2 * QuietZone) * QuietZone;
-                posWithZone.Y += size.height / (Rows + 2 * QuietZone) * QuietZone;
+                XPoint posWithZone = new(pos.X, pos.Y);
+                posWithZone.X += size.width / (Columns + (2 * QuietZone)) * QuietZone;
+                posWithZone.Y += size.height / (Rows + (2 * QuietZone)) * QuietZone;
 
                 gfx.DrawRectangle(XBrushes.White, pos.x, pos.y, size.width, size.height);
                 gfx.DrawImage(matrixImage, posWithZone.x, posWithZone.y, sizeWithZone.width, sizeWithZone.height);
@@ -213,10 +212,9 @@ namespace PdfSharp.Drawing.BarCodes
         /// <param name="text">The code to be checked.</param>
         protected override void CheckCode(string text)
         {
-            if (text == null)
-                throw new ArgumentNullException("text");
+            ArgumentNullException.ThrowIfNull(text);
 
-            DataMatrixImage mImage = new DataMatrixImage(Text, Encoding, Rows, Columns);
+            DataMatrixImage mImage = new(Text, Encoding, Rows, Columns);
             DataMatrixImage.Iec16022Ecc200(Columns, Rows, Encoding, Text.Length, Text, 0, 0, 0);
         }
     }

@@ -40,8 +40,8 @@ namespace PdfSharp.Fonts.OpenType
         public OpenTypeFontTable(FontData fontData, string tag)
         {
             this.fontData = fontData;
-            if (fontData != null && fontData.tableDictionary.ContainsKey(tag))
-                this.DirectoryEntry = fontData.tableDictionary[tag];
+            if (fontData != null && fontData.tableDictionary.TryGetValue(tag, out TableDirectoryEntry value))
+                this.DirectoryEntry = value;
             else
                 this.DirectoryEntry = new TableDirectoryEntry(tag);
             this.DirectoryEntry.FontTable = this;

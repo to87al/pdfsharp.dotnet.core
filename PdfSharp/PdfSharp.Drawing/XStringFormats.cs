@@ -48,7 +48,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XStringFormat format = new XStringFormat();
+                XStringFormat format = new();
                 format.LineAlignment = XLineAlignment.BaseLine;
                 return format;
             }
@@ -61,7 +61,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XStringFormat format = new XStringFormat();
+                XStringFormat format = new();
                 format.Alignment = XStringAlignment.Near;
                 format.LineAlignment = XLineAlignment.Near;
                 return format;
@@ -75,7 +75,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XStringFormat format = new XStringFormat();
+                XStringFormat format = new();
                 format.Alignment = XStringAlignment.Center;
                 format.LineAlignment = XLineAlignment.Center;
                 return format;
@@ -89,7 +89,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XStringFormat format = new XStringFormat();
+                XStringFormat format = new();
                 format.Alignment = XStringAlignment.Center;
                 format.LineAlignment = XLineAlignment.Near;
                 return format;
@@ -103,7 +103,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XStringFormat format = new XStringFormat();
+                XStringFormat format = new();
                 format.Alignment = XStringAlignment.Center;
                 format.LineAlignment = XLineAlignment.Far;
                 return format;

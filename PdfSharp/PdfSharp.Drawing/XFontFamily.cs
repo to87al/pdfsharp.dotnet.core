@@ -64,7 +64,7 @@ namespace PdfSharp.Drawing
             // HACK
             int idxHash = this.name.LastIndexOf('#');
             if (idxHash > 0)
-                this.name = this.name.Substring(idxHash + 1);
+                this.name = this.name[(idxHash + 1)..];
             this.wpfFamily = family;
 #if GDI
       this.gdiFamily = new System.Drawing.FontFamily(family.Source);

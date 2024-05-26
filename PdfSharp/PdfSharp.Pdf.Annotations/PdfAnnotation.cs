@@ -188,8 +188,8 @@ namespace PdfSharp.Pdf.Annotations
             set
             {
                 // TODO: an array.SetColor(clr) function may be useful here
-                PdfArray array = new PdfArray(this.Owner, new PdfReal[]
-                  { new PdfReal(value.R / 255.0), new PdfReal(value.G / 255.0), new PdfReal(value.B / 255.0) });
+                PdfArray array = new(this.Owner, new PdfReal[]
+                  { new(value.R / 255.0), new(value.G / 255.0), new(value.B / 255.0) });
                 Elements[Keys.C] = array;
                 Elements.SetDateTime(Keys.M, DateTime.Now);
             }
@@ -212,7 +212,7 @@ namespace PdfSharp.Pdf.Annotations
             set
             {
                 if (value is < 0 or > 1)
-                    throw new ArgumentOutOfRangeException("value", value, "Opacity must be a value in the range from 0 to 1.");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "Opacity must be a value in the range from 0 to 1.");
                 Elements.SetReal(Keys.CA, value);
                 Elements.SetDateTime(Keys.M, DateTime.Now);
             }

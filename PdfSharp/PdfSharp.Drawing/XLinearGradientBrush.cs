@@ -125,7 +125,7 @@ namespace PdfSharp.Drawing
                 throw new InvalidEnumArgumentException("linearGradientMode", (int)linearGradientMode, typeof(XLinearGradientMode));
 
             if (rect.Width == 0 || rect.Height == 0)
-                throw new ArgumentException("Invalid rectangle.", "rect");
+                throw new ArgumentException("Invalid rectangle.", nameof(rect));
 
             this.useRect = true;
             this.color1 = color1;

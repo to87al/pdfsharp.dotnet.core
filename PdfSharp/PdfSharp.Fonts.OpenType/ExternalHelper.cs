@@ -51,16 +51,16 @@ namespace PdfSharp.Fonts.OpenType
             byte[] data = null;
             if (subset)
             {
-                OpenTypeDescriptor descriptor = new OpenTypeDescriptor(font, options);
+                OpenTypeDescriptor descriptor = new(font, options);
                 FontData image = descriptor.fontData;
-                CMapInfo cmapInfo = new CMapInfo(descriptor);
+                CMapInfo cmapInfo = new(descriptor);
                 cmapInfo.AddAnsiChars();
                 image = image.CreateFontSubSet(cmapInfo.GlyphIndices, false);
                 data = image.Data;
             }
             else
             {
-                FontData fontData = new FontData(font, options);
+                FontData fontData = new(font, options);
                 data = fontData.Data;
             }
             return data;

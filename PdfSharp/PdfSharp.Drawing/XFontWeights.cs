@@ -39,7 +39,6 @@ namespace PdfSharp.Drawing
     {
         internal static bool FontWeightStringToKnownWeight(string s, IFormatProvider provider, ref XFontWeight fontWeight)
         {
-            int num;
             switch (s.ToLower())
             {
                 case "thin":
@@ -107,7 +106,7 @@ namespace PdfSharp.Drawing
                     return true;
             }
 
-            if (Int32.TryParse(s, NumberStyles.Integer, provider, out num))
+            if (Int32.TryParse(s, NumberStyles.Integer, provider, out int num))
             {
                 fontWeight = new XFontWeight(num);
                 return true;

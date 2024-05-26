@@ -26,7 +26,7 @@ namespace PdfSharp.Xps.Rendering
 
         readonly PdfContentWriter writer;
 
-        internal XMatrix currentTransform = new XMatrix();
+        internal XMatrix currentTransform = new();
 
         public PdfGraphicsState Clone()
         {
@@ -60,13 +60,13 @@ namespace PdfSharp.Xps.Rendering
             get { return this.defaultPageTransform; }
             set { this.defaultPageTransform = value; }
         }
-        XMatrix defaultPageTransform = new XMatrix();
+        XMatrix defaultPageTransform = new();
 
         public XMatrix Transform
         {
             get { return this.transform; }
         }
-        XMatrix transform = new XMatrix();
+        XMatrix transform = new();
 
         public XMatrix MultiplyTransform(XMatrix matrix)
         {
@@ -101,9 +101,7 @@ namespace PdfSharp.Xps.Rendering
         int realizedLineCap = -1;
         int realizedLineJoin = -1;
         double realizedMiterLimit = -1;
-        readonly XDashStyle realizedDashStyle = (XDashStyle)(-1);
-        readonly string realizedDashPattern;
-        Color realizedStrokeColor = new Color();
+        Color realizedStrokeColor = new();
 
         public void RealizeStroke(Path path) // XPen pen, PdfColorMode colorMode)
         {
@@ -111,8 +109,7 @@ namespace PdfSharp.Xps.Rendering
             //color = ColorSpaceHelper.EnsureColorMode(colorMode, color);
 
             var brush = path.Stroke;
-            SolidColorBrush sBrush;
-            if ((sBrush = brush as SolidColorBrush) != null)
+            if (brush is SolidColorBrush sBrush)
             {
 
                 var thickness = path.StrokeThickness;
@@ -284,7 +281,7 @@ namespace PdfSharp.Xps.Rendering
             if (this.realizedLineCap != (int)path.StrokeStartLineCap)
             {
                 // HACK: Set Triangle to Square
-                int[] pdfValue = { 0, 1, 2, 2 };  // Flat, Round, Square, Triangle,
+                int[] pdfValue = [0, 1, 2, 2];  // Flat, Round, Square, Triangle,
                                                   //int[] pdfValue = { 1, 1, 1, 1 };  // Flat, Round, Square, Triangle,
 
                 int value = pdfValue[(int)path.StrokeStartLineCap];
@@ -294,7 +291,7 @@ namespace PdfSharp.Xps.Rendering
 
             if (this.realizedLineJoin != (int)path.StrokeLineJoin)
             {
-                int[] pdfValue = { 0, 2, 1 };  // Miter, Bevel, Round
+                int[] pdfValue = [0, 2, 1];  // Miter, Bevel, Round
 
                 int value = pdfValue[(int)path.StrokeLineJoin];
                 this.writer.WriteLiteral("{0} j\n", value);
@@ -379,7 +376,7 @@ namespace PdfSharp.Xps.Rendering
           //}
           //this.realizedDashStyle = dashStyle;
 #endif
-                    StringBuilder pdf = new StringBuilder("[", 256);
+                    StringBuilder pdf = new("[", 256);
                     for (int idx = 0; idx < count; idx++)
                     {
                         if (idx > 0)
@@ -431,16 +428,11 @@ namespace PdfSharp.Xps.Rendering
 
         #region Fill
 
-        Color realizedFillColor = new Color();
+        Color realizedFillColor = new();
 
         public void RealizeFill(Brush brush, double opacity, ref XForm xform, ref XImage ximage) // PdfColorMode colorMode)
         {
-            SolidColorBrush sbrush;
-            LinearGradientBrush lbrush;
-            RadialGradientBrush rbrush;
-            ImageBrush ibrush;
-            VisualBrush vbrush;
-            if ((sbrush = brush as SolidColorBrush) != null)
+            if (brush is SolidColorBrush sbrush)
             {
                 Color color = sbrush.Color.ToXpsColor();
                 //color = ColorSpaceHelper.EnsureColorMode(colorMode, color);
@@ -489,22 +481,22 @@ namespace PdfSharp.Xps.Rendering
                 //}
                 //this.realizedFillColor = color;
             }
-            else if ((lbrush = brush as LinearGradientBrush) != null)
+            else if (brush is LinearGradientBrush lbrush)
             {
                 // NOT IN USE ANYMORE
                 //RealizeLinearGradientBrush(lbrush, xform);
             }
-            else if ((rbrush = brush as RadialGradientBrush) != null)
+            else if (brush is RadialGradientBrush rbrush)
             {
                 // NOT IN USE ANYMORE
                 //RealizeRadialGradientBrush(rbrush, xform);
             }
-            else if ((ibrush = brush as ImageBrush) != null)
+            else if (brush is ImageBrush ibrush)
             {
                 // NOT IN USE ANYMORE
                 //RealizeImageBrush(ibrush, ref xform, ref ximage);
             }
-            else if ((vbrush = brush as VisualBrush) != null)
+            else if (brush is VisualBrush vbrush)
             {
                 // NOT IN USE ANYMORE
                 //RealizeVisualBrush(vbrush, ref xform);
@@ -526,42 +518,7 @@ namespace PdfSharp.Xps.Rendering
             this.writer.WriteLiteral(gsName + " gs\n");
         }
 
-        //void RealizeLinearGradientBrush(LinearGradientBrush brush)
-        //{
-        //  // HACK
-        //  int count = brush.GradientStops.Count;
-        //  int idx = count / 2;
-        //  RealizeFillHack(brush.GradientStops[idx].Color);
-        //  //Debugger.Break();
-        //}
-
-        //void RealizeRadialGradientBrush(RadialGradientBrush brush)
-        //{
-        //  int count = brush.GradientStops.Count;
-        //  int idx = count / 2;
-        //  RealizeFillHack(brush.GradientStops[idx].Color);
-        //}
         #endregion
-
-        /// <summary>
-        /// Helper for not yet implemented brush types.
-        /// </summary>
-        void RealizeFillHack(Color color)
-        {
-            this.writer.WriteRgb(color, " rg\n");
-
-            //if (this.realizedFillColor.ScA != color.ScA)
-            {
-                PdfExtGState extGState = this.writer.Owner.ExtGStateTable.GetExtGStateNonStroke(color.ScA);
-                string gs = this.writer.Resources.AddExtGState(extGState);
-                this.writer.WriteLiteral("{0} gs\n", gs);
-
-                // Must create transparany group
-                if (color.ScA < 1)
-                    this.writer.CreateDefaultTransparencyGroup();
-            }
-            this.realizedFillColor = color;
-        }
         //    #region Text
 
         internal PdfFont realizedFont;
@@ -569,10 +526,10 @@ namespace PdfSharp.Xps.Rendering
         //    double realizedFontSize = 0;
 
         /// <summary>
-        /// <AbsURI, <nameInPdf, PdfFont>>
+        /// AbsURI, nameInPdf, PdfFont'
         /// </summary>
         private readonly Dictionary<string, KeyValuePair<string, PdfFont>> _fonts =
-          new Dictionary<string, KeyValuePair<string, PdfFont>>();
+          [];
 
         private static int fontCount = 0;
 
@@ -588,8 +545,7 @@ namespace PdfSharp.Xps.Rendering
             }
 
             var nameInPdf = "";
-            KeyValuePair<string, PdfFont> exist;
-            if (_fonts.TryGetValue(absURI.OriginalString, out exist))
+            if (_fonts.TryGetValue(absURI.OriginalString, out KeyValuePair<string, PdfFont> exist))
             {
                 this.realizedFont = exist.Value;
                 nameInPdf = exist.Key;
@@ -597,7 +553,7 @@ namespace PdfSharp.Xps.Rendering
             else
             {
                 GlyphTypeface typeFace =
-                  new GlyphTypeface(absURI);
+                  new(absURI);
 
                 string name = String.Format("XPS-Font-{0:00}", ++fontCount);
                 name = PdfFont.CreateEmbeddedFontSubsetName(name);
@@ -611,7 +567,7 @@ namespace PdfSharp.Xps.Rendering
                     memStream.Write(buff, 0, len);
                 }
                 var fontData = memStream.ToArray();
-                Font font = new Font(name, fontData);
+                Font font = new(name, fontData);
 
                 nameInPdf = writer.GetFontName(font);
                 _fonts.Add(absURI.OriginalString, new KeyValuePair<string, PdfFont>(
@@ -628,7 +584,7 @@ namespace PdfSharp.Xps.Rendering
             }
         }
 
-        public XPoint realizedTextPosition = new XPoint();
+        public XPoint realizedTextPosition = new();
 
         //    #endregion
 

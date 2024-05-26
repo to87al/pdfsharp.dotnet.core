@@ -261,19 +261,13 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// </param>
         public InflaterInputStream(Stream baseInputStream, Inflater inflater, int bufferSize)
         {
-            if (baseInputStream == null)
-            {
-                throw new ArgumentNullException("InflaterInputStream baseInputStream is null");
-            }
+            ArgumentNullException.ThrowIfNull(baseInputStream);
 
-            if (inflater == null)
-            {
-                throw new ArgumentNullException("InflaterInputStream Inflater is null");
-            }
+            ArgumentNullException.ThrowIfNull(inflater);
 
             if (bufferSize <= 0)
             {
-                throw new ArgumentOutOfRangeException("bufferSize");
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
             }
 
             this.baseInputStream = baseInputStream;
@@ -485,7 +479,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         {
             if (n <= 0)
             {
-                throw new ArgumentOutOfRangeException("n");
+                throw new ArgumentOutOfRangeException(nameof(n));
             }
 
             // v0.80 Skip by seeking if underlying stream supports it...
@@ -548,11 +542,11 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// <param name="password">The password used to initialise the keys</param>
         protected void InitializePassword(string password)
         {
-            keys = new uint[] {
+            keys = [
                 0x12345678,
                 0x23456789,
                 0x34567890
-            };
+            ];
             for (int i = 0; i < password.Length; ++i)
             {
                 UpdateKeys((byte)password[i]);
@@ -567,7 +561,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         {
             keys[0] = Crc32.ComputeCrc32(keys[0], ch);
             keys[1] = keys[1] + (byte)keys[0];
-            keys[1] = keys[1] * 134775813 + 1;
+            keys[1] = (keys[1] * 134775813) + 1;
             keys[2] = Crc32.ComputeCrc32(keys[2], (byte)(keys[1] >> 24));
         }
 

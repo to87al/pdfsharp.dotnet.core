@@ -55,8 +55,8 @@ namespace PdfSharp.Drawing
         {
 #if !SILVERLIGHT
             return new BezierSegment(
-              new System.Windows.Point(pt1.X + tension3 * (pt2.X - pt0.X), pt1.Y + tension3 * (pt2.Y - pt0.Y)),
-              new System.Windows.Point(pt2.X - tension3 * (pt3.X - pt1.X), pt2.Y - tension3 * (pt3.Y - pt1.Y)),
+              new System.Windows.Point(pt1.X + (tension3 * (pt2.X - pt0.X)), pt1.Y + (tension3 * (pt2.Y - pt0.Y))),
+              new System.Windows.Point(pt2.X - (tension3 * (pt3.X - pt1.X)), pt2.Y - (tension3 * (pt3.Y - pt1.Y))),
               new System.Windows.Point(pt2.X, pt2.Y), true);
 #else
       return new BezierSegment(); // AGHACK
@@ -70,7 +70,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static PathGeometry CreatePolygonGeometry(System.Windows.Point[] points, XFillMode fillMode, bool closed)
         {
-            PolyLineSegment seg = new PolyLineSegment();
+            PolyLineSegment seg = new();
             int count = points.Length;
             // For correct drawing the start point of the segment must not be the same as the first point
             for (int idx = 1; idx < count; idx++)
@@ -78,11 +78,11 @@ namespace PdfSharp.Drawing
 #if !SILVERLIGHT
             seg.IsStroked = true;
 #endif
-            PathFigure fig = new PathFigure();
+            PathFigure fig = new();
             fig.StartPoint = new System.Windows.Point(points[0].X, points[0].Y);
             fig.Segments.Add(seg);
             fig.IsClosed = closed;
-            PathGeometry geo = new PathGeometry();
+            PathGeometry geo = new();
             geo.FillRule = fillMode == XFillMode.Winding ? FillRule.Nonzero : FillRule.EvenOdd;
             geo.Figures.Add(fig);
             return geo;
@@ -140,9 +140,9 @@ namespace PdfSharp.Drawing
                 if (Math.Abs(sinα) > 1E-10)
                 {
                     if (α < Math.PI)
-                        α = Math.PI / 2 - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
+                        α = (Math.PI / 2) - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
                     else
-                        α = 3 * Math.PI / 2 - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
+                        α = (3 * Math.PI / 2) - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
                 }
                 //α = Calc.πHalf - Math.Atan(δy * Math.Cos(α) / (δx * sinα));
                 β *= Calc.Deg2Rad;
@@ -150,9 +150,9 @@ namespace PdfSharp.Drawing
                 if (Math.Abs(sinβ) > 1E-10)
                 {
                     if (β < Math.PI)
-                        β = Math.PI / 2 - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
+                        β = (Math.PI / 2) - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
                     else
-                        β = 3 * Math.PI / 2 - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
+                        β = (3 * Math.PI / 2) - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
                 }
                 //β = Calc.πHalf - Math.Atan(δy * Math.Cos(β) / (δx * sinβ));
             }
@@ -162,14 +162,14 @@ namespace PdfSharp.Drawing
             sinβ = Math.Sin(β);
             cosβ = Math.Cos(β);
 
-            startPoint = new System.Windows.Point(x0 + δx * cosα, y0 + δy * sinα);
-            System.Windows.Point destPoint = new System.Windows.Point(x0 + δx * cosβ, y0 + δy * sinβ);
-            System.Windows.Size size = new System.Windows.Size(δx, δy);
+            startPoint = new System.Windows.Point(x0 + (δx * cosα), y0 + (δy * sinα));
+            System.Windows.Point destPoint = new(x0 + (δx * cosβ), y0 + (δy * sinβ));
+            System.Windows.Size size = new(δx, δy);
             bool isLargeArc = Math.Abs(sweepAngle) >= 180;
             SweepDirection sweepDirection = sweepAngle > 0 ? SweepDirection.Clockwise : SweepDirection.Counterclockwise;
 #if !SILVERLIGHT
             bool isStroked = true;
-            ArcSegment seg = new ArcSegment(destPoint, size, 0, isLargeArc, sweepDirection, isStroked);
+            ArcSegment seg = new(destPoint, size, 0, isLargeArc, sweepDirection, isStroked);
 #else
       ArcSegment seg = new ArcSegment();
       seg.Point = destPoint;
@@ -189,7 +189,7 @@ namespace PdfSharp.Drawing
         public static List<XPoint> BezierCurveFromArc(double x, double y, double width, double height, double startAngle, double sweepAngle,
           PathStart pathStart, ref XMatrix matrix)
         {
-            List<XPoint> points = new List<XPoint>();
+            List<XPoint> points = [];
 
             // Normalize the angles
             double α = startAngle;
@@ -231,18 +231,18 @@ namespace PdfSharp.Drawing
                 {
                     if (currentQuadrant == startQuadrant && firstLoop)
                     {
-                        double ξ = currentQuadrant * 90 + (clockwise ? 90 : 0);
+                        double ξ = (currentQuadrant * 90) + (clockwise ? 90 : 0);
                         AppendPartialArcQuadrant(points, x, y, width, height, α, ξ, pathStart, matrix);
                     }
                     else if (currentQuadrant == endQuadrant)
                     {
-                        double ξ = currentQuadrant * 90 + (clockwise ? 0 : 90);
+                        double ξ = (currentQuadrant * 90) + (clockwise ? 0 : 90);
                         AppendPartialArcQuadrant(points, x, y, width, height, ξ, β, PathStart.Ignore1st, matrix);
                     }
                     else
                     {
-                        double ξ1 = currentQuadrant * 90 + (clockwise ? 0 : 90);
-                        double ξ2 = currentQuadrant * 90 + (clockwise ? 90 : 0);
+                        double ξ1 = (currentQuadrant * 90) + (clockwise ? 0 : 90);
+                        double ξ2 = (currentQuadrant * 90) + (clockwise ? 90 : 0);
                         AppendPartialArcQuadrant(points, x, y, width, height, ξ1, ξ2, PathStart.Ignore1st, matrix);
                     }
 
@@ -352,19 +352,19 @@ namespace PdfSharp.Drawing
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 + δx * cosα, y0 + δy * sinα)));
+                        points.Add(matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα))));
                         break;
 
                     case PathStart.LineTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 + δx * cosα, y0 + δy * sinα)));
+                        points.Add(matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα))));
                         break;
 
                     case PathStart.Ignore1st:
                         break;
                 }
-                points.Add(matrix.Transform(new XPoint(x0 + δx * (cosα - κ * sinα), y0 + δy * (sinα + κ * cosα))));
-                points.Add(matrix.Transform(new XPoint(x0 + δx * (cosβ + κ * sinβ), y0 + δy * (sinβ - κ * cosβ))));
-                points.Add(matrix.Transform(new XPoint(x0 + δx * cosβ, y0 + δy * sinβ)));
+                points.Add(matrix.Transform(new XPoint(x0 + (δx * (cosα - (κ * sinα))), y0 + (δy * (sinα + (κ * cosα))))));
+                points.Add(matrix.Transform(new XPoint(x0 + (δx * (cosβ + (κ * sinβ))), y0 + (δy * (sinβ - (κ * cosβ))))));
+                points.Add(matrix.Transform(new XPoint(x0 + (δx * cosβ), y0 + (δy * sinβ))));
             }
             else
             {
@@ -372,19 +372,19 @@ namespace PdfSharp.Drawing
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 - δx * cosα, y0 - δy * sinα)));
+                        points.Add(matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα))));
                         break;
 
                     case PathStart.LineTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 - δx * cosα, y0 - δy * sinα)));
+                        points.Add(matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα))));
                         break;
 
                     case PathStart.Ignore1st:
                         break;
                 }
-                points.Add(matrix.Transform(new XPoint(x0 - δx * (cosα - κ * sinα), y0 - δy * (sinα + κ * cosα))));
-                points.Add(matrix.Transform(new XPoint(x0 - δx * (cosβ + κ * sinβ), y0 - δy * (sinβ - κ * cosβ))));
-                points.Add(matrix.Transform(new XPoint(x0 - δx * cosβ, y0 - δy * sinβ)));
+                points.Add(matrix.Transform(new XPoint(x0 - (δx * (cosα - (κ * sinα))), y0 - (δy * (sinα + (κ * cosα))))));
+                points.Add(matrix.Transform(new XPoint(x0 - (δx * (cosβ + (κ * sinβ))), y0 - (δy * (sinβ - (κ * cosβ))))));
+                points.Add(matrix.Transform(new XPoint(x0 - (δx * cosβ), y0 - (δy * sinβ))));
             }
         }
 
@@ -406,14 +406,14 @@ namespace PdfSharp.Drawing
             bool isCounterclockwise = !clockwise;
 
             // Adjust for different radii and rotation angle
-            XMatrix matrix = new XMatrix();
+            XMatrix matrix = new();
             matrix.RotateAppend(-rotationAngle);
             matrix.ScaleAppend(δy / δx, 1);
             XPoint pt1 = matrix.Transform(point1);
             XPoint pt2 = matrix.Transform(point2);
 
             // Get info about chord that connects both points
-            XPoint midPoint = new XPoint((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
+            XPoint midPoint = new((pt1.X + pt2.X) / 2, (pt1.Y + pt2.Y) / 2);
             XVector vect = pt2 - pt1;
             double halfChord = vect.Length / 2;
 
@@ -429,12 +429,12 @@ namespace PdfSharp.Drawing
             vectRotated.Normalize();
 
             // Distance from chord to center 
-            double centerDistance = Math.Sqrt(δy * δy - halfChord * halfChord);
+            double centerDistance = Math.Sqrt((δy * δy) - (halfChord * halfChord));
             if (double.IsNaN(centerDistance))
                 centerDistance = 0;
 
             // Calculate center point
-            XPoint center = midPoint + centerDistance * vectRotated;
+            XPoint center = midPoint + (centerDistance * vectRotated);
 
             // Get angles from center to the two points
             double α = Math.Atan2(pt1.Y - center.Y, pt1.X - center.X);
@@ -454,7 +454,7 @@ namespace PdfSharp.Drawing
             double sweepAngle = β - α;
 
             // Let the algorithm of GDI+ DrawArc to Bézier curves do the rest of the job
-            return BezierCurveFromArc(center.X - δx * factor, center.Y - δy, 2 * δx * factor, 2 * δy,
+            return BezierCurveFromArc(center.X - (δx * factor), center.Y - δy, 2 * δx * factor, 2 * δy,
               α / Calc.Deg2Rad, sweepAngle / Calc.Deg2Rad, pathStart, ref matrix);
         }
 
@@ -503,8 +503,8 @@ namespace PdfSharp.Drawing
             double angle;
 
             // The points are on the unit circle, so:
-            cosArcAngle = startPoint.X * endPoint.X + startPoint.Y * endPoint.Y;
-            sinArcAngle = startPoint.X * endPoint.Y - startPoint.Y * endPoint.X;
+            cosArcAngle = (startPoint.X * endPoint.X) + (startPoint.Y * endPoint.Y);
+            sinArcAngle = (startPoint.X * endPoint.Y) - (startPoint.Y * endPoint.X);
 
             if (cosArcAngle >= 0)
             {
@@ -663,7 +663,7 @@ namespace PdfSharp.Drawing
         public static PointCollection ArcToBezier(double xStart, double yStart, double xRadius, double yRadius, double rotationAngle,
           bool isLargeArc, bool isClockwise, double xEnd, double yEnd, out int pieces)
         {
-            double cosArcAngle, sinArcAngle, xCenter, yCenter, r, bezDist;
+            double xCenter, yCenter, r, bezDist;
             XVector vecToBez1, vecToBez2;
             XMatrix matToEllipse;
 
@@ -679,7 +679,7 @@ namespace PdfSharp.Drawing
             double x = (xEnd - xStart) / 2;
             double y = (yEnd - yStart) / 2;
 
-            double halfChord2 = x * x + y * y;     // (half chord length)^2
+            double halfChord2 = (x * x) + (y * y);     // (half chord length)^2
 
             // Degenerate case: single point
             if (halfChord2 < fuzz2)
@@ -709,8 +709,8 @@ namespace PdfSharp.Drawing
             double cos = Math.Cos(rotationAngle);
             double sin = Math.Sin(rotationAngle);
 
-            r = x * cos - y * sin;
-            y = x * sin + y * cos;
+            r = (x * cos) - (y * sin);
+            y = (x * sin) + (y * cos);
             x = r;
 
             // Transform 3: Scale so that the ellipse will become a unit circle 
@@ -721,7 +721,7 @@ namespace PdfSharp.Drawing
             // from the origin, which is the chord's midpoint. By Pythagoras, the length of that
             // vector is sqrt(1 - (half chord)^2). 
 
-            halfChord2 = x * x + y * y;   // now in the circle coordinates
+            halfChord2 = (x * x) + (y * y);   // now in the circle coordinates
 
             if (halfChord2 > 1)
             {
@@ -762,8 +762,8 @@ namespace PdfSharp.Drawing
             // Transformation 4: shift the origin to the center of the circle, which then becomes 
             // the unit circle. Since the chord's midpoint is the origin, the start point is (-x, -y)
             // and the endpoint is (x, y).
-            XPoint ptStart = new XPoint(-x - xCenter, -y - yCenter);
-            XPoint ptEnd = new XPoint(x - xCenter, y - yCenter);
+            XPoint ptStart = new(-x - xCenter, -y - yCenter);
+            XPoint ptEnd = new(x - xCenter, y - yCenter);
 
             // Set up the matrix that will take us back to our coordinate system.  This matrix is 
             // the inverse of the combination of transformation 1 thru 4. 
@@ -774,12 +774,12 @@ namespace PdfSharp.Drawing
             if (!isZeroCenter)
             {
                 // Prepend the translation that will take the origin to the circle's center
-                matToEllipse.OffsetX += (matToEllipse.M11 * xCenter + matToEllipse.M21 * yCenter);
-                matToEllipse.OffsetY += (matToEllipse.M12 * xCenter + matToEllipse.M22 * yCenter);
+                matToEllipse.OffsetX += ((matToEllipse.M11 * xCenter) + (matToEllipse.M21 * yCenter));
+                matToEllipse.OffsetY += ((matToEllipse.M12 * xCenter) + (matToEllipse.M22 * yCenter));
             }
 
             // Get the sine & cosine of the angle that will generate the arc pieces
-            GetArcAngle(ptStart, ptEnd, isLargeArc, isClockwise, out cosArcAngle, out sinArcAngle, out pieces);
+            GetArcAngle(ptStart, ptEnd, isLargeArc, isClockwise, out double cosArcAngle, out double sinArcAngle, out pieces);
 
             // Get the vector to the first Bezier control point 
             bezDist = GetBezierDistance(cosArcAngle, 1);
@@ -790,13 +790,13 @@ namespace PdfSharp.Drawing
 
             vecToBez1 = new XVector(-bezDist * ptStart.Y, bezDist * ptStart.X);
 
-            PointCollection result = new PointCollection();
+            PointCollection result = [];
 
             // Add the arc pieces, except for the last 
             for (int idx = 1; idx < pieces; idx++)
             {
                 // Get the arc piece's endpoint
-                XPoint ptPieceEnd = new XPoint(ptStart.X * cosArcAngle - ptStart.Y * sinArcAngle, ptStart.X * sinArcAngle + ptStart.Y * cosArcAngle);
+                XPoint ptPieceEnd = new((ptStart.X * cosArcAngle) - (ptStart.Y * sinArcAngle), (ptStart.X * sinArcAngle) + (ptStart.Y * cosArcAngle));
                 vecToBez2 = new XVector(-bezDist * ptPieceEnd.Y, bezDist * ptPieceEnd.X);
 
                 result.Add(matToEllipse.Transform(ptStart + vecToBez1));

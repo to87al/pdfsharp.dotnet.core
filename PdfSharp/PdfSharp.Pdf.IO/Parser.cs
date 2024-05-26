@@ -251,7 +251,7 @@ namespace PdfSharp.Pdf.IO
         End:;
         }
 #endif
-                PdfDictionary.PdfStream stream = new PdfDictionary.PdfStream(bytes, dict);
+                PdfDictionary.PdfStream stream = new(bytes, dict);
                 dict.Stream = stream;
                 ReadSymbol(Symbol.EndStream);
                 symbol = ScanNextToken();
@@ -288,8 +288,7 @@ namespace PdfSharp.Pdf.IO
         {
             Debug.Assert(Symbol == Symbol.BeginArray);
 
-            if (array == null)
-                array = new PdfArray(this.document);
+            array ??= new PdfArray(this.document);
 
             int sp = this.stack.SP;
             ParseObject(Symbol.EndArray);
@@ -320,8 +319,7 @@ namespace PdfSharp.Pdf.IO
         GetType();
 #endif
 
-            if (dict == null)
-                dict = new PdfDictionary(this.document);
+            dict ??= new PdfDictionary(this.document);
             DictionaryMeta meta = dict.Meta;
 
             int sp = this.stack.SP;
@@ -422,7 +420,7 @@ namespace PdfSharp.Pdf.IO
                     case Symbol.R:
                         {
                             Debug.Assert(this.stack.GetItem(-1) is PdfInteger && this.stack.GetItem(-2) is PdfInteger);
-                            PdfObjectID objectID = new PdfObjectID(this.stack.GetInteger(-2), this.stack.GetInteger(-1));
+                            PdfObjectID objectID = new(this.stack.GetInteger(-2), this.stack.GetInteger(-1));
 
                             PdfReference iref = this.document.irefTable[objectID];
                             if (iref == null)
@@ -451,13 +449,13 @@ namespace PdfSharp.Pdf.IO
                         }
 
                     case Symbol.BeginArray:
-                        PdfArray array = new PdfArray(this.document);
+                        PdfArray array = new(this.document);
                         ReadArray(array, false);
                         this.stack.Shift(array);
                         break;
 
                     case Symbol.BeginDictionary:
-                        PdfDictionary dict = new PdfDictionary(this.document);
+                        PdfDictionary dict = new(this.document);
                         ReadDictionary(dict, false);
                         this.stack.Shift(dict);
                         break;
@@ -517,8 +515,7 @@ namespace PdfSharp.Pdf.IO
             int objectNubmer = ReadInteger();
             int generationNumber = ReadInteger();
             ReadSymbol(Symbol.Obj);
-            if (obj != null)
-                obj.SetObjectID(objectNubmer, generationNumber);
+            obj?.SetObjectID(objectNubmer, generationNumber);
         }
 
         PdfItem ReadReference(PdfReference iref, bool includeReferences)
@@ -537,28 +534,6 @@ namespace PdfSharp.Pdf.IO
             return current;
         }
 
-        /// <summary>
-        /// Reads the next token that must be the specified one.
-        /// </summary>
-        Symbol ReadToken(string token)
-        {
-            Symbol current = this.lexer.ScanNextToken();
-            if (token != this.lexer.Token)
-                throw new PdfReaderException(PSSR.UnexpectedToken(this.lexer.Token));
-            return current;
-        }
-
-        /// <summary>
-        /// Reads a name from the PDF data stream. The preceding slash is part of the result string.
-        /// </summary>
-        string ReadName()
-        {
-            string name;
-            Symbol symbol = ScanNextToken(out name);
-            if (symbol != Symbol.Name)
-                throw new PdfReaderException(PSSR.UnexpectedToken(name));
-            return name;
-        }
         /*
             /// <summary>
             /// Reads a string immediately or (optionally) indirectly from the PDF data stream.
@@ -684,10 +659,9 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public static PdfObject ReadObject(PdfDocument owner, PdfObjectID objectID)
         {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
+            ArgumentNullException.ThrowIfNull(owner);
 
-            Parser parser = new Parser(owner);
+            Parser parser = new(owner);
             return parser.ReadObject(null, objectID, false);
         }
 
@@ -718,8 +692,7 @@ namespace PdfSharp.Pdf.IO
             {
                 trailer = ReadXRefTableAndTrailer(this.document.irefTable);
                 // 1st trailer seems to be the best..
-                if (this.document.trailer == null)
-                    this.document.trailer = trailer;
+                this.document.trailer ??= trailer;
                 int prev = trailer.Elements.GetInteger(PdfTrailer.Keys.Prev);
                 if (prev == 0)
                     break;
@@ -765,7 +738,7 @@ namespace PdfSharp.Pdf.IO
                             continue;
                         // Even it is restricted, an object can exists in more than one subsection.
                         // (PDF Reference Implementation Notes 15).
-                        PdfObjectID objectID = new PdfObjectID(id, generation);
+                        PdfObjectID objectID = new(id, generation);
                         // Ignore the latter one
                         if (xrefTable.Contains(objectID))
                             continue;
@@ -775,7 +748,7 @@ namespace PdfSharp.Pdf.IO
                 else if (symbol == Symbol.Trailer)
                 {
                     ReadSymbol(Symbol.BeginDictionary);
-                    PdfTrailer trailer = new PdfTrailer(this.document);
+                    PdfTrailer trailer = new(this.document);
                     this.ReadDictionary(trailer, false);
                     return trailer;
                 }
@@ -823,7 +796,7 @@ namespace PdfSharp.Pdf.IO
                     datetime = new DateTime(year, month, day, hour, minute, second);
                     if (o != 'Z')
                     {
-                        TimeSpan ts = new TimeSpan(hh, mm, 0);
+                        TimeSpan ts = new(hh, mm, 0);
                         if (o == '+')
                             datetime.Add(ts);
                         else
@@ -1148,7 +1121,7 @@ namespace PdfSharp.Pdf.IO
 
         ParserState SaveState()
         {
-            ParserState state = new ParserState();
+            ParserState state = new();
             state.Position = this.lexer.Position;
             state.Symbol = this.lexer.Symbol;
             return state;

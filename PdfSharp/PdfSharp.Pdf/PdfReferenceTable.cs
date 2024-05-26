@@ -52,7 +52,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Represents the relation between PdfObjectID and PdfReference for a PdfDocument.
         /// </summary>
-        public Dictionary<PdfObjectID, PdfReference> objectTable = new Dictionary<PdfObjectID, PdfReference>();
+        public Dictionary<PdfObjectID, PdfReference> objectTable = [];
 
         internal bool IsUnderConstruction
         {
@@ -107,8 +107,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                PdfReference iref;
-                this.objectTable.TryGetValue(objectID, out iref);
+                this.objectTable.TryGetValue(objectID, out PdfReference iref);
                 return iref;
             }
         }
@@ -204,7 +203,7 @@ namespace PdfSharp.Pdf
             get
             {
                 Dictionary<PdfObjectID, PdfReference>.ValueCollection collection = this.objectTable.Values;
-                List<PdfReference> list = new List<PdfReference>(collection);
+                List<PdfReference> list = new(collection);
                 list.Sort(PdfReference.Comparer);
                 PdfReference[] irefs = new PdfReference[collection.Count];
                 list.CopyTo(irefs, 0);
@@ -290,7 +289,7 @@ namespace PdfSharp.Pdf
         [Conditional("DEBUG_")]
         public void CheckConsistence()
         {
-            Dictionary<PdfReference, object> ht1 = new Dictionary<PdfReference, object>();
+            Dictionary<PdfReference, object> ht1 = [];
             foreach (PdfReference iref in this.objectTable.Values)
             {
                 Debug.Assert(!ht1.ContainsKey(iref), "Duplicate iref.");
@@ -298,7 +297,7 @@ namespace PdfSharp.Pdf
                 ht1.Add(iref, null);
             }
 
-            Dictionary<PdfObjectID, object> ht2 = new Dictionary<PdfObjectID, object>();
+            Dictionary<PdfObjectID, object> ht2 = [];
             foreach (PdfReference iref in this.objectTable.Values)
             {
                 Debug.Assert(!ht2.ContainsKey(iref.ObjectID), "Duplicate iref.");
@@ -364,15 +363,15 @@ namespace PdfSharp.Pdf
         public PdfReference[] TransitiveClosure(PdfObject pdfObject, int depth)
         {
             CheckConsistence();
-            Dictionary<PdfItem, object> objects = new Dictionary<PdfItem, object>();
-            this.overflow = new Dictionary<PdfItem, object>();
+            Dictionary<PdfItem, object> objects = [];
+            this.overflow = [];
             TransitiveClosureImplementation(objects, pdfObject, ref depth);
         TryAgain:
             if (this.overflow.Count > 0)
             {
                 PdfObject[] array = new PdfObject[this.overflow.Count];
                 this.overflow.Keys.CopyTo(array, 0);
-                this.overflow = new Dictionary<PdfItem, object>();
+                this.overflow = [];
                 for (int idx = 0; idx < array.Length; idx++)
                 {
                     //PdfObject o = array[idx];
@@ -411,7 +410,7 @@ namespace PdfSharp.Pdf
         }
 
         static int nestingLevel;
-        Dictionary<PdfItem, object> overflow = new Dictionary<PdfItem, object>();
+        Dictionary<PdfItem, object> overflow = [];
         void TransitiveClosureImplementation(Dictionary<PdfItem, object> objects, PdfObject pdfObject, ref int depth)
         {
             if (depth-- == 0)
@@ -449,8 +448,7 @@ namespace PdfSharp.Pdf
                 {
                     foreach (PdfItem item in enumerable)
                     {
-                        PdfReference iref = item as PdfReference;
-                        if (iref != null)
+                        if (item is PdfReference iref)
                         {
                             // Is this an indirect reference to an object that not exists?
                             //if (iref.Document == null)

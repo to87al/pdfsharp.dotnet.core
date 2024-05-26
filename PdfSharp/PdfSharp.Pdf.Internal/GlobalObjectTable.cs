@@ -65,8 +65,7 @@ namespace PdfSharp.Pdf.Internal
                     if (((PdfDocument.DocumentHandle)this.documentHandles[idx]).IsAlive)
                     {
                         PdfDocument target = ((PdfDocument.DocumentHandle)this.documentHandles[idx]).Target;
-                        if (target != null)
-                            target.OnExternalDocumentFinalized(handle);
+                        target?.OnExternalDocumentFinalized(handle);
                     }
                 }
 
@@ -125,6 +124,6 @@ namespace PdfSharp.Pdf.Internal
         /// <summary>
         /// Array of handles to all documents.
         /// </summary>
-        readonly List<object> documentHandles = new List<object>();
+        readonly List<object> documentHandles = [];
     }
 }

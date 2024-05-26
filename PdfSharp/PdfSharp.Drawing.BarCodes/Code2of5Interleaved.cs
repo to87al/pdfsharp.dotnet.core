@@ -67,28 +67,19 @@ namespace PdfSharp.Drawing.BarCodes
         {
         }
 
-        /// <summary>
-        /// Returns an array of size 5 that represents the thick (true) and thin (false) lines or spaces
-        /// representing the specified digit.
-        /// </summary>
-        /// <param name="digit">The digit to represent.</param>
-        static bool[] ThickAndThinLines(int digit)
-        {
-            return Lines[digit];
-        }
-        static readonly bool[][] Lines = new bool[][]
-        {
-      new bool[] {false, false, true, true, false},
-      new bool[] {true, false, false, false, true},
-      new bool[] {false, true, false, false, true},
-      new bool[] {true, true, false, false, false},
-      new bool[] {false, false, true, false, true},
-      new bool[] {true, false, true, false, false},
-      new bool[] {false, true, true, false, false},
-      new bool[] {false, false, false, true, true},
-      new bool[] {true, false, false, true, false},
-      new bool[] {false, true, false, true, false},
-        };
+        static readonly bool[][] Lines =
+        [
+      [false, false, true, true, false],
+      [true, false, false, false, true],
+      [false, true, false, false, true],
+      [true, true, false, false, false],
+      [false, false, true, false, true],
+      [true, false, true, false, false],
+      [false, true, true, false, false],
+      [false, false, false, true, true],
+      [true, false, false, true, false],
+      [false, true, false, true, false],
+        ];
 
         /// <summary>
         /// Renders the bar code.
@@ -97,7 +88,7 @@ namespace PdfSharp.Drawing.BarCodes
         {
             XGraphicsState state = gfx.Save();
 
-            BarCodeRenderInfo info = new BarCodeRenderInfo(gfx, brush, font, position);
+            BarCodeRenderInfo info = new(gfx, brush, font, position);
             InitRendering(info);
             info.CurrPosInString = 0;
             //info.CurrPos = info.Center - this.size / 2;
@@ -135,7 +126,7 @@ namespace PdfSharp.Drawing.BarCodes
              * 
              * Total width = (6 + r + (2 * r + 3) * text.Length) * thin
              */
-            double thinLineAmount = 6 + this.wideNarrowRatio + (2 * this.wideNarrowRatio + 3) * this.text.Length;
+            double thinLineAmount = 6 + this.wideNarrowRatio + (((2 * this.wideNarrowRatio) + 3) * this.text.Length);
             info.ThinBarWidth = this.Size.Width / thinLineAmount;
         }
 

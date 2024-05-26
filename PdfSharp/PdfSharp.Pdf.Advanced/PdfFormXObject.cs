@@ -211,7 +211,7 @@ namespace PdfSharp.Pdf.Advanced
                 this.Elements["/BBox"] = rect;
 
                 // Rotate the image such that it is upright
-                XMatrix matrix = new XMatrix();  //XMatrix.Identity;
+                XMatrix matrix = new();  //XMatrix.Identity;
                 double width = rect.Width;
                 double height = rect.Height;
                 matrix.RotateAtPrepend(-rotate, new XPoint(width / 2, height / 2));
@@ -246,8 +246,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.resources == null)
-                    this.resources = (PdfResources)Elements.GetValue(PdfFormXObject.Keys.Resources, VCF.Create);
+                this.resources ??= (PdfResources)Elements.GetValue(PdfFormXObject.Keys.Resources, VCF.Create);
                 return this.resources;
             }
         }
@@ -478,8 +477,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

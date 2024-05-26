@@ -57,8 +57,7 @@ namespace PdfSharp.Pdf.AcroForms
         /// </summary>
         protected int IndexInOptArray(string value)
         {
-            PdfArray opt = Elements[Keys.Opt] as PdfArray;
-            if (opt != null)
+            if (Elements[Keys.Opt] is PdfArray opt)
             {
                 int count = opt.Elements.Count;
                 for (int idx = 0; idx < count; idx++)
@@ -88,12 +87,11 @@ namespace PdfSharp.Pdf.AcroForms
         /// </summary>
         protected string ValueInOptArray(int index)
         {
-            PdfArray opt = Elements[Keys.Opt] as PdfArray;
-            if (opt != null)
+            if (Elements[Keys.Opt] is PdfArray opt)
             {
                 int count = opt.Elements.Count;
                 if (index < 0 || index >= count)
-                    throw new ArgumentOutOfRangeException("index");
+                    throw new ArgumentOutOfRangeException(nameof(index));
 
                 PdfItem item = opt.Elements[index];
                 if (item is PdfString)
@@ -148,8 +146,7 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

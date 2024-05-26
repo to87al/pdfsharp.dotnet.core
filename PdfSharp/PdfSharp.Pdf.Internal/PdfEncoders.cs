@@ -56,8 +56,7 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                if (PdfEncoders.rawEncoding == null)
-                    PdfEncoders.rawEncoding = new RawEncoding();
+                PdfEncoders.rawEncoding ??= new RawEncoding();
                 return PdfEncoders.rawEncoding;
             }
         }
@@ -70,8 +69,7 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                if (PdfEncoders.rawUnicodeEncoding == null)
-                    PdfEncoders.rawUnicodeEncoding = new RawUnicodeEncoding();
+                PdfEncoders.rawUnicodeEncoding ??= new RawUnicodeEncoding();
                 return PdfEncoders.rawUnicodeEncoding;
             }
         }
@@ -84,8 +82,7 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                if (PdfEncoders.winAnsiEncoding == null)
-                    PdfEncoders.winAnsiEncoding =
+                PdfEncoders.winAnsiEncoding ??=
 #if !SILVERLIGHT
             System.Text.Encoding.Default;// Encoding.GetEncoding(1252);
 #else
@@ -103,8 +100,7 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                if (PdfEncoders.docEncoding == null)
-                    PdfEncoders.docEncoding = new DocEncoding();
+                PdfEncoders.docEncoding ??= new DocEncoding();
                 return PdfEncoders.docEncoding;
             }
         }
@@ -117,8 +113,7 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                if (PdfEncoders.unicodeEncoding == null)
-                    PdfEncoders.unicodeEncoding = Encoding.Unicode;
+                PdfEncoders.unicodeEncoding ??= Encoding.Unicode;
                 return PdfEncoders.unicodeEncoding;
             }
         }
@@ -300,7 +295,7 @@ namespace PdfSharp.Pdf.Internal
         public static byte[] FormatStringLiteral(byte[] bytes, bool unicode, bool prefix, bool hex, PdfStandardSecurityHandler securityHandler)
         {
             if (bytes == null || bytes.Length == 0)
-                return hex ? new byte[] { (byte)'<', (byte)'>' } : new byte[] { (byte)'(', (byte)')' };
+                return hex ? [(byte)'<', (byte)'>'] : [(byte)'(', (byte)')'];
 
             Debug.Assert(!unicode || bytes.Length % 2 == 0, "Odd number of bytes in Unicode string.");
 
@@ -313,12 +308,12 @@ namespace PdfSharp.Pdf.Internal
             }
 
             int count = bytes.Length;
-            StringBuilder pdf = new StringBuilder();
+            StringBuilder pdf = new();
             if (!unicode)
             {
                 if (!hex)
                 {
-                    pdf.Append("(");
+                    pdf.Append('(');
                     for (int idx = 0; idx < count; idx++)
                     {
                         char ch = (char)bytes[idx];
@@ -354,8 +349,8 @@ namespace PdfSharp.Pdf.Internal
                                     if (!encrypted)
                                     {
                                         pdf.Append("\\0");
-                                        pdf.Append((char)(ch % 8 + '0'));
-                                        pdf.Append((char)(ch / 8 + '0'));
+                                        pdf.Append((char)((ch % 8) + '0'));
+                                        pdf.Append((char)((ch / 8) + '0'));
                                     }
                                     else
                                         pdf.Append(ch);
@@ -402,14 +397,14 @@ namespace PdfSharp.Pdf.Internal
                     if (prefix)
                         pdf.Append("<FEFF");
                     else
-                        pdf.Append("<");
+                        pdf.Append('<');
                     for (int idx = 0; idx < count; idx += 2)
                     {
                         pdf.AppendFormat("{0:X2}{1:X2}", bytes[idx], bytes[idx + 1]);
                         if (idx != 0 && (idx % 48) == 0)
-                            pdf.Append("\n");
+                            pdf.Append('\n');
                     }
-                    pdf.Append(">");
+                    pdf.Append('>');
                 }
                 else
                 {
@@ -424,8 +419,8 @@ namespace PdfSharp.Pdf.Internal
         /// <summary>
         /// Converts WinAnsi to DocEncode characters. Incomplete, just maps € and some other characters.
         /// </summary>
-        static readonly byte[] docencode_______ = new byte[256]
-        {
+        static readonly byte[] docencode_______ =
+        [
       // TODO: 
       0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
       0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
@@ -443,7 +438,7 @@ namespace PdfSharp.Pdf.Internal
       0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xD5, 0xD6, 0xD7, 0xD8, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF,
       0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0xE7, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF,
       0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
-        };
+        ];
 
         //public static string DocEncode(string text, bool unicode)//, PdfStandardSecurityHandler securityHandler)
         //{

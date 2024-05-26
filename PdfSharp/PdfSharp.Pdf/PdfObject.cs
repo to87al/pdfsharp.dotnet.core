@@ -129,11 +129,10 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal void SetObjectID(int objectNumber, int generationNumber)
         {
-            PdfObjectID objectID = new PdfObjectID(objectNumber, generationNumber);
+            PdfObjectID objectID = new(objectNumber, generationNumber);
 
             // TODO: check imported
-            if (this.iref == null)
-                this.iref = this.document.irefTable[objectID];
+            this.iref ??= this.document.irefTable[objectID];
             if (this.iref == null)
             {
                 this.iref = new PdfReference(this);
@@ -196,8 +195,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.internals == null)
-                    this.internals = new PdfObjectInternals(this);
+                this.internals ??= new PdfObjectInternals(this);
                 return this.internals;
             }
         }
@@ -278,7 +276,7 @@ namespace PdfSharp.Pdf
         }
 #endif
             // 1st loop. Replace all objects by their clones.
-            PdfImportedObjectTable iot = new PdfImportedObjectTable(owner, externalObject.Owner);
+            PdfImportedObjectTable iot = new(owner, externalObject.Owner);
             for (int idx = 0; idx < count; idx++)
             {
                 PdfObject obj = elements[idx];
@@ -427,10 +425,7 @@ namespace PdfSharp.Pdf
         internal static void FixUpObject(PdfImportedObjectTable iot, PdfDocument owner, PdfObject value)
         {
             Debug.Assert(ReferenceEquals(iot.Owner, owner));
-
-            PdfDictionary dict;
-            PdfArray array;
-            if ((dict = value as PdfDictionary) != null)
+            if (value is PdfDictionary dict)
             {
                 // Set document for cloned direct objects
                 if (dict.Owner == null)
@@ -444,8 +439,7 @@ namespace PdfSharp.Pdf
                 {
                     PdfItem item = dict.Elements[name];
                     // Is item an iref?
-                    PdfReference iref = item as PdfReference;
-                    if (iref != null)
+                    if (item is PdfReference iref)
                     {
                         // Does the iref already belongs to the owner?
                         if (iref.Document == owner)
@@ -470,7 +464,7 @@ namespace PdfSharp.Pdf
                     }
                 }
             }
-            else if ((array = value as PdfArray) != null)
+            else if (value is PdfArray array)
             {
                 // Set document for cloned direct objects
                 if (array.Owner == null)
@@ -484,8 +478,7 @@ namespace PdfSharp.Pdf
                 {
                     PdfItem item = array.Elements[idx];
                     // Is item an iref?
-                    PdfReference iref = item as PdfReference;
-                    if (iref != null)
+                    if (item is PdfReference iref)
                     {
                         // Does the iref already belongs to the owner?
                         if (iref.Document == owner)

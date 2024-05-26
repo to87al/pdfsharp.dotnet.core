@@ -42,7 +42,7 @@ namespace PdfSharp.Fonts
     {
         FontDescriptorStock()
         {
-            this.table = new Dictionary<FontSelector, FontDescriptor>();
+            this.table = [];
         }
 
         /// <summary>
@@ -82,12 +82,10 @@ namespace PdfSharp.Fonts
         /// </summary>
         public FontDescriptor CreateDescriptor(XFont font)
         {
-            if (font == null)
-                throw new ArgumentNullException("font");
+            ArgumentNullException.ThrowIfNull(font);
 
-            FontSelector selector = new FontSelector(font);
-            FontDescriptor descriptor;
-            if (!this.table.TryGetValue(selector, out descriptor))
+            FontSelector selector = new(font);
+            if (!this.table.TryGetValue(selector, out FontDescriptor descriptor))
             {
                 lock (typeof(FontDescriptorStock))
                 {
@@ -108,19 +106,17 @@ namespace PdfSharp.Fonts
         /// </summary>
         public FontDescriptor CreateDescriptor(XFontFamily family, XFontStyle style)
         {
-            if (family == null)
-                throw new ArgumentNullException("family");
+            ArgumentNullException.ThrowIfNull(family);
 
-            FontSelector selector = new FontSelector(family, style);
-            FontDescriptor descriptor;
-            if (!this.table.TryGetValue(selector, out descriptor))
+            FontSelector selector = new(family, style);
+            if (!this.table.TryGetValue(selector, out FontDescriptor descriptor))
             {
                 lock (typeof(FontDescriptorStock))
                 {
                     // may be created by other thread meanwhile
                     if (!this.table.TryGetValue(selector, out descriptor))
                     {
-                        XFont font = new XFont(family.Name, 10, style);
+                        XFont font = new(family.Name, 10, style);
                         descriptor = new OpenTypeDescriptor(font);
                         if (this.table.ContainsKey(selector))
                             GetType();
@@ -134,9 +130,8 @@ namespace PdfSharp.Fonts
 
         public FontDescriptor CreateDescriptor(string idName, byte[] fontData)
         {
-            FontSelector selector = new FontSelector(idName);
-            FontDescriptor descriptor;
-            if (!this.table.TryGetValue(selector, out descriptor))
+            FontSelector selector = new(idName);
+            if (!this.table.TryGetValue(selector, out FontDescriptor descriptor))
             {
                 lock (typeof(FontDescriptorStock))
                 {
@@ -211,8 +206,7 @@ namespace PdfSharp.Fonts
                 {
                     lock (typeof(FontDescriptorStock))
                     {
-                        if (global == null)
-                            global = new FontDescriptorStock();
+                        global ??= new FontDescriptorStock();
                     }
                 }
                 return global;

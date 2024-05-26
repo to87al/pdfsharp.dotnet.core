@@ -73,8 +73,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.resources == null)
-                    this.resources = (PdfResources)Elements.GetValue(Keys.Resources, VCF.Create);
+                this.resources ??= (PdfResources)Elements.GetValue(Keys.Resources, VCF.Create);
                 return this.resources;
             }
         }

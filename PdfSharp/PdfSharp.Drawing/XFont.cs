@@ -234,8 +234,7 @@ namespace PdfSharp.Drawing
 #endif
             }
 
-            if (this.family == null)
-                this.family = new System.Windows.Media.FontFamily(Name);
+            this.family ??= new System.Windows.Media.FontFamily(Name);
 
             if (typeface == null)
                 this.typeface = FontHelper.CreateTypeface(this.family, style);
@@ -543,8 +542,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                if (this.pdfOptions == null)
-                    this.pdfOptions = new XPdfFontOptions();
+                this.pdfOptions ??= new XPdfFontOptions();
                 return this.pdfOptions;
             }
         }

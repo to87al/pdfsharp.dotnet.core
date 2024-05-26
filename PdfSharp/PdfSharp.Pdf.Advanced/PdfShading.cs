@@ -56,14 +56,13 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public void SetupFromBrush(XLinearGradientBrush brush)
         {
-            if (brush == null)
-                throw new ArgumentNullException("brush");
+            ArgumentNullException.ThrowIfNull(brush);
 
             PdfColorMode colorMode = this.document.Options.ColorMode;
             XColor color1 = ColorSpaceHelper.EnsureColorMode(colorMode, brush.color1);
             XColor color2 = ColorSpaceHelper.EnsureColorMode(colorMode, brush.color2);
 
-            PdfDictionary function = new PdfDictionary();
+            PdfDictionary function = new();
 
             Elements[Keys.ShadingType] = new PdfInteger(2);
             if (colorMode != PdfColorMode.Cmyk)
@@ -235,8 +234,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

@@ -60,15 +60,14 @@ namespace PdfSharp.Drawing
         /// </summary>
         internal XPdfForm(string path)
         {
-            int pageNumber;
-            path = ExtractPageNumber(path, out pageNumber);
+            path = ExtractPageNumber(path, out int pageNumber);
 
             path = Path.GetFullPath(path);
             if (!File.Exists(path))
                 throw new FileNotFoundException(PSSR.FileNotFound(path), path);
 
             if (PdfReader.TestPdfFile(path) == 0)
-                throw new ArgumentException("The specified file has no valid PDF file header.", "path");
+                throw new ArgumentException("The specified file has no valid PDF file header.", nameof(path));
 
             this.path = path;
             if (pageNumber != 0)
@@ -85,7 +84,7 @@ namespace PdfSharp.Drawing
             this.path = "*" + Guid.NewGuid().ToString("B");
 
             if (PdfReader.TestPdfFile(stream) == 0)
-                throw new ArgumentException("The specified stream has no valid PDF file header.", "stream");
+                throw new ArgumentException("The specified stream has no valid PDF file header.", nameof(stream));
 
             this.externalDocument = PdfReader.Open(stream);
         }
@@ -370,8 +369,7 @@ namespace PdfSharp.Drawing
                 if (IsTemplate)
                     throw new InvalidOperationException("This XPdfForm is a template and not an imported PDF page; therefore it has no external document.");
 
-                if (this.externalDocument == null)
-                    this.externalDocument = PdfDocument.Tls.GetDocument(path);
+                this.externalDocument ??= PdfDocument.Tls.GetDocument(path);
                 return this.externalDocument;
             }
         }
@@ -383,8 +381,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static string ExtractPageNumber(string path, out int pageNumber)
         {
-            if (path == null)
-                throw new ArgumentNullException("path");
+            ArgumentNullException.ThrowIfNull(path);
 
             pageNumber = 0;
             int length = path.Length;
@@ -400,8 +397,8 @@ namespace PdfSharp.Drawing
                         // must have at least one dot left of colon to distinguish from e.g. '#123'
                         if (path.IndexOf('.') != -1)
                         {
-                            pageNumber = Int32.Parse(path.Substring(length + 1));
-                            path = path.Substring(0, length);
+                            pageNumber = Int32.Parse(path[(length + 1)..]);
+                            path = path[..length];
                         }
                     }
                 }

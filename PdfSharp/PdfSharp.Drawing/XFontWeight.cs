@@ -160,8 +160,7 @@ namespace PdfSharp.Drawing
 
         private string ConvertToString(string format, IFormatProvider provider)
         {
-            string str;
-            if (!XFontWeights.FontWeightToString(Weight, out str))
+            if (!XFontWeights.FontWeightToString(Weight, out string str))
                 return Weight.ToString(provider);
             return str;
         }

@@ -487,7 +487,7 @@ namespace PdfSharp.Pdf.Content
             //AppendBlank(rawString[0]);
             byte[] bytes = PdfEncoders.RawEncoding.GetBytes(rawString);
             this.stream.Write(bytes, 0, bytes.Length);
-            this.stream.Write(new byte[] { (byte)'\n' }, 0, 1);
+            this.stream.Write([(byte)'\n'], 0, 1);
             this.lastCat = GetCategory((char)bytes[^1]);
         }
 
@@ -511,32 +511,11 @@ namespace PdfSharp.Pdf.Content
         protected int writeIndent = 0;
 
         /// <summary>
-        /// Increases indent level.
-        /// </summary>
-        void IncreaseIndent()
-        {
-            this.writeIndent += indent;
-        }
-
-        /// <summary>
-        /// Decreases indent level.
-        /// </summary>
-        void DecreaseIndent()
-        {
-            this.writeIndent -= indent;
-        }
-
-        /// <summary>
         /// Gets an indent string of current indent.
         /// </summary>
         string IndentBlanks
         {
             get { return new string(' ', this.writeIndent); }
-        }
-
-        void WriteIndent()
-        {
-            this.WriteRaw(IndentBlanks);
         }
 
         void WriteSeparator(CharCat cat, char ch)
@@ -564,11 +543,6 @@ namespace PdfSharp.Pdf.Content
                     //  }
                     //  break;
             }
-        }
-
-        void WriteSeparator(CharCat cat)
-        {
-            WriteSeparator(cat, '\0');
         }
 
         public void NewLine()
@@ -615,6 +589,6 @@ namespace PdfSharp.Pdf.Content
             //public bool HasStream;
         }
 
-        readonly List<CObject> stack = new List<CObject>();
+        readonly List<CObject> stack = [];
     }
 }

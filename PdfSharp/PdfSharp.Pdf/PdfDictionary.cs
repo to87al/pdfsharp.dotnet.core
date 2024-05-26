@@ -95,10 +95,8 @@ namespace PdfSharp.Pdf
         protected PdfDictionary(PdfDictionary dict)
           : base(dict)
         {
-            if (dict.elements != null)
-                dict.elements.ChangeOwner(this);
-            if (dict.stream != null)
-                dict.stream.SetOwner(this);
+            dict.elements?.ChangeOwner(this);
+            dict.stream?.SetOwner(this);
         }
 
         /// <summary>
@@ -125,8 +123,7 @@ namespace PdfSharp.Pdf
                 PdfName[] names = dict.elements.KeyNames;
                 foreach (PdfName name in names)
                 {
-                    PdfObject obj = dict.elements[name] as PdfObject;
-                    if (obj != null)
+                    if (dict.elements[name] is PdfObject obj)
                     {
                         obj = obj.Clone();
                         // Recall that obj.Document is now null
@@ -149,8 +146,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.elements == null)
-                    this.elements = new DictionaryElements(this);
+                this.elements ??= new DictionaryElements(this);
                 return this.elements;
             }
         }
@@ -170,11 +166,11 @@ namespace PdfSharp.Pdf
         {
             // Get keys and sort
             PdfName[] keys = Elements.KeyNames;
-            List<PdfName> list = new List<PdfName>(keys);
+            List<PdfName> list = new(keys);
             list.Sort((IComparer<PdfName>)PdfName.Comparer);
             list.CopyTo(keys, 0);
 
-            StringBuilder pdf = new StringBuilder();
+            StringBuilder pdf = new();
             pdf.Append("<< ");
             foreach (PdfName key in keys)
                 pdf.Append(key + " " + this.Elements[key] + " ");
@@ -219,8 +215,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal virtual void WriteDictionaryElement(PdfWriter writer, PdfName key)
         {
-            if (key == null)
-                throw new ArgumentNullException("key");
+            ArgumentNullException.ThrowIfNull(key);
             PdfItem item = Elements[key];
 #if DEBUG
       // TODO: simplify PDFsharp
@@ -289,7 +284,7 @@ namespace PdfSharp.Pdf
 
             internal DictionaryElements(PdfDictionary dict)
             {
-                this.elements = new Dictionary<string, PdfItem>();
+                this.elements = [];
                 this.owner = dict;
             }
 
@@ -548,8 +543,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void SetName(string key, string value)
             {
-                if (value == null)
-                    throw new ArgumentNullException("value");
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (value.Length == 0 || value[0] != '/')
                     value = "/" + value;
@@ -564,7 +558,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public PdfRectangle GetRectangle(string key, bool create)
             {
-                PdfRectangle value = new PdfRectangle();
+                PdfRectangle value = new();
                 object obj = this[key];
                 if (obj == null)
                 {
@@ -575,8 +569,7 @@ namespace PdfSharp.Pdf
                 if (obj is PdfReference)
                     obj = ((PdfReference)obj).Value;
 
-                PdfArray array = obj as PdfArray;
-                if (array != null && array.Elements.Count == 4)
+                if (obj is PdfArray array && array.Elements.Count == 4)
                 {
                     value = new PdfRectangle(array.Elements.GetReal(0), array.Elements.GetReal(1),
                       array.Elements.GetReal(2), array.Elements.GetReal(3));
@@ -610,7 +603,7 @@ namespace PdfSharp.Pdf
             /// If the value is not convertible, the function throws an InvalidCastException.
             public XMatrix GetMatrix(string key, bool create)
             {
-                XMatrix value = new XMatrix();
+                XMatrix value = new();
                 object obj = this[key];
                 if (obj == null)
                 {
@@ -621,8 +614,7 @@ namespace PdfSharp.Pdf
                 if (obj is PdfReference)
                     obj = ((PdfReference)obj).Value;
 
-                PdfArray array = obj as PdfArray;
-                if (array != null && array.Elements.Count == 6)
+                if (obj is PdfArray array && array.Elements.Count == 6)
                 {
                     value = new XMatrix(array.Elements.GetReal(0), array.Elements.GetReal(1), array.Elements.GetReal(2),
                       array.Elements.GetReal(3), array.Elements.GetReal(4), array.Elements.GetReal(5));
@@ -712,7 +704,7 @@ namespace PdfSharp.Pdf
                     return (int)defaultValue;
                 }
                 Debug.Assert(obj is Enum);
-                return (int)Enum.Parse(defaultValue.GetType(), obj.ToString().Substring(1), false);
+                return (int)Enum.Parse(defaultValue.GetType(), obj.ToString().AsSpan(1), false);
             }
 
             internal int GetEnumFromName(string key, object defaultValue)
@@ -869,17 +861,17 @@ namespace PdfSharp.Pdf
                 {
                     // Use contstructor with signature 'Ctor(PdfDocument owner)'.
                     ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                      null, new Type[] { typeof(PdfDocument) }, null);
+                      null, [typeof(PdfDocument)], null);
                     Debug.Assert(ctorInfo != null, "No appropriate constructor found for type: " + type.Name);
-                    array = ctorInfo.Invoke(new object[] { this.owner.Owner }) as PdfArray;
+                    array = ctorInfo.Invoke([this.owner.Owner]) as PdfArray;
                 }
                 else
                 {
                     // Use contstructor with signature 'Ctor(PdfDictionary dict)'.
                     ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                      null, new Type[] { typeof(PdfArray) }, null);
+                      null, [typeof(PdfArray)], null);
                     Debug.Assert(ctorInfo != null, "No appropriate constructor found for type: " + type.Name);
-                    array = ctorInfo.Invoke(new object[] { oldArray }) as PdfArray;
+                    array = ctorInfo.Invoke([oldArray]) as PdfArray;
                 }
                 return array;
             }
@@ -892,37 +884,19 @@ namespace PdfSharp.Pdf
                 {
                     // Use contstructor with signature 'Ctor(PdfDocument owner)'.
                     ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                      null, new Type[] { typeof(PdfDocument) }, null);
+                      null, [typeof(PdfDocument)], null);
                     Debug.Assert(ctorInfo != null, "No appropriate constructor found for type: " + type.Name);
-                    dict = ctorInfo.Invoke(new object[] { this.owner.Owner }) as PdfDictionary;
+                    dict = ctorInfo.Invoke([this.owner.Owner]) as PdfDictionary;
                 }
                 else
                 {
                     // Use contstructor with signature 'Ctor(PdfDictionary dict)'.
                     ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                      null, new Type[] { typeof(PdfDictionary) }, null);
+                      null, [typeof(PdfDictionary)], null);
                     Debug.Assert(ctorInfo != null, "No appropriate constructor found for type: " + type.Name);
-                    dict = ctorInfo.Invoke(new object[] { oldDictionary }) as PdfDictionary;
+                    dict = ctorInfo.Invoke([oldDictionary]) as PdfDictionary;
                 }
                 return dict;
-            }
-
-            PdfItem CreateValue(Type type, PdfDictionary oldValue)
-            {
-                ConstructorInfo ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                  null, new Type[] { typeof(PdfDocument) }, null);
-                PdfObject obj = ctorInfo.Invoke(new object[] { this.owner.Owner }) as PdfObject;
-                if (oldValue != null)
-                {
-                    obj.Reference = oldValue.Reference;
-                    obj.Reference.Value = obj;
-                    if (obj is PdfDictionary)
-                    {
-                        PdfDictionary dict = (PdfDictionary)obj;
-                        dict.elements = oldValue.elements;
-                    }
-                }
-                return obj;
             }
 
             /// <summary>
@@ -930,7 +904,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void SetValue(string key, PdfItem value)
             {
-                Debug.Assert((value is PdfObject && ((PdfObject)value).Reference == null) | !(value is PdfObject),
+                Debug.Assert((value is PdfObject @object && @object.Reference == null) | value is not PdfObject,
                   "You try to set an indirect object directly into a dictionary.");
 
                 // HACK?
@@ -995,7 +969,7 @@ namespace PdfSharp.Pdf
             public void SetObject(string key, PdfObject obj)
             {
                 if (obj.Reference != null)
-                    throw new ArgumentException("PdfObject must not be an indirect object.", "obj");
+                    throw new ArgumentException("PdfObject must not be an indirect object.", nameof(obj));
                 this[key] = obj;
             }
 
@@ -1006,7 +980,7 @@ namespace PdfSharp.Pdf
             public void SetReference(string key, PdfObject obj)
             {
                 if (obj.Reference == null)
-                    throw new ArgumentException("PdfObject must be an indirect object.", "obj");
+                    throw new ArgumentException("PdfObject must be an indirect object.", nameof(obj));
                 this[key] = obj.Reference;
             }
 
@@ -1060,14 +1034,12 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    PdfItem item;
-                    this.elements.TryGetValue(key, out item);
+                    this.elements.TryGetValue(key, out PdfItem item);
                     return item;
                 }
                 set
                 {
-                    if (value == null)
-                        throw new ArgumentNullException("value");
+                    ArgumentNullException.ThrowIfNull(value);
 #if DEBUG
           if (key == "/MediaBox")
             key.GetType();
@@ -1085,8 +1057,7 @@ namespace PdfSharp.Pdf
               throw new ArgumentException("A dictionary with stream cannot be a direct value.");
           }
 #endif
-                    PdfObject obj = value as PdfObject;
-                    if (obj != null && obj.IsIndirect)
+                    if (value is PdfObject obj && obj.IsIndirect)
                         value = obj.Reference;
                     this.elements[key] = value;
                 }
@@ -1100,8 +1071,7 @@ namespace PdfSharp.Pdf
                 get { return this[key.Value]; }
                 set
                 {
-                    if (value == null)
-                        throw new ArgumentNullException("value");
+                    ArgumentNullException.ThrowIfNull(value);
 
 #if DEBUG
           if (value is PdfDictionary)
@@ -1112,8 +1082,7 @@ namespace PdfSharp.Pdf
           }
 #endif
 
-                    PdfObject obj = value as PdfObject;
-                    if (obj != null && obj.IsIndirect)
+                    if (value is PdfObject obj && obj.IsIndirect)
                         value = obj.Reference;
                     this.elements[key.Value] = value;
                 }
@@ -1195,14 +1164,13 @@ namespace PdfSharp.Pdf
             public void Add(string key, PdfItem value)
             {
                 if (String.IsNullOrEmpty(key))
-                    throw new ArgumentNullException("key");
+                    throw new ArgumentNullException(nameof(key));
 
                 if (key[0] != '/')
                     throw new ArgumentException("The key must start with a slash '/'.");
 
                 // If object is indirect automatically convert value to reference.
-                PdfObject obj = value as PdfObject;
-                if (obj != null && obj.IsIndirect)
+                if (value is PdfObject obj && obj.IsIndirect)
                     value = obj.Reference;
 
                 this.elements.Add(key, value);
@@ -1338,8 +1306,7 @@ namespace PdfSharp.Pdf
 
             internal PdfStream(PdfDictionary owner)
             {
-                if (owner == null)
-                    throw new ArgumentNullException("owner");
+                ArgumentNullException.ThrowIfNull(owner);
                 this.owner = owner;
             }
 
@@ -1402,8 +1369,7 @@ namespace PdfSharp.Pdf
                 get { return this.value; }
                 set
                 {
-                    if (value == null)
-                        throw new ArgumentNullException("value");
+                    ArgumentNullException.ThrowIfNull(value);
                     this.value = value;
                     this.owner.Elements.SetInteger(Keys.Length, value.Length);
                 }
@@ -1436,7 +1402,7 @@ namespace PdfSharp.Pdf
                             this.value.CopyTo(bytes, 0);
                         }
                     }
-                    return bytes ?? new byte[0];
+                    return bytes ?? [];
                 }
             }
 

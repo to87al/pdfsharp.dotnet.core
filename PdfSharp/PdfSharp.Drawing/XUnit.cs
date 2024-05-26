@@ -80,7 +80,7 @@ namespace PdfSharp.Drawing
         /// To determine the XGraphicsUnit use property <code>Type</code>.
         /// To get the value in point use the implicit conversion to double.
         /// </summary>
-        public double Value
+        public readonly double Value
         {
             get { return this.value; }
         }
@@ -88,7 +88,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Gets the unit of measure.
         /// </summary>
-        public XGraphicsUnit Type
+        public readonly XGraphicsUnit Type
         {
             get { return this.type; }
         }
@@ -98,7 +98,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Point
         {
-            get
+            readonly get
             {
                 return type switch
                 {
@@ -122,7 +122,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Inch
         {
-            get
+            readonly get
             {
                 return type switch
                 {
@@ -146,7 +146,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Millimeter
         {
-            get
+            readonly get
             {
                 return this.type switch
                 {
@@ -170,7 +170,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Centimeter
         {
-            get
+            readonly get
             {
                 return type switch
                 {
@@ -194,7 +194,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Presentation
         {
-            get
+            readonly get
             {
                 return type switch
                 {
@@ -248,7 +248,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Returns the unit of measure of the object as a string like 'pt', 'cm', or 'in'.
         /// </summary>
-        string GetSuffix()
+        readonly string GetSuffix()
         {
             return type switch
             {
@@ -370,7 +370,7 @@ namespace PdfSharp.Drawing
 
             try
             {
-                unit.value = Double.Parse(value.Substring(0, valLen).Trim(), CultureInfo.InvariantCulture);
+                unit.value = Double.Parse(value[..valLen].Trim(), CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
             {
@@ -379,7 +379,7 @@ namespace PdfSharp.Drawing
                 throw new ArgumentException(message, ex);
             }
 
-            string typeStr = value.Substring(valLen).Trim().ToLower();
+            string typeStr = value[valLen..].Trim().ToLower();
             unit.type = XGraphicsUnit.Point;
             unit.type = typeStr switch
             {
@@ -452,7 +452,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Calls base class Equals.
         /// </summary>
-        public override bool Equals(Object obj)
+        public override readonly bool Equals(Object obj)
         {
             if (obj is XUnit)
                 return this == (XUnit)obj;
@@ -462,7 +462,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return this.value.GetHashCode() ^ this.type.GetHashCode();
         }

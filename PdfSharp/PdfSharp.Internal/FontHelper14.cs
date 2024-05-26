@@ -66,10 +66,9 @@ namespace PdfSharp.Internal
         /// </summary>
         public static XSize MeasureString(string text, XFont font, XStringFormat stringFormat)
         {
-            XSize size = new XSize();
+            XSize size = new();
 
-            OpenTypeDescriptor descriptor = FontDescriptorStock.Global.CreateDescriptor(font) as OpenTypeDescriptor;
-            if (descriptor != null)
+            if (FontDescriptorStock.Global.CreateDescriptor(font) is OpenTypeDescriptor descriptor)
             {
                 size.Height = (descriptor.Ascender + Math.Abs(descriptor.Descender)) * font.Size / font.unitsPerEm;
                 Debug.Assert(descriptor.Ascender > 0);
@@ -94,8 +93,8 @@ namespace PdfSharp.Internal
                     width += descriptor.GlyphIndexToWidth(glyphIndex);
                 }
                 size.Width = width * font.Size * (font.Italic ? 1 : 1) / descriptor.UnitsPerEm;
+                Debug.Assert(descriptor != null, "No OpenTypeDescriptor.");
             }
-            Debug.Assert(descriptor != null, "No OpenTypeDescriptor.");
             return size;
         }
     }

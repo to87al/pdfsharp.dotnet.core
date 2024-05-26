@@ -129,18 +129,18 @@ namespace PdfSharp.Drawing
         public XForm(PdfDocument document, XRect viewBox)
         {
             if (viewBox.width < 1 || viewBox.height < 1)
-                throw new ArgumentNullException("viewBox", "The size of the XPdfForm is to small.");
+                throw new ArgumentNullException(nameof(viewBox), "The size of the XPdfForm is to small.");
             // I must tie the XPdfForm to a document immediately, because otherwise I would have no place where
             // to store the resources.
             if (document == null)
-                throw new ArgumentNullException("document", "An XPdfForm template must be associated with a document at creation time.");
+                throw new ArgumentNullException(nameof(document), "An XPdfForm template must be associated with a document at creation time.");
 
             this.formState = FormState.Created;
             this.document = document;
             this.pdfForm = new PdfFormXObject(document, this);
             //this.templateSize = size;
             this.viewBox = viewBox;
-            PdfRectangle rect = new PdfRectangle(viewBox);
+            PdfRectangle rect = new(viewBox);
             this.pdfForm.Elements.SetRectangle(PdfFormXObject.Keys.BBox, rect);
         }
 
@@ -405,7 +405,7 @@ namespace PdfSharp.Drawing
                 this.transform = value;
             }
         }
-        internal XMatrix transform = new XMatrix();  //XMatrix.Identity;
+        internal XMatrix transform = new();  //XMatrix.Identity;
 
         public PdfResources Resources
         {

@@ -215,7 +215,7 @@ namespace PdfSharp.Drawing
             {
                 figure.StartPoint = new System.Windows.Point(x1, y1);
 #if !SILVERLIGHT
-                LineSegment lineSegment = new LineSegment(new System.Windows.Point(x2, y2), true);
+                LineSegment lineSegment = new(new System.Windows.Point(x2, y2), true);
 #else
         LineSegment lineSegment = new LineSegment();
         lineSegment.Point = new Point(x2, y2);
@@ -226,8 +226,8 @@ namespace PdfSharp.Drawing
             else
             {
 #if !SILVERLIGHT
-                LineSegment lineSegment1 = new LineSegment(new System.Windows.Point(x1, y1), true);
-                LineSegment lineSegment2 = new LineSegment(new System.Windows.Point(x2, y2), true);
+                LineSegment lineSegment1 = new(new System.Windows.Point(x1, y1), true);
+                LineSegment lineSegment2 = new(new System.Windows.Point(x2, y2), true);
 #else
         LineSegment lineSegment1 = new LineSegment();
         lineSegment1.Point = new Point(x1, y1);
@@ -279,8 +279,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void AddLines(XPoint[] points)
         {
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(points);
 
             int count = points.Length;
             if (count == 0)
@@ -297,7 +296,7 @@ namespace PdfSharp.Drawing
                 for (int idx = 1; idx < count; idx++)
                 {
 #if !SILVERLIGHT
-                    LineSegment lineSegment = new LineSegment(new System.Windows.Point(points[idx].x, points[idx].y), true);
+                    LineSegment lineSegment = new(new System.Windows.Point(points[idx].x, points[idx].y), true);
 #else
           LineSegment lineSegment = new LineSegment();
           lineSegment.Point = new Point(points[idx].x, points[idx].y); // ,true?
@@ -311,7 +310,7 @@ namespace PdfSharp.Drawing
                 {
                     // figure.Segments.Add(new LineSegment(new System.Windows.Point(points[idx].x, points[idx].y), true));
 #if !SILVERLIGHT
-                    LineSegment lineSegment = new LineSegment(new System.Windows.Point(points[idx].x, points[idx].y), true);
+                    LineSegment lineSegment = new(new System.Windows.Point(points[idx].x, points[idx].y), true);
 #else
           LineSegment lineSegment = new LineSegment();
           lineSegment.Point = new Point(points[idx].x, points[idx].y); // ,true?
@@ -386,7 +385,7 @@ namespace PdfSharp.Drawing
             {
                 // figure.Segments.Add(new LineSegment(new System.Windows.Point(x1, y1), true));
 #if !SILVERLIGHT
-                LineSegment lineSegment = new LineSegment(new System.Windows.Point(x1, y1), true);
+                LineSegment lineSegment = new(new System.Windows.Point(x1, y1), true);
 #else
         LineSegment lineSegment = new LineSegment();
         lineSegment.Point = new Point(x1, y1);
@@ -398,7 +397,7 @@ namespace PdfSharp.Drawing
             //  new System.Windows.Point(x3, y3),
             //  new System.Windows.Point(x4, y4), true));
 #if !SILVERLIGHT
-            BezierSegment bezierSegment = new BezierSegment(
+            BezierSegment bezierSegment = new(
               new System.Windows.Point(x2, y2),
               new System.Windows.Point(x3, y3),
               new System.Windows.Point(x4, y4), true);
@@ -450,14 +449,14 @@ namespace PdfSharp.Drawing
         public void AddBeziers(XPoint[] points)
         {
             if (points == null)
-                new ArgumentNullException("points");
+                new ArgumentNullException(nameof(points));
 
             int count = points.Length;
             if (points.Length < 4)
-                throw new ArgumentException("At least four points required for bezier curve.", "points");
+                throw new ArgumentException("At least four points required for bezier curve.", nameof(points));
 
             if ((points.Length - 1) % 3 != 0)
-                throw new ArgumentException("Invalid number of points for bezier curve. Number must fulfil 4+3n.", "points");
+                throw new ArgumentException("Invalid number of points for bezier curve. Number must fulfil 4+3n.", nameof(points));
 
 #if GDI
       this.gdipPath.AddBeziers(XGraphics.MakePointFArray(points));
@@ -470,7 +469,7 @@ namespace PdfSharp.Drawing
             {
                 // figure.Segments.Add(new LineSegment(new System.Windows.Point(points[0].x, points[0].y), true));
 #if !SILVERLIGHT
-                LineSegment lineSegment = new LineSegment(new System.Windows.Point(points[0].x, points[0].y), true);
+                LineSegment lineSegment = new(new System.Windows.Point(points[0].x, points[0].y), true);
 #else
         LineSegment lineSegment = new LineSegment();
         lineSegment.Point = new Point(points[0].x, points[0].y);
@@ -484,7 +483,7 @@ namespace PdfSharp.Drawing
                 //                      new System.Windows.Point(points[idx + 1].x, points[idx + 1].y),
                 //                      new System.Windows.Point(points[idx + 2].x, points[idx + 2].y), true));
 #if !SILVERLIGHT
-                BezierSegment bezierSegment = new BezierSegment(
+                BezierSegment bezierSegment = new(
                                       new System.Windows.Point(points[idx].x, points[idx].y),
                                       new System.Windows.Point(points[idx + 1].x, points[idx + 1].y),
                                       new System.Windows.Point(points[idx + 2].x, points[idx + 2].y), true);
@@ -576,7 +575,7 @@ namespace PdfSharp.Drawing
         {
             int count = points.Length;
             if (count < 2)
-                throw new ArgumentException("AddCurve requires two or more points.", "points");
+                throw new ArgumentException("AddCurve requires two or more points.", nameof(points));
 #if GDI
       this.gdipPath.AddCurve(XGraphics.MakePointFArray(points), (float)tension);
 #endif
@@ -590,7 +589,7 @@ namespace PdfSharp.Drawing
             {
                 // figure.Segments.Add(new LineSegment(new System.Windows.Point(points[0].x, points[0].y), true));
 #if !SILVERLIGHT
-                LineSegment lineSegment = new LineSegment(new System.Windows.Point(points[0].x, points[0].y), true);
+                LineSegment lineSegment = new(new System.Windows.Point(points[0].x, points[0].y), true);
 #else
         LineSegment lineSegment = new LineSegment();
         lineSegment.Point = new Point(points[0].x, points[0].y);
@@ -703,8 +702,7 @@ namespace PdfSharp.Drawing
 #endif
 #if WPF
             PathFigure figure = CurrentPathFigure;
-            System.Windows.Point startPoint;
-            ArcSegment seg = GeometryHelper.CreateArcSegment(x, y, width, height, startAngle, sweepAngle, out startPoint);
+            ArcSegment seg = GeometryHelper.CreateArcSegment(x, y, width, height, startAngle, sweepAngle, out Point startPoint);
             if (figure.Segments.Count == 0)
                 figure.StartPoint = startPoint;
             figure.Segments.Add(seg);
@@ -736,7 +734,7 @@ namespace PdfSharp.Drawing
             {
                 // figure.Segments.Add(new LineSegment(point1.ToPoint(), true));
 #if !SILVERLIGHT
-                LineSegment lineSegment = new LineSegment(point1.ToPoint(), true);
+                LineSegment lineSegment = new(point1.ToPoint(), true);
 #else
         LineSegment lineSegment = new LineSegment();
         lineSegment.Point = point1.ToPoint();
@@ -746,7 +744,7 @@ namespace PdfSharp.Drawing
 
             // figure.Segments.Add(new ArcSegment(point2.ToPoint(), size.ToSize(), rotationAngle, isLargeArg, sweepDirection, true));
 #if !SILVERLIGHT
-            ArcSegment arcSegment = new ArcSegment(point2.ToPoint(), size.ToSize(), rotationAngle, isLargeArg, sweepDirection, true);
+            ArcSegment arcSegment = new(point2.ToPoint(), size.ToSize(), rotationAngle, isLargeArg, sweepDirection, true);
 #else
       ArcSegment arcSegment = new ArcSegment();
       arcSegment.Point = point2.ToPoint();
@@ -798,9 +796,9 @@ namespace PdfSharp.Drawing
             // figure.Segments.Add(new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true));
             // figure.Segments.Add(new LineSegment(new System.Windows.Point(rect.x, rect.y + rect.height), true));
 #if !SILVERLIGHT
-            LineSegment lineSegment1 = new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y), true);
-            LineSegment lineSegment2 = new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true);
-            LineSegment lineSegment3 = new LineSegment(new System.Windows.Point(rect.x, rect.y + rect.height), true);
+            LineSegment lineSegment1 = new(new System.Windows.Point(rect.x + rect.width, rect.y), true);
+            LineSegment lineSegment2 = new(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true);
+            LineSegment lineSegment3 = new(new System.Windows.Point(rect.x, rect.y + rect.height), true);
 #else
       LineSegment lineSegment1 = new LineSegment();
       lineSegment1.Point = new Point(rect.x + rect.width, rect.y);
@@ -881,9 +879,9 @@ namespace PdfSharp.Drawing
                 // figure.Segments.Add(new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true));
                 // figure.Segments.Add(new LineSegment(new System.Windows.Point(rect.x, rect.y + rect.height), true));
 #if !SILVERLIGHT
-                LineSegment lineSegment1 = new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y), true);
-                LineSegment lineSegment2 = new LineSegment(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true);
-                LineSegment lineSegment3 = new LineSegment(new System.Windows.Point(rect.x, rect.y + rect.height), true);
+                LineSegment lineSegment1 = new(new System.Windows.Point(rect.x + rect.width, rect.y), true);
+                LineSegment lineSegment2 = new(new System.Windows.Point(rect.x + rect.width, rect.y + rect.height), true);
+                LineSegment lineSegment3 = new(new System.Windows.Point(rect.x, rect.y + rect.height), true);
 #else
         LineSegment lineSegment1 = new LineSegment();
         lineSegment1.Point = new Point(rect.x + rect.width, rect.y);
@@ -1144,7 +1142,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Adds the outline of a pie shape to this path.
         /// </summary>
-        public void AddPie(XRect rect, double startAngle, double sweepAngle)
+        public static void AddPie(XRect rect, double startAngle, double sweepAngle)
         {
             AddPie(rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
         }
@@ -1152,7 +1150,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Adds the outline of a pie shape to this path.
         /// </summary>
-        public void AddPie(int x, int y, int width, int height, double startAngle, double sweepAngle)
+        public static void AddPie(int x, int y, int width, int height, double startAngle, double sweepAngle)
         {
             AddPie((double)x, (double)y, (double)width, (double)height, startAngle, sweepAngle);
         }
@@ -1244,13 +1242,12 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void AddClosedCurve(XPoint[] points, double tension)
         {
-            if (points == null)
-                throw new ArgumentNullException("points");
+            ArgumentNullException.ThrowIfNull(points);
             int count = points.Length;
             if (count == 0)
                 return;
             if (count < 2)
-                throw new ArgumentException("Not enough points.", "points");
+                throw new ArgumentException("Not enough points.", nameof(points));
 #if GDI
       this.gdipPath.AddClosedCurve(XGraphics.MakePointFArray(points), (float)tension);
 #endif
@@ -1388,10 +1385,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void AddString(string s, XFontFamily family, XFontStyle style, double emSize, XRect layoutRect, XStringFormat format)
         {
-            if (s == null)
-                throw new ArgumentNullException("s");
-            if (family == null)
-                throw new ArgumentNullException("family");
+            ArgumentNullException.ThrowIfNull(s);
+            ArgumentNullException.ThrowIfNull(family);
 
             if (format.LineAlignment == XLineAlignment.BaseLine && layoutRect.Height != 0)
                 throw new InvalidOperationException("DrawString: With XLineAlignment.BaseLine the height of the layout rectangle must be 0.");
@@ -1399,10 +1394,9 @@ namespace PdfSharp.Drawing
             if (s.Length == 0)
                 return;
 
-            if (format == null)
-                format = XStringFormats.Default;
+            format ??= XStringFormats.Default;
 
-            XFont font = new XFont(family.Name, emSize, style);
+            XFont font = new(family.Name, emSize, style);
 #if GDI && !WPF
           RectangleF rc = layoutRect.ToRectangleF();
           if (format.LineAlignment == XLineAlignment.BaseLine)
@@ -1471,7 +1465,7 @@ namespace PdfSharp.Drawing
 
                 case XLineAlignment.Center:
                     // TODO use CapHeight. PDFlib also uses 3/4 of ascent
-                    y += -formattedText.Baseline + (cyAscent * 2 / 4) + layoutRect.Height / 2;
+                    y += -formattedText.Baseline + (cyAscent * 2 / 4) + (layoutRect.Height / 2);
                     break;
 
                 case XLineAlignment.Far:

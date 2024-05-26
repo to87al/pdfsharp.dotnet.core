@@ -60,9 +60,9 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         static readonly int REP_3_10 = 17;
         static readonly int REP_11_138 = 18;
         static readonly int EOF_SYMBOL = 256;
-        static readonly int[] BL_ORDER = { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 };
+        static readonly int[] BL_ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
-        static readonly byte[] bit4Reverse = {
+        static readonly byte[] bit4Reverse = [
             0,
             8,
             4,
@@ -79,7 +79,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             11,
             7,
             15
-        };
+        ];
 
         /// <summary>
         /// Not documented
@@ -245,7 +245,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
 
                 for (int i = numNodes - 1; i >= 0; i--)
                 {
-                    if (childs[2 * i + 1] != -1)
+                    if (childs[(2 * i) + 1] != -1)
                     {
                         int bitLength = lengths[i] + 1;
                         if (bitLength > maxLength)
@@ -253,7 +253,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                             bitLength = maxLength;
                             overflow++;
                         }
-                        lengths[childs[2 * i]] = lengths[childs[2 * i + 1]] = bitLength;
+                        lengths[childs[2 * i]] = lengths[childs[(2 * i) + 1]] = bitLength;
                     }
                     else
                     {
@@ -384,14 +384,14 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                 numCodes = Math.Max(maxCode + 1, minNumCodes);
 
                 int numLeafs = heapLen;
-                int[] childs = new int[4 * heapLen - 2];
-                int[] values = new int[2 * heapLen - 1];
+                int[] childs = new int[(4 * heapLen) - 2];
+                int[] values = new int[(2 * heapLen) - 1];
                 int numNodes = numLeafs;
                 for (int i = 0; i < heapLen; i++)
                 {
                     int node = heap[i];
                     childs[2 * i] = node;
-                    childs[2 * i + 1] = -1;
+                    childs[(2 * i) + 1] = -1;
                     values[i] = freqs[node] << 8;
                     heap[i] = i;
                 }
@@ -417,7 +417,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
 
                         heap[ppos] = heap[path];
                         ppos = path;
-                        path = path * 2 + 1;
+                        path = (path * 2) + 1;
                     }
 
                     /* Now propagate the last element down along path.  Normally
@@ -436,7 +436,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     /* Create a new node father of first and second */
                     last = numNodes++;
                     childs[2 * last] = first;
-                    childs[2 * last + 1] = second;
+                    childs[(2 * last) + 1] = second;
                     int mindepth = Math.Min(values[first] & 0xff, values[second] & 0xff);
                     values[last] = lastVal = values[first] + values[second] - mindepth + 1;
 
@@ -453,7 +453,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
 
                         heap[ppos] = heap[path];
                         ppos = path;
-                        path = ppos * 2 + 1;
+                        path = (ppos * 2) + 1;
                     }
 
                     /* Now propagate the new element down along path */
@@ -464,7 +464,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     heap[path] = last;
                 } while (heapLen > 1);
 
-                if (heap[0] != childs.Length / 2 - 1)
+                if (heap[0] != (childs.Length / 2) - 1)
                 {
                     throw new SharpZipBaseException("Heap invariant violated");
                 }
@@ -638,9 +638,9 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         /// <returns>Value with bits reversed</returns>
         public static short BitReverse(int toReverse)
         {
-            return (short)(bit4Reverse[toReverse & 0xF] << 12 |
-                            bit4Reverse[(toReverse >> 4) & 0xF] << 8 |
-                            bit4Reverse[(toReverse >> 8) & 0xF] << 4 |
+            return (short)((bit4Reverse[toReverse & 0xF] << 12) |
+                            (bit4Reverse[(toReverse >> 4) & 0xF] << 8) |
+                            (bit4Reverse[(toReverse >> 8) & 0xF] << 4) |
                             bit4Reverse[toReverse >> 12]);
         }
 
@@ -787,7 +787,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     int dc = Dcode(dist);
                     distTree.WriteSymbol(dc);
 
-                    bits = dc / 2 - 1;
+                    bits = (dc / 2) - 1;
                     if (bits > 0)
                     {
                         pending.WriteBits(dist & ((1 << bits) - 1), bits);
@@ -865,7 +865,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     blTreeCodes = i + 1;
                 }
             }
-            int opt_len = 14 + blTreeCodes * 3 + blTree.GetEncodedLength() +
+            int opt_len = 14 + (blTreeCodes * 3) + blTree.GetEncodedLength() +
               literalTree.GetEncodedLength() + distTree.GetEncodedLength() +
               extra_bits;
 
@@ -967,7 +967,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             distTree.freqs[dc]++;
             if (dc >= 4)
             {
-                extra_bits += dc / 2 - 1;
+                extra_bits += (dc / 2) - 1;
             }
             return IsFull();
         }

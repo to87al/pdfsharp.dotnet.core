@@ -54,7 +54,7 @@ namespace PdfSharp.Pdf.Advanced
         /// Initializes a new instance of the <see cref="PdfContent"/> class.
         /// </summary>
         internal PdfContent(PdfPage page)
-          : base(page != null ? page.Owner : null)
+          : base(page?.Owner)
         {
             //this.pageContent = new PageContent(page);
         }
@@ -177,8 +177,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

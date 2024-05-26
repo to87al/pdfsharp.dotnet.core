@@ -62,7 +62,7 @@ namespace PdfSharp.Pdf.Advanced
     partial class PdfImage
     {
         internal readonly static uint[] WhiteTerminatingCodes =
-        {
+        [
       0x35, 8, //00110101 // 0
       0x07, 6, //000111
       0x07, 4, //0111
@@ -127,10 +127,10 @@ namespace PdfSharp.Pdf.Advanced
       0x32, 8, //00110010
       0x33, 8, //00110011
       0x34, 8, //00110100 // 63
-    };
+    ];
 
         internal readonly static uint[] BlackTerminatingCodes =
-        {
+        [
       0x37, 10, //0000110111   // 0
       0x02,  3, //010
       0x03,  2, //11
@@ -195,10 +195,10 @@ namespace PdfSharp.Pdf.Advanced
       0x5a, 12, //000001011010
       0x66, 12, //000001100110
       0x67, 12, //000001100111 // 63
-    };
+    ];
 
         internal readonly static uint[] WhiteMakeUpCodes =
-        {
+        [
       0x1b,  5, //11011 64          // 0
       0x12,  5, //10010 128
       0x17,  6, //010111 192
@@ -241,10 +241,10 @@ namespace PdfSharp.Pdf.Advanced
       0x1e, 12, //000000011110 2496
       0x1f, 12, //000000011111 2560
       0x01, 12, //000000000001 EOL  // 40
-    };
+    ];
 
         internal readonly static uint[] BlackMakeUpCodes =
-        {
+        [
       0x0f, 10, //0000001111    64   // 0
       0xc8, 12, //000011001000  128
       0xc9, 12, //000011001001  192
@@ -287,12 +287,12 @@ namespace PdfSharp.Pdf.Advanced
       0x1e, 12, //000000011110 2496
       0x1f, 12, //000000011111 2560
       0x01, 12, //000000000001 EOL   // 40
-    };
+    ];
 
-        internal readonly static uint[] HorizontalCodes = { 0x1, 3 }; /* 001 */
-        internal readonly static uint[] PassCodes = { 0x1, 4, }; /* 0001 */
+        internal readonly static uint[] HorizontalCodes = [0x1, 3]; /* 001 */
+        internal readonly static uint[] PassCodes = [0x1, 4,]; /* 0001 */
         internal readonly static uint[] VerticalCodes =
-        {
+        [
       0x03, 7, /* 0000 011 */
       0x03, 6, /* 0000 11 */
       0x03, 3, /* 011 */
@@ -300,10 +300,10 @@ namespace PdfSharp.Pdf.Advanced
       0x2,  3, /* 010 */
       0x02, 6, /* 0000 10 */
       0x02, 7, /* 0000 010 */
-    };
+    ];
 
         readonly static uint[] ZeroRuns =
-        {
+        [
       8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,	/* 0x00 - 0x0f */
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,	/* 0x10 - 0x1f */
       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,	/* 0x20 - 0x2f */
@@ -320,10 +320,10 @@ namespace PdfSharp.Pdf.Advanced
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0xd0 - 0xdf */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0xe0 - 0xef */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0xf0 - 0xff */
-    };
+    ];
 
         readonly static uint[] OneRuns =
-        {
+        [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x00 - 0x0f */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x10 - 0x1f */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x20 - 0x2f */
@@ -340,7 +340,7 @@ namespace PdfSharp.Pdf.Advanced
       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,	/* 0xd0 - 0xdf */
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,	/* 0xe0 - 0xef */
       4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8,	/* 0xf0 - 0xff */
-    };
+    ];
 
         /// <summary>
         /// Counts the consecutive one bits in an image line.
@@ -352,8 +352,7 @@ namespace PdfSharp.Pdf.Advanced
             uint found = 0;
             for (; ; )
             {
-                uint bits;
-                int @byte = reader.PeekByte(out bits);
+                int @byte = reader.PeekByte(out uint bits);
                 uint hits = OneRuns[@byte];
                 if (hits < bits)
                 {
@@ -378,8 +377,7 @@ namespace PdfSharp.Pdf.Advanced
             uint found = 0;
             for (; ; )
             {
-                uint bits;
-                int @byte = reader.PeekByte(out bits);
+                int @byte = reader.PeekByte(out uint bits);
                 uint hits = ZeroRuns[@byte];
                 if (hits < bits)
                 {
@@ -445,12 +443,12 @@ namespace PdfSharp.Pdf.Advanced
         static void FaxEncode2DRow(BitWriter writer, uint bytesFileOffset, byte[] imageBits, uint currentRow, uint referenceRow, uint width, uint height, uint bytesPerLineBmp)
         {
             // Translated from LibTiff
-            uint bytesOffsetRead = bytesFileOffset + (height - 1 - currentRow) * bytesPerLineBmp;
-            BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
+            uint bytesOffsetRead = bytesFileOffset + ((height - 1 - currentRow) * bytesPerLineBmp);
+            BitReader reader = new(imageBits, bytesOffsetRead, width);
             BitReader readerReference;
             if (referenceRow != 0xffffffff)
             {
-                uint bytesOffsetReadReference = bytesFileOffset + (height - 1 - referenceRow) * bytesPerLineBmp;
+                uint bytesOffsetReadReference = bytesFileOffset + ((height - 1 - referenceRow) * bytesPerLineBmp);
                 readerReference = new BitReader(imageBits, bytesOffsetReadReference, width);
             }
             else
@@ -511,48 +509,6 @@ namespace PdfSharp.Pdf.Advanced
                 a1 = FindDifference(reader, a0, width, bitA0/*reader.GetBit(a0)*/);
                 b1 = FindDifference(readerReference, a0, width, !bitA0/*reader.GetBit(a0)*/);
                 b1 = FindDifferenceWithCheck(readerReference, b1, width, bitA0/*reader.GetBit(a0)*/);
-            }
-        }
-
-        /// <summary>
-        /// Encodes a bitonal bitmap using 1D CCITT fax encoding.
-        /// </summary>
-        /// <param name="imageData">Space reserved for the fax encoded bitmap. An exception will be thrown if this buffer is too small.</param>
-        /// <param name="imageBits">The bitmap to be encoded.</param>
-        /// <param name="bytesFileOffset">Offset of image data in bitmap file.</param>
-        /// <param name="width">The width of the image.</param>
-        /// <param name="height">The height of the image.</param>
-        /// <returns>The size of the fax encoded image (0 on failure).</returns>
-        private static int DoFaxEncoding(ref byte[] imageData, byte[] imageBits, uint bytesFileOffset, uint width, uint height)
-        {
-            try
-            {
-                uint bytesPerLineBmp = ((width + 31) / 32) * 4;
-                BitWriter writer = new BitWriter(ref imageData);
-                for (uint y = 0; y < height; ++y)
-                {
-                    uint bytesOffsetRead = bytesFileOffset + (height - 1 - y) * bytesPerLineBmp;
-                    BitReader reader = new BitReader(imageBits, bytesOffsetRead, width);
-                    for (uint bitsRead = 0; bitsRead < width;)
-                    {
-                        uint white = CountOneBits(reader, width - bitsRead);
-                        WriteSample(writer, white, true);
-                        bitsRead += white;
-                        if (bitsRead < width)
-                        {
-                            uint black = CountZeroBits(reader, width - bitsRead);
-                            WriteSample(writer, black, false);
-                            bitsRead += black;
-                        }
-                    }
-                }
-                writer.FlushBuffer();
-                return writer.BytesWritten();
-            }
-            catch (Exception /*ex*/)
-            {
-                //ex.GetType();
-                return 0;
             }
         }
 
@@ -630,7 +586,7 @@ namespace PdfSharp.Pdf.Advanced
             try
             {
                 uint bytesPerLineBmp = ((width + 31) / 32) * 4;
-                BitWriter writer = new BitWriter(ref imageData);
+                BitWriter writer = new(ref imageData);
                 for (uint y = 0; y < height; ++y)
                 {
                     FaxEncode2DRow(writer, bytesFileOffset, imageBits, y, (y != 0) ? y - 1 : 0xffffffff, width, height, bytesPerLineBmp);
@@ -665,7 +621,7 @@ namespace PdfSharp.Pdf.Advanced
             // A make-up code for a multiple of 64 will be written if required:
             if (count > 63)
             {
-                uint line = count / 64 - 1;
+                uint line = (count / 64) - 1;
                 writer.WriteTableLine(makeUpCodes, line);
                 count -= (line + 1) * 64;
             }
@@ -723,8 +679,7 @@ namespace PdfSharp.Pdf.Advanced
             if (position >= bitsTotal)
                 return false;
             SetPosition(position);
-            uint dummy;
-            return (PeekByte(out dummy) & 0x80) > 0;
+            return (PeekByte(out uint dummy) & 0x80) > 0;
         }
 
         /// <summary>
@@ -804,7 +759,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Masks for n bits in a byte (with n = 0 through 8).
         /// </summary>
-        static readonly uint[] masks = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
+        static readonly uint[] masks = [0, 1, 3, 7, 15, 31, 63, 127, 255];
 
         /// <summary>
         /// Writes bits to the byte array.
@@ -876,7 +831,7 @@ namespace PdfSharp.Pdf.Advanced
         internal void WriteTableLine(uint[] table, uint line)
         {
             uint value = table[line * 2];
-            uint bits = table[line * 2 + 1];
+            uint bits = table[(line * 2) + 1];
             WriteBits(value, bits);
         }
 

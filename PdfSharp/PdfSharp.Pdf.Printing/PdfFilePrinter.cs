@@ -158,7 +158,7 @@ namespace PdfSharp.Pdf.Printing
 
                 //acrord32.exe /t          <- seems to work best
                 //acrord32.exe /h /p       <- some swear by this version
-                ProcessStartInfo startInfo = new ProcessStartInfo();
+                ProcessStartInfo startInfo = new();
                 startInfo.FileName = PdfFilePrinter.adobeReaderPath;
                 string args = String.Format("/t \"{0}\" \"{1}\"", this.pdfFileName, this.printerName);
                 //Debug.WriteLine(args);

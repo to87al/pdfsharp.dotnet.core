@@ -95,8 +95,6 @@ namespace PdfSharp.Xps.Rendering
         }
 
         /// <summary>
-
-        /// <summary>
         /// Writes all elements of the collection to the content stream.
         /// </summary>
         public void WriteElements(UIElementCollection elements)
@@ -105,32 +103,29 @@ namespace PdfSharp.Xps.Rendering
             foreach (UIElement element in elements)
                 WriteElement(element);
         }
+        /// <summary>
         /// Writes the specified element to the content stream.
         /// </summary>
         public void WriteElement(UIElement element)
         {
-            Canvas canvas;
-            Path path;
-            Glyphs glyphs;
-            Visual visual;
             //Comment comment;
-            if ((canvas = element as Canvas) != null)
+            if (element is Canvas canvas)
             {
                 BeginGraphic();
                 WriteCanvas(canvas);
             }
 
-            else if ((path = element as Path) != null)
+            else if (element is Path path)
             {
                 BeginGraphic();
                 WritePath(path);
             }
-            else if ((glyphs = element as Glyphs) != null)
+            else if (element is Glyphs glyphs)
             {
                 //BeginText();
                 WriteGlyphs(glyphs);
             }
-            else if ((visual = element as Visual) != null)
+            else if (element is Visual visual)
             {
                 Debug.Assert(false, "Shouldn't execute to here.");
                 WriteVisual(visual);
@@ -395,12 +390,7 @@ namespace PdfSharp.Xps.Rendering
             }
             else
             {
-                SolidColorBrush sBrush;
-                LinearGradientBrush lgBrush;
-                RadialGradientBrush rgBrush;
-                ImageBrush iBrush;
-                VisualBrush vBrush;
-                if ((sBrush = path.Fill as SolidColorBrush) != null)
+                if (path.Fill is SolidColorBrush sBrush)
                 {
                     var color = sBrush.Color;
                     double opacity = Opacity * color.ScA;
@@ -415,7 +405,7 @@ namespace PdfSharp.Xps.Rendering
                     WriteGeometry(path.Data.GetFlattenedPathGeometry());
                     WritePathFillStroke(path);
                 }
-                else if ((lgBrush = path.Fill as LinearGradientBrush) != null)
+                else if (path.Fill is LinearGradientBrush lgBrush)
                 {
                     // TODO: For better visual compatibility use a Shading Pattern if Opacity is not 1 and
                     // the Stroke Style is not solid. Acrobat 8 ignores this case.
@@ -453,7 +443,7 @@ namespace PdfSharp.Xps.Rendering
                     if (path.Stroke != null)
                         WriteStrokeGeometry(path);
                 }
-                else if ((rgBrush = path.Fill as RadialGradientBrush) != null)
+                else if (path.Fill is RadialGradientBrush rgBrush)
                 {
                     var xgState = Context.PdfDocument.Internals.CreateIndirectObject<PdfExtGState>();
                     xgState.SetDefault1();
@@ -528,7 +518,7 @@ namespace PdfSharp.Xps.Rendering
                     if (path.Stroke != null)
                         WriteStrokeGeometry(path);
                 }
-                else if ((iBrush = path.Fill as ImageBrush) != null)
+                else if (path.Fill is ImageBrush iBrush)
                 {
                     var xgState = Context.PdfDocument.Internals.CreateIndirectObject<PdfExtGState>();
                     xgState.SetDefault1();
@@ -553,7 +543,7 @@ namespace PdfSharp.Xps.Rendering
                     if (path.Stroke != null)
                         WriteStrokeGeometry(path);
                 }
-                else if ((vBrush = path.Fill as VisualBrush) != null)
+                else if (path.Fill is VisualBrush vBrush)
                 {
                     var xgState = Context.PdfDocument.Internals.CreateIndirectObject<PdfExtGState>();
                     xgState.SetDefault1();
@@ -594,21 +584,15 @@ namespace PdfSharp.Xps.Rendering
             if (path.Stroke == null)
                 return;
 
-            SolidColorBrush sBrush;
-            LinearGradientBrush lgBrush;
-            RadialGradientBrush rgBrush;
-            VisualBrush vBrush;
-            ImageBrush iBrush;
-
             //if (path.Stroke != null && this.renderMode == RenderMode.Default) // HACK
 
-            if ((sBrush = path.Stroke as SolidColorBrush) != null)
+            if (path.Stroke is SolidColorBrush sBrush)
             {
                 RealizeStroke(path);
                 WriteGeometry(path.Data.GetFlattenedPathGeometry());
                 WriteLiteral("S\n");
             }
-            else if ((lgBrush = path.Stroke as LinearGradientBrush) != null)
+            else if (path.Stroke is LinearGradientBrush lgBrush)
             {
                 var xgState = Context.PdfDocument.Internals.CreateIndirectObject<PdfExtGState>();
                 xgState.SetDefault1();
@@ -656,7 +640,7 @@ namespace PdfSharp.Xps.Rendering
                     WriteLiteral("S Q\n");
                 }
             }
-            else if ((rgBrush = path.Stroke as RadialGradientBrush) != null)
+            else if (path.Stroke is RadialGradientBrush rgBrush)
             {
                 // HACK
                 WriteLiteral("/DeviceRGB CS 0 1 0 RG\n");
@@ -664,7 +648,7 @@ namespace PdfSharp.Xps.Rendering
                 WriteGeometry(path.Data.GetFlattenedPathGeometry());
                 WriteLiteral("S Q\n");
             }
-            else if ((iBrush = path.Stroke as ImageBrush) != null)
+            else if (path.Stroke is ImageBrush iBrush)
             {
                 // HACK
                 WriteLiteral("/DeviceRGB CS 0 1 0 RG\n");
@@ -672,7 +656,7 @@ namespace PdfSharp.Xps.Rendering
                 WriteGeometry(path.Data.GetFlattenedPathGeometry());
                 WriteLiteral("S Q\n");
             }
-            else if ((vBrush = path.Stroke as VisualBrush) != null)
+            else if (path.Stroke is VisualBrush vBrush)
             {
                 // HACK
                 WriteLiteral("/DeviceRGB CS 0 1 0 RG\n");
@@ -706,31 +690,6 @@ namespace PdfSharp.Xps.Rendering
             path.GetType();
 
             return false;
-        }
-
-        static void AddCapToPath(Path path, PathFigure figure, double length, double lineWidthHalf, PenLineCap lineCap, XMatrix matrix)
-        {
-            // sketch:
-            // 1. create Transform that make a horizontal line with start in 0,0
-            // 2. create a Polygon with the shape of the line including its caps
-            // 3. render the shape with the brush of the pen
-            //PolyLineSegment seg;
-            switch (lineCap)
-            {
-                case PenLineCap.Flat:
-                    matrix.Transform(new XPoint(length + lineWidthHalf, -lineWidthHalf));
-                    break;
-
-                case PenLineCap.Square:
-                    matrix.Transform(new XPoint(length + lineWidthHalf, -lineWidthHalf));
-                    break;
-
-                case PenLineCap.Round:
-                    break;
-
-                case PenLineCap.Triangle:
-                    break;
-            }
         }
 
 
@@ -818,7 +777,7 @@ namespace PdfSharp.Xps.Rendering
                 //  // Recall that the value of Height depends on Orientation.
 
                 // Flip page horizontaly and mirror text.
-                XMatrix defaultViewMatrix = new XMatrix();
+                XMatrix defaultViewMatrix = new();
                 if (!hacks4softmask)
                 {
                     defaultViewMatrix.TranslatePrepend(0, pageHeight);
@@ -899,7 +858,7 @@ namespace PdfSharp.Xps.Rendering
             this.currentPoint = point;
         }
 
-        Point currentPoint = new Point();
+        Point currentPoint = new();
 
         internal void WriteGeometry(PathGeometry geo)
         {
@@ -909,18 +868,14 @@ namespace PdfSharp.Xps.Rendering
             if (geo.Transform != null) // also check render mode?
             {
                 var matrix = geo.Transform.Value;
-                MatrixTransform transform = new MatrixTransform(matrix);
+                MatrixTransform transform = new(matrix);
                 MultiplyTransform(transform);
                 WriteRenderTransform(transform);
             }
 
             foreach (var figure in geo.Figures)
             {
-                LineSegment lseg;
                 PolyLineSegment pseg;
-                PolyBezierSegment bseg;
-                ArcSegment aseg;
-                PolyQuadraticBezierSegment qseg;
 
                 // And now for the most superfluous and unnecessary optimization within the whole PDFsharp library
                 if (figure.IsClosed && figure.Segments.Count == 1)
@@ -952,17 +907,17 @@ namespace PdfSharp.Xps.Rendering
                 WriteMoveStart(figure.StartPoint);
                 foreach (var seg in figure.Segments)
                 {
-                    if ((lseg = seg as LineSegment) != null)
+                    if (seg is LineSegment lseg)
                     {
                         WriteSegment(lseg);
                     }
                     else if ((pseg = seg as PolyLineSegment) != null)
                         WriteSegment(pseg);
-                    else if ((bseg = seg as PolyBezierSegment) != null)
+                    else if (seg is PolyBezierSegment bseg)
                         WriteSegment(bseg);
-                    else if ((aseg = seg as ArcSegment) != null)
+                    else if (seg is ArcSegment aseg)
                         WriteSegment(aseg);
-                    else if ((qseg = seg as PolyQuadraticBezierSegment) != null)
+                    else if (seg is PolyQuadraticBezierSegment qseg)
                         WriteSegment(qseg);
                 }
                 if (figure.IsClosed)
@@ -1028,8 +983,8 @@ namespace PdfSharp.Xps.Rendering
                     var pt2 = points[idx++];
                     // Cannot believe it: I just guessed the formula and it works!
                     WriteLiteral("{0:0.####} {1:0.####} {2:0.####} {3:0.####} {4:0.####} {5:0.####} c\n",
-                      pt1.X - (pt1.X - pt0.X) / 3, pt1.Y - (pt1.Y - pt0.Y) / 3,
-                      pt1.X + (pt2.X - pt1.X) / 3, pt1.Y + (pt2.Y - pt1.Y) / 3,
+                      pt1.X - ((pt1.X - pt0.X) / 3), pt1.Y - ((pt1.Y - pt0.Y) / 3),
+                      pt1.X + ((pt2.X - pt1.X) / 3), pt1.Y + ((pt2.Y - pt1.Y) / 3),
                       pt2.X, pt2.Y);
                     currentPoint = pt2;
                     pt0 = this.currentPoint;
@@ -1054,11 +1009,10 @@ namespace PdfSharp.Xps.Rendering
         {
             if (!DevHelper.FlattenArcSegments)
             {
-                int pieces;
                 PointCollection points =
                   GeometryHelper.ArcToBezier(this.currentPoint.X, this.currentPoint.Y, seg.Size.Width, seg.Size.Height, seg.RotationAngle, seg.IsLargeArc,
                     seg.SweepDirection == SweepDirection.Clockwise,
-                    seg.Point.X, seg.Point.Y, out pieces);
+                    seg.Point.X, seg.Point.Y, out int pieces);
                 if (pieces == 0)
                 {
                     // just draw single line
@@ -1510,8 +1464,7 @@ namespace PdfSharp.Xps.Rendering
             }
 
             Debug.Assert(font.PdfFont == null || Object.ReferenceEquals(font.PdfFont, pdfFont));
-            if (font.PdfFont == null)
-                font.PdfFont = pdfFont;
+            font.PdfFont ??= pdfFont;
             return name;
         }
 
@@ -1601,6 +1554,6 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// The graphical state stack.
         /// </summary>
-        readonly Stack<PdfGraphicsState> graphicsStateStack = new Stack<PdfGraphicsState>();
+        readonly Stack<PdfGraphicsState> graphicsStateStack = new();
     }
 }

@@ -31,7 +31,7 @@ namespace PdfSharp.Xps.Rendering
           XRect boundingBox,
           XMatrix transform)
         {
-            RadialShadingBuilder builder = new RadialShadingBuilder(context);
+            RadialShadingBuilder builder = new(context);
             PdfShadingPattern pattern = builder.BuildPattern(brush, boundingBox, transform);
             return pattern;
         }
@@ -82,7 +82,7 @@ namespace PdfSharp.Xps.Rendering
             //  BX /Sh0 sh EX Q
             //  Q
             //endstream
-            XRect bbox = new XRect(-600, -700, 1200, 1520); // HACK
+            XRect bbox = new(-600, -700, 1200, 1520); // HACK
             XMatrix matrix = transform;
             //matrix.Prepend(brush.Transform.Matrix);
 
@@ -100,7 +100,7 @@ namespace PdfSharp.Xps.Rendering
 
             double dx = 2 * brush.RadiusX;
             double dy = 2 * brush.RadiusY;
-            XRect brushBox = new XRect(brush.Center.X - brush.RadiusX, brush.Center.Y - brush.RadiusY, dx, dy);
+            XRect brushBox = new(brush.Center.X - brush.RadiusX, brush.Center.Y - brush.RadiusY, dx, dy);
             Debug.Assert(dx * dy > 0, "Radius is 0.");
             double scaleX, scaleY;
             if (dx > dy)
@@ -115,14 +115,12 @@ namespace PdfSharp.Xps.Rendering
             }
 
             PdfColorMode colorMode = PdfColorMode.Rgb;
-            PdfDictionary funcReflected;
-            PdfDictionary funcRegular = BuildShadingFunction(brush.GradientStops, false, colorMode, true, out funcReflected);
+            PdfDictionary funcRegular = BuildShadingFunction(brush.GradientStops, false, colorMode, true, out PdfDictionary funcReflected);
             if (brush.SpreadMethod != GradientSpreadMethod.Pad)
             {
                 if (CanOptimizeForTwoColors(brush.GradientStops))
                 {
-                    PdfDictionary dummy;
-                    funcReflected = BuildShadingFunction(brush.GradientStops, false, colorMode, false, out dummy);
+                    funcReflected = BuildShadingFunction(brush.GradientStops, false, colorMode, false, out PdfDictionary dummy);
                 }
                 else
                 {
@@ -151,7 +149,7 @@ namespace PdfSharp.Xps.Rendering
                 shadings[idx] = shading;
             }
 
-            PdfContentWriter writer = new PdfContentWriter(Context, pattern);
+            PdfContentWriter writer = new(Context, pattern);
             writer.BeginContentRaw();
 
             // Fill background (even if spread method is not pad)
@@ -177,7 +175,7 @@ namespace PdfSharp.Xps.Rendering
                 gs.SetDefault2();
                 writer.WriteGraphicsState(gs);
 
-                XMatrix transformation = new XMatrix(scaleX, 0, 0, scaleY, 0, 0);
+                XMatrix transformation = new(scaleX, 0, 0, scaleY, 0, 0);
                 writer.WriteMatrix(transformation);
 
                 string shName = writer.Resources.AddShading(shadings[idx]);
@@ -277,111 +275,13 @@ namespace PdfSharp.Xps.Rendering
         }
 
         /// <summary>
-        /// Builds a PdfFormXObject from the specified brush. 
-        /// // If a gradient contains transparency, a soft mask is created an added to the specified graphic state.
-        /// </summary>
-        PdfFormXObject BuildForm(RadialGradientBrush brush, PathGeometry geometry)
-        {
-            PdfFormXObject pdfForm = Context.PdfDocument.Internals.CreateIndirectObject<PdfFormXObject>();
-
-            // HACK
-            pdfForm.Elements.SetRectangle(PdfFormXObject.Keys.BBox, new PdfRectangle(0, 640, 480, 0));
-
-            // Transparency group of the form
-            //<<
-            //  /I true
-            //  /K false
-            //  /S /Transparency
-            //  /Type /Group
-            //>>
-            PdfTransparencyGroupAttributes tgPrimaryForm = Context.PdfDocument.Internals.CreateIndirectObject<PdfTransparencyGroupAttributes>();
-            // not set by Acrobat: tgAttributes.Elements.SetName(PdfTransparencyGroupAttributes.Keys.CS, "/DeviceRGB");
-            tgPrimaryForm.Elements.SetBoolean(PdfTransparencyGroupAttributes.Keys.I, true);
-            tgPrimaryForm.Elements.SetBoolean(PdfTransparencyGroupAttributes.Keys.K, false);
-            pdfForm.Elements.SetReference(PdfFormXObject.Keys.Group, tgPrimaryForm);
-
-            // Shading
-            PdfShading shading = BuildShading(brush, 1, 1);
-
-            // ExtGState 
-            //<<
-            //  /AIS false
-            //  /BM /Normal
-            //  /ca 1
-            //  /CA 1
-            //  /op false
-            //  /OP false
-            //  /OPM 1
-            //  /SA true
-            //  /SMask 22 0 R
-            //  /Type /ExtGState
-            //>>
-            PdfExtGState pdfExtGState = Context.PdfDocument.Internals.CreateIndirectObject<PdfExtGState>();
-            pdfExtGState.SetDefault1();
-
-            // Soft mask
-            PdfSoftMask softmask = BuildSoftMask(brush);
-            pdfExtGState.Elements.SetReference(PdfExtGState.Keys.SMask, softmask);
-
-            // PdfFormXObject
-            //<<
-            //  /BBox [200.118 369.142 582.795 -141.094]
-            //  /Group 11 0 R
-            //  /Length 117
-            //  /Matrix [1 0 0 1 0 0]
-            //  /Resources
-            //  <<
-            //    /ColorSpace
-            //    <<
-            //      /CS0 8 0 R
-            //    >>
-            //    /ExtGState
-            //    <<
-            //      /GS0 23 0 R
-            //    >>
-            //    /Shading
-            //    <<
-            //      /Sh0 14 0 R
-            //    >>
-            //  >>
-            //  /Subtype /Form
-            //>>
-            //stream
-            //q
-            //203.868 365.392 157.5 -97.5 re
-            //W* n
-            //q
-            //0 g
-            //1 i 
-            ///GS0 gs
-            //0.75 0 0 -0.75 200.1181183 369.1417236 cm
-            //BX /Sh0 sh EX Q
-            //Q
-            //endstream
-            PdfContentWriter writer = new PdfContentWriter(Context, pdfForm);
-            writer.BeginContentRaw();
-            // Acrobat 8 clips to bounding box, so we should do
-            writer.WriteClip(geometry);
-            //writer.WriteGraphicsState(extGState);
-            //writer.WriteLiteral("0 g\n");
-            writer.WriteLiteral(writer.Resources.AddExtGState(pdfExtGState) + " gs\n");
-
-            XMatrix transform = new XMatrix(); //(brush.Viewport.Width / viewBoxForm.width, 0, 0, brush.Viewport.Height / viewBoxForm.height, 0, 0);
-            writer.WriteMatrix(transform);
-            writer.WriteLiteral("BX " + writer.Resources.AddShading(shading) + " sh EX\n");
-            writer.EndContent();
-
-            return pdfForm;
-        }
-
-        /// <summary>
         /// Builds the soft mask.
         /// </summary>
         PdfSoftMask BuildSoftMask(RadialGradientBrush brush)
         {
             Debug.Assert(brush.GradientStops.HasTransparency());
 
-            XRect viewBox = new XRect(0, 0, 360, 480); // HACK
+            XRect viewBox = new(0, 0, 360, 480); // HACK
                                                        //XForm xform = new XForm(Context.PdfDocument, viewBox);
 
             PdfFormXObject form = Context.PdfDocument.Internals.CreateIndirectObject<PdfFormXObject>();
@@ -476,7 +376,7 @@ namespace PdfSharp.Xps.Rendering
             //  Q
             //endstream
             form.Elements.SetReference(PdfFormXObject.Keys.Group, tgAttributes);
-            PdfContentWriter writer = new PdfContentWriter(Context, form);
+            PdfContentWriter writer = new(Context, form);
             writer.BeginContentRaw();
             // Acrobat 8 clips to bounding box, so we should do
             // why   0 480 360 -480 re ??
@@ -485,7 +385,7 @@ namespace PdfSharp.Xps.Rendering
             writer.WriteLiteral("1 i 0 g\n");
             writer.WriteLiteral(writer.Resources.AddExtGState(pdfStateMaskFrom) + " gs\n");
 
-            XMatrix transform = new XMatrix(); //(brush.Viewport.Width / viewBoxForm.width, 0, 0, brush.Viewport.Height / viewBoxForm.height, 0, 0);
+            XMatrix transform = new(); //(brush.Viewport.Width / viewBoxForm.width, 0, 0, brush.Viewport.Height / viewBoxForm.height, 0, 0);
             writer.WriteMatrix(transform);
             writer.WriteLiteral("BX " + writer.Resources.AddShading(shadingFrom) + " sh EX\n");
             writer.EndContent();
@@ -530,8 +430,7 @@ namespace PdfSharp.Xps.Rendering
             shading.Elements.SetValue(PdfShading.Keys.Extend, new PdfLiteral("[true true]"));
 
             PdfColorMode colorMode = PdfColorMode.Rgb; //this.document.Options.ColorMode;
-            PdfDictionary func;
-            PdfDictionary function = BuildShadingFunction(brush.GradientStops, true, colorMode, true, out func);
+            PdfDictionary function = BuildShadingFunction(brush.GradientStops, true, colorMode, true, out PdfDictionary func);
 #if true
             shading.Elements.SetValue(PdfShading.Keys.Function, function);
 #else
@@ -547,7 +446,7 @@ namespace PdfSharp.Xps.Rendering
         /// </summary>
         protected PdfDictionary BuildShadingFunction(GradientStopCollection gradients, bool softMask, PdfColorMode colorMode, bool reverse, out PdfDictionary funcReverse)
         {
-            PdfDictionary func = new PdfDictionary();
+            PdfDictionary func = new();
             int count = gradients.Count;
             Debug.Assert(count >= 2);
 
@@ -558,15 +457,15 @@ namespace PdfSharp.Xps.Rendering
                 // Build a Type 3 function with an array of 2 Type 2 functions
                 func.Elements["/FunctionType"] = new PdfInteger(3);  // Type 3 - Stitching Function
                 func.Elements["/Domain"] = new PdfLiteral("[0 1]");
-                PdfArray fnarray = new PdfArray();
+                PdfArray fnarray = new();
                 func.Elements["/Functions"] = fnarray;
 
-                StringBuilder bounds = new StringBuilder("[");
-                StringBuilder encode = new StringBuilder("[");
+                StringBuilder bounds = new("[");
+                StringBuilder encode = new("[");
 
                 for (int idx = 1; idx < count; idx++)
                 {
-                    PdfDictionary fn2 = new PdfDictionary();
+                    PdfDictionary fn2 = new();
                     fn2.Elements["/FunctionType"] = new PdfInteger(2);
                     var clr0 = gradients[idx - 1].Color;
                     var clr1 = gradients[idx].Color;
@@ -610,7 +509,7 @@ namespace PdfSharp.Xps.Rendering
                 func.Elements["/Encode"] = new PdfLiteral("[1 0]");
                 func.Elements["/Bounds"] = new PdfLiteral("[]");
                 func.Elements["/Range"] = new PdfLiteral("[0 1 0 1 0 1]");
-                PdfArray fnarray0 = new PdfArray();
+                PdfArray fnarray0 = new();
                 fnarray0.Elements.Add(funcReverse);
                 func.Elements["/Functions"] = fnarray0;
 
@@ -690,13 +589,13 @@ namespace PdfSharp.Xps.Rendering
 
             //        // Build a Type 3 function with an array of n-1 Type 2 functions
 
-            PdfDictionary fn1 = new PdfDictionary();
+            PdfDictionary fn1 = new();
 
 
             fn1.Elements["/FunctionType"] = new PdfInteger(3);  // Type 3 - Stitching Function
             fn1.Elements["/Domain"] = new PdfLiteral("[0 1]");
             fn1.Elements["/Range"] = new PdfLiteral("[0 1 0 1 0 1]");
-            PdfArray fnarray = new PdfArray();
+            PdfArray fnarray = new();
             fn1.Elements["/Functions"] = fnarray;
 
             var bounds = new StringBuilder("[");
@@ -704,7 +603,7 @@ namespace PdfSharp.Xps.Rendering
 
             for (int idx = 1; idx < count; idx++)
             {
-                PdfDictionary fn2 = new PdfDictionary();
+                PdfDictionary fn2 = new();
                 fn2.Elements["/FunctionType"] = new PdfInteger(2);
                 var clr0 = gradients[idx - 1].Color;
                 var clr1 = gradients[idx].Color;

@@ -176,14 +176,12 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.trimMargins == null)
-                    this.trimMargins = new TrimMargins();
+                this.trimMargins ??= new TrimMargins();
                 return this.trimMargins;
             }
             set
             {
-                if (this.trimMargins == null)
-                    this.trimMargins = new TrimMargins();
+                this.trimMargins ??= new TrimMargins();
                 if (value != null)
                 {
                     this.trimMargins.Left = value.Left;
@@ -195,7 +193,7 @@ namespace PdfSharp.Pdf
                     this.trimMargins.All = 0;
             }
         }
-        TrimMargins trimMargins = new TrimMargins();
+        TrimMargins trimMargins = new();
 
         /// <summary>
         /// Gets or sets the media box directly. XGrahics is not prepared to work with a media box
@@ -335,8 +333,7 @@ namespace PdfSharp.Pdf
                             if (item is PdfReference)
                                 item = ((PdfReference)item).Value;
 
-                            PdfArray array = item as PdfArray;
-                            if (array != null)
+                            if (item is PdfArray array)
                             {
                                 // It is already an array of content streams.
                                 if (array.IsIndirect)
@@ -354,7 +351,7 @@ namespace PdfSharp.Pdf
                                 // Only one content stream -> create array
                                 this.contents = new PdfContents(Owner);
                                 //Owner.irefTable.Add(this.contents);
-                                PdfContent content = new PdfContent((PdfDictionary)item);
+                                PdfContent content = new((PdfDictionary)item);
                                 this.contents.Elements.Add(content.Reference);
                             }
                         }
@@ -436,8 +433,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.customValues == null)
-                    this.customValues = PdfCustomValues.Get(Elements);
+                this.customValues ??= PdfCustomValues.Get(Elements);
                 return this.customValues;
             }
             set
@@ -454,8 +450,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.resources == null)
-                    this.resources = (PdfResources)Elements.GetValue(Keys.Resources, VCF.Create); //VCF.CreateIndirect
+                this.resources ??= (PdfResources)Elements.GetValue(Keys.Resources, VCF.Create); //VCF.CreateIndirect
                 return this.resources;
             }
         }
@@ -569,7 +564,7 @@ namespace PdfSharp.Pdf
             this.transparencyUsed = true; // TODO: check XObjects
             if (this.transparencyUsed && !Elements.ContainsKey(Keys.Group))
             {
-                PdfDictionary group = new PdfDictionary();
+                PdfDictionary group = new();
                 this.elements["/Group"] = group;
                 if (this.document.Options.ColorMode != PdfColorMode.Cmyk)
                     group.Elements.SetName("/CS", "/DeviceRGB");
@@ -698,7 +693,7 @@ namespace PdfSharp.Pdf
                 CropBox = new PdfRectangle(0, 0, width, height);
                 BleedBox = new PdfRectangle(0, 0, width, height);
 
-                PdfRectangle rect = new PdfRectangle(this.trimMargins.Left.Point, this.trimMargins.Top.Point,
+                PdfRectangle rect = new(this.trimMargins.Left.Point, this.trimMargins.Top.Point,
                   width - this.trimMargins.Right.Point, height - this.trimMargins.Bottom.Point);
                 TrimBox = rect;
                 ArtBox = rect.Clone();
@@ -914,8 +909,7 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

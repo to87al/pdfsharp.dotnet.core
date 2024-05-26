@@ -45,8 +45,7 @@ namespace PdfSharp.Drawing.Layout
         /// </summary>
         public XTextFormatter(XGraphics gfx)
         {
-            if (gfx == null)
-                throw new ArgumentNullException("gfx");
+            ArgumentNullException.ThrowIfNull(gfx);
             this.gfx = gfx;
         }
 
@@ -71,8 +70,7 @@ namespace PdfSharp.Drawing.Layout
             get { return this.font; }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException("font");
+                ArgumentNullException.ThrowIfNull(value);
                 this.font = value;
 
                 this.lineSpace = font.GetHeight(this.gfx);
@@ -80,8 +78,8 @@ namespace PdfSharp.Drawing.Layout
                 this.cyDescent = lineSpace * font.cellDescent / font.cellSpace;
 
                 // HACK in XTextFormatter
-                this.spaceWidth = gfx.MeasureString("x x", value).width;
-                this.spaceWidth -= gfx.MeasureString("xx", value).width;
+                this.spaceWidth = XGraphics.MeasureString("x x", value).width;
+                this.spaceWidth -= XGraphics.MeasureString("xx", value).width;
             }
         }
         XFont font;
@@ -132,12 +130,9 @@ namespace PdfSharp.Drawing.Layout
         /// <param name="format">The format. Must be <c>XStringFormat.TopLeft</c></param>
         public void DrawString(string text, XFont font, XBrush brush, XRect layoutRectangle, XStringFormat format)
         {
-            if (text == null)
-                throw new ArgumentNullException("text");
-            if (font == null)
-                throw new ArgumentNullException("font");
-            if (brush == null)
-                throw new ArgumentNullException("brush");
+            ArgumentNullException.ThrowIfNull(text);
+            ArgumentNullException.ThrowIfNull(font);
+            ArgumentNullException.ThrowIfNull(brush);
             if (format.Alignment != XStringAlignment.Near || format.LineAlignment != XLineAlignment.Near)
                 throw new ArgumentException("Only TopLeft alignment is currently implemented.");
 
@@ -189,7 +184,7 @@ namespace PdfSharp.Drawing.Layout
                     {
                         string token = text.Substring(startIndex, blockLength);
                         this.blocks.Add(new Block(token, BlockType.Text,
-                          this.gfx.MeasureString(token, this.font).Width));
+                          XGraphics.MeasureString(token, this.font).Width));
                     }
                     startIndex = idx + 1;
                     blockLength = 0;
@@ -201,7 +196,7 @@ namespace PdfSharp.Drawing.Layout
                     {
                         string token = text.Substring(startIndex, blockLength);
                         this.blocks.Add(new Block(token, BlockType.Text,
-                          this.gfx.MeasureString(token, this.font).Width));
+                          XGraphics.MeasureString(token, this.font).Width));
                         startIndex = idx + 1;
                         blockLength = 0;
                     }
@@ -220,7 +215,7 @@ namespace PdfSharp.Drawing.Layout
             {
                 string token = text.Substring(startIndex, blockLength);
                 this.blocks.Add(new Block(token, BlockType.Text,
-                  this.gfx.MeasureString(token, this.font).Width));
+                  XGraphics.MeasureString(token, this.font).Width));
             }
         }
 
@@ -310,7 +305,7 @@ namespace PdfSharp.Drawing.Layout
             }
         }
 
-        readonly List<Block> blocks = new List<Block>();
+        readonly List<Block> blocks = [];
 
         enum BlockType
         {

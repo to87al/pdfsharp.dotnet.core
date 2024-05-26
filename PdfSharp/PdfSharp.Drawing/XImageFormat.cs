@@ -53,8 +53,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public override bool Equals(object obj)
         {
-            XImageFormat format = obj as XImageFormat;
-            if (format == null)
+            if (obj is not XImageFormat format)
                 return false;
             return this.guid == format.guid;
         }
@@ -131,12 +130,12 @@ namespace PdfSharp.Drawing
             //ImageFormat.icon = new ImageFormat(new Guid("{b96b3cb5-0728-11d3-9d7b-0000f81ef32e}"));
         }
 
-        private static readonly XImageFormat png = new XImageFormat(new Guid("{B96B3CAF-0728-11D3-9D7B-0000F81EF32E}"));
-        private static readonly XImageFormat gif = new XImageFormat(new Guid("{B96B3CB0-0728-11D3-9D7B-0000F81EF32E}"));
-        private static readonly XImageFormat jpeg = new XImageFormat(new Guid("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}"));
-        private static readonly XImageFormat tiff = new XImageFormat(new Guid("{B96B3CB1-0728-11D3-9D7B-0000F81EF32E}"));
-        private static readonly XImageFormat icon = new XImageFormat(new Guid("{B96B3CB5-0728-11D3-9D7B-0000F81EF32E}"));
+        private static readonly XImageFormat png = new(new Guid("{B96B3CAF-0728-11D3-9D7B-0000F81EF32E}"));
+        private static readonly XImageFormat gif = new(new Guid("{B96B3CB0-0728-11D3-9D7B-0000F81EF32E}"));
+        private static readonly XImageFormat jpeg = new(new Guid("{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}"));
+        private static readonly XImageFormat tiff = new(new Guid("{B96B3CB1-0728-11D3-9D7B-0000F81EF32E}"));
+        private static readonly XImageFormat icon = new(new Guid("{B96B3CB5-0728-11D3-9D7B-0000F81EF32E}"));
         // not GDI+ conform
-        private static readonly XImageFormat pdf = new XImageFormat(new Guid("{84570158-DBF0-4C6B-8368-62D6A3CA76E0}"));
+        private static readonly XImageFormat pdf = new(new Guid("{84570158-DBF0-4C6B-8368-62D6A3CA76E0}"));
     }
 }

@@ -88,7 +88,7 @@ namespace PdfSharp.Pdf.Advanced
             if (id == null || id.Length != 16)
                 return Guid.Empty;
 
-            StringBuilder guid = new StringBuilder();
+            StringBuilder guid = new();
             for (int idx = 0; idx < 16; idx++)
                 guid.AppendFormat("{0:X2}", (byte)id[idx]);
 
@@ -117,8 +117,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public static PdfReference GetReference(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             return obj.Reference;
         }
 
@@ -127,8 +126,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public static PdfObjectID GetObjectID(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             return obj.ObjectID;
         }
 
@@ -137,8 +135,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public static int GetObjectNumber(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             return obj.ObjectNumber;
         }
 
@@ -147,8 +144,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public static int GenerationNumber(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             return obj.GenerationNumber;
         }
 
@@ -182,10 +178,10 @@ namespace PdfSharp.Pdf.Advanced
         {
             T result = null;
             ConstructorInfo ctorInfo = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.ExactBinding,
-              null, new Type[] { typeof(PdfDocument) }, null);
+              null, [typeof(PdfDocument)], null);
             if (ctorInfo != null)
             {
-                result = (T)ctorInfo.Invoke(new object[] { this.document });
+                result = (T)ctorInfo.Invoke([this.document]);
                 Debug.Assert(result != null);
                 AddObject(result);
             }
@@ -199,8 +195,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public void AddObject(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             if (obj.Owner == null)
                 obj.Document = this.document;
             else if (obj.Owner != this.document)
@@ -213,8 +208,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public void RemoveObject(PdfObject obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException("obj");
+            ArgumentNullException.ThrowIfNull(obj);
             if (obj.Reference == null)
                 throw new InvalidOperationException("Only indirect objects can be removed.");
             if (obj.Owner != this.document)
@@ -257,7 +251,7 @@ namespace PdfSharp.Pdf.Advanced
         public static void WriteObject(Stream stream, PdfItem item)
         {
             // Never write an encrypted object
-            PdfWriter writer = new PdfWriter(stream, null);
+            PdfWriter writer = new(stream, null);
             writer.Options = PdfWriterOptions.OmitStream;
             item.WriteObject(writer);
         }

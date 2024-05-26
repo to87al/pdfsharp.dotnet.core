@@ -67,8 +67,7 @@ namespace PdfSharp.Drawing.BarCodes
 
             //XPoint pt = center - this.size / 2;
             XPoint pt = position - CodeBase.CalcDistance(AnchorType.TopLeft, this.anchor, this.size);
-            uint value;
-            uint.TryParse(this.text, out value);
+            uint.TryParse(this.text, out uint value);
 #if true
             // HACK: Project Wallenwein: set LK
             value |= 1;
@@ -76,7 +75,7 @@ namespace PdfSharp.Drawing.BarCodes
 #endif
             if (this.synchronizeCode)
             {
-                XRect rect = new XRect(pt.x, pt.y, this.makerThickness, this.size.height);
+                XRect rect = new(pt.x, pt.y, this.makerThickness, this.size.height);
                 gfx.DrawRectangle(brush, rect);
                 pt.x += 2 * this.makerDistance;
             }
@@ -84,7 +83,7 @@ namespace PdfSharp.Drawing.BarCodes
             {
                 if ((value & 1) == 1)
                 {
-                    XRect rect = new XRect(pt.x + idx * this.makerDistance, pt.y, this.makerThickness, this.size.height);
+                    XRect rect = new(pt.x + (idx * this.makerDistance), pt.y, this.makerThickness, this.size.height);
                     gfx.DrawRectangle(brush, rect);
                 }
                 value >>= 1;

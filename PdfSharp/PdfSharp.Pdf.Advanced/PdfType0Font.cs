@@ -94,7 +94,7 @@ namespace PdfSharp.Pdf.Advanced
             this.fontDescriptor.FontName = BaseFont;
             this.descendantFont.BaseFont = BaseFont;
 
-            PdfArray descendantFonts = new PdfArray(document);
+            PdfArray descendantFonts = new(document);
             Owner.irefTable.Add(descendantFont);
             descendantFonts.Elements.Add(descendantFont.Reference);
             Elements[Keys.DescendantFonts] = descendantFonts;
@@ -138,21 +138,16 @@ namespace PdfSharp.Pdf.Advanced
             //}
 
             // CID fonts are always embedded
-            if (!BaseFont.Contains("+"))  // HACK in PdfType0Font
+            if (!BaseFont.Contains('+'))  // HACK in PdfType0Font
                 BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
 
             this.fontDescriptor.FontName = BaseFont;
             this.descendantFont.BaseFont = BaseFont;
 
-            PdfArray descendantFonts = new PdfArray(document);
+            PdfArray descendantFonts = new(document);
             Owner.irefTable.Add(descendantFont);
             descendantFonts.Elements.Add(descendantFont.Reference);
             Elements[Keys.DescendantFonts] = descendantFonts;
-        }
-
-        XPdfFontOptions FontOptions
-        {
-            get { return this.fontOptions; }
         }
 
         readonly XPdfFontOptions fontOptions;
@@ -177,7 +172,7 @@ namespace PdfSharp.Pdf.Advanced
 #if true
             // use GetGlyphIndices to create the widths array
             OpenTypeDescriptor descriptor = (OpenTypeDescriptor)this.fontDescriptor.descriptor;
-            StringBuilder w = new StringBuilder("[");
+            StringBuilder w = new("[");
             if (this.cmapInfo != null)
             {
                 int[] glyphIndices = this.cmapInfo.GetGlyphIndices();
@@ -191,7 +186,7 @@ namespace PdfSharp.Pdf.Advanced
 
                 for (int idx = 0; idx < count; idx++)
                     w.AppendFormat("{0}[{1}]", glyphIndices[idx], glyphWidths[idx]);
-                w.Append("]");
+                w.Append(']');
                 this.descendantFont.Elements.SetValue(PdfCIDFont.Keys.W, new PdfLiteral(w.ToString()));
 #else
       TrueTypeDescriptor descriptor = (TrueTypeDescriptor)this.fontDescriptor.descriptor;
@@ -296,8 +291,7 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

@@ -62,9 +62,9 @@ namespace PdfSharp.Drawing
         public int Restore(InternalGraphicsState state)
         {
             if (!this.stack.Contains(state))
-                throw new ArgumentException("State not on stack.", "state");
+                throw new ArgumentException("State not on stack.", nameof(state));
             if (state.invalid)
-                throw new ArgumentException("State already restored.", "state");
+                throw new ArgumentException("State already restored.", nameof(state));
 
             int count = 1;
             InternalGraphicsState top = (InternalGraphicsState)this.stack.Pop();
@@ -91,6 +91,6 @@ namespace PdfSharp.Drawing
         }
 
         readonly InternalGraphicsState current;
-        readonly Stack<InternalGraphicsState> stack = new Stack<InternalGraphicsState>();
+        readonly Stack<InternalGraphicsState> stack = new();
     }
 }

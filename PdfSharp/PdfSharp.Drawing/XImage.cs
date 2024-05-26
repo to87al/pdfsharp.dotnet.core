@@ -119,32 +119,6 @@ namespace PdfSharp.Drawing
             Initialize();
         }
 
-        XImage(Stream stream)
-        {
-            // Create a dummy unique path
-            this.path = "*" + Guid.NewGuid().ToString("B");
-
-#if GDI
-      this.gdiImage = Image.FromStream(stream);
-#endif
-#if WPF
-            throw new NotImplementedException();
-            //this.wpfImage = new BitmapImage(new Uri(path));
-#endif
-
-#if true_
-      float vres = this.image.VerticalResolution;
-      float hres = this.image.HorizontalResolution;
-      SizeF size = this.image.PhysicalDimension;
-      int flags  = this.image.Flags;
-      Size sz    = this.image.Size;
-      GraphicsUnit units = GraphicsUnit.Millimeter;
-      RectangleF rect = this.image.GetBounds(ref units);
-      int width = this.image.Width;
-#endif
-            Initialize();
-        }
-
 #if GDI
 #if UseGdiObjects
     /// <summary>
@@ -313,9 +287,9 @@ namespace PdfSharp.Drawing
             string filename = bitmapSource.ToString();
             filename = UrlDecodeStringFromStringInternal(filename);
             if (filename.StartsWith("file:///"))
-                filename = filename.Substring(8); // Remove all 3 slashes!
+                filename = filename[8..]; // Remove all 3 slashes!
             else if (filename.StartsWith("file://"))
-                filename = filename.Substring(5); // Keep 2 slashes (UNC path)
+                filename = filename[5..]; // Keep 2 slashes (UNC path)
             return filename;
         }
 
@@ -571,7 +545,7 @@ namespace PdfSharp.Drawing
 #endif
 #if WPF && !GDI
 #if !SILVERLIGHT
-                Debug.Assert(Math.Abs(this.wpfImage.PixelWidth * 72 / this.wpfImage.DpiX - this.wpfImage.Width * 72.0 / 96.0) < 0.001);
+                Debug.Assert(Math.Abs((this.wpfImage.PixelWidth * 72 / this.wpfImage.DpiX) - (this.wpfImage.Width * 72.0 / 96.0)) < 0.001);
                 return this.wpfImage.Width * 72.0 / 96.0;
 #else
         // AGHACK
@@ -599,7 +573,7 @@ namespace PdfSharp.Drawing
 #endif
 #if WPF || SILVERLIGHT && !GDI
 #if !SILVERLIGHT
-                Debug.Assert(Math.Abs(this.wpfImage.PixelHeight * 72 / this.wpfImage.DpiY - this.wpfImage.Height * 72.0 / 96.0) < 0.001);
+                Debug.Assert(Math.Abs((this.wpfImage.PixelHeight * 72 / this.wpfImage.DpiY) - (this.wpfImage.Height * 72.0 / 96.0)) < 0.001);
                 return this.wpfImage.Height * 72.0 / 96.0;
 #else
         // AGHACK

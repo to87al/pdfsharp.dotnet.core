@@ -211,8 +211,7 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                if (this.dashPattern == null)
-                    this.dashPattern = new double[0];
+                this.dashPattern ??= [];
                 return this.dashPattern;
             }
             set

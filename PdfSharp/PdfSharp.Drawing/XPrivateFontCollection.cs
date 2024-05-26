@@ -54,7 +54,7 @@ namespace PdfSharp.Drawing
             //if (s_global != null)
             //  throw new InvalidOperationException("Because of limitations in GDI+ you can only have one instance of XPrivateFontCollection in your application.");
         }
-        internal static XPrivateFontCollection s_global = new XPrivateFontCollection();
+        internal static XPrivateFontCollection s_global = new();
 
         //static XPrivateFontCollection()
         //{
@@ -111,8 +111,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XPrivateFontCollection SetGlobalFontCollection(XPrivateFontCollection fontCollection)
         {
-            if (fontCollection == null)
-                throw new ArgumentNullException("fontCollection");
+            ArgumentNullException.ThrowIfNull(fontCollection);
 
             XPrivateFontCollection old = s_global;
             s_global = fontCollection;
@@ -208,16 +207,16 @@ namespace PdfSharp.Drawing
             // does not work
 
             if (String.IsNullOrEmpty(familyName))
-                throw new ArgumentNullException("familyName");
-            if (familyName.Contains(","))
+                throw new ArgumentNullException(nameof(familyName));
+            if (familyName.Contains(','))
                 throw new NotImplementedException("Only one family name is supported.");
 
             // family name starts right of '#'
             int idxHash = familyName.IndexOf('#');
             if (idxHash < 0)
-                throw new ArgumentException("Family name must contain a '#'. Example './#MyFontFamilyName'", "familyName");
+                throw new ArgumentException("Family name must contain a '#'. Example './#MyFontFamilyName'", nameof(familyName));
 
-            string key = familyName.Substring(idxHash + 1);
+            string key = familyName[(idxHash + 1)..];
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentException("familyName has invalid format.");
 
@@ -225,7 +224,7 @@ namespace PdfSharp.Drawing
                 throw new ArgumentException("An entry with the specified family name already exists.");
 
 #if !SILVERLIGHT
-            System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(baseUri, familyName);
+            System.Windows.Media.FontFamily fontFamily = new(baseUri, familyName);
 #else
       System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(familyName);
 #endif
@@ -326,7 +325,7 @@ namespace PdfSharp.Drawing
     //List<XGlyphTypeface> privateFonts = new List<XGlyphTypeface>();
 #endif
 #if WPF
-        readonly Dictionary<string, System.Windows.Media.FontFamily> fontFamilies = new Dictionary<string, System.Windows.Media.FontFamily>(StringComparer.InvariantCultureIgnoreCase);
+        readonly Dictionary<string, System.Windows.Media.FontFamily> fontFamilies = new(StringComparer.InvariantCultureIgnoreCase);
 #endif
     }
 }

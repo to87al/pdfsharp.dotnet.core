@@ -65,14 +65,12 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (this.trimMargins == null)
-                    this.trimMargins = new TrimMargins();
+                this.trimMargins ??= new TrimMargins();
                 return this.trimMargins;
             }
             set
             {
-                if (this.trimMargins == null)
-                    this.trimMargins = new TrimMargins();
+                this.trimMargins ??= new TrimMargins();
                 if (value != null)
                 {
                     this.trimMargins.Left = value.Left;
@@ -84,6 +82,6 @@ namespace PdfSharp.Pdf
                     this.trimMargins.All = 0;
             }
         }
-        TrimMargins trimMargins = new TrimMargins();
+        TrimMargins trimMargins = new();
     }
 }

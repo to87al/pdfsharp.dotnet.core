@@ -35,7 +35,7 @@ namespace PdfSharp.Internal
     /// <summary>
     /// Required native Win32 calls. Don't know what to do under Mono.
     /// </summary>
-    static class NativeMethods
+    static partial class NativeMethods
     {
         /// <summary>
         /// Reflected from System.Drawing.SafeNativeMethods+LOGFONT
@@ -79,8 +79,8 @@ namespace PdfSharp.Internal
             public string lfFaceName;
             public override string ToString()
             {
-                object[] objArray1 = new object[0x1c]
-                {
+                object[] objArray1 =
+                [
           "lfHeight=", this.lfHeight,
           ", lfWidth=", this.lfWidth,
           ", lfEscapement=", this.lfEscapement,
@@ -95,20 +95,20 @@ namespace PdfSharp.Internal
           ", lfQuality=", this.lfQuality,
           ", lfPitchAndFamily=", this.lfPitchAndFamily,
           ", lfFaceName=", this.lfFaceName
-                };
+                ];
                 return string.Concat(objArray1);
             }
             public LOGFONT() { }
         }
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetDC(IntPtr hwnd);
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr GetDC(IntPtr hwnd);
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
 
-        [DllImport("gdi32.dll", SetLastError = true)]
-        public static extern int GetFontData(
+        [LibraryImport("gdi32.dll", SetLastError = true)]
+        public static partial int GetFontData(
           IntPtr hdc, // handle to DC
           uint dwTable, // metric table name
           uint dwOffset, // offset into table
@@ -116,14 +116,15 @@ namespace PdfSharp.Internal
           int cbData // length of data
           );
 
-        [DllImport("gdi32.dll", EntryPoint = "CreateFontIndirectW")]
-        public static extern IntPtr CreateFontIndirect(LOGFONT lpLogFont);
+        //[DllImport("gdi32.dll", EntryPoint = "CreateFontIndirectW")]
+        //public static extern IntPtr CreateFontIndirect(LOGFONT lpLogFont);
 
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+        [LibraryImport("gdi32.dll")]
+        public static partial IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
 
-        [DllImport("gdi32.dll")]
-        public static extern bool DeleteObject(IntPtr hgdiobj);
+        [LibraryImport("gdi32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool DeleteObject(IntPtr hgdiobj);
 
         public const int HORZSIZE = 4; // Horizontal size in millimeters
         public const int VERTSIZE = 6; // Vertical size in millimeters
@@ -131,7 +132,7 @@ namespace PdfSharp.Internal
         public const int VERTRES = 10; // Vertical height in pixels
         public const int LOGPIXELSX = 88; // Logical pixels/inch in X
         public const int LOGPIXELSY = 90; // Logical pixels/inch in Y
-        [DllImport("gdi32.dll")]
-        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+        [LibraryImport("gdi32.dll")]
+        public static partial int GetDeviceCaps(IntPtr hdc, int nIndex);
     }
 }

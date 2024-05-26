@@ -43,10 +43,8 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfImportedObjectTable(PdfDocument owner, PdfDocument externalDocument)
         {
-            if (owner == null)
-                throw new ArgumentNullException("owner");
-            if (externalDocument == null)
-                throw new ArgumentNullException("externalDocument");
+            ArgumentNullException.ThrowIfNull(owner);
+            ArgumentNullException.ThrowIfNull(externalDocument);
             this.owner = owner;
             this.externalDocumentHandle = externalDocument.Handle;
             this.xObjects = new PdfFormXObject[externalDocument.PageCount];
@@ -120,6 +118,6 @@ namespace PdfSharp.Pdf.Advanced
         /// Maps external object identifiers to cross reference entries of the importing document
         /// {PdfObjectID -> PdfReference}.
         /// </summary>
-        readonly Dictionary<string, PdfReference> externalIDs = new Dictionary<string, PdfReference>();
+        readonly Dictionary<string, PdfReference> externalIDs = [];
     }
 }

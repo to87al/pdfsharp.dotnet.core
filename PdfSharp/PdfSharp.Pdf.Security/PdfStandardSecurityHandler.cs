@@ -224,8 +224,7 @@ namespace PdfSharp.Pdf.Security
             int pValue = Elements.GetInteger(Keys.P);
             int rValue = Elements.GetInteger(Keys.R);
 
-            if (inputPassword == null)
-                inputPassword = "";
+            inputPassword ??= "";
 
             bool strongEncryption = rValue == 3;
             int keyLength = strongEncryption ? 16 : 32;
@@ -275,15 +274,6 @@ namespace PdfSharp.Pdf.Security
 #endif
         }
 
-        [Conditional("DEBUG")]
-        static void DumpBytes(string tag, byte[] bytes)
-        {
-            string dump = tag + ": ";
-            for (int idx = 0; idx < bytes.Length; idx++)
-                dump += String.Format("{0:X2}", bytes[idx]);
-            Debug.WriteLine(dump);
-        }
-
         /// <summary>
         /// Pads a password to a 32 byte array.
         /// </summary>
@@ -302,10 +292,10 @@ namespace PdfSharp.Pdf.Security
             return padded;
         }
         static readonly byte[] passwordPadding = // 32 bytes password padding defined by Adobe
-        {
+        [
       0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
       0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A,
-    };
+    ];
 
         /// <summary>
         /// Generates the user key based on the padded user password.
@@ -373,11 +363,13 @@ namespace PdfSharp.Pdf.Security
             this.md5.TransformBlock(ownerKey, 0, ownerKey.Length, ownerKey, 0);
 
             // Split permission into 4 bytes
-            byte[] permission = new byte[4];
-            permission[0] = (byte)permissions;
-            permission[1] = (byte)(permissions >> 8);
-            permission[2] = (byte)(permissions >> 16);
-            permission[3] = (byte)(permissions >> 24);
+            byte[] permission =
+            [
+                (byte)permissions,
+                (byte)(permissions >> 8),
+                (byte)(permissions >> 16),
+                (byte)(permissions >> 24),
+            ];
             this.md5.TransformBlock(permission, 0, 4, permission, 0);
             this.md5.TransformBlock(documentID, 0, documentID.Length, documentID, 0);
             this.md5.TransformFinalBlock(permission, 0, 0);
@@ -581,7 +573,7 @@ namespace PdfSharp.Pdf.Security
             permissions |= (int)(strongEncryption ? (uint)0xfffff0c0 : (uint)0xffffffc0);
             permissions &= unchecked((int)0xfffffffc);
 
-            PdfInteger pValue = new PdfInteger(permissions);
+            PdfInteger pValue = new(permissions);
 
             Debug.Assert(this.ownerPassword.Length > 0, "Empty owner password.");
             byte[] userPad = PadPassword(this.userPassword);
@@ -592,8 +584,8 @@ namespace PdfSharp.Pdf.Security
             byte[] documentID = PdfEncoders.RawEncoding.GetBytes(this.document.Internals.FirstDocumentID);
             InitWidhUserPassword(documentID, this.userPassword, this.ownerKey, permissions, strongEncryption);
 
-            PdfString oValue = new PdfString(PdfEncoders.RawEncoding.GetString(this.ownerKey));
-            PdfString uValue = new PdfString(PdfEncoders.RawEncoding.GetString(this.userKey));
+            PdfString oValue = new(PdfEncoders.RawEncoding.GetString(this.ownerKey));
+            PdfString uValue = new(PdfEncoders.RawEncoding.GetString(this.userKey));
 
             Elements[Keys.Filter] = new PdfName("/Standard");
             Elements[Keys.V] = vValue;
@@ -710,8 +702,7 @@ namespace PdfSharp.Pdf.Security
             {
                 get
                 {
-                    if (meta == null)
-                        meta = CreateMeta(typeof(Keys));
+                    meta ??= CreateMeta(typeof(Keys));
                     return meta;
                 }
             }

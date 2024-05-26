@@ -72,7 +72,7 @@ namespace PdfSharp.Drawing
         {
             return wpfLineJoin[(int)lineJoin];
         }
-        static readonly PenLineJoin[] wpfLineJoin = new PenLineJoin[] { PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel };
+        static readonly PenLineJoin[] wpfLineJoin = [PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel];
 #endif
 
 #if WPF
@@ -83,7 +83,7 @@ namespace PdfSharp.Drawing
         {
             return wpfLineCap[(int)lineCap];
         }
-        static readonly PenLineCap[] wpfLineCap = new PenLineCap[] { PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square };
+        static readonly PenLineCap[] wpfLineCap = [PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square];
 #endif
     }
 }

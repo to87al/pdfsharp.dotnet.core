@@ -71,7 +71,7 @@ namespace PdfSharp.Pdf.Annotations
                 string value = Elements.GetName(Keys.Name);
                 if (value == "")
                     return PdfRubberStampAnnotationIcon.NoIcon;
-                value = value.Substring(1);
+                value = value[1..];
                 if (!Enum.IsDefined(typeof(PdfRubberStampAnnotationIcon), value))
                     return PdfRubberStampAnnotationIcon.NoIcon;
                 return (PdfRubberStampAnnotationIcon)Enum.Parse(typeof(PdfRubberStampAnnotationIcon), value, false);
@@ -119,8 +119,7 @@ namespace PdfSharp.Pdf.Annotations
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

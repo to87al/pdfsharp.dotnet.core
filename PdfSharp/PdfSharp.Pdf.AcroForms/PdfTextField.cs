@@ -67,7 +67,7 @@ namespace PdfSharp.Pdf.AcroForms
             get { return this.font; }
             set { this.font = value; }
         }
-        XFont font = new XFont("Courier New", 10);
+        XFont font = new("Courier New", 10);
 
         /// <summary>
         /// Gets or sets the foreground color of the field.
@@ -136,7 +136,7 @@ namespace PdfSharp.Pdf.AcroForms
         void RenderAppearance()
         {
             PdfRectangle rect = Elements.GetRectangle(PdfAnnotation.Keys.Rect);
-            XForm form = new XForm(this.document, rect.Size);
+            XForm form = new(this.document, rect.Size);
             XGraphics gfx = XGraphics.FromForm(form);
 
             if (backColor != XColor.Empty)
@@ -150,8 +150,7 @@ namespace PdfSharp.Pdf.AcroForms
             form.DrawingFinished();
 
             // Get existing or create new appearance dictionary
-            PdfDictionary ap = Elements[PdfAnnotation.Keys.AP] as PdfDictionary;
-            if (ap == null)
+            if (Elements[PdfAnnotation.Keys.AP] is not PdfDictionary ap)
             {
                 ap = new PdfDictionary(this.document);
                 Elements[PdfAnnotation.Keys.AP] = ap;
@@ -186,8 +185,7 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    if (Keys.meta == null)
-                        Keys.meta = CreateMeta(typeof(Keys));
+                    Keys.meta ??= CreateMeta(typeof(Keys));
                     return Keys.meta;
                 }
             }

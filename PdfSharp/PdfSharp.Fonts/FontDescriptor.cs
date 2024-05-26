@@ -310,11 +310,8 @@ namespace PdfSharp.Fonts
         {
             get
             {
-                if (this.fontMetrics == null)
-                {
-                    this.fontMetrics = new XFontMetrics(this.fontName, this.unitsPerEm, this.ascender, this.descender, this.leading, this.capHeight,
+                this.fontMetrics ??= new XFontMetrics(this.fontName, this.unitsPerEm, this.ascender, this.descender, this.leading, this.capHeight,
                       this.xHeight, this.stemV, 0, 0, 0);
-                }
                 return this.fontMetrics;
             }
         }

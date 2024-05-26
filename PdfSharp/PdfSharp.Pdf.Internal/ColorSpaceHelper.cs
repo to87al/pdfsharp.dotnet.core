@@ -64,8 +64,7 @@ namespace PdfSharp.Pdf.Internal
         /// </summary>
         public static XColor EnsureColorMode(PdfDocument document, XColor color)
         {
-            if (document == null)
-                throw new ArgumentNullException("document");
+            ArgumentNullException.ThrowIfNull(document);
 
             return EnsureColorMode(document.Options.ColorMode, color);
         }

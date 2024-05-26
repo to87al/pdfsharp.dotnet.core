@@ -173,7 +173,7 @@ namespace PdfSharp.Drawing.Pdf
 
                     case XDashStyle.Custom:
                         {
-                            StringBuilder pdf = new StringBuilder("[", 256);
+                            StringBuilder pdf = new("[", 256);
                             int len = pen.dashPattern == null ? 0 : pen.dashPattern.Length;
                             for (int idx = 0; idx < len; idx++)
                             {
@@ -279,7 +279,7 @@ namespace PdfSharp.Drawing.Pdf
             {
                 XMatrix matrix = this.renderer.defaultViewMatrix;
                 matrix.Prepend(this.Transform);
-                PdfShadingPattern pattern = new PdfShadingPattern(this.renderer.Owner);
+                PdfShadingPattern pattern = new(this.renderer.Owner);
                 pattern.SetupFromBrush((XLinearGradientBrush)brush, matrix);
                 string name = this.renderer.Resources.AddPattern(pattern);
                 this.renderer.AppendFormat("/Pattern cs\n", name);
@@ -397,7 +397,7 @@ namespace PdfSharp.Drawing.Pdf
 
         public void SetAndRealizeClipRect(XRect clipRect)
         {
-            XGraphicsPath clipPath = new XGraphicsPath();
+            XGraphicsPath clipPath = new();
             clipPath.AddRectangle(clipRect);
             RealizeClipPath(clipPath);
         }

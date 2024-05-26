@@ -69,7 +69,7 @@ namespace PdfSharp.Drawing
             return false;
         }
 
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
             if (o is null or not XVector)
                 return false;
@@ -77,12 +77,12 @@ namespace PdfSharp.Drawing
             return Equals(this, vector);
         }
 
-        public bool Equals(XVector value)
+        public readonly bool Equals(XVector value)
         {
             return Equals(this, value);
         }
 
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return this.x.GetHashCode() ^ this.y.GetHashCode();
         }
@@ -99,13 +99,13 @@ namespace PdfSharp.Drawing
 
         public double X
         {
-            get { return this.x; }
+            readonly get { return this.x; }
             set { this.x = value; }
         }
 
         public double Y
         {
-            get { return this.y; }
+            readonly get { return this.y; }
             set { this.y = value; }
         }
 
@@ -124,20 +124,20 @@ namespace PdfSharp.Drawing
             return ConvertToString(format, provider);
         }
 
-        internal string ConvertToString(string format, IFormatProvider provider)
+        internal readonly string ConvertToString(string format, IFormatProvider provider)
         {
             const char numericListSeparator = ',';
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", new object[] { numericListSeparator, this.x, this.y });
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, this.x, this.y]);
         }
 
-        public double Length
+        public readonly double Length
         {
             get { return Math.Sqrt((this.x * this.x) + (this.y * this.y)); }
         }
 
-        public double LengthSquared
+        public readonly double LengthSquared
         {
-            get { return this.x * this.x + this.y * this.y; }
+            get { return (this.x * this.x) + (this.y * this.y); }
         }
 
         public void Normalize()
@@ -148,13 +148,13 @@ namespace PdfSharp.Drawing
 
         public static double CrossProduct(XVector vector1, XVector vector2)
         {
-            return vector1.x * vector2.y - vector1.y * vector2.x;
+            return (vector1.x * vector2.y) - (vector1.y * vector2.x);
         }
 
         public static double AngleBetween(XVector vector1, XVector vector2)
         {
-            double y = vector1.x * vector2.y - vector2.x * vector1.y;
-            double x = vector1.x * vector2.x + vector1.y * vector2.y;
+            double y = (vector1.x * vector2.y) - (vector2.x * vector1.y);
+            double x = (vector1.x * vector2.x) + (vector1.y * vector2.y);
             return (Math.Atan2(y, x) * 57.295779513082323);
         }
 
@@ -241,17 +241,17 @@ namespace PdfSharp.Drawing
 
         public static double operator *(XVector vector1, XVector vector2)
         {
-            return vector1.x * vector2.x + vector1.y * vector2.y;
+            return (vector1.x * vector2.x) + (vector1.y * vector2.y);
         }
 
         public static double Multiply(XVector vector1, XVector vector2)
         {
-            return vector1.x * vector2.x + vector1.y * vector2.y;
+            return (vector1.x * vector2.x) + (vector1.y * vector2.y);
         }
 
         public static double Determinant(XVector vector1, XVector vector2)
         {
-            return vector1.x * vector2.y - vector1.y * vector2.x;
+            return (vector1.x * vector2.y) - (vector1.y * vector2.x);
         }
 
         public static explicit operator XSize(XVector vector)

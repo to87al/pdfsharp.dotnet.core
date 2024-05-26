@@ -155,16 +155,16 @@ namespace PdfSharp.Pdf.AcroForms
         {
             get
             {
-                List<PdfName> names = new List<PdfName>();
+                List<PdfName> names = [];
                 if (HasKids)
                 {
                     PdfAcroFieldCollection fields = Fields;
                     fields.GetDescendantNames(ref names, null);
                 }
-                List<string> temp = new List<string>();
+                List<string> temp = [];
                 foreach (PdfName name in names)
                     temp.Add(name.ToString());
-                return temp.ToArray();
+                return [.. temp];
             }
         }
 
@@ -220,10 +220,6 @@ namespace PdfSharp.Pdf.AcroForms
         /// </summary>
         public sealed class PdfAcroFieldCollection : PdfArray
         {
-            PdfAcroFieldCollection(PdfArray array)
-              : base(array)
-            {
-            }
 
             /// <summary>
             /// Gets the names of all fields in the collection.
@@ -247,12 +243,12 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    List<PdfName> names = new List<PdfName>();
+                    List<PdfName> names = [];
                     GetDescendantNames(ref names, null);
-                    List<string> temp = new List<string>();
+                    List<string> temp = [];
                     foreach (PdfName name in names)
                         temp.Add(name.ToString());
-                    return temp.ToArray();
+                    return [.. temp];
                 }
             }
 
@@ -263,8 +259,7 @@ namespace PdfSharp.Pdf.AcroForms
                 {
                     PdfAcroField field = this[idx];
                     Debug.Assert(field != null);
-                    if (field != null)
-                        field.GetDescendantNames(ref names, partialName);
+                    field?.GetDescendantNames(ref names, partialName);
                 }
             }
 
@@ -307,8 +302,8 @@ namespace PdfSharp.Pdf.AcroForms
                     return null;
 
                 int dot = name.IndexOf('.');
-                string prefix = dot == -1 ? name : name.Substring(0, dot);
-                string suffix = dot == -1 ? "" : name.Substring(dot + 1);
+                string prefix = dot == -1 ? name : name[..dot];
+                string suffix = dot == -1 ? "" : name[(dot + 1)..];
 
                 int count = Elements.Count;
                 for (int idx = 0; idx < count; idx++)

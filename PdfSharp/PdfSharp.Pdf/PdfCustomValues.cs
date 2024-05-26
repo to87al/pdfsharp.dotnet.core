@@ -80,8 +80,7 @@ namespace PdfSharp.Pdf
                 if (dict == null)
                     return null;
                 PdfCustomValue cust = dict as PdfCustomValue;
-                if (cust == null)
-                    cust = new PdfCustomValue(dict);
+                cust ??= new PdfCustomValue(dict);
                 return cust;
             }
             set
@@ -153,8 +152,7 @@ namespace PdfSharp.Pdf
             else
             {
                 customValues = dict as PdfCustomValues;
-                if (customValues == null)
-                    customValues = new PdfCustomValues(dict);
+                customValues ??= new PdfCustomValues(dict);
             }
             return customValues;
         }

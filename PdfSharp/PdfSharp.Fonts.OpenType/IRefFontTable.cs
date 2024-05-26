@@ -58,7 +58,7 @@ namespace PdfSharp.Fonts.OpenType
       if (DirectoryEntry.Tag != TableTagNames.Head)
       {
         byte[] bytes = new byte[DirectoryEntry.PaddedLength];
-        Buffer.BlockCopy(this.irefDirectoryEntry.FontTable.fontData.Data, this.irefDirectoryEntry.Offset, bytes, 0, DirectoryEntry.PaddedLength);
+        System.Buffer.BlockCopy(this.irefDirectoryEntry.FontTable.fontData.Data, this.irefDirectoryEntry.Offset, bytes, 0, DirectoryEntry.PaddedLength);
         uint checkSum1 = DirectoryEntry.CheckSum;
         uint checkSum2 = CalcChecksum(bytes);
         // TODO: Sometimes this Assert fails,

@@ -189,7 +189,7 @@ namespace PdfSharp.Pdf
                 if (attributes.Length == 1)
                 {
                     KeyInfoAttribute attribute = (KeyInfoAttribute)attributes[0];
-                    KeyDescriptor descriptor = new KeyDescriptor(attribute);
+                    KeyDescriptor descriptor = new(attribute);
                     descriptor.KeyValue = (string)field.GetValue(null);
                     this.keyDescriptors[descriptor.KeyValue] = descriptor;
                 }
@@ -201,6 +201,6 @@ namespace PdfSharp.Pdf
             get { return this.keyDescriptors[key]; }
         }
 
-        readonly Dictionary<string, KeyDescriptor> keyDescriptors = new Dictionary<string, KeyDescriptor>();
+        readonly Dictionary<string, KeyDescriptor> keyDescriptors = [];
     }
 }

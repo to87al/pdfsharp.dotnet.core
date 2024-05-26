@@ -73,7 +73,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public int ObjectNumber
         {
-            get { return this.objectNumber; }
+            readonly get { return this.objectNumber; }
             set { this.objectNumber = value; }
         }
         int objectNumber;
@@ -83,7 +83,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public int GenerationNumber
         {
-            get { return this.generationNumber; }
+            readonly get { return this.generationNumber; }
             set { this.generationNumber = (ushort)value; }
         }
         ushort generationNumber;
@@ -91,7 +91,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Indicates whether this object is an empty object identifier.
         /// </summary>
-        public bool IsEmpty
+        public readonly bool IsEmpty
         {
             get { return this.objectNumber == 0; }
         }
@@ -99,7 +99,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is PdfObjectID)
             {
@@ -113,7 +113,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return this.objectNumber ^ this.generationNumber;
         }
@@ -137,7 +137,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Returns the object and generation numbers as a string.
         /// </summary>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return objectNumber.ToString(CultureInfo.InvariantCulture) + " " + generationNumber.ToString(CultureInfo.InvariantCulture);
         }
@@ -153,7 +153,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Compares the current object id with another object.
         /// </summary>
-        public int CompareTo(object obj)
+        public readonly int CompareTo(object obj)
         {
             if (obj is PdfObjectID)
             {

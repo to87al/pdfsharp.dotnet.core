@@ -81,8 +81,8 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
                 {
                     return -1; // ok
                 }
-                buffer |= (uint)((window[window_start++] & 0xff |
-                                 (window[window_start++] & 0xff) << 8) << bits_in_buffer);
+                buffer |= (uint)(((window[window_start++] & 0xff) |
+                                 ((window[window_start++] & 0xff) << 8)) << bits_in_buffer);
                 bits_in_buffer += 16;
             }
             return (int)(buffer & ((1 << n) - 1));
@@ -193,7 +193,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         {
             if (length < 0)
             {
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException(nameof(length));
             }
             if ((bits_in_buffer & 7) != 0)
             {

@@ -16,14 +16,14 @@ namespace PdfSharp.Xps.Rendering
         public static XImage FromImageBrush(DocumentRenderingContext context,
           ImageBrush brush)
         {
-            ImageBuilder ib = new ImageBuilder(context);
+            ImageBuilder ib = new(context);
             XImage xpImage = Build(brush);
             return xpImage;
         }
 
         private static XImage Build(ImageBrush brush)
         {
-            XpsImage xpImage = new XpsImage(brush.ImageSource as BitmapSource);
+            XpsImage xpImage = new(brush.ImageSource as BitmapSource);
             return xpImage;
         }
     }

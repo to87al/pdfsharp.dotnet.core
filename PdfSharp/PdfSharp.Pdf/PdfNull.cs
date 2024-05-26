@@ -58,6 +58,6 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// The only instance of this class.
         /// </summary>
-        public static readonly PdfNull Value = new PdfNull();
+        public static readonly PdfNull Value = new();
     }
 }
