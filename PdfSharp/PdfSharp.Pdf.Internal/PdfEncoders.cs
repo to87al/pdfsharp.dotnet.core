@@ -56,11 +56,12 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                PdfEncoders.rawEncoding ??= new RawEncoding();
-                return PdfEncoders.rawEncoding;
+                rawEncoding ??= new RawEncoding();
+                return rawEncoding;
             }
         }
-        static Encoding rawEncoding;
+
+        private static Encoding rawEncoding;
 
         /// <summary>
         /// Gets the raw Unicode encoding.
@@ -69,11 +70,12 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                PdfEncoders.rawUnicodeEncoding ??= new RawUnicodeEncoding();
-                return PdfEncoders.rawUnicodeEncoding;
+                rawUnicodeEncoding ??= new RawUnicodeEncoding();
+                return rawUnicodeEncoding;
             }
         }
-        static Encoding rawUnicodeEncoding;
+
+        private static Encoding rawUnicodeEncoding;
 
         /// <summary>
         /// Gets the Windows 1252 (ANSI) encoding.
@@ -82,16 +84,17 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                PdfEncoders.winAnsiEncoding ??=
+                winAnsiEncoding ??=
 #if !SILVERLIGHT
-            System.Text.Encoding.Default;// Encoding.GetEncoding(1252);
+            Encoding.Default;// Encoding.GetEncoding(1252);
 #else
  Encoding.GetEncoding("utf-8"); // AGHACK
 #endif
-                return PdfEncoders.winAnsiEncoding;
+                return winAnsiEncoding;
             }
         }
-        static Encoding winAnsiEncoding;
+
+        private static Encoding winAnsiEncoding;
 
         /// <summary>
         /// Gets the PDF DocEncoding encoding.
@@ -100,11 +103,12 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                PdfEncoders.docEncoding ??= new DocEncoding();
-                return PdfEncoders.docEncoding;
+                docEncoding ??= new DocEncoding();
+                return docEncoding;
             }
         }
-        static Encoding docEncoding;
+
+        private static Encoding docEncoding;
 
         /// <summary>
         /// Gets the UNICODE little-endian encoding.
@@ -113,11 +117,12 @@ namespace PdfSharp.Pdf.Internal
         {
             get
             {
-                PdfEncoders.unicodeEncoding ??= Encoding.Unicode;
-                return PdfEncoders.unicodeEncoding;
+                unicodeEncoding ??= Encoding.Unicode;
+                return unicodeEncoding;
             }
         }
-        static Encoding unicodeEncoding;
+
+        private static Encoding unicodeEncoding;
 
         ///// <summary>
         ///// Encodes a string from a byte array. Each character gets the code of the corresponding byte.
@@ -417,9 +422,9 @@ namespace PdfSharp.Pdf.Internal
         }
 
         /// <summary>
-        /// Converts WinAnsi to DocEncode characters. Incomplete, just maps € and some other characters.
+        /// Converts WinAnsi to DocEncode characters. Incomplete, just maps ï¿½ and some other characters.
         /// </summary>
-        static readonly byte[] docencode_______ =
+        private static readonly byte[] docencode_______ =
         [
       // TODO: 
       0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,

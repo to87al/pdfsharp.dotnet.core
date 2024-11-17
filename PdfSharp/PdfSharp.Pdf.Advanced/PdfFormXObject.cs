@@ -64,22 +64,24 @@ namespace PdfSharp.Pdf.Advanced
 
         public double DpiX
         {
-            get { return this.dpiX; }
-            set { this.dpiX = value; }
+            get { return dpiX; }
+            set { dpiX = value; }
         }
-        double dpiX = 72;
+
+        private double dpiX = 72;
 
         public double DpiY
         {
-            get { return this.dpiY; }
-            set { this.dpiY = value; }
+            get { return dpiY; }
+            set { dpiY = value; }
         }
-        double dpiY = 72;
+
+        private double dpiY = 72;
 
         internal PdfFormXObject(PdfDocument thisDocument, PdfImportedObjectTable importedObjectTable, XPdfForm form)
           : base(thisDocument)
         {
-            Debug.Assert(Object.ReferenceEquals(thisDocument, importedObjectTable.Owner));
+            Debug.Assert(ReferenceEquals(thisDocument, importedObjectTable.Owner));
             Elements.SetName(Keys.Type, "/XObject");
             Elements.SetName(Keys.Subtype, "/Form");
 
@@ -197,18 +199,18 @@ namespace PdfSharp.Pdf.Advanced
             }
 
             // Take /Rotate into account
-            PdfRectangle rect = importPage.Elements.GetRectangle(PdfPage.Keys.MediaBox);
-            int rotate = importPage.Elements.GetInteger(PdfPage.Keys.Rotate);
+            PdfRectangle rect = importPage.Elements.GetRectangle(PdfPage.InheritablePageKeys.MediaBox);
+            int rotate = importPage.Elements.GetInteger(PdfPage.InheritablePageKeys.Rotate);
             //rotate = 0;
             if (rotate == 0)
             {
                 // Set bounding box to media box
-                this.Elements["/BBox"] = rect;
+                Elements["/BBox"] = rect;
             }
             else
             {
                 // TODO: Have to adjust bounding box? (I think not, but I'm not sure -> wait for problem)
-                this.Elements["/BBox"] = rect;
+                Elements["/BBox"] = rect;
 
                 // Rotate the image such that it is upright
                 XMatrix matrix = new();  //XMatrix.Identity;
@@ -235,10 +237,10 @@ namespace PdfSharp.Pdf.Advanced
 #endif
             PdfItem filter = content.Elements["/Filter"];
             if (filter != null)
-                this.Elements["/Filter"] = filter.Clone();
+                Elements["/Filter"] = filter.Clone();
 
             // (no cloning needed because the bytes keep untouched)
-            this.Stream = content.Stream; // new PdfStream(bytes, this);
+            Stream = content.Stream; // new PdfStream(bytes, this);
             Elements.SetInteger("/Length", content.Stream.Value.Length);
         }
 
@@ -246,11 +248,12 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                this.resources ??= (PdfResources)Elements.GetValue(PdfFormXObject.Keys.Resources, VCF.Create);
-                return this.resources;
+                resources ??= (PdfResources)Elements.GetValue(Keys.Resources, VCF.Create);
+                return resources;
             }
         }
-        PdfResources resources;
+
+        private PdfResources resources;
 
         PdfResources IContentStream.Resources
         {
@@ -259,7 +262,7 @@ namespace PdfSharp.Pdf.Advanced
 
         internal string GetFontName(XFont font, out PdfFont pdfFont)
         {
-            pdfFont = this.document.FontTable.GetFont(font);
+            pdfFont = document.FontTable.GetFont(font);
             Debug.Assert(pdfFont != null);
             string name = Resources.AddFont(pdfFont);
             return name;
@@ -275,7 +278,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal string GetFontName(string idName, byte[] fontData, out PdfFont pdfFont)
         {
-            pdfFont = this.document.FontTable.GetFont(idName, fontData);
+            pdfFont = document.FontTable.GetFont(idName, fontData);
             Debug.Assert(pdfFont != null);
             string name = Resources.AddFont(pdfFont);
             return name;
@@ -427,7 +430,7 @@ namespace PdfSharp.Pdf.Advanced
             /// <summary>
             /// (Required) An array of four numbers in the form coordinate system, giving the 
             /// coordinates of the left, bottom, right, and top edges, respectively, of the 
-            /// form XObject’s bounding box. These boundaries are used to clip the form XObject
+            /// form XObjectï¿½s bounding box. These boundaries are used to clip the form XObject
             /// and to determine its size for caching.
             /// </summary>
             [KeyInfo(KeyType.Rectangle | KeyType.Required)]
@@ -451,7 +454,7 @@ namespace PdfSharp.Pdf.Advanced
             /// <summary>
             /// (Optional; PDF 1.4) A group attributes dictionary indicating that the contents
             /// of the form XObject are to be treated as a group and specifying the attributes
-            /// of that group (see Section 4.9.2, “Group XObjects”).
+            /// of that group (see Section 4.9.2, ï¿½Group XObjectsï¿½).
             /// Note: If a Ref entry (see below) is present, the group attributes also apply to the
             /// external page imported by that entry, which allows such an imported page to be
             /// treated as a group without further modification.
@@ -477,11 +480,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

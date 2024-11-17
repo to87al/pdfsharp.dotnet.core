@@ -101,16 +101,17 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XStringAlignment Alignment
         {
-            get { return this.alignment; }
+            get { return alignment; }
             set
             {
-                this.alignment = value;
+                alignment = value;
 #if GDI
         this.stringFormat.Alignment = (StringAlignment)value;
 #endif
             }
         }
-        XStringAlignment alignment;
+
+        private XStringAlignment alignment;
 
         //public int DigitSubstitutionLanguage { get; }
         //public StringDigitSubstitute DigitSubstitutionMethod { get; }
@@ -124,10 +125,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XLineAlignment LineAlignment
         {
-            get { return this.lineAlignment; }
+            get { return lineAlignment; }
             set
             {
-                this.lineAlignment = value;
+                lineAlignment = value;
 #if GDI
         if (value == XLineAlignment.BaseLine)
           this.stringFormat.LineAlignment = StringAlignment.Near;
@@ -136,7 +137,8 @@ namespace PdfSharp.Drawing
 #endif
             }
         }
-        XLineAlignment lineAlignment;
+
+        private XLineAlignment lineAlignment;
 
         //public StringTrimming Trimming { get; set; }
 
@@ -219,10 +221,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XStringFormatFlags FormatFlags
         {
-            get { return this.formatFlags; }
+            get { return formatFlags; }
             set
             {
-                this.formatFlags = value;
+                formatFlags = value;
 #if GDI
         this.stringFormat.FormatFlags = (StringFormatFlags)value;
 #endif

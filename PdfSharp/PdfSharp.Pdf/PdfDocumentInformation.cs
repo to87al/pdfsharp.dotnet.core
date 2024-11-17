@@ -124,7 +124,7 @@ namespace PdfSharp.Pdf
         internal sealed class Keys : KeysBase
         {
             /// <summary>
-            /// (Optional; PDF 1.1) The document’s title.
+            /// (Optional; PDF 1.1) The documentï¿½s title.
             /// </summary>
             [KeyInfo(KeyType.String | KeyType.Optional)]
             public const string Title = "/Title";
@@ -189,11 +189,12 @@ namespace PdfSharp.Pdf
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

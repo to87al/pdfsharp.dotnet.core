@@ -60,7 +60,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             ArgumentNullException.ThrowIfNull(brush);
 
-            PdfShading shading = new(this.document);
+            PdfShading shading = new(document);
             shading.SetupFromBrush(brush);
             Elements[Keys.Shading] = shading;
             //Elements[Keys.Matrix] = new PdfLiteral("[" + PdfEncoders.ToString(matrix) + "]");
@@ -87,7 +87,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string PatternType = "/PatternType";
 
             /// <summary>
-            /// (Required) A shading object (see below) defining the shading pattern’s gradient fill.
+            /// (Required) A shading object (see below) defining the shading patternï¿½s gradient fill.
             /// </summary>
             [KeyInfo(KeyType.Dictionary | KeyType.Required)]
             public const string Shading = "/Shading";
@@ -115,11 +115,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

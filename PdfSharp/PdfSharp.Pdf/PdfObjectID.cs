@@ -47,7 +47,7 @@ namespace PdfSharp.Pdf
         {
             Debug.Assert(objectNumber >= 1, "Object number out of range.");
             this.objectNumber = objectNumber;
-            this.generationNumber = 0;
+            generationNumber = 0;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace PdfSharp.Pdf
 #if DEBUG
       // iText creates generation numbers with a value of 65536... 
       if (generationNumber > 65535)
-        Debug.WriteLine(String.Format("Generation number: {0}", generationNumber));
+        Debug.WriteLine($"Generation number: {generationNumber}");
 #endif
             this.objectNumber = objectNumber;
             this.generationNumber = (ushort)generationNumber;
@@ -73,27 +73,29 @@ namespace PdfSharp.Pdf
         /// </summary>
         public int ObjectNumber
         {
-            readonly get { return this.objectNumber; }
-            set { this.objectNumber = value; }
+            readonly get { return objectNumber; }
+            set { objectNumber = value; }
         }
-        int objectNumber;
+
+        private int objectNumber;
 
         /// <summary>
         /// Gets or sets the generation number.
         /// </summary>
         public int GenerationNumber
         {
-            readonly get { return this.generationNumber; }
-            set { this.generationNumber = (ushort)value; }
+            readonly get { return generationNumber; }
+            set { generationNumber = (ushort)value; }
         }
-        ushort generationNumber;
+
+        private ushort generationNumber;
 
         /// <summary>
         /// Indicates whether this object is an empty object identifier.
         /// </summary>
         public readonly bool IsEmpty
         {
-            get { return this.objectNumber == 0; }
+            get { return objectNumber == 0; }
         }
 
         /// <summary>
@@ -104,8 +106,8 @@ namespace PdfSharp.Pdf
             if (obj is PdfObjectID)
             {
                 PdfObjectID id = (PdfObjectID)obj;
-                if (this.objectNumber == id.objectNumber)
-                    return this.generationNumber == id.generationNumber;
+                if (objectNumber == id.objectNumber)
+                    return generationNumber == id.generationNumber;
             }
             return false;
         }
@@ -115,7 +117,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public override readonly int GetHashCode()
         {
-            return this.objectNumber ^ this.generationNumber;
+            return objectNumber ^ generationNumber;
         }
 
         /// <summary>
@@ -158,9 +160,9 @@ namespace PdfSharp.Pdf
             if (obj is PdfObjectID)
             {
                 PdfObjectID id = (PdfObjectID)obj;
-                if (this.objectNumber == id.objectNumber)
-                    return this.generationNumber - id.generationNumber;
-                return this.objectNumber - id.objectNumber;
+                if (objectNumber == id.objectNumber)
+                    return generationNumber - id.generationNumber;
+                return objectNumber - id.objectNumber;
             }
             return 1;
         }

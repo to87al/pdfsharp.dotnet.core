@@ -72,7 +72,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfCatalog Root
         {
-            get { return (PdfCatalog)Elements.GetValue(PdfTrailer.Keys.Root, VCF.CreateIndirect); }
+            get { return (PdfCatalog)Elements.GetValue(Keys.Root, VCF.CreateIndirect); }
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal PdfArray CreateNewDocumentIDs()
         {
-            PdfArray array = new(this.document);
+            PdfArray array = new(document);
             byte[] docID = Guid.NewGuid().ToByteArray();
             string id = PdfEncoders.RawEncoding.GetString(docID, 0, docID.Length);
             array.Elements.Add(new PdfString(id, PdfStringFlags.HexLiteral));
@@ -125,8 +125,8 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                this.securityHandler ??= (PdfStandardSecurityHandler)Elements.GetValue(Keys.Encrypt, VCF.CreateIndirect);
-                return this.securityHandler;
+                securityHandler ??= (PdfStandardSecurityHandler)Elements.GetValue(Keys.Encrypt, VCF.CreateIndirect);
+                return securityHandler;
             }
         }
         internal PdfStandardSecurityHandler securityHandler;
@@ -146,7 +146,7 @@ namespace PdfSharp.Pdf.Advanced
         internal override void WriteObject(PdfWriter writer)
         {
             // Delete /XRefStm entry, if any
-            this.elements.Remove(Keys.XRefStm);
+            elements.Remove(Keys.XRefStm);
 
             // Don't encypt myself
             PdfStandardSecurityHandler securityHandler = writer.SecurityHandler;
@@ -161,40 +161,40 @@ namespace PdfSharp.Pdf.Advanced
         internal void Finish()
         {
             // \Root
-            if (document.trailer.Elements[PdfTrailer.Keys.Root] is PdfReference iref && iref.Value == null)
+            if (document.trailer.Elements[Keys.Root] is PdfReference iref && iref.Value == null)
             {
                 iref = document.irefTable[iref.ObjectID];
                 Debug.Assert(iref.Value != null);
-                this.document.trailer.Elements[PdfTrailer.Keys.Root] = iref;
+                document.trailer.Elements[Keys.Root] = iref;
             }
 
             // \Info
-            iref = this.document.trailer.Elements[PdfTrailer.Keys.Info] as PdfReference;
+            iref = document.trailer.Elements[Keys.Info] as PdfReference;
             if (iref != null && iref.Value == null)
             {
                 iref = document.irefTable[iref.ObjectID];
                 Debug.Assert(iref.Value != null);
-                this.document.trailer.Elements[PdfTrailer.Keys.Info] = iref;
+                document.trailer.Elements[Keys.Info] = iref;
             }
 
             // \Encrypt
-            iref = this.document.trailer.Elements[PdfTrailer.Keys.Encrypt] as PdfReference;
+            iref = document.trailer.Elements[Keys.Encrypt] as PdfReference;
             if (iref != null)
             {
                 iref = document.irefTable[iref.ObjectID];
                 Debug.Assert(iref.Value != null);
-                this.document.trailer.Elements[PdfTrailer.Keys.Encrypt] = iref;
+                document.trailer.Elements[Keys.Encrypt] = iref;
 
                 // The encryption dictionary (security handler) was read in before the XRefTable construction 
                 // was completed. The next lines fix that state (it take several hours to find that bugs...).
-                iref.Value = this.document.trailer.securityHandler;
-                this.document.trailer.securityHandler.Reference = iref;
+                iref.Value = document.trailer.securityHandler;
+                document.trailer.securityHandler.Reference = iref;
                 iref.Value.Reference = iref;
             }
 
             Elements.Remove(Keys.Prev);
 
-            this.document.irefTable.IsUnderConstruction = false;
+            document.irefTable.IsUnderConstruction = false;
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace PdfSharp.Pdf.Advanced
         internal sealed class Keys : KeysBase
         {
             /// <summary>
-            /// (Required; must not be an indirect reference) The total number of entries in the file’s 
+            /// (Required; must not be an indirect reference) The total number of entries in the fileï¿½s 
             /// cross-reference table, as defined by the combination of the original section and all
             /// update sections. Equivalently, this value is 1 greater than the highest object number
             /// used in the file.
@@ -229,13 +229,13 @@ namespace PdfSharp.Pdf.Advanced
             public const string Root = "/Root";
 
             /// <summary>
-            /// (Required if document is encrypted; PDF 1.1) The document’s encryption dictionary.
+            /// (Required if document is encrypted; PDF 1.1) The documentï¿½s encryption dictionary.
             /// </summary>
             [KeyInfo(KeyType.Dictionary | KeyType.Optional, typeof(PdfStandardSecurityHandler))]
             public const string Encrypt = "/Encrypt";
 
             /// <summary>
-            /// (Optional; must be an indirect reference) The document’s information dictionary.
+            /// (Optional; must be an indirect reference) The documentï¿½s information dictionary.
             /// </summary>
             [KeyInfo(KeyType.Dictionary | KeyType.Optional, typeof(PdfDocumentInformation))]
             public const string Info = "/Info";
@@ -262,11 +262,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

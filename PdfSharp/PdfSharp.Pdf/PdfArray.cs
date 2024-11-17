@@ -43,7 +43,7 @@ namespace PdfSharp.Pdf
     [DebuggerDisplay("(elements={Elements.Count})")]
     public class PdfArray : PdfObject, IEnumerable<PdfItem>
     {
-        ArrayElements elements;
+        private ArrayElements elements;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfArray"/> class.
@@ -119,8 +119,8 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                this.elements ??= new ArrayElements(this);
-                return this.elements;
+                elements ??= new ArrayElements(this);
+                return elements;
             }
         }
 
@@ -168,13 +168,13 @@ namespace PdfSharp.Pdf
         /// </summary>
         public sealed class ArrayElements : IList<PdfItem>, ICloneable
         {
-            List<PdfItem> elements;
-            PdfArray owner;
+            private List<PdfItem> elements;
+            private PdfArray owner;
 
             internal ArrayElements(PdfArray array)
             {
-                this.elements = [];
-                this.owner = array;
+                elements = [];
+                owner = array;
             }
 
             object ICloneable.Clone()
@@ -198,7 +198,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             internal void SetOwner(PdfArray array)
             {
-                this.owner = array;
+                owner = array;
                 array.elements = this;
             }
 
@@ -373,7 +373,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public PdfItem[] Items
             {
-                get { return [.. this.elements]; }
+                get { return [.. elements]; }
             }
 
             ///// <summary>
@@ -408,11 +408,11 @@ namespace PdfSharp.Pdf
             /// <value></value>
             public PdfItem this[int index]
             {
-                get { return this.elements[index]; }
+                get { return elements[index]; }
                 set
                 {
                     ArgumentNullException.ThrowIfNull(value);
-                    this.elements[index] = value;
+                    elements[index] = value;
                 }
             }
 
@@ -421,7 +421,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void RemoveAt(int index)
             {
-                this.elements.RemoveAt(index);
+                elements.RemoveAt(index);
             }
 
             /// <summary>
@@ -429,7 +429,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public bool Remove(PdfItem item)
             {
-                return this.elements.Remove(item);
+                return elements.Remove(item);
             }
 
             /// <summary>
@@ -437,7 +437,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void Insert(int index, PdfItem value)
             {
-                this.elements.Insert(index, value);
+                elements.Insert(index, value);
             }
 
             /// <summary>
@@ -445,7 +445,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public bool Contains(PdfItem value)
             {
-                return this.elements.Contains(value);
+                return elements.Contains(value);
             }
 
             /// <summary>
@@ -453,7 +453,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void Clear()
             {
-                this.elements.Clear();
+                elements.Clear();
             }
 
             /// <summary>
@@ -461,7 +461,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public int IndexOf(PdfItem value)
             {
-                return this.elements.IndexOf(value);
+                return elements.IndexOf(value);
             }
 
             /// <summary>
@@ -474,9 +474,9 @@ namespace PdfSharp.Pdf
                 //  "You try to set an indirect object directly into an array.");
 
                 if (value is PdfObject obj && obj.IsIndirect)
-                    this.elements.Add(obj.Reference);
+                    elements.Add(obj.Reference);
                 else
-                    this.elements.Add(value);
+                    elements.Add(value);
             }
 
             /// <summary>
@@ -504,7 +504,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public int Count
             {
-                get { return this.elements.Count; }
+                get { return elements.Count; }
             }
 
             /// <summary>
@@ -512,7 +512,7 @@ namespace PdfSharp.Pdf
             /// </summary>
             public void CopyTo(PdfItem[] array, int index)
             {
-                this.elements.CopyTo(array, index);
+                elements.CopyTo(array, index);
             }
 
             /// <summary>
@@ -530,12 +530,12 @@ namespace PdfSharp.Pdf
             /// </summary>
             public IEnumerator<PdfItem> GetEnumerator()
             {
-                return this.elements.GetEnumerator();
+                return elements.GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.elements.GetEnumerator();
+                return elements.GetEnumerator();
             }
         }
     }

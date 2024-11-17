@@ -12,12 +12,12 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Constructs a PdfShading from LinearGradientBrush or RadialGradientBrush.
     /// </summary>
-    class LinearShadingBuilder : PatternOrShadingBuilder
+    internal class LinearShadingBuilder : PatternOrShadingBuilder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LinearShadingBuilder"/> class.
         /// </summary>
-        LinearShadingBuilder(DocumentRenderingContext context) :
+        private LinearShadingBuilder(DocumentRenderingContext context) :
           base(context)
         { }
 
@@ -59,7 +59,7 @@ namespace PdfSharp.Xps.Rendering
         /// Builds a PdfShading from the specified brush. If a gradient contains transparency, a soft mask is created an added to the 
         /// specified graphic state.
         /// </summary>
-        PdfShading BuildShading(LinearGradientBrush brush)
+        private PdfShading BuildShading(LinearGradientBrush brush)
         {
             // Setup shading
             PdfShading shading = new(Context.PdfDocument);
@@ -106,7 +106,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a PdfShadingPattern from the specified brush.
         /// </summary>
-        PdfShadingPattern BuildShadingPattern(LinearGradientBrush brush, XMatrix transform)
+        private PdfShadingPattern BuildShadingPattern(LinearGradientBrush brush, XMatrix transform)
         {
             //<<
             //  /Matrix [0.75 0 0 -0.75 8 470.4]
@@ -130,7 +130,7 @@ namespace PdfSharp.Xps.Rendering
         /// Builds a PdfFormXObject from the specified brush. 
         /// // If a gradient contains transparency, a soft mask is created an added to the specified graphic state.
         /// </summary>
-        PdfFormXObject BuildForm(LinearGradientBrush brush, PathGeometry geometry)
+        private PdfFormXObject BuildForm(LinearGradientBrush brush, PathGeometry geometry)
         {
             PdfFormXObject pdfForm = Context.PdfDocument.Internals.CreateIndirectObject<PdfFormXObject>();
 
@@ -227,7 +227,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds the soft mask.
         /// </summary>
-        PdfSoftMask BuildSoftMask(LinearGradientBrush brush)
+        private PdfSoftMask BuildSoftMask(LinearGradientBrush brush)
         {
             Debug.Assert(brush.GradientStops.HasTransparency());
 
@@ -346,7 +346,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a monochrome shading for a form XObject of a soft mask.
         /// </summary>
-        PdfShading BuildShadingForSoftMask(LinearGradientBrush brush)
+        private PdfShading BuildShadingForSoftMask(LinearGradientBrush brush)
         {
             // Setup shading
             //<<
@@ -394,7 +394,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a monochrome shading for a form XObject of a soft mask.
         /// </summary>
-        PdfShading BuildShadingForSoftMask(RadialGradientBrush brush)
+        private PdfShading BuildShadingForSoftMask(RadialGradientBrush brush)
         {
             // Setup shading
             //<<

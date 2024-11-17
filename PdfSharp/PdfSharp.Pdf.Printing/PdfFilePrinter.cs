@@ -76,7 +76,7 @@ namespace PdfSharp.Pdf.Printing
         /// <param name="pdfFileName">Name of the PDF file.</param>
         public PdfFilePrinter(string pdfFileName)
         {
-            this.PdfFileName = pdfFileName;
+            PdfFileName = pdfFileName;
         }
 
         /// <summary>
@@ -95,10 +95,11 @@ namespace PdfSharp.Pdf.Printing
         /// </summary>
         public string PdfFileName
         {
-            get { return this.pdfFileName; }
-            set { this.pdfFileName = value; }
+            get { return pdfFileName; }
+            set { pdfFileName = value; }
         }
-        string pdfFileName;
+
+        private string pdfFileName;
 
         /// <summary>
         /// Gets or sets the name of the printer. A typical name looks like '\\myserver\HP LaserJet PCL5'.
@@ -106,20 +107,22 @@ namespace PdfSharp.Pdf.Printing
         /// <value>The name of the printer.</value>
         public string PrinterName
         {
-            get { return this.printerName; }
-            set { this.printerName = value; }
+            get { return printerName; }
+            set { printerName = value; }
         }
-        string printerName;
+
+        private string printerName;
 
         /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
         public string WorkingDirectory
         {
-            get { return this.workingDirectory; }
-            set { this.workingDirectory = value; }
+            get { return workingDirectory; }
+            set { workingDirectory = value; }
         }
-        string workingDirectory;
+
+        private string workingDirectory;
 
         /// <summary>
         /// Prints the PDF file.
@@ -135,20 +138,20 @@ namespace PdfSharp.Pdf.Printing
         /// <param name="milliseconds">The number of milliseconds to wait for completing the print job.</param>
         public void Print(int milliseconds)
         {
-            if (this.printerName == null || this.printerName.Length == 0)
-                this.printerName = PdfFilePrinter.defaultPrinterName;
+            if (printerName == null || printerName.Length == 0)
+                printerName = defaultPrinterName;
 
-            if (PdfFilePrinter.adobeReaderPath == null || PdfFilePrinter.adobeReaderPath.Length == 0)
+            if (adobeReaderPath == null || adobeReaderPath.Length == 0)
                 throw new InvalidOperationException("No full qualified path to AcroRd32.exe or Acrobat.exe is set.");
 
-            if (this.printerName == null || this.printerName.Length == 0)
+            if (printerName == null || printerName.Length == 0)
                 throw new InvalidOperationException("No printer name set.");
             // Check whether file exists.
             string fqName = workingDirectory != null && workingDirectory.Length != 0
                     ? Path.Combine(workingDirectory, pdfFileName)
                     : Path.Combine(Directory.GetCurrentDirectory(), pdfFileName);
             if (!File.Exists(fqName))
-                throw new InvalidOperationException(String.Format("The file {0} does not exist.", fqName));
+                throw new InvalidOperationException($"The file {fqName} does not exist.");
 
             // TODO: Check whether printer exists.
 
@@ -159,15 +162,15 @@ namespace PdfSharp.Pdf.Printing
                 //acrord32.exe /t          <- seems to work best
                 //acrord32.exe /h /p       <- some swear by this version
                 ProcessStartInfo startInfo = new();
-                startInfo.FileName = PdfFilePrinter.adobeReaderPath;
-                string args = String.Format("/t \"{0}\" \"{1}\"", this.pdfFileName, this.printerName);
+                startInfo.FileName = adobeReaderPath;
+                string args = $"/t \"{pdfFileName}\" \"{printerName}\"";
                 //Debug.WriteLine(args);
                 startInfo.Arguments = args;
                 startInfo.CreateNoWindow = true;
                 startInfo.ErrorDialog = false;
                 startInfo.UseShellExecute = false;
-                if (this.workingDirectory != null && this.workingDirectory.Length != 0)
-                    startInfo.WorkingDirectory = this.workingDirectory;
+                if (workingDirectory != null && workingDirectory.Length != 0)
+                    startInfo.WorkingDirectory = workingDirectory;
 
                 Process process = Process.Start(startInfo);
                 if (!process.WaitForExit(milliseconds))
@@ -187,14 +190,14 @@ namespace PdfSharp.Pdf.Printing
         /// when it was not already running.
         /// If you use PDFsharp and have any suggestions to circumvent this function, please let us know.
         /// </summary>
-        static void DoSomeVeryDirtyHacksToMakeItWork()
+        private static void DoSomeVeryDirtyHacksToMakeItWork()
         {
-            if (PdfFilePrinter.runningAcro != null)
+            if (runningAcro != null)
             {
-                if (!PdfFilePrinter.runningAcro.HasExited)
+                if (!runningAcro.HasExited)
                     return;
-                PdfFilePrinter.runningAcro.Dispose();
-                PdfFilePrinter.runningAcro = null;
+                runningAcro.Dispose();
+                runningAcro = null;
             }
             // Is any Adobe Reader/Acrobat running?
             Process[] processes = Process.GetProcesses();
@@ -206,24 +209,25 @@ namespace PdfSharp.Pdf.Printing
                     Process process = processes[idx];
                     ProcessModule module = process.MainModule;
 
-                    if (String.Compare(Path.GetFileName(module.FileName), Path.GetFileName(PdfFilePrinter.adobeReaderPath), true) == 0)
+                    if (String.Compare(Path.GetFileName(module.FileName), Path.GetFileName(adobeReaderPath), true) == 0)
                     {
                         // Yes: Fine, we can print.
-                        PdfFilePrinter.runningAcro = process;
+                        runningAcro = process;
                         break;
                     }
                 }
                 catch { }
             }
-            if (PdfFilePrinter.runningAcro == null)
+            if (runningAcro == null)
             {
                 // No: Start an Adobe Reader/Acrobat.
                 // If you are within ASP.NET, good luck...
-                PdfFilePrinter.runningAcro = Process.Start(PdfFilePrinter.adobeReaderPath);
-                PdfFilePrinter.runningAcro.WaitForInputIdle();
+                runningAcro = Process.Start(adobeReaderPath);
+                runningAcro.WaitForInputIdle();
             }
         }
-        static Process runningAcro;
+
+        private static Process runningAcro;
 
         /// <summary>
         /// Gets or sets the Adobe Reader or Adobe Acrobat path.
@@ -231,19 +235,21 @@ namespace PdfSharp.Pdf.Printing
         /// </summary>
         static public string AdobeReaderPath
         {
-            get { return PdfFilePrinter.adobeReaderPath; }
-            set { PdfFilePrinter.adobeReaderPath = value; }
+            get { return adobeReaderPath; }
+            set { adobeReaderPath = value; }
         }
-        static string adobeReaderPath;
+
+        private static string adobeReaderPath;
 
         /// <summary>
         /// Gets or sets the name of the default printer. A typical name looks like '\\myserver\HP LaserJet PCL5'.
         /// </summary>
         static public string DefaultPrinterName
         {
-            get { return PdfFilePrinter.defaultPrinterName; }
-            set { PdfFilePrinter.defaultPrinterName = value; }
+            get { return defaultPrinterName; }
+            set { defaultPrinterName = value; }
         }
-        static string defaultPrinterName;
+
+        private static string defaultPrinterName;
     }
 }

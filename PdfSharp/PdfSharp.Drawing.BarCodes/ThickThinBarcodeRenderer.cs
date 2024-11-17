@@ -50,7 +50,7 @@ namespace PdfSharp.Drawing.BarCodes
             CalcThinBarWidth(info);
             info.BarHeight = Size.Height;
             // HACK in ThickThinBarCode
-            if (this.textLocation != TextLocation.None)
+            if (textLocation != TextLocation.None)
                 info.BarHeight *= 4.0 / 5;
 
 #if DEBUG_
@@ -59,7 +59,7 @@ namespace PdfSharp.Drawing.BarCodes
       XSolidBrush brush = new XSolidBrush(back);
       info.Gfx.DrawRectangle(brush, new XRect(info.Center - this.size / 2, this.size));
 #endif
-            switch (this.direction)
+            switch (direction)
             {
                 case CodeDirection.RightToLeft:
                     info.Gfx.RotateAtTransform(180, info.Position);
@@ -81,12 +81,12 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public override double WideNarrowRatio
         {
-            get { return this.wideNarrowRatio; }
+            get { return wideNarrowRatio; }
             set
             {
                 if (value is > 3 or < 2)
                     throw new ArgumentOutOfRangeException(nameof(value), BcgSR.Invalid2of5Relation);
-                this.wideNarrowRatio = value;
+                wideNarrowRatio = value;
             }
         }
         internal double wideNarrowRatio = 2.6;
@@ -136,9 +136,9 @@ namespace PdfSharp.Drawing.BarCodes
         internal void RenderText(BarCodeRenderInfo info)
         {
             info.Font ??= new XFont("Courier New", Size.Height / 6);
-            XPoint center = info.Position + CodeBase.CalcDistance(this.anchor, AnchorType.TopLeft, this.size);
+            XPoint center = info.Position + CalcDistance(anchor, AnchorType.TopLeft, size);
             //center.Y += info.Font.Size;
-            info.Gfx.DrawString(this.text, info.Font, info.Brush, new XRect(center, Size), XStringFormats.BottomCenter);
+            info.Gfx.DrawString(text, info.Font, info.Brush, new XRect(center, Size), XStringFormats.BottomCenter);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace PdfSharp.Drawing.BarCodes
         internal double GetBarWidth(BarCodeRenderInfo info, bool isThick)
         {
             if (isThick)
-                return info.ThinBarWidth * this.wideNarrowRatio;
+                return info.ThinBarWidth * wideNarrowRatio;
             else
                 return info.ThinBarWidth;
         }

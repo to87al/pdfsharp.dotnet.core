@@ -13,12 +13,12 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Constructs a PdfShading from LinearGradientBrush or RadialGradientBrush.
     /// </summary>
-    class RadialShadingBuilder : PatternOrShadingBuilder
+    internal class RadialShadingBuilder : PatternOrShadingBuilder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RadialShadingBuilder"/> class.
         /// </summary>
-        RadialShadingBuilder(DocumentRenderingContext context) :
+        private RadialShadingBuilder(DocumentRenderingContext context) :
           base(context)
         { }
 
@@ -36,7 +36,7 @@ namespace PdfSharp.Xps.Rendering
             return pattern;
         }
 
-        PdfShadingPattern BuildPattern(RadialGradientBrush brush, XRect boundingBox, XMatrix transform)
+        private PdfShadingPattern BuildPattern(RadialGradientBrush brush, XRect boundingBox, XMatrix transform)
         {
             //<<
             //  /BBox [0 0 600 760]
@@ -187,7 +187,7 @@ namespace PdfSharp.Xps.Rendering
             return pattern;
         }
 
-        PdfShading BuildShading(RadialGradientBrush brush, double scaleX, double scaleY)
+        private PdfShading BuildShading(RadialGradientBrush brush, double scaleX, double scaleY)
         {
             // Setup shading
             //<<
@@ -231,7 +231,7 @@ namespace PdfSharp.Xps.Rendering
             return shading;
         }
 
-        PdfShading BuildShading2(RadialGradientBrush brush, double scaleX, double scaleY, int repeatcount, PdfObject function)
+        private PdfShading BuildShading2(RadialGradientBrush brush, double scaleX, double scaleY, int repeatcount, PdfObject function)
         {
             // Setup shading
             //<<
@@ -277,7 +277,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds the soft mask.
         /// </summary>
-        PdfSoftMask BuildSoftMask(RadialGradientBrush brush)
+        private PdfSoftMask BuildSoftMask(RadialGradientBrush brush)
         {
             Debug.Assert(brush.GradientStops.HasTransparency());
 
@@ -396,7 +396,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a monochrome shading for a form XObject of a soft mask.
         /// </summary>
-        PdfShading BuildShadingForSoftMask(RadialGradientBrush brush)
+        private PdfShading BuildShadingForSoftMask(RadialGradientBrush brush)
         {
             // Setup shading
             //<<
@@ -582,7 +582,7 @@ namespace PdfSharp.Xps.Rendering
             return func;
         }
 
-        static PdfDictionary BuildShadingFunction3(GradientStopCollection gradients, bool softMask, PdfColorMode colorMode)
+        private static PdfDictionary BuildShadingFunction3(GradientStopCollection gradients, bool softMask, PdfColorMode colorMode)
         {
             int count = gradients.Count;
             Debug.Assert(count >= 2);

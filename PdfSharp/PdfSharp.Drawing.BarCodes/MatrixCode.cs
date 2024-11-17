@@ -58,7 +58,7 @@ namespace PdfSharp.Drawing.BarCodes
                 this.rows = rows;
             }
 
-            this.Text = text;
+            Text = text;
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public string Encoding
         {
-            get { return this.encoding; }
+            get { return encoding; }
             set
             {
-                this.encoding = value;
-                this.matrixImage = null;
+                encoding = value;
+                matrixImage = null;
             }
         }
         internal string encoding;
@@ -80,11 +80,11 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public int Columns
         {
-            get { return this.columns; }
+            get { return columns; }
             set
             {
-                this.columns = value;
-                this.matrixImage = null;
+                columns = value;
+                matrixImage = null;
             }
         }
         internal int columns;
@@ -94,11 +94,11 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public int Rows
         {
-            get { return this.rows; }
+            get { return rows; }
             set
             {
-                this.rows = value;
-                this.matrixImage = null;
+                rows = value;
+                matrixImage = null;
             }
         }
         internal int rows;
@@ -112,7 +112,7 @@ namespace PdfSharp.Drawing.BarCodes
             set
             {
                 base.Text = value;
-                this.matrixImage = null;
+                matrixImage = null;
             }
         }
 

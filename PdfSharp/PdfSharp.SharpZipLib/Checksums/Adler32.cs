@@ -91,9 +91,9 @@ namespace PdfSharp.SharpZipLib.Checksums
         /// <summary>
         /// largest prime smaller than 65536
         /// </summary>
-        readonly static uint BASE = 65521;
+        private readonly static uint BASE = 65521;
 
-        uint checksum;
+        private uint checksum;
 
         /// <summary>
         /// Returns the Adler32 data checksum computed so far.

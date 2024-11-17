@@ -53,9 +53,9 @@ namespace PdfSharp.Pdf.Annotations
             Initialize();
         }
 
-        void Initialize()
+        private void Initialize()
         {
-            Elements.SetName(Keys.Subtype, "/Text");
+            Elements.SetName(PdfAnnotation.Keys.Subtype, "/Text");
             // By default make a yellow comment.
             Icon = PdfTextAnnotationIcon.Comment;
             //Color = XColors.Yellow;
@@ -140,11 +140,12 @@ namespace PdfSharp.Pdf.Annotations
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

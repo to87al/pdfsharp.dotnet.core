@@ -55,13 +55,13 @@ namespace PdfSharp.Pdf.AcroForms
         {
             get
             {
-                string value = Elements.GetString(Keys.V);
+                string value = Elements.GetString(PdfAcroField.Keys.V);
                 return value.Length != 0 && value != "/Off";
             }
             set
             {
                 string name = value ? GetNonOffValue() : "/Off";
-                Elements.SetName(Keys.V, name);
+                Elements.SetName(PdfAcroField.Keys.V, name);
                 Elements.SetName(PdfAnnotation.Keys.AS, name);
             }
         }
@@ -86,11 +86,12 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

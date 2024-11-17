@@ -60,7 +60,7 @@ namespace PdfSharp.Drawing
             this.cultureInfo = cultureInfo;
         }
 
-        readonly CultureInfo cultureInfo;
+        private readonly CultureInfo cultureInfo;
 
 #if DEBUG_
     static public void Test()
@@ -125,7 +125,7 @@ namespace PdfSharp.Drawing
             ColorResourceInfo colorInfo = GetColorInfo(knownColor);
 
             // Currently German only
-            if (this.cultureInfo.TwoLetterISOLanguageName == "de")
+            if (cultureInfo.TwoLetterISOLanguageName == "de")
                 return colorInfo.NameDE;
 
             return colorInfo.Name;
@@ -140,11 +140,11 @@ namespace PdfSharp.Drawing
             if (color.IsKnownColor)
                 name = ToColorName(XKnownColorTable.GetKnownColor(color.Argb));
             else
-                name = String.Format("{0}, {1}, {2}, {3}", (int)(255 * color.A), color.R, color.G, color.B);
+                name = $"{(int)(255 * color.A)}, {color.R}, {color.G}, {color.B}";
             return name;
         }
 
-        static ColorResourceInfo GetColorInfo(XKnownColor knownColor)
+        private static ColorResourceInfo GetColorInfo(XKnownColor knownColor)
         {
             for (int idx = 0; idx < colorInfos.Length; idx++)
             {
@@ -341,9 +341,9 @@ namespace PdfSharp.Drawing
             {
                 this.knownColor = knownColor;
                 this.color = color;
-                this.Argb = argb;
-                this.Name = name;
-                this.NameDE = nameDE;
+                Argb = argb;
+                Name = name;
+                NameDE = nameDE;
             }
             public XKnownColor knownColor;
             public XColor color;

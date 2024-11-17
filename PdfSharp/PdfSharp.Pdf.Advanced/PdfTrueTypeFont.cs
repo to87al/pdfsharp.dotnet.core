@@ -56,12 +56,12 @@ namespace PdfSharp.Pdf.Advanced
 
             // TrueType with WinAnsiEncoding only
             OpenTypeDescriptor ttDescriptor = (OpenTypeDescriptor)FontDescriptorStock.Global.CreateDescriptor(font);
-            this.fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
-            this.fontOptions = font.PdfOptions;
-            Debug.Assert(this.fontOptions != null);
+            fontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
+            fontOptions = font.PdfOptions;
+            Debug.Assert(fontOptions != null);
 
             //this.cmapInfo = new CMapInfo(null/*ttDescriptor*/);
-            this.cmapInfo = new CMapInfo(ttDescriptor);
+            cmapInfo = new CMapInfo(ttDescriptor);
 
             BaseFont = font.Name.Replace(" ", "");
             switch (font.Style & (XFontStyle.Bold | XFontStyle.Italic))
@@ -78,11 +78,11 @@ namespace PdfSharp.Pdf.Advanced
                     BaseFont += ",BoldItalic";
                     break;
             }
-            if (this.fontOptions.FontEmbedding == PdfFontEmbedding.Always)
-                BaseFont = PdfFont.CreateEmbeddedFontSubsetName(BaseFont);
-            this.fontDescriptor.FontName = BaseFont;
+            if (fontOptions.FontEmbedding == PdfFontEmbedding.Always)
+                BaseFont = CreateEmbeddedFontSubsetName(BaseFont);
+            fontDescriptor.FontName = BaseFont;
 
-            Debug.Assert(this.fontOptions.FontEncoding == PdfFontEncoding.WinAnsi);
+            Debug.Assert(fontOptions.FontEncoding == PdfFontEncoding.WinAnsi);
             if (!IsSymbolFont)
                 Encoding = "/WinAnsiEncoding";
 
@@ -109,14 +109,14 @@ namespace PdfSharp.Pdf.Advanced
             //#endif
             //        }
 
-            Owner.irefTable.Add(this.fontDescriptor);
-            Elements[Keys.FontDescriptor] = this.fontDescriptor.Reference;
+            Owner.irefTable.Add(fontDescriptor);
+            Elements[Keys.FontDescriptor] = fontDescriptor.Reference;
 
             FontEncoding = font.PdfOptions.FontEncoding;
             FontEmbedding = font.PdfOptions.FontEmbedding;
         }
 
-        readonly XPdfFontOptions fontOptions;
+        private readonly XPdfFontOptions fontOptions;
 
         public string BaseFont
         {
@@ -156,7 +156,7 @@ namespace PdfSharp.Pdf.Advanced
 
             if (FontEmbedding is PdfFontEmbedding.Always or PdfFontEmbedding.Automatic)
             {
-                FontData subSet = this.fontDescriptor.descriptor.fontData.CreateFontSubSet(this.cmapInfo.GlyphIndices, false);
+                FontData subSet = fontDescriptor.descriptor.fontData.CreateFontSubSet(cmapInfo.GlyphIndices, false);
                 byte[] fontData = subSet.Data;
 
 #if DEBUG_
@@ -164,12 +164,12 @@ namespace PdfSharp.Pdf.Advanced
         byte[] fontSubSet = fss.Process();
         fss.CompareBytes(fontSubSet, fontProgram);
 #endif
-                PdfDictionary fontStream = new(this.Owner);
-                this.Owner.Internals.AddObject(fontStream);
-                this.fontDescriptor.Elements[PdfFontDescriptor.Keys.FontFile2] = fontStream.Reference;
+                PdfDictionary fontStream = new(Owner);
+                Owner.Internals.AddObject(fontStream);
+                fontDescriptor.Elements[PdfFontDescriptor.Keys.FontFile2] = fontStream.Reference;
 
                 fontStream.Elements["/Length1"] = new PdfInteger(fontData.Length);
-                if (!this.Owner.Options.NoCompression)
+                if (!Owner.Options.NoCompression)
                 {
                     fontData = Filtering.FlateDecode.Encode(fontData);
                     fontStream.Elements["/Filter"] = new PdfName("/FlateDecode");
@@ -185,7 +185,7 @@ namespace PdfSharp.Pdf.Advanced
             PdfArray width = Widths;
             //width.Elements.Clear();
             for (int idx = 0; idx < 256; idx++)
-                width.Elements.Add(new PdfInteger(this.fontDescriptor.descriptor.widths[idx]));
+                width.Elements.Add(new PdfInteger(fontDescriptor.descriptor.widths[idx]));
             //}
             //else
             //{
@@ -233,7 +233,7 @@ namespace PdfSharp.Pdf.Advanced
             /// <summary>
             /// (Required) The PostScript name of the font. For Type 1 fonts, this is usually
             /// the value of the FontName entry in the font program; for more information.
-            /// The Post-Script name of the font can be used to find the font’s definition in 
+            /// The Post-Script name of the font can be used to find the fontï¿½s definition in 
             /// the consumer application or its environment. It is also the name that is used when
             /// printing to a PostScript output device.
             /// </summary>
@@ -242,14 +242,14 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Required except for the standard 14 fonts) The first character code defined 
-            /// in the font’s Widths array.
+            /// in the fontï¿½s Widths array.
             /// </summary>
             [KeyInfo(KeyType.Integer)]
             public const string FirstChar = "/FirstChar";
 
             /// <summary>
             /// (Required except for the standard 14 fonts) The last character code defined
-            /// in the font’s Widths array.
+            /// in the fontï¿½s Widths array.
             /// </summary>
             [KeyInfo(KeyType.Integer)]
             public const string LastChar = "/LastChar";
@@ -268,7 +268,7 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Required except for the standard 14 fonts; must be an indirect reference)
-            /// A font descriptor describing the font’s metrics other than its glyph widths.
+            /// A font descriptor describing the fontï¿½s metrics other than its glyph widths.
             /// Note: For the standard 14 fonts, the entries FirstChar, LastChar, Widths, and 
             /// FontDescriptor must either all be present or all be absent. Ordinarily, they are
             /// absent; specifying them enables a standard font to be overridden.
@@ -277,10 +277,10 @@ namespace PdfSharp.Pdf.Advanced
             public new const string FontDescriptor = "/FontDescriptor";
 
             /// <summary>
-            /// (Optional) A specification of the font’s character encoding if different from its
+            /// (Optional) A specification of the fontï¿½s character encoding if different from its
             /// built-in encoding. The value of Encoding is either the name of a predefined
             /// encoding (MacRomanEncoding, MacExpertEncoding, or WinAnsiEncoding, as described in 
-            /// Appendix D) or an encoding dictionary that specifies differences from the font’s
+            /// Appendix D) or an encoding dictionary that specifies differences from the fontï¿½s
             /// built-in encoding or from a specified predefined encoding.
             /// </summary>
             [KeyInfo(KeyType.Name | KeyType.Dictionary)]
@@ -300,11 +300,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

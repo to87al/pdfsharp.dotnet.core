@@ -47,28 +47,31 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfRectangle MediaBox
         {
-            get { return this.mediaBox; }
-            set { this.mediaBox = value; }
+            get { return mediaBox; }
+            set { mediaBox = value; }
         }
-        PdfRectangle mediaBox;
+
+        private PdfRectangle mediaBox;
 
         public PdfRectangle CropBox
         {
-            get { return this.cropBox; }
-            set { this.cropBox = value; }
+            get { return cropBox; }
+            set { cropBox = value; }
         }
-        PdfRectangle cropBox;
+
+        private PdfRectangle cropBox;
 
         public int Rotate
         {
-            get { return this.rotate; }
+            get { return rotate; }
             set
             {
                 if (value % 90 != 0)
                     throw new ArgumentException("Rotate", "The value must be a multiple of 90.");
-                this.rotate = value;
+                rotate = value;
             }
         }
-        int rotate;
+
+        private int rotate;
     }
 }

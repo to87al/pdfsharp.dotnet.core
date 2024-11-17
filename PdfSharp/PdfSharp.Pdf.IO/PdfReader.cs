@@ -65,7 +65,7 @@ namespace PdfSharp.Pdf.IO
     {
         /// <summary>
         /// Determines whether the file specified by its path is a PDF file by inspecting the first eight
-        /// bytes of the data. If the file header has the form «%PDF-x.y» the function returns the version
+        /// bytes of the data. If the file header has the form ï¿½%PDF-x.yï¿½ the function returns the version
         /// number as integer (e.g. 14 for PDF 1.4). If the file header is invalid or inaccessible
         /// for any reason, 0 is returned. The function never throws an exception. 
         /// </summary>
@@ -74,12 +74,12 @@ namespace PdfSharp.Pdf.IO
             FileStream stream = null;
             try
             {
-                string realPath = PdfSharp.Drawing.XPdfForm.ExtractPageNumber(path, out int pageNumber);
+                string realPath = Drawing.XPdfForm.ExtractPageNumber(path, out int pageNumber);
                 if (File.Exists(realPath)) // prevent unwanted exceptions during debugging
                 {
                     stream = new FileStream(realPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     byte[] bytes = new byte[1024];
-                    stream.Read(bytes, 0, 1024);
+                    stream.ReadExactly(bytes, 0, 1024);
                     return GetPdfFileVersion(bytes);
                 }
             }
@@ -97,7 +97,7 @@ namespace PdfSharp.Pdf.IO
 
         /// <summary>
         /// Determines whether the specified stream is a PDF file by inspecting the first eight
-        /// bytes of the data. If the data begins with «%PDF-x.y» the function returns the version
+        /// bytes of the data. If the data begins with ï¿½%PDF-x.yï¿½ the function returns the version
         /// number as integer (e.g. 14 for PDF 1.4). If the data is invalid or inaccessible
         /// for any reason, 0 is returned. The function never throws an exception. 
         /// </summary>
@@ -108,7 +108,7 @@ namespace PdfSharp.Pdf.IO
             {
                 pos = stream.Position;
                 byte[] bytes = new byte[1024];
-                stream.Read(bytes, 0, 1024);
+                stream.ReadExactly(bytes, 0, 1024);
                 return GetPdfFileVersion(bytes);
             }
             catch { }
@@ -126,7 +126,7 @@ namespace PdfSharp.Pdf.IO
 
         /// <summary>
         /// Determines whether the specified data is a PDF file by inspecting the first eight
-        /// bytes of the data. If the data begins with «%PDF-x.y» the function returns the version
+        /// bytes of the data. If the data begins with ï¿½%PDF-x.yï¿½ the function returns the version
         /// number as integer (e.g. 14 for PDF 1.4). If the data is invalid or inaccessible
         /// for any reason, 0 is returned. The function never throws an exception. 
         /// </summary>
@@ -143,7 +143,7 @@ namespace PdfSharp.Pdf.IO
 #if !SILVERLIGHT
             try
             {
-                // Acrobat accepts headers like «%!PS-Adobe-N.n PDF-M.m»...
+                // Acrobat accepts headers like ï¿½%!PS-Adobe-N.n PDF-M.mï¿½...
                 string header = Encoding.ASCII.GetString(bytes);
                 if (header[0] == '%' || header.IndexOf("%PDF") >= 0)
                 {
@@ -197,7 +197,7 @@ namespace PdfSharp.Pdf.IO
             FileStream stream = new(path, FileMode.Open, FileAccess.Read);
             try
             {
-                document = PdfReader.Open(stream, password, openmode, provider);
+                document = Open(stream, password, openmode, provider);
                 if (document != null)
                 {
                     document.fullPath = Path.GetFullPath(path);
@@ -266,7 +266,7 @@ namespace PdfSharp.Pdf.IO
                 // Get file version
                 byte[] header = new byte[1024];
                 stream.Position = 0;
-                stream.Read(header, 0, 1024);
+                stream.ReadExactly(header, 0, 1024);
                 document.version = GetPdfFileVersion(header);
                 if (document.version == 0)
                     throw new InvalidOperationException(PSSR.InvalidPdf);
@@ -423,7 +423,7 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public static PdfDocument Open(Stream stream)
         {
-            return PdfReader.Open(stream, PdfDocumentOpenMode.Modify);
+            return Open(stream, PdfDocumentOpenMode.Modify);
         }
     }
 }

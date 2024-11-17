@@ -55,8 +55,8 @@ namespace PdfSharp.Pdf.AcroForms
         /// </summary>
         public string Text
         {
-            get { return Elements.GetString(Keys.V); }
-            set { Elements.SetString(Keys.V, value); RenderAppearance(); } //HACK in PdfTextField
+            get { return Elements.GetString(PdfAcroField.Keys.V); }
+            set { Elements.SetString(PdfAcroField.Keys.V, value); RenderAppearance(); } //HACK in PdfTextField
         }
 
         /// <summary>
@@ -64,30 +64,33 @@ namespace PdfSharp.Pdf.AcroForms
         /// </summary>
         public XFont Font
         {
-            get { return this.font; }
-            set { this.font = value; }
+            get { return font; }
+            set { font = value; }
         }
-        XFont font = new("Courier New", 10);
+
+        private XFont font = new("Courier New", 10);
 
         /// <summary>
         /// Gets or sets the foreground color of the field.
         /// </summary>
         public XColor ForeColor
         {
-            get { return this.foreColor; }
-            set { this.foreColor = value; }
+            get { return foreColor; }
+            set { foreColor = value; }
         }
-        XColor foreColor = XColors.Black;
+
+        private XColor foreColor = XColors.Black;
 
         /// <summary>
         /// Gets or sets the background color of the field.
         /// </summary>
         public XColor BackColor
         {
-            get { return this.backColor; }
-            set { this.backColor = value; }
+            get { return backColor; }
+            set { backColor = value; }
         }
-        XColor backColor = XColor.Empty;
+
+        private XColor backColor = XColor.Empty;
 
         /// <summary>
         /// Gets or sets the maximum length of the field.
@@ -133,10 +136,10 @@ namespace PdfSharp.Pdf.AcroForms
         /// Creates the normal appearance form X object for the annotation that represents
         /// this acro form text field.
         /// </summary>
-        void RenderAppearance()
+        private void RenderAppearance()
         {
             PdfRectangle rect = Elements.GetRectangle(PdfAnnotation.Keys.Rect);
-            XForm form = new(this.document, rect.Size);
+            XForm form = new(document, rect.Size);
             XGraphics gfx = XGraphics.FromForm(form);
 
             if (backColor != XColor.Empty)
@@ -152,7 +155,7 @@ namespace PdfSharp.Pdf.AcroForms
             // Get existing or create new appearance dictionary
             if (Elements[PdfAnnotation.Keys.AP] is not PdfDictionary ap)
             {
-                ap = new PdfDictionary(this.document);
+                ap = new PdfDictionary(document);
                 Elements[PdfAnnotation.Keys.AP] = ap;
             }
 
@@ -173,7 +176,7 @@ namespace PdfSharp.Pdf.AcroForms
         public new class Keys : PdfAcroField.Keys
         {
             /// <summary>
-            /// (Optional; inheritable) The maximum length of the field’s text, in characters.
+            /// (Optional; inheritable) The maximum length of the fieldï¿½s text, in characters.
             /// </summary>
             [KeyInfo(KeyType.Integer | KeyType.Optional)]
             public const string MaxLen = "/MaxLen";
@@ -185,11 +188,12 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

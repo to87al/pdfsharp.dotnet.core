@@ -115,7 +115,7 @@ namespace PdfSharp.Pdf.AcroForms
             /// (Required; inheritable) An array of options to be presented to the user. Each element of
             /// the array is either a text string representing one of the available options or a two-element
             /// array consisting of a text string together with a default appearance string for constructing
-            /// the item’s appearance dynamically at viewing time.
+            /// the itemï¿½s appearance dynamically at viewing time.
             /// </summary>
             [KeyInfo(KeyType.Array | KeyType.Optional)]
             public const string Opt = "/Opt";
@@ -146,11 +146,12 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

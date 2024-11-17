@@ -302,7 +302,7 @@ namespace PdfSharp.Pdf.Advanced
       0x02, 7, /* 0000 010 */
     ];
 
-        readonly static uint[] ZeroRuns =
+        private readonly static uint[] ZeroRuns =
         [
       8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,	/* 0x00 - 0x0f */
       3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,	/* 0x10 - 0x1f */
@@ -322,7 +322,7 @@ namespace PdfSharp.Pdf.Advanced
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0xf0 - 0xff */
     ];
 
-        readonly static uint[] OneRuns =
+        private readonly static uint[] OneRuns =
         [
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x00 - 0x0f */
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* 0x10 - 0x1f */
@@ -440,7 +440,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <param name="width">The width of the image.</param>
         /// <param name="height">The height of the image.</param>
         /// <param name="bytesPerLineBmp">The bytes per line in the bitmap file.</param>
-        static void FaxEncode2DRow(BitWriter writer, uint bytesFileOffset, byte[] imageBits, uint currentRow, uint referenceRow, uint width, uint height, uint bytesPerLineBmp)
+        private static void FaxEncode2DRow(BitWriter writer, uint bytesFileOffset, byte[] imageBits, uint currentRow, uint referenceRow, uint width, uint height, uint bytesPerLineBmp)
         {
             // Translated from LibTiff
             uint bytesOffsetRead = bytesFileOffset + ((height - 1 - currentRow) * bytesPerLineBmp);
@@ -633,14 +633,14 @@ namespace PdfSharp.Pdf.Advanced
     /// <summary>
     /// The BitReader class is a helper to read bits from an in-memory bitmap file.
     /// </summary>
-    class BitReader
+    internal class BitReader
     {
-        readonly byte[] imageBits;
-        uint bytesOffsetRead;
-        readonly uint bytesFileOffset;
-        byte buffer;
-        uint bitsInBuffer;
-        readonly uint bitsTotal; // Bits we may read (bits per image line)
+        private readonly byte[] imageBits;
+        private uint bytesOffsetRead;
+        private readonly uint bytesFileOffset;
+        private byte buffer;
+        private uint bitsInBuffer;
+        private readonly uint bitsTotal; // Bits we may read (bits per image line)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitReader"/> class.
@@ -728,12 +728,12 @@ namespace PdfSharp.Pdf.Advanced
     /// <summary>
     /// A helper class for writing groups of bits into an array of bytes.
     /// </summary>
-    class BitWriter
+    internal class BitWriter
     {
-        int bytesOffsetWrite;
-        readonly byte[] imageData;
-        uint buffer;
-        uint bitsInBuffer;
+        private int bytesOffsetWrite;
+        private readonly byte[] imageData;
+        private uint buffer;
+        private uint bitsInBuffer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitWriter"/> class.
@@ -759,7 +759,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Masks for n bits in a byte (with n = 0 through 8).
         /// </summary>
-        static readonly uint[] masks = [0, 1, 3, 7, 15, 31, 63, 127, 255];
+        private static readonly uint[] masks = [0, 1, 3, 7, 15, 31, 63, 127, 255];
 
         /// <summary>
         /// Writes bits to the byte array.

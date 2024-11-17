@@ -1,10 +1,11 @@
 ﻿using PdfSharp.Internal;
 using System;
 using System.Globalization;
+using System.Windows.Documents;
 
 namespace PdfSharp.Xps.XpsModel
 {
-    enum GlyphIndicesComplexity
+    internal enum GlyphIndicesComplexity
     {
         None = 1,
         DistanceOnly = 2,
@@ -15,14 +16,14 @@ namespace PdfSharp.Xps.XpsModel
     /// <summary>
     /// Represents parsed Indices attribute. See 5.1.3.
     /// </summary>
-    class GlyphIndices
+    internal class GlyphIndices
     {
         /// <summary>
         /// Initializes an empty GlyphMapping.
         /// </summary>
         public GlyphIndices()
         {
-            this.glyphMapping = [];
+            glyphMapping = [];
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace PdfSharp.Xps.XpsModel
         /// </summary>
         public GlyphIndices(string indices)
         {
-            this.glyphMapping = GlyphIndicesParser.Parse(indices);
+            glyphMapping = GlyphIndicesParser.Parse(indices);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace PdfSharp.Xps.XpsModel
         /// </summary>
         public int Count
         {
-            get { return this.glyphMapping.Length; }
+            get { return glyphMapping.Length; }
         }
 
         /// <summary>
@@ -46,32 +47,33 @@ namespace PdfSharp.Xps.XpsModel
         /// </summary>
         public GlyphMapping this[int idx]
         {
-            get { return this.glyphMapping[idx]; }
+            get { return glyphMapping[idx]; }
         }
 
-        readonly GlyphMapping[] glyphMapping;
+        private readonly GlyphMapping[] glyphMapping;
 
         public GlyphIndicesComplexity Complexity
         {
             get
             {
-                if (this.complexity == 0)
-                    this.complexity = CalcGlyphIndicesComplexity();
-                return this.complexity;
+                if (complexity == 0)
+                    complexity = CalcGlyphIndicesComplexity();
+                return complexity;
             }
         }
-        GlyphIndicesComplexity complexity;
+
+        private GlyphIndicesComplexity complexity;
 
         /// <summary>
         /// Evaluates how complex the GlyphMapping is.
         /// </summary>
-        GlyphIndicesComplexity CalcGlyphIndicesComplexity()
+        private GlyphIndicesComplexity CalcGlyphIndicesComplexity()
         {
             GlyphIndicesComplexity result = GlyphIndicesComplexity.None;
-            int count = this.glyphMapping != null ? this.glyphMapping.Length : 0;
+            int count = glyphMapping != null ? glyphMapping.Length : 0;
             for (int idx = 0; idx < count; idx++)
             {
-                GlyphMapping gm = this.glyphMapping[idx];
+                GlyphMapping gm = glyphMapping[idx];
 
                 if (gm.ClusterCodeUnitCount > 1 || gm.ClusterGlyphCount > 1)
                 {
@@ -205,7 +207,7 @@ namespace PdfSharp.Xps.XpsModel
     /// <summary>
     /// Converts an indices string into a GlyphMapping array.
     /// </summary>
-    class GlyphIndicesParser
+    internal class GlyphIndicesParser
     {
         public static GlyphIndices.GlyphMapping[] Parse(string indices)
         {
@@ -213,17 +215,17 @@ namespace PdfSharp.Xps.XpsModel
             return parser.Parse();
         }
 
-        GlyphIndicesParser(string indices)
+        private GlyphIndicesParser(string indices)
         {
             this.indices = indices;
         }
 
-        readonly string indices;
+        private readonly string indices;
         internal static readonly char[] separator = ['(', ')', ':'];
 
-        GlyphIndices.GlyphMapping[] Parse()
+        private GlyphIndices.GlyphMapping[] Parse()
         {
-            string[] parts = this.indices.Split([';']);
+            string[] parts = indices.Split([';']);
             int count = parts.Length;
             GlyphIndices.GlyphMapping[] glyphMapping = new GlyphIndices.GlyphMapping[count];
 
@@ -233,7 +235,7 @@ namespace PdfSharp.Xps.XpsModel
             return glyphMapping;
         }
 
-        static GlyphIndices.GlyphMapping ParsePart(string parts)
+        private static GlyphIndices.GlyphMapping ParsePart(string parts)
         {
             GlyphIndices.GlyphMapping mapping = new(42);
             //mapping.ClusterCodeUnitCount = 1;

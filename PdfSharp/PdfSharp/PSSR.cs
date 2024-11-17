@@ -41,7 +41,7 @@ namespace PdfSharp
     /// <summary>
     /// The Pdf-Sharp-String-Resources.
     /// </summary>
-    static class PSSR
+    internal static class PSSR
     {
         // How to use:
         // Create a function or property for each message text, depending on how many parameters are
@@ -70,13 +70,13 @@ namespace PdfSharp
             string message;
             try
             {
-                message = PSSR.GetString(id);
+                message = GetString(id);
                 message = message != null ? Format(message, args) : "INTERNAL ERROR: Message not found in resources.";
                 return message;
             }
             catch (Exception ex)
             {
-                message = String.Format("UNEXPECTED ERROR while formatting message with ID {0}: {1}", id.ToString(), ex.ToString());
+                message = $"UNEXPECTED ERROR while formatting message with ID {id.ToString()}: {ex.ToString()}";
             }
             return message;
         }
@@ -92,7 +92,7 @@ namespace PdfSharp
             }
             catch (Exception ex)
             {
-                message = String.Format("UNEXPECTED ERROR while formatting message '{0}': {1}", format, ex);
+                message = $"UNEXPECTED ERROR while formatting message '{format}': {ex}";
             }
             return message;
         }
@@ -102,7 +102,7 @@ namespace PdfSharp
         /// </summary>
         public static string GetString(PSMsgID id)
         {
-            return PSSR.ResMngr.GetString(id.ToString());
+            return ResMngr.GetString(id.ToString());
         }
 
         #endregion
@@ -183,7 +183,7 @@ namespace PdfSharp
 
         public static string CannotChangeImmutableObject(string typename)
         {
-            return String.Format("You cannot change this immutable {0} object.", typename);
+            return $"You cannot change this immutable {typename} object.";
         }
 
         #endregion
@@ -270,8 +270,8 @@ namespace PdfSharp
                 XColorSpace.GrayScale => "grayscale",
                 _ => "(undefined)",
             };
-            return String.Format("The document requires color mode {0}, but a color is defined using {1}. " +
-        "Use only colors that match the color mode of the PDF document", mode, space);
+            return $"The document requires color mode {mode}, but a color is defined using {space}. " +
+                   "Use only colors that match the color mode of the PDF document";
         }
 
         public static string CannotGetGlyphTypeface(string fontName)
@@ -305,18 +305,19 @@ namespace PdfSharp
         {
             get
             {
-                if (PSSR.resmngr == null)
+                if (resmngr == null)
                 {
 #if true_
           // Force the English language, even on German Windows.
           System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
 #endif
-                    PSSR.resmngr = new ResourceManager("PdfSharp.Resources.Messages", Assembly.GetExecutingAssembly());
+                    resmngr = new ResourceManager("PdfSharp.Resources.Messages", Assembly.GetExecutingAssembly());
                 }
-                return PSSR.resmngr;
+                return resmngr;
             }
         }
-        static ResourceManager resmngr;
+
+        private static ResourceManager resmngr;
 
         /// <summary>
         /// Writes all messages defined by PSMsgID.
@@ -328,7 +329,7 @@ namespace PdfSharp
             string[] names = Enum.GetNames(typeof(PSMsgID));
             foreach (string name in names)
             {
-                string message = String.Format("{0}: '{1}'", name, ResMngr.GetString(name));
+                string message = $"{name}: '{ResMngr.GetString(name)}'";
                 Debug.Assert(message != null);
                 Debug.WriteLine(message);
             }

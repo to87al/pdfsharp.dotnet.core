@@ -86,14 +86,14 @@ namespace PdfSharp.Pdf.Advanced
             //  /SMask /None
             //  /Type /ExtGState
             //>>
-            Elements.SetBoolean(PdfExtGState.Keys.AIS, false);
-            Elements.SetName(PdfExtGState.Keys.BM, "/Normal");
+            Elements.SetBoolean(Keys.AIS, false);
+            Elements.SetName(Keys.BM, "/Normal");
             StrokeAlpha = 1;
             NonStrokeAlpha = 1;
-            Elements.SetBoolean(PdfExtGState.Keys.op, false);
-            Elements.SetBoolean(PdfExtGState.Keys.OP, false);
-            Elements.SetBoolean(PdfExtGState.Keys.SA, true);
-            Elements.SetName(PdfExtGState.Keys.SMask, "/None");
+            Elements.SetBoolean(Keys.op, false);
+            Elements.SetBoolean(Keys.OP, false);
+            Elements.SetBoolean(Keys.SA, true);
+            Elements.SetName(Keys.SMask, "/None");
         }
 
         /// <summary>
@@ -113,15 +113,15 @@ namespace PdfSharp.Pdf.Advanced
             //  /SMask /None
             //  /Type /ExtGState
             //>>
-            Elements.SetBoolean(PdfExtGState.Keys.AIS, false);
-            Elements.SetName(PdfExtGState.Keys.BM, "/Normal");
+            Elements.SetBoolean(Keys.AIS, false);
+            Elements.SetName(Keys.BM, "/Normal");
             StrokeAlpha = 1;
             NonStrokeAlpha = 1;
-            Elements.SetBoolean(PdfExtGState.Keys.op, true);
-            Elements.SetBoolean(PdfExtGState.Keys.OP, true);
-            Elements.SetInteger(PdfExtGState.Keys.OPM, 1);
-            Elements.SetBoolean(PdfExtGState.Keys.SA, true);
-            Elements.SetName(PdfExtGState.Keys.SMask, "/None");
+            Elements.SetBoolean(Keys.op, true);
+            Elements.SetBoolean(Keys.OP, true);
+            Elements.SetInteger(Keys.OPM, 1);
+            Elements.SetBoolean(Keys.SA, true);
+            Elements.SetName(Keys.SMask, "/None");
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string Type = "/Type";
 
             /// <summary>
-            /// (Optional; PDF 1.3) The line width (see “Line Width” on page 185).
+            /// (Optional; PDF 1.3) The line width (see ï¿½Line Widthï¿½ on page 185).
             /// </summary>
             [KeyInfo(KeyType.Real | KeyType.Optional)]
             public const string LW = "/LW";
@@ -302,7 +302,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string ca = "/ca";
 
             /// <summary>
-            /// (Optional; PDF 1.4) The alpha source flag (“alpha is shape”), specifying whether 
+            /// (Optional; PDF 1.4) The alpha source flag (ï¿½alpha is shapeï¿½), specifying whether 
             /// the current soft mask and alpha constant are to be interpreted as shape values (true)
             /// or opacity values (false).
             /// </summary>
@@ -323,11 +323,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

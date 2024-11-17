@@ -2,7 +2,7 @@
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@pdfsharp.com)
-//   Thomas Hövel (mailto:Thomas.Hoevel@pdfsharp.com)
+//   Thomas Hï¿½vel (mailto:Thomas.Hoevel@pdfsharp.com)
 //
 // Copyright (c) 2005-2009 empira Software GmbH, Cologne (Germany)
 //
@@ -97,7 +97,7 @@ namespace PdfSharp.Pdf.Advanced
             get { return image; }
         }
 
-        readonly XImage image;
+        private readonly XImage image;
 
         /// <summary>
         /// Returns 'Image'.
@@ -110,7 +110,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Creates the keys for a JPEG image.
         /// </summary>
-        void InitializeJpeg()
+        private void InitializeJpeg()
         {
             // PDF support JPEG, so there's not much to be done
             MemoryStream memory;
@@ -149,17 +149,17 @@ namespace PdfSharp.Pdf.Advanced
             if (imageDataCompressed.Length < imageBits.Length)
             {
                 Stream = new PdfStream(imageDataCompressed, this);
-                Elements[Keys.Length] = new PdfInteger(imageDataCompressed.Length);
+                Elements[PdfStream.Keys.Length] = new PdfInteger(imageDataCompressed.Length);
                 PdfArray arrayFilters = new(document);
                 arrayFilters.Elements.Add(new PdfName("/FlateDecode"));
                 arrayFilters.Elements.Add(new PdfName("/DCTDecode"));
-                Elements[Keys.Filter] = arrayFilters;
+                Elements[PdfStream.Keys.Filter] = arrayFilters;
             }
             else
             {
                 Stream = new PdfStream(imageBits, this);
-                Elements[Keys.Length] = new PdfInteger(streamLength);
-                Elements[Keys.Filter] = new PdfName("/DCTDecode");
+                Elements[PdfStream.Keys.Length] = new PdfInteger(streamLength);
+                Elements[PdfStream.Keys.Filter] = new PdfName("/DCTDecode");
             }
             Elements[Keys.Width] = new PdfInteger(image.PixelWidth);
             Elements[Keys.Height] = new PdfInteger(image.PixelHeight);
@@ -213,7 +213,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Creates the keys for a FLATE image.
         /// </summary>
-        void InitializeNonJpeg()
+        private void InitializeNonJpeg()
         {
 #if GDI && !WPF
       //bool hasMask = false;
@@ -253,7 +253,7 @@ namespace PdfSharp.Pdf.Advanced
       }
 #endif
 #if WPF // && !GDI
-            // WPFTHHO: Bitte prüfen, siehe System.Windows.Media.PixelFormats
+            // WPFTHHO: Bitte prï¿½fen, siehe System.Windows.Media.PixelFormats
             //bool hasMask = false;
 #if !SILVERLIGHT
             string format = image.wpfImage.Format.ToString();
@@ -342,7 +342,7 @@ namespace PdfSharp.Pdf.Advanced
 #endif
 #if WPF
 #if !SILVERLIGHT
-            // WPFTHHO: Bitte prüfen
+            // WPFTHHO: Bitte prï¿½fen
             BmpBitmapEncoder encoder = new();
             encoder.Frames.Add(BitmapFrame.Create(image.wpfImage));
             encoder.Save(memory);
@@ -454,8 +454,8 @@ namespace PdfSharp.Pdf.Advanced
 
                     Owner.irefTable.Add(pdfMask);
                     pdfMask.Stream = new PdfStream(maskDataCompressed, pdfMask);
-                    pdfMask.Elements[Keys.Length] = new PdfInteger(maskDataCompressed.Length);
-                    pdfMask.Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                    pdfMask.Elements[PdfStream.Keys.Length] = new PdfInteger(maskDataCompressed.Length);
+                    pdfMask.Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                     pdfMask.Elements[Keys.Width] = new PdfInteger(width);
                     pdfMask.Elements[Keys.Height] = new PdfInteger(height);
                     pdfMask.Elements[Keys.BitsPerComponent] = new PdfInteger(1);
@@ -472,8 +472,8 @@ namespace PdfSharp.Pdf.Advanced
 
                     Owner.irefTable.Add(smask);
                     smask.Stream = new PdfStream(alphaMaskCompressed, smask);
-                    smask.Elements[Keys.Length] = new PdfInteger(alphaMaskCompressed.Length);
-                    smask.Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                    smask.Elements[PdfStream.Keys.Length] = new PdfInteger(alphaMaskCompressed.Length);
+                    smask.Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                     smask.Elements[Keys.Width] = new PdfInteger(width);
                     smask.Elements[Keys.Height] = new PdfInteger(height);
                     smask.Elements[Keys.BitsPerComponent] = new PdfInteger(8);
@@ -484,8 +484,8 @@ namespace PdfSharp.Pdf.Advanced
                 byte[] imageDataCompressed = fd.Encode(imageData);
 
                 Stream = new PdfStream(imageDataCompressed, this);
-                Elements[Keys.Length] = new PdfInteger(imageDataCompressed.Length);
-                Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                Elements[PdfStream.Keys.Length] = new PdfInteger(imageDataCompressed.Length);
+                Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                 Elements[Keys.Width] = new PdfInteger(width);
                 Elements[Keys.Height] = new PdfInteger(height);
                 Elements[Keys.BitsPerComponent] = new PdfInteger(8);
@@ -649,20 +649,20 @@ namespace PdfSharp.Pdf.Advanced
                 PdfDictionary colorPalette = null;
                 if (isBitonal == 0 && !isGray)
                 {
-                    colorPalette = new PdfDictionary(this.document);
+                    colorPalette = new PdfDictionary(document);
                     byte[] packedPaletteData = paletteData.Length >= 48 ? fd.Encode(paletteData) : null; // don't compress small palettes
                     if (packedPaletteData != null && packedPaletteData.Length + 20 < paletteData.Length) // +20: compensate for the overhead (estimated value)
                     {
                         // Create compressed color palette:
                         colorPalette.CreateStream(packedPaletteData);
-                        colorPalette.Elements[Keys.Length] = new PdfInteger(packedPaletteData.Length);
-                        colorPalette.Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                        colorPalette.Elements[PdfStream.Keys.Length] = new PdfInteger(packedPaletteData.Length);
+                        colorPalette.Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                     }
                     else
                     {
                         // Create uncompressed color palette:
                         colorPalette.CreateStream(paletteData);
-                        colorPalette.Elements[Keys.Length] = new PdfInteger(paletteData.Length);
+                        colorPalette.Elements[PdfStream.Keys.Length] = new PdfInteger(paletteData.Length);
                     }
                     Owner.irefTable.Add(colorPalette);
                 }
@@ -792,10 +792,10 @@ namespace PdfSharp.Pdf.Advanced
                         pdfMask.Elements.SetName(Keys.Type, "/XObject");
                         pdfMask.Elements.SetName(Keys.Subtype, "/Image");
 
-                        this.Owner.irefTable.Add(pdfMask);
+                        Owner.irefTable.Add(pdfMask);
                         pdfMask.Stream = new PdfStream(maskDataCompressed, pdfMask);
-                        pdfMask.Elements[Keys.Length] = new PdfInteger(maskDataCompressed.Length);
-                        pdfMask.Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                        pdfMask.Elements[PdfStream.Keys.Length] = new PdfInteger(maskDataCompressed.Length);
+                        pdfMask.Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                         pdfMask.Elements[Keys.Width] = new PdfInteger(width);
                         pdfMask.Elements[Keys.Height] = new PdfInteger(height);
                         pdfMask.Elements[Keys.BitsPerComponent] = new PdfInteger(1);
@@ -818,8 +818,8 @@ namespace PdfSharp.Pdf.Advanced
                     if (imageDataFax.Length < imageDataCompressed.Length)
                     {
                         Stream = new PdfStream(imageDataFax, this);
-                        Elements[Keys.Length] = new PdfInteger(imageDataFax.Length);
-                        Elements[Keys.Filter] = new PdfName("/CCITTFaxDecode");
+                        Elements[PdfStream.Keys.Length] = new PdfInteger(imageDataFax.Length);
+                        Elements[PdfStream.Keys.Filter] = new PdfName("/CCITTFaxDecode");
                         //PdfArray array2 = new PdfArray(this.document);
                         PdfDictionary dictionary = new();
                         if (k != 0)
@@ -830,16 +830,16 @@ namespace PdfSharp.Pdf.Advanced
                         dictionary.Elements.Add("/Columns", new PdfInteger(width));
                         dictionary.Elements.Add("/Rows", new PdfInteger(height));
                         //array2.Elements.Add(dictionary);
-                        Elements[Keys.DecodeParms] = dictionary; // array2;
+                        Elements[PdfStream.Keys.DecodeParms] = dictionary; // array2;
                     }
                     else
                     {
                         Stream = new PdfStream(imageDataFaxCompressed, this);
-                        Elements[Keys.Length] = new PdfInteger(imageDataFaxCompressed.Length);
+                        Elements[PdfStream.Keys.Length] = new PdfInteger(imageDataFaxCompressed.Length);
                         PdfArray arrayFilters = new(document);
                         arrayFilters.Elements.Add(new PdfName("/FlateDecode"));
                         arrayFilters.Elements.Add(new PdfName("/CCITTFaxDecode"));
-                        Elements[Keys.Filter] = arrayFilters;
+                        Elements[PdfStream.Keys.Filter] = arrayFilters;
                         PdfArray arrayDecodeParms = new(document);
 
                         PdfDictionary dictFlateDecodeParms = new();
@@ -856,15 +856,15 @@ namespace PdfSharp.Pdf.Advanced
 
                         arrayDecodeParms.Elements.Add(dictFlateDecodeParms); // How to add the "null object"?
                         arrayDecodeParms.Elements.Add(dictCcittFaxDecodeParms);
-                        Elements[Keys.DecodeParms] = arrayDecodeParms;
+                        Elements[PdfStream.Keys.DecodeParms] = arrayDecodeParms;
                     }
                 }
                 else
                 {
                     // /FlateDecode creates the smaller file (or no monochrome bitmap):
                     Stream = new PdfStream(imageDataCompressed, this);
-                    Elements[Keys.Length] = new PdfInteger(imageDataCompressed.Length);
-                    Elements[Keys.Filter] = new PdfName("/FlateDecode");
+                    Elements[PdfStream.Keys.Length] = new PdfInteger(imageDataCompressed.Length);
+                    Elements[PdfStream.Keys.Filter] = new PdfName("/FlateDecode");
                 }
 
                 Elements[Keys.Width] = new PdfInteger(width);
@@ -930,8 +930,8 @@ namespace PdfSharp.Pdf.Advanced
             /// (Required for images, except those that use the JPXDecode filter; not allowed for image masks)
             /// The color space in which image samples are specified; it can be any type of color space except
             /// Pattern. If the image uses the JPXDecode filter, this entry is optional:
-            /// • If ColorSpace is present, any color space specifications in the JPEG2000 data are ignored.
-            /// • If ColorSpace is absent, the color space specifications in the JPEG2000 data are used.
+            /// ï¿½ If ColorSpace is present, any color space specifications in the JPEG2000 data are ignored.
+            /// ï¿½ If ColorSpace is absent, the color space specifications in the JPEG2000 data are used.
             ///   The Decode array is also ignored unless ImageMask is true.
             /// </summary>
             [KeyInfo(KeyType.NameOrArray | KeyType.Required)]
@@ -981,10 +981,10 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Optional) An array of numbers describing how to map image samples into the range of values
-            /// appropriate for the image’s color space. If ImageMask is true, the array must be either
+            /// appropriate for the imageï¿½s color space. If ImageMask is true, the array must be either
             /// [0 1] or [1 0]; otherwise, its length must be twice the number of color components required 
             /// by ColorSpace. If the image uses the JPXDecode filter and ImageMask is false, Decode is ignored.
-            /// Default value: see “Decode Arrays”.
+            /// Default value: see ï¿½Decode Arraysï¿½.
             /// </summary>
             [KeyInfo(KeyType.Array | KeyType.Optional)]
             public const string Decode = "/Decode";
@@ -1009,8 +1009,8 @@ namespace PdfSharp.Pdf.Advanced
             /// source of mask shape or mask opacity values in the transparent imaging model. The alpha 
             /// source parameter in the graphics state determines whether the mask values are interpreted as
             /// shape or opacity. If present, this entry overrides the current soft mask in the graphics state,
-            /// as well as the image’s Mask entry, if any. (However, the other transparency related graphics 
-            /// state parameters — blend mode and alpha constant — remain in effect.) If SMask is absent, the 
+            /// as well as the imageï¿½s Mask entry, if any. (However, the other transparency related graphics 
+            /// state parameters ï¿½ blend mode and alpha constant ï¿½ remain in effect.) If SMask is absent, the 
             /// image has no associated soft mask (although the current soft mask in the graphics state may
             /// still apply).
             /// </summary>
@@ -1021,10 +1021,10 @@ namespace PdfSharp.Pdf.Advanced
             /// (Optional for images that use the JPXDecode filter, meaningless otherwise; PDF 1.5)
             /// A code specifying how soft-mask information encoded with image samples should be used:
             /// 0 If present, encoded soft-mask image information should be ignored.
-            /// 1 The image’s data stream includes encoded soft-mask values. An application can create
+            /// 1 The imageï¿½s data stream includes encoded soft-mask values. An application can create
             ///   a soft-mask image from the information to be used as a source of mask shape or mask 
             ///   opacity in the transparency imaging model.
-            /// 2 The image’s data stream includes color channels that have been preblended with a 
+            /// 2 The imageï¿½s data stream includes color channels that have been preblended with a 
             ///   background; the image data also includes an opacity channel. An application can create
             ///   a soft-mask image with a Matte entry from the opacity channel information to be used as
             ///   a source of mask shape or mask opacity in the transparency model. If this entry has a 
@@ -1043,13 +1043,13 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Required if the image is a structural content item; PDF 1.3) The integer key of the 
-            /// image’s entry in the structural parent tree.
+            /// imageï¿½s entry in the structural parent tree.
             /// </summary>
             [KeyInfo(KeyType.Integer | KeyType.Required)]
             public const string StructParent = "/StructParent";
 
             /// <summary>
-            /// (Optional; PDF 1.3; indirect reference preferred) The digital identifier of the image’s
+            /// (Optional; PDF 1.3; indirect reference preferred) The digital identifier of the imageï¿½s
             /// parent Web Capture content set.
             /// </summary>
             [KeyInfo(KeyType.String | KeyType.Optional)]
@@ -1082,7 +1082,7 @@ namespace PdfSharp.Pdf.Advanced
     /// <summary>
     /// Helper class for creating bitmap masks (8 pels per byte).
     /// </summary>
-    class MonochromeMask
+    internal class MonochromeMask
     {
         private readonly int sizeX;
         private readonly int sizeY;

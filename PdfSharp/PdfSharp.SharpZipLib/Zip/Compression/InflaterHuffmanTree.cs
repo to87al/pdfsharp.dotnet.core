@@ -46,8 +46,8 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
     /// </summary>
     internal class InflaterHuffmanTree
     {
-        static readonly int MAX_BITLEN = 15;
-        short[] tree;
+        private static readonly int MAX_BITLEN = 15;
+        private short[] tree;
 
         /// <summary>
         /// Literal length tree
@@ -108,7 +108,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             BuildTree(codeLengths);
         }
 
-        void BuildTree(byte[] codeLengths)
+        private void BuildTree(byte[] codeLengths)
         {
             int[] blCount = new int[MAX_BITLEN + 1];
             int[] nextCode = new int[MAX_BITLEN + 1];

@@ -8,7 +8,7 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Implements the rendering process.
     /// </summary>
-    class PdfRenderer
+    internal class PdfRenderer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfRenderer"/> class.
@@ -37,7 +37,7 @@ namespace PdfSharp.Xps.Rendering
         {
             this.page = page;
 
-            this.context = new DocumentRenderingContext(page.Owner);
+            context = new DocumentRenderingContext(page.Owner);
 
             //this.page.Width = fixedPage.Width;
             //this.page.Height = fixedPage.Height;
@@ -60,22 +60,22 @@ namespace PdfSharp.Xps.Rendering
             //}
             page.RenderContent = content;
 
-            this.writer = new PdfContentWriter(this.context, this.page);
+            writer = new PdfContentWriter(context, this.page);
 
             //Initialize();
 
-            this.writer.BeginContent(false);
-            this.writer.WriteElements(fixedPage.Children);
-            this.writer.EndContent();
+            writer.BeginContent(false);
+            writer.WriteElements(fixedPage.Children);
+            writer.EndContent();
         }
 
         internal PdfDocument Document
         {
-            get { return this.page.document; }
+            get { return page.document; }
         }
 
-        PdfPage page;
-        PdfContentWriter writer;
-        DocumentRenderingContext context;
+        private PdfPage page;
+        private PdfContentWriter writer;
+        private DocumentRenderingContext context;
     }
 }

@@ -50,13 +50,13 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGState(double alpha)
         {
             string key = MakeKey(alpha);
-            if (!this.alphaValues.TryGetValue(key, out PdfExtGState extGState))
+            if (!alphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
-                extGState = new PdfExtGState(this.owner);
+                extGState = new PdfExtGState(owner);
                 extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
                 extGState.Elements[PdfExtGState.Keys.ca] = new PdfReal(alpha);
 
-                this.alphaValues[key] = extGState;
+                alphaValues[key] = extGState;
             }
             return extGState;
         }
@@ -67,12 +67,12 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGStateStroke(double alpha)
         {
             string key = MakeKey(alpha);
-            if (!this.strokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
+            if (!strokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
-                extGState = new PdfExtGState(this.owner);
+                extGState = new PdfExtGState(owner);
                 extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
 
-                this.strokeAlphaValues[key] = extGState;
+                strokeAlphaValues[key] = extGState;
             }
             return extGState;
         }
@@ -83,13 +83,12 @@ namespace PdfSharp.Pdf.Advanced
         public PdfExtGState GetExtGStateNonStroke(double alpha)
         {
             string key = MakeKey(alpha);
-            ;
-            if (!this.nonStrokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
+            if (!nonStrokeAlphaValues.TryGetValue(key, out PdfExtGState extGState))
             {
-                extGState = new PdfExtGState(this.owner);
+                extGState = new PdfExtGState(owner);
                 extGState.Elements[PdfExtGState.Keys.ca] = new PdfReal(alpha);
 
-                this.nonStrokeAlphaValues[key] = extGState;
+                nonStrokeAlphaValues[key] = extGState;
             }
             return extGState;
         }
@@ -122,7 +121,7 @@ namespace PdfSharp.Pdf.Advanced
         //  //return extGState;
         //}
 
-        static string MakeKey(double alpha)
+        private static string MakeKey(double alpha)
         {
             return ((int)(1000 * alpha)).ToString(CultureInfo.InvariantCulture);
         }
@@ -130,8 +129,9 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Maps from alpha values (range "0" to "1000") to PdfExtGState objects.
         /// </summary>
-        readonly Dictionary<string, PdfExtGState> alphaValues = [];
-        readonly Dictionary<string, PdfExtGState> strokeAlphaValues = [];
-        readonly Dictionary<string, PdfExtGState> nonStrokeAlphaValues = [];
+        private readonly Dictionary<string, PdfExtGState> alphaValues = [];
+
+        private readonly Dictionary<string, PdfExtGState> strokeAlphaValues = [];
+        private readonly Dictionary<string, PdfExtGState> nonStrokeAlphaValues = [];
     }
 }

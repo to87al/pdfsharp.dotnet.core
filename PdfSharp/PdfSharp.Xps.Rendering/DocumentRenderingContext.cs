@@ -5,7 +5,7 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Keeps track of the already created PDF objects.
     /// </summary>
-    class DocumentRenderingContext
+    internal class DocumentRenderingContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentRenderingContext"/> class.
@@ -21,10 +21,10 @@ namespace PdfSharp.Xps.Rendering
         /// </summary>
         public PdfDocument PdfDocument
         {
-            get { return this.pdfDocument; }
+            get { return pdfDocument; }
         }
 
-        readonly PdfDocument pdfDocument;
+        private readonly PdfDocument pdfDocument;
 
         ///// <summary>
         ///// Gets the XPS document.

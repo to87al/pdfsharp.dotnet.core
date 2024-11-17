@@ -80,7 +80,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         ////		/// </summary>
         ////		protected long csize;
 
-        bool isStreamOwner = true;
+        private bool isStreamOwner = true;
 
         /// <summary>
         /// Get/set flag indicating ownership of underlying stream.
@@ -271,16 +271,16 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
             }
 
             this.baseInputStream = baseInputStream;
-            this.inf = inflater;
+            inf = inflater;
             buf = new byte[bufferSize];
 
             if (baseInputStream.CanSeek)
             {
-                this.len = (int)baseInputStream.Length;
+                len = (int)baseInputStream.Length;
             }
             else
             {
-                this.len = 0;
+                len = 0;
             }
         }
 
@@ -308,7 +308,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
             }
         }
 
-        int readChunkSize = 0;
+        private int readChunkSize = 0;
 
         /// <summary>
         /// Sets the size of chunks to read from the input stream
@@ -509,7 +509,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// </summary>
         protected byte[] cryptbuffer = null;
 
-        uint[] keys = null;
+        private uint[] keys = null;
 
         /// <summary>
         /// Decrypt a single byte

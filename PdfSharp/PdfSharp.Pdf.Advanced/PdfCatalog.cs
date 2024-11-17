@@ -46,7 +46,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             Elements.SetName(Keys.Type, "/Catalog");
 
-            this.version = "1.4";  // HACK in PdfCatalog
+            version = "1.4";  // HACK in PdfCatalog
         }
 
         /// <summary>
@@ -54,10 +54,10 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public string Version
         {
-            get { return this.version; }
+            get { return version; }
             set
             {
-                this.version = value switch
+                version = value switch
                 {
                     "1.0" or "1.1" or "1.2" => throw new InvalidOperationException("Unsupported PDF version."),
                     "1.3" or "1.4" => value,
@@ -66,7 +66,8 @@ namespace PdfSharp.Pdf.Advanced
                 };
             }
         }
-        string version = "1.3";
+
+        private string version = "1.3";
 
         /// <summary>
         /// Gets the pages collection of this document.
@@ -75,16 +76,17 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.pages == null)
+                if (pages == null)
                 {
-                    this.pages = (PdfPages)Elements.GetValue(Keys.Pages, VCF.CreateIndirect);
-                    if (this.Owner.IsImported)
-                        this.pages.FlattenPageTree();
+                    pages = (PdfPages)Elements.GetValue(Keys.Pages, VCF.CreateIndirect);
+                    if (Owner.IsImported)
+                        pages.FlattenPageTree();
                 }
-                return this.pages;
+                return pages;
             }
         }
-        PdfPages pages;
+
+        private PdfPages pages;
 
         /// <summary>
         /// Implementation of PdfDocument.PageLayout.
@@ -111,11 +113,12 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                this.viewerPreferences ??= (PdfViewerPreferences)Elements.GetValue(Keys.ViewerPreferences, VCF.CreateIndirect);
-                return this.viewerPreferences;
+                viewerPreferences ??= (PdfViewerPreferences)Elements.GetValue(Keys.ViewerPreferences, VCF.CreateIndirect);
+                return viewerPreferences;
             }
         }
-        PdfViewerPreferences viewerPreferences;
+
+        private PdfViewerPreferences viewerPreferences;
 
         /// <summary>
         /// Implementation of PdfDocument.Outlines.
@@ -124,11 +127,12 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                this.outline ??= (PdfOutline)Elements.GetValue(Keys.Outlines, VCF.CreateIndirect);
-                return this.outline.Outlines;
+                outline ??= (PdfOutline)Elements.GetValue(Keys.Outlines, VCF.CreateIndirect);
+                return outline.Outlines;
             }
         }
-        PdfOutline outline;
+
+        private PdfOutline outline;
 
         /// <summary>
         /// Gets the AcroForm dictionary of this document.
@@ -137,11 +141,12 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                this.acroForm ??= (PdfAcroForm)Elements.GetValue(Keys.AcroForm);
-                return this.acroForm;
+                acroForm ??= (PdfAcroForm)Elements.GetValue(Keys.AcroForm);
+                return acroForm;
             }
         }
-        PdfAcroForm acroForm;
+
+        private PdfAcroForm acroForm;
 
         /// <summary>
         /// Implementation of PdfDocument.PageMode.
@@ -163,19 +168,19 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal override void PrepareForSave()
         {
-            this.pages?.PrepareForSave();
+            pages?.PrepareForSave();
 
-            if (this.outline != null && this.outline.Outlines.Count > 0)
+            if (outline != null && outline.Outlines.Count > 0)
             {
                 if (Elements[Keys.PageMode] == null)
                     PageMode = PdfPageMode.UseOutlines;
-                this.outline.PrepareForSave();
+                outline.PrepareForSave();
             }
         }
 
         internal override void WriteObject(PdfWriter writer)
         {
-            if (this.outline != null && this.outline.Outlines.Count > 0)
+            if (outline != null && outline.Outlines.Count > 0)
             {
                 if (Elements[Keys.PageMode] == null)
                     PageMode = PdfPageMode.UseOutlines;
@@ -197,7 +202,7 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Optional; PDF 1.4) The version of the PDF specification to which the document
-            /// conforms (for example, 1.4) if later than the version specified in the file’s header.
+            /// conforms (for example, 1.4) if later than the version specified in the fileï¿½s header.
             /// If the header specifies a later version, or if this entry is absent, the document 
             /// conforms to the version specified in the header. This entry enables a PDF producer 
             /// application to update the version using an incremental update.
@@ -207,7 +212,7 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Required; must be an indirect reference) The page tree node that is the root of 
-            /// the document’s page tree.
+            /// the documentï¿½s page tree.
             /// </summary>
             [KeyInfo(KeyType.Dictionary | KeyType.Required | KeyType.MustBeIndirect, typeof(PdfPages))]
             public const string Pages = "/Pages";
@@ -222,7 +227,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string PageLabels = "/PageLabels";
 
             /// <summary>
-            /// (Optional; PDF 1.2) The document’s name dictionary.
+            /// (Optional; PDF 1.2) The documentï¿½s name dictionary.
             /// </summary>
             [KeyInfo("1.2", KeyType.Dictionary | KeyType.Optional)]
             public const string Names = "/Names";
@@ -270,14 +275,14 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Optional; must be an indirect reference) The outline dictionary that is the root 
-            /// of the document’s outline hierarchy.
+            /// of the documentï¿½s outline hierarchy.
             /// </summary>
             [KeyInfo(KeyType.Dictionary | KeyType.Optional, typeof(PdfOutline))]
             public const string Outlines = "/Outlines";
 
             /// <summary>
             /// (Optional; PDF 1.1; must be an indirect reference) An array of thread dictionaries 
-            /// representing the document’s article threads.
+            /// representing the documentï¿½s article threads.
             /// </summary>
             [KeyInfo("1.1", KeyType.Array | KeyType.Optional)]
             public const string Threads = "/Threads";
@@ -306,7 +311,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string URI = "/URI";
 
             /// <summary>
-            /// (Optional; PDF 1.2) The document’s interactive form (AcroForm) dictionary.
+            /// (Optional; PDF 1.2) The documentï¿½s interactive form (AcroForm) dictionary.
             /// </summary>
             [KeyInfo("1.2", KeyType.Dictionary | KeyType.Optional, typeof(PdfAcroForm))]
             public const string AcroForm = "/AcroForm";
@@ -319,14 +324,14 @@ namespace PdfSharp.Pdf.Advanced
             public const string Metadata = "/Metadata";
 
             /// <summary>
-            /// (Optional; PDF 1.3) The document’s structure tree root dictionary.
+            /// (Optional; PDF 1.3) The documentï¿½s structure tree root dictionary.
             /// </summary>
             [KeyInfo("1.3", KeyType.Dictionary | KeyType.Optional)]
             public const string StructTreeRoot = "/StructTreeRoot";
 
             /// <summary>
             /// (Optional; PDF 1.4) A mark information dictionary containing information
-            /// about the document’s usage of Tagged PDF conventions.
+            /// about the documentï¿½s usage of Tagged PDF conventions.
             /// </summary>
             [KeyInfo("1.4", KeyType.Dictionary | KeyType.Optional)]
             public const string MarkInfo = "/MarkInfo";
@@ -360,7 +365,7 @@ namespace PdfSharp.Pdf.Advanced
             public const string PieceInfo = "/PieceInfo";
 
             /// <summary>
-            /// (Optional; PDF 1.5; required if a document contains optional content) The document’s 
+            /// (Optional; PDF 1.5; required if a document contains optional content) The documentï¿½s 
             /// optional content properties dictionary.
             /// </summary>
             [KeyInfo("1.5", KeyType.Dictionary | KeyType.Optional)]
@@ -387,11 +392,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

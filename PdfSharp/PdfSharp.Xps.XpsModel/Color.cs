@@ -7,96 +7,96 @@ using System.Globalization;
 
 namespace PdfSharp.Xps.XpsModel
 {
-    struct Color
+    internal struct Color
     {
         public byte A
         {
-            readonly get { return this.sRgbColor.a; }
+            readonly get { return sRgbColor.a; }
             set
             {
-                this.sRgbColor.a = value;
-                this.scRgbColor.a = ((float)value) / 255f;
+                sRgbColor.a = value;
+                scRgbColor.a = ((float)value) / 255f;
             }
         }
 
         public byte R
         {
-            readonly get { return this.sRgbColor.r; }
+            readonly get { return sRgbColor.r; }
             set
             {
-                this.sRgbColor.r = value;
-                this.scRgbColor.r = ColorHelper.sRgbToScRgb(value);
+                sRgbColor.r = value;
+                scRgbColor.r = ColorHelper.sRgbToScRgb(value);
             }
         }
 
         public byte G
         {
-            readonly get { return this.sRgbColor.g; }
+            readonly get { return sRgbColor.g; }
             set
             {
-                this.sRgbColor.g = value;
-                this.scRgbColor.g = ColorHelper.sRgbToScRgb(value);
+                sRgbColor.g = value;
+                scRgbColor.g = ColorHelper.sRgbToScRgb(value);
             }
         }
 
         public byte B
         {
-            readonly get { return this.sRgbColor.b; }
+            readonly get { return sRgbColor.b; }
             set
             {
-                this.sRgbColor.b = value;
-                this.scRgbColor.b = ColorHelper.sRgbToScRgb(value);
+                sRgbColor.b = value;
+                scRgbColor.b = ColorHelper.sRgbToScRgb(value);
             }
         }
 
         public float ScA
         {
-            readonly get { return this.scRgbColor.a; }
+            readonly get { return scRgbColor.a; }
             set
             {
-                this.scRgbColor.a = value;
+                scRgbColor.a = value;
                 if (value < 0f)
-                    this.sRgbColor.a = 0;
+                    sRgbColor.a = 0;
                 else if (value > 1f)
-                    this.sRgbColor.a = 0xff;
+                    sRgbColor.a = 0xff;
                 else
-                    this.sRgbColor.a = (byte)(value * 255f);
+                    sRgbColor.a = (byte)(value * 255f);
             }
         }
 
         public float ScR
         {
-            readonly get { return this.scRgbColor.r; }
+            readonly get { return scRgbColor.r; }
             set
             {
-                this.scRgbColor.r = value;
-                this.sRgbColor.r = ColorHelper.ScRgbTosRgb(value);
+                scRgbColor.r = value;
+                sRgbColor.r = ColorHelper.ScRgbTosRgb(value);
             }
         }
 
         public float ScG
         {
-            readonly get { return this.scRgbColor.g; }
+            readonly get { return scRgbColor.g; }
             set
             {
-                this.scRgbColor.g = value;
-                this.sRgbColor.g = ColorHelper.ScRgbTosRgb(value);
+                scRgbColor.g = value;
+                sRgbColor.g = ColorHelper.ScRgbTosRgb(value);
             }
         }
 
         public float ScB
         {
-            readonly get { return this.scRgbColor.b; }
+            readonly get { return scRgbColor.b; }
             set
             {
-                this.scRgbColor.b = value;
-                this.sRgbColor.b = ColorHelper.ScRgbTosRgb(value);
+                scRgbColor.b = value;
+                sRgbColor.b = ColorHelper.ScRgbTosRgb(value);
             }
         }
 
-        public static implicit operator PdfSharp.Drawing.XColor(Color clr)
+        public static implicit operator XColor(Color clr)
         {
-            return PdfSharp.Drawing.XColor.FromArgb(clr.A, clr.R, clr.G, clr.B);
+            return XColor.FromArgb(clr.A, clr.R, clr.G, clr.B);
         }
 
         internal static Color FromArgb(byte a, byte r, byte g, byte b)
@@ -142,7 +142,7 @@ namespace PdfSharp.Xps.XpsModel
                 {
                     DevHelper.NotImplemented("Color StaticResource: " + value);
                     // HACK: just continue
-                    return Color.FromArgb(255, 0, 128, 0);
+                    return FromArgb(255, 0, 128, 0);
                 }
                 else if (value.StartsWith("sc#"))
                 {
@@ -167,7 +167,7 @@ namespace PdfSharp.Xps.XpsModel
                 {
                     DevHelper.NotImplemented("Color profile: " + value);
                     // HACK: just continue
-                    return Color.FromArgb(255, 0, 128, 0);
+                    return FromArgb(255, 0, 128, 0);
                 }
                 else
                     throw new NotImplementedException("Color type.");
@@ -175,12 +175,12 @@ namespace PdfSharp.Xps.XpsModel
             return clr;
         }
 
-        ColorType colorType;
-        SColor sRgbColor;
-        SCColor scRgbColor;
+        private ColorType colorType;
+        private SColor sRgbColor;
+        private SCColor scRgbColor;
     }
 
-    static class ColorConverter
+    internal static class ColorConverter
     {
         public static XColor ToXColor(this System.Windows.Media.Color c)
         {

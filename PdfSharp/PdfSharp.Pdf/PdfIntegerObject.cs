@@ -69,11 +69,11 @@ namespace PdfSharp.Pdf
         /// </summary>
         public int Value
         {
-            get { return this.value; }
+            get { return value; }
             //set {this.value = value;}
         }
 
-        readonly int value;
+        private readonly int value;
 
         /// <summary>
         /// Returns the integer as string.
@@ -89,7 +89,7 @@ namespace PdfSharp.Pdf
         internal override void WriteObject(PdfWriter writer)
         {
             writer.WriteBeginObject(this);
-            writer.Write(this.value);
+            writer.Write(value);
             writer.WriteEndObject();
         }
     }

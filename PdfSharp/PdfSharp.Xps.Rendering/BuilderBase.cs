@@ -5,7 +5,7 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Base class for all builder classes.
     /// </summary>
-    class BuilderBase
+    internal class BuilderBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BuilderBase"/> class.
@@ -20,16 +20,16 @@ namespace PdfSharp.Xps.Rendering
         /// </summary>
         protected DocumentRenderingContext Context
         {
-            get { return this.context; }
+            get { return context; }
         }
 
-        readonly DocumentRenderingContext context;
+        private readonly DocumentRenderingContext context;
     }
 
     /// <summary>
     /// Base class for TilingPatternBuilder and ShadingBuilder.
     /// </summary>
-    class PatternOrShadingBuilder : BuilderBase
+    internal class PatternOrShadingBuilder : BuilderBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BuilderBase"/> class.

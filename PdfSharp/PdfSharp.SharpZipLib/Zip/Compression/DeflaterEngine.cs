@@ -74,52 +74,53 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
     /// </summary>
     internal class DeflaterEngine : DeflaterConstants
     {
-        static readonly int TOO_FAR = 4096;
+        private static readonly int TOO_FAR = 4096;
 
-        int ins_h;
-        readonly short[] head;
-        readonly short[] prev;
+        private int ins_h;
+        private readonly short[] head;
+        private readonly short[] prev;
 
-        int matchStart, matchLen;
-        bool prevAvailable;
-        int blockStart;
-        int strstart, lookahead;
-        readonly byte[] window;
+        private int matchStart, matchLen;
+        private bool prevAvailable;
+        private int blockStart;
+        private int strstart, lookahead;
+        private readonly byte[] window;
 
-        DeflateStrategy strategy;
-        int max_chain, max_lazy, niceLength, goodLength;
+        private DeflateStrategy strategy;
+        private int max_chain, max_lazy, niceLength, goodLength;
 
         /// <summary>
         /// The current compression function.
         /// </summary>
-        int comprFunc;
+        private int comprFunc;
 
         /// <summary>
         /// The input data for compression.
         /// </summary>
-        byte[] inputBuf;
+        private byte[] inputBuf;
 
         /// <summary>
         /// The total bytes of input read.
         /// </summary>
-        int totalIn;
+        private int totalIn;
 
         /// <summary>
         /// The offset into inputBuf, where input data starts.
         /// </summary>
-        int inputOff;
+        private int inputOff;
 
         /// <summary>
         /// The end offset of the input data.
         /// </summary>
-        int inputEnd;
-        readonly DeflaterPending pending;
-        readonly DeflaterHuffman huffman;
+        private int inputEnd;
+
+        private readonly DeflaterPending pending;
+        private readonly DeflaterHuffman huffman;
 
         /// <summary>
         /// The adler checksum
         /// </summary>
-        readonly Adler32 adler;
+        private readonly Adler32 adler;
 
         /// <summary>
         /// Construct instance with pending buffer
@@ -217,12 +218,12 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         /// </summary>
         public void SetLevel(int lvl)
         {
-            goodLength = DeflaterConstants.GOOD_LENGTH[lvl];
-            max_lazy = DeflaterConstants.MAX_LAZY[lvl];
-            niceLength = DeflaterConstants.NICE_LENGTH[lvl];
-            max_chain = DeflaterConstants.MAX_CHAIN[lvl];
+            goodLength = GOOD_LENGTH[lvl];
+            max_lazy = MAX_LAZY[lvl];
+            niceLength = NICE_LENGTH[lvl];
+            max_chain = MAX_CHAIN[lvl];
 
-            if (DeflaterConstants.COMPR_FUNC[lvl] != comprFunc)
+            if (COMPR_FUNC[lvl] != comprFunc)
             {
                 //				if (DeflaterConstants.DEBUGGING) {
                 //					//Console.WriteLine("Change from " + comprFunc + " to "
@@ -265,7 +266,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             }
         }
 
-        void UpdateHash()
+        private void UpdateHash()
         {
             //			if (DEBUGGING) {
             //				//Console.WriteLine("updateHash: "+strstart);
@@ -273,7 +274,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             ins_h = (window[strstart] << HASH_SHIFT) ^ window[strstart + 1];
         }
 
-        int InsertString()
+        private int InsertString()
         {
             short match;
             int hash = ((ins_h << HASH_SHIFT) ^ window[strstart + (MIN_MATCH - 1)]) & HASH_MASK;
@@ -295,7 +296,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             return match & 0xffff;
         }
 
-        void SlideWindow()
+        private void SlideWindow()
         {
             Array.Copy(window, WSIZE, window, 0, WSIZE);
             matchStart -= WSIZE;
@@ -335,7 +336,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             /* If there is not enough lookahead, but still some input left,
 			 * read in the input
 			 */
-            while (lookahead < DeflaterConstants.MIN_LOOKAHEAD && inputOff < inputEnd)
+            while (lookahead < MIN_LOOKAHEAD && inputOff < inputEnd)
             {
                 int more = (2 * WSIZE) - lookahead - strstart;
 
@@ -344,7 +345,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     more = inputEnd - inputOff;
                 }
 
-                System.Array.Copy(inputBuf, inputOff, window, strstart + lookahead, more);
+                Array.Copy(inputBuf, inputOff, window, strstart + lookahead, more);
                 adler.Update(inputBuf, inputOff, more);
 
                 inputOff += more;
@@ -358,14 +359,14 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             }
         }
 
-        bool FindLongestMatch(int curMatch)
+        private bool FindLongestMatch(int curMatch)
         {
-            int chainLength = this.max_chain;
+            int chainLength = max_chain;
             int niceLength = this.niceLength;
             short[] prev = this.prev;
-            int scan = this.strstart;
+            int scan = strstart;
             int match;
-            int best_end = this.strstart + matchLen;
+            int best_end = strstart + matchLen;
             int best_len = Math.Max(matchLen, MIN_MATCH - 1);
 
             int limit = Math.Max(strstart - MAX_DIST, 0);
@@ -375,7 +376,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             byte scan_end = window[best_end];
 
             /* Do not waste too much time if we already have a good match: */
-            if (best_len >= this.goodLength)
+            if (best_len >= goodLength)
             {
                 chainLength >>= 2;
             }
@@ -388,14 +389,14 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                 niceLength = lookahead;
             }
 
-            if (DeflaterConstants.DEBUGGING && strstart > (2 * WSIZE) - MIN_LOOKAHEAD)
+            if (DEBUGGING && strstart > (2 * WSIZE) - MIN_LOOKAHEAD)
             {
                 throw new InvalidOperationException("need lookahead");
             }
 
             do
             {
-                if (DeflaterConstants.DEBUGGING && curMatch >= strstart)
+                if (DEBUGGING && curMatch >= strstart)
                 {
                     throw new InvalidOperationException("future match");
                 }
@@ -450,7 +451,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         /// </summary>
         public void SetDictionary(byte[] buffer, int offset, int length)
         {
-            if (DeflaterConstants.DEBUGGING && strstart != 1)
+            if (DEBUGGING && strstart != 1)
             {
                 throw new InvalidOperationException("strstart not 1");
             }
@@ -465,7 +466,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                 length = MAX_DIST;
             }
 
-            System.Array.Copy(buffer, offset, window, strstart, length);
+            Array.Copy(buffer, offset, window, strstart, length);
 
             UpdateHash();
             --length;
@@ -478,7 +479,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             blockStart = strstart;
         }
 
-        bool DeflateStored(bool flush, bool finish)
+        private bool DeflateStored(bool flush, bool finish)
         {
             if (!flush && lookahead == 0)
             {
@@ -490,14 +491,14 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
 
             int storedLen = strstart - blockStart;
 
-            if ((storedLen >= DeflaterConstants.MAX_BLOCK_SIZE) || /* Block is full */
+            if ((storedLen >= MAX_BLOCK_SIZE) || /* Block is full */
                 (blockStart < WSIZE && storedLen >= MAX_DIST) ||   /* Block may move out of window */
                 flush)
             {
                 bool lastBlock = finish;
-                if (storedLen > DeflaterConstants.MAX_BLOCK_SIZE)
+                if (storedLen > MAX_BLOCK_SIZE)
                 {
-                    storedLen = DeflaterConstants.MAX_BLOCK_SIZE;
+                    storedLen = MAX_BLOCK_SIZE;
                     lastBlock = false;
                 }
 
@@ -602,7 +603,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             return true;
         }
 
-        bool DeflateSlow(bool flush, bool finish)
+        private bool DeflateSlow(bool flush, bool finish)
         {
             if (lookahead < MIN_LOOKAHEAD && !flush)
             {
@@ -620,7 +621,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                     prevAvailable = false;
 
                     /* We are flushing everything */
-                    if (DeflaterConstants.DEBUGGING && !flush)
+                    if (DEBUGGING && !flush)
                     {
                         throw new SharpZipBaseException("Not flushing, but no lookahead");
                     }

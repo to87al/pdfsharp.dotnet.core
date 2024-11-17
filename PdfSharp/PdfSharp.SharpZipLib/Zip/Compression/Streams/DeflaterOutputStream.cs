@@ -66,7 +66,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         /// </summary>
         protected Stream baseOutputStream;
 
-        bool isStreamOwner = true;
+        private bool isStreamOwner = true;
 
         /// <summary>
         /// Get/set flag indicating ownership of underlying stream.
@@ -231,9 +231,9 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
                     break;
                 }
 
-                if (this.Password != null)
+                if (Password != null)
                 {
-                    this.EncryptBlock(buf, 0, len);
+                    EncryptBlock(buf, 0, len);
                 }
 
                 baseOutputStream.Write(buf, 0, len);
@@ -339,9 +339,9 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
                     break;
                 }
 
-                if (this.Password != null)
+                if (Password != null)
                 {
-                    this.EncryptBlock(buf, 0, len);
+                    EncryptBlock(buf, 0, len);
                 }
 
                 baseOutputStream.Write(buf, 0, len);
@@ -399,8 +399,8 @@ namespace PdfSharp.SharpZipLib.Zip.Compression.Streams
         #region Encryption
 
         // TODO  Refactor this code.  The presence of Zip specific code in this low level class is wrong
-        string password = null;
-        uint[] keys = null;
+        private string password = null;
+        private uint[] keys = null;
 
         /// <summary>
         /// Get/set the password used for encryption.  When null no encryption is performed

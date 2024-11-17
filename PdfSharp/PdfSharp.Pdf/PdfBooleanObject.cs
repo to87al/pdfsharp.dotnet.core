@@ -68,27 +68,27 @@ namespace PdfSharp.Pdf
         /// </summary>
         public bool Value
         {
-            get { return this.value; }
+            get { return value; }
             //set {this.value = value;}
         }
 
-        readonly bool value;
+        private readonly bool value;
 
         /// <summary>
         /// Returns "false" or "true".
         /// </summary>
         public override string ToString()
         {
-            return this.value ? bool.TrueString : bool.FalseString;
+            return value ? bool.TrueString : bool.FalseString;
         }
 
         /// <summary>
-        /// Writes the keyword «false» or «true».
+        /// Writes the keyword ï¿½falseï¿½ or ï¿½trueï¿½.
         /// </summary>
         internal override void WriteObject(PdfWriter writer)
         {
             writer.WriteBeginObject(this);
-            writer.Write(this.value);
+            writer.Write(value);
             writer.WriteEndObject();
         }
     }

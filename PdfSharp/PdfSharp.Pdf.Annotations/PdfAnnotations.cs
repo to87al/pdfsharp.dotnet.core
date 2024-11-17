@@ -56,8 +56,8 @@ namespace PdfSharp.Pdf.Annotations
         /// <param name="annotation">The annotation.</param>
         public void Add(PdfAnnotation annotation)
         {
-            annotation.Document = this.Owner;
-            this.Owner.irefTable.Add(annotation);
+            annotation.Document = Owner;
+            Owner.irefTable.Add(annotation);
             Elements.Add(annotation.Reference);
         }
 
@@ -147,10 +147,11 @@ namespace PdfSharp.Pdf.Annotations
         /// </summary>
         internal PdfPage Page
         {
-            get { return this.page; }
-            set { this.page = value; }
+            get { return page; }
+            set { page = value; }
         }
-        PdfPage page;
+
+        private PdfPage page;
 
         /// <summary>
         /// Fixes the /P element in imported annotation.
@@ -178,20 +179,20 @@ namespace PdfSharp.Pdf.Annotations
             return (IEnumerator<PdfItem>)new AnnotationsIterator(this);
         }
 
-        class AnnotationsIterator : IEnumerator<PdfAnnotation>
+        private class AnnotationsIterator : IEnumerator<PdfAnnotation>
         {
-            readonly PdfAnnotations annotations;
-            int index;
+            private readonly PdfAnnotations annotations;
+            private int index;
 
             public AnnotationsIterator(PdfAnnotations annotations)
             {
                 this.annotations = annotations;
-                this.index = -1;
+                index = -1;
             }
 
             public PdfAnnotation Current
             {
-                get { return this.annotations[this.index]; }
+                get { return annotations[index]; }
             }
 
             object IEnumerator.Current
@@ -201,12 +202,12 @@ namespace PdfSharp.Pdf.Annotations
 
             public bool MoveNext()
             {
-                return ++this.index < this.annotations.Count;
+                return ++index < annotations.Count;
             }
 
             public void Reset()
             {
-                this.index = -1;
+                index = -1;
             }
 
             public void Dispose()

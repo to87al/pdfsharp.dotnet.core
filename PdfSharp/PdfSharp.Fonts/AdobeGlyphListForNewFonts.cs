@@ -35,7 +35,7 @@ namespace PdfSharp.Fonts
     /// </summary>
     public sealed class AdobeGlyphListForNewFonts
     {
-        AdobeGlyphListForNewFonts() { }
+        private AdobeGlyphListForNewFonts() { }
 
         // ReSharper disable InconsistentNaming
 

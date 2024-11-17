@@ -55,15 +55,16 @@ namespace PdfSharp.Pdf.AcroForms
         {
             get
             {
-                if (this.fields == null)
+                if (fields == null)
                 {
                     object o = Elements.GetValue(Keys.Fields, VCF.CreateIndirect);
-                    this.fields = (PdfAcroField.PdfAcroFieldCollection)o;
+                    fields = (PdfAcroField.PdfAcroFieldCollection)o;
                 }
-                return this.fields;
+                return fields;
             }
         }
-        PdfAcroField.PdfAcroFieldCollection fields;
+
+        private PdfAcroField.PdfAcroFieldCollection fields;
 
         /// <summary>
         /// Predefined keys of this dictionary. 
@@ -72,7 +73,7 @@ namespace PdfSharp.Pdf.AcroForms
         public sealed class Keys : KeysBase
         {
             /// <summary>
-            /// (Required) An array of references to the document’s root fields (those with
+            /// (Required) An array of references to the documentï¿½s root fields (those with
             /// no ancestors in the field hierarchy).
             /// </summary>
             [KeyInfo(KeyType.Array | KeyType.Required, typeof(PdfAcroField.PdfAcroFieldCollection))]
@@ -128,11 +129,12 @@ namespace PdfSharp.Pdf.AcroForms
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

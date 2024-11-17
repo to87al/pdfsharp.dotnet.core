@@ -47,7 +47,7 @@ namespace PdfSharp.Pdf
             this.document = document;
         }
 
-        readonly PdfDocument document;
+        private readonly PdfDocument document;
 
         /// <summary>
         /// Represents the relation between PdfObjectID and PdfReference for a PdfDocument.
@@ -56,10 +56,11 @@ namespace PdfSharp.Pdf
 
         internal bool IsUnderConstruction
         {
-            get { return this.isUnderConstruction; }
-            set { this.isUnderConstruction = value; }
+            get { return isUnderConstruction; }
+            set { isUnderConstruction = value; }
         }
-        bool isUnderConstruction;
+
+        private bool isUnderConstruction;
 
         /// <summary>
         /// Adds a cross reference entry to the table. Used when parsing the trailer.
@@ -69,10 +70,10 @@ namespace PdfSharp.Pdf
             if (iref.ObjectID.IsEmpty)
                 iref.ObjectID = new PdfObjectID(GetNewObjectNumber());
 
-            if (this.objectTable.ContainsKey(iref.ObjectID))
+            if (objectTable.ContainsKey(iref.ObjectID))
                 throw new InvalidOperationException("Object already in table.");
 
-            this.objectTable.Add(iref.ObjectID, iref);
+            objectTable.Add(iref.ObjectID, iref);
         }
 
         /// <summary>
@@ -81,22 +82,22 @@ namespace PdfSharp.Pdf
         public void Add(PdfObject value)
         {
             if (value.Owner == null)
-                value.Document = this.document;
+                value.Document = document;
             else
-                Debug.Assert(value.Owner == this.document);
+                Debug.Assert(value.Owner == document);
 
             if (value.ObjectID.IsEmpty)
                 value.SetObjectID(GetNewObjectNumber(), 0);
 
-            if (this.objectTable.ContainsKey(value.ObjectID))
+            if (objectTable.ContainsKey(value.ObjectID))
                 throw new InvalidOperationException("Object already in table.");
 
-            this.objectTable.Add(value.ObjectID, value.Reference);
+            objectTable.Add(value.ObjectID, value.Reference);
         }
 
         public void Remove(PdfReference iref)
         {
-            this.objectTable.Remove(iref.ObjectID);
+            objectTable.Remove(iref.ObjectID);
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                this.objectTable.TryGetValue(objectID, out PdfReference iref);
+                objectTable.TryGetValue(objectID, out PdfReference iref);
                 return iref;
             }
         }
@@ -117,7 +118,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public bool Contains(PdfObjectID objectID)
         {
-            return this.objectTable.ContainsKey(objectID);
+            return objectTable.ContainsKey(objectID);
         }
 
         //public PdfObject GetObject(PdfObjectID objectID)
@@ -141,7 +142,7 @@ namespace PdfSharp.Pdf
         {
             // New objects are numbered consecutively. If a document is imported, maxObjectNumber is
             // set to the highest object number used in the document.
-            return ++this.maxObjectNumber;
+            return ++maxObjectNumber;
         }
         internal int maxObjectNumber;
 
@@ -163,8 +164,8 @@ namespace PdfSharp.Pdf
             //list.CopyTo(objectIDs);
 
             int count = irefs.Length;
-            writer.WriteRaw(String.Format("0 {0}\n", count + 1));
-            writer.WriteRaw(String.Format("{0:0000000000} {1:00000} {2} \n", 0, 65535, "f"));
+            writer.WriteRaw($"0 {count + 1}\n");
+            writer.WriteRaw($"{0:0000000000} {65535:00000} {"f"} \n");
             //PdfEncoders.WriteAnsi(stream, text);
 
             for (int idx = 0; idx < count; idx++)
@@ -176,7 +177,7 @@ namespace PdfSharp.Pdf
 
                 // Acrobat is very pedantic; it must be exactly 20 bytes per line.
                 writer.WriteRaw(
-                  String.Format("{0:0000000000} {1:00000} {2} \n", iref.Position, iref.GenerationNumber, "n"));
+                    $"{iref.Position:0000000000} {iref.GenerationNumber:00000} {"n"} \n");
                 //PdfEncoders.WriteAnsi(stream, text);
             }
         }
@@ -188,7 +189,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                ICollection collection = this.objectTable.Keys;
+                ICollection collection = objectTable.Keys;
                 PdfObjectID[] objectIDs = new PdfObjectID[collection.Count];
                 collection.CopyTo(objectIDs, 0);
                 return objectIDs;
@@ -202,7 +203,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                Dictionary<PdfObjectID, PdfReference>.ValueCollection collection = this.objectTable.Values;
+                Dictionary<PdfObjectID, PdfReference>.ValueCollection collection = objectTable.Values;
                 List<PdfReference> list = new(collection);
                 list.Sort(PdfReference.Comparer);
                 PdfReference[] irefs = new PdfReference[collection.Count];
@@ -221,10 +222,10 @@ namespace PdfSharp.Pdf
         internal int Compact()
         {
             // TODO: remove PdfBooleanObject, PdfIntegerObject etc.
-            int removed = this.objectTable.Count;
+            int removed = objectTable.Count;
             //CheckConsistence();
             // TODO: Is this really so easy?
-            PdfReference[] irefs = TransitiveClosure(this.document.trailer);
+            PdfReference[] irefs = TransitiveClosure(document.trailer);
 
 #if DEBUG_
       foreach (PdfReference iref in this.objectTable.Values)
@@ -246,15 +247,15 @@ namespace PdfSharp.Pdf
       }
 #endif
 
-            this.maxObjectNumber = 0;
-            this.objectTable.Clear();
+            maxObjectNumber = 0;
+            objectTable.Clear();
             foreach (PdfReference iref in irefs)
             {
-                this.objectTable.Add(iref.ObjectID, iref);
-                this.maxObjectNumber = Math.Max(this.maxObjectNumber, iref.ObjectNumber);
+                objectTable.Add(iref.ObjectID, iref);
+                maxObjectNumber = Math.Max(maxObjectNumber, iref.ObjectNumber);
             }
             //CheckConsistence();
-            removed -= this.objectTable.Count;
+            removed -= objectTable.Count;
             return removed;
         }
 
@@ -265,7 +266,7 @@ namespace PdfSharp.Pdf
         {
             //CheckConsistence();
             PdfReference[] irefs = AllReferences;
-            this.objectTable.Clear();
+            objectTable.Clear();
             // Give all objects a new number
             int count = irefs.Length;
             for (int idx = 0; idx < count; idx++)
@@ -277,9 +278,9 @@ namespace PdfSharp.Pdf
 #endif
                 iref.ObjectID = new PdfObjectID(idx + 1);
                 // Rehash with new number
-                this.objectTable.Add(iref.ObjectID, iref);
+                objectTable.Add(iref.ObjectID, iref);
             }
-            this.maxObjectNumber = count;
+            maxObjectNumber = count;
             //CheckConsistence();
         }
 
@@ -290,7 +291,7 @@ namespace PdfSharp.Pdf
         public void CheckConsistence()
         {
             Dictionary<PdfReference, object> ht1 = [];
-            foreach (PdfReference iref in this.objectTable.Values)
+            foreach (PdfReference iref in objectTable.Values)
             {
                 Debug.Assert(!ht1.ContainsKey(iref), "Duplicate iref.");
                 Debug.Assert(iref.Value != null);
@@ -298,13 +299,13 @@ namespace PdfSharp.Pdf
             }
 
             Dictionary<PdfObjectID, object> ht2 = [];
-            foreach (PdfReference iref in this.objectTable.Values)
+            foreach (PdfReference iref in objectTable.Values)
             {
                 Debug.Assert(!ht2.ContainsKey(iref.ObjectID), "Duplicate iref.");
                 ht2.Add(iref.ObjectID, null);
             }
 
-            ICollection collection = this.objectTable.Values;
+            ICollection collection = objectTable.Values;
             int count = collection.Count;
             PdfReference[] irefs = new PdfReference[count];
             collection.CopyTo(irefs, 0);
@@ -364,14 +365,14 @@ namespace PdfSharp.Pdf
         {
             CheckConsistence();
             Dictionary<PdfItem, object> objects = [];
-            this.overflow = [];
+            overflow = [];
             TransitiveClosureImplementation(objects, pdfObject, ref depth);
         TryAgain:
-            if (this.overflow.Count > 0)
+            if (overflow.Count > 0)
             {
-                PdfObject[] array = new PdfObject[this.overflow.Count];
-                this.overflow.Keys.CopyTo(array, 0);
-                this.overflow = [];
+                PdfObject[] array = new PdfObject[overflow.Count];
+                overflow.Keys.CopyTo(array, 0);
+                overflow = [];
                 for (int idx = 0; idx < array.Length; idx++)
                 {
                     //PdfObject o = array[idx];
@@ -409,9 +410,10 @@ namespace PdfSharp.Pdf
             return irefs;
         }
 
-        static int nestingLevel;
-        Dictionary<PdfItem, object> overflow = [];
-        void TransitiveClosureImplementation(Dictionary<PdfItem, object> objects, PdfObject pdfObject, ref int depth)
+        private static int nestingLevel;
+        private Dictionary<PdfItem, object> overflow = [];
+
+        private void TransitiveClosureImplementation(Dictionary<PdfItem, object> objects, PdfObject pdfObject, ref int depth)
         {
             if (depth-- == 0)
                 return;
@@ -422,8 +424,8 @@ namespace PdfSharp.Pdf
                 {
                     //Debug.WriteLine(String.Format("Nestinglevel={0}", nestingLevel));
                     //GetType();
-                    if (!this.overflow.ContainsKey(pdfObject))
-                        this.overflow.Add(pdfObject, null);
+                    if (!overflow.ContainsKey(pdfObject))
+                        overflow.Add(pdfObject, null);
                     return;
                 }
 #if DEBUG_
@@ -466,12 +468,12 @@ namespace PdfSharp.Pdf
                             //  iref = dead;
                             //}
 
-                            if (!Object.ReferenceEquals(iref.Document, this.document))
+                            if (!ReferenceEquals(iref.Document, document))
                             {
                                 GetType();
-                                Debug.WriteLine(String.Format("Bad iref: {0}", iref.ObjectID.ToString()));
+                                Debug.WriteLine($"Bad iref: {iref.ObjectID.ToString()}");
                             }
-                            Debug.Assert(Object.ReferenceEquals(iref.Document, this.document) || iref.Document == null, "External object detected!");
+                            Debug.Assert(ReferenceEquals(iref.Document, document) || iref.Document == null, "External object detected!");
 #if DEBUG
               if (iref.ObjectID.ObjectNumber == 23)
                 GetType();
@@ -486,11 +488,11 @@ namespace PdfSharp.Pdf
                                     // ... from trailer hack
                                     if (value == null)
                                     {
-                                        iref = this.objectTable[iref.ObjectID];
+                                        iref = objectTable[iref.ObjectID];
                                         Debug.Assert(iref.Value != null);
                                         value = iref.Value;
                                     }
-                                    Debug.Assert(Object.ReferenceEquals(iref.Document, this.document));
+                                    Debug.Assert(ReferenceEquals(iref.Document, document));
                                     objects.Add(iref, null);
                                     //Debug.WriteLine(String.Format("objects.Add('{0}', null);", iref.ObjectID.ToString()));
                                     if (value is PdfArray or PdfDictionary)
@@ -526,15 +528,16 @@ namespace PdfSharp.Pdf
         {
             get
             {
-                if (false || this.deadObject == null)
+                if (false || deadObject == null)
                 {
-                    this.deadObject = new PdfDictionary(this.document);
-                    Add(this.deadObject);
-                    this.deadObject.Elements.Add("/DeadObjectCount", new PdfInteger());
+                    deadObject = new PdfDictionary(document);
+                    Add(deadObject);
+                    deadObject.Elements.Add("/DeadObjectCount", new PdfInteger());
                 }
-                return this.deadObject.Reference;
+                return deadObject.Reference;
             }
         }
-        PdfDictionary deadObject;
+
+        private PdfDictionary deadObject;
     }
 }

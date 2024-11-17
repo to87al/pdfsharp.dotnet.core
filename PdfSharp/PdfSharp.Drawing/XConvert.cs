@@ -40,7 +40,7 @@ namespace PdfSharp.Drawing
     /// <summary>
     /// Converts XGraphics enums to GDI+ enums.
     /// </summary>
-    static class XConvert
+    internal static class XConvert
     {
 #if GDI
     /// <summary>
@@ -72,7 +72,8 @@ namespace PdfSharp.Drawing
         {
             return wpfLineJoin[(int)lineJoin];
         }
-        static readonly PenLineJoin[] wpfLineJoin = [PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel];
+
+        private static readonly PenLineJoin[] wpfLineJoin = [PenLineJoin.Miter, PenLineJoin.Round, PenLineJoin.Bevel];
 #endif
 
 #if WPF
@@ -83,7 +84,8 @@ namespace PdfSharp.Drawing
         {
             return wpfLineCap[(int)lineCap];
         }
-        static readonly PenLineCap[] wpfLineCap = [PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square];
+
+        private static readonly PenLineCap[] wpfLineCap = [PenLineCap.Flat, PenLineCap.Round, PenLineCap.Square];
 #endif
     }
 }

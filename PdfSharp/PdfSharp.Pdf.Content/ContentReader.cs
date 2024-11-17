@@ -37,7 +37,7 @@ namespace PdfSharp.Pdf.Content
     public sealed class ContentReader
     {
         // Makes this class static
-        ContentReader() { }
+        private ContentReader() { }
 
         /// <summary>
         /// Reads the content stream(s) of the specified page.

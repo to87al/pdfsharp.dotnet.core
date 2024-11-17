@@ -108,7 +108,7 @@ namespace PdfSharp.Pdf.Filters
         /// <summary>
         /// Initialize the dictionary.
         /// </summary>
-        void InitializeDictionary()
+        private void InitializeDictionary()
         {
             stringTable = new byte[8192][];
 
@@ -125,7 +125,7 @@ namespace PdfSharp.Pdf.Filters
         /// <summary>
         /// Add a new entry to the Dictionary.
         /// </summary>
-        void AddEntry(byte[] oldstring, byte newstring)
+        private void AddEntry(byte[] oldstring, byte newstring)
         {
             int length = oldstring.Length;
             byte[] str = new byte[length + 1];
@@ -145,7 +145,7 @@ namespace PdfSharp.Pdf.Filters
         /// <summary>
         /// Returns the next set of bits.
         /// </summary>
-        int NextCode
+        private int NextCode
         {
             get
             {
@@ -172,12 +172,12 @@ namespace PdfSharp.Pdf.Filters
             }
         }
 
-        readonly int[] andTable = [511, 1023, 2047, 4095];
-        byte[][] stringTable;
-        byte[] data;
-        int tableIndex, bitsToGet = 9;
-        int bytePointer;
-        int nextData = 0;
-        int nextBits = 0;
+        private readonly int[] andTable = [511, 1023, 2047, 4095];
+        private byte[][] stringTable;
+        private byte[] data;
+        private int tableIndex, bitsToGet = 9;
+        private int bytePointer;
+        private int nextData = 0;
+        private int nextBits = 0;
     }
 }

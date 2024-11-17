@@ -6,9 +6,9 @@ using System.Windows.Media.Imaging;
 
 namespace PdfSharp.Xps.Rendering
 {
-    class ImageBuilder : BuilderBase
+    internal class ImageBuilder : BuilderBase
     {
-        ImageBuilder(DocumentRenderingContext context) :
+        private ImageBuilder(DocumentRenderingContext context) :
           base(context)
         {
         }
@@ -28,11 +28,11 @@ namespace PdfSharp.Xps.Rendering
         }
     }
 
-    class XpsImage : XImage
+    internal class XpsImage : XImage
     {
         public XpsImage(BitmapSource src)
         {
-            base.wpfImage = src;
+            wpfImage = src;
             var t = typeof(XImage);
             var fmtProperty = t.GetField("format", BindingFlags.Instance | BindingFlags.NonPublic);
             fmtProperty.SetValue(this, XImageFormat.Png);

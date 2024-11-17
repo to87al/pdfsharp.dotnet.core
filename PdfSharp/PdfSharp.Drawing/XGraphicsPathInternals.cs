@@ -48,7 +48,7 @@ namespace PdfSharp.Drawing
             this.path = path;
         }
 
-        readonly XGraphicsPath path;
+        private readonly XGraphicsPath path;
 
 #if GDI
     /// <summary>
@@ -66,7 +66,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public PathGeometry WpfPath
         {
-            get { return this.path.pathGeometry; }
+            get { return path.pathGeometry; }
         }
 #endif
     }

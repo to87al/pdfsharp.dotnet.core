@@ -50,8 +50,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XPdfFontOptions(PdfFontEncoding encoding, PdfFontEmbedding embedding)
         {
-            this.fontEncoding = encoding;
-            this.fontEmbedding = embedding;
+            fontEncoding = encoding;
+            fontEmbedding = embedding;
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XPdfFontOptions(PdfFontEncoding encoding)
         {
-            this.fontEncoding = encoding;
-            this.fontEmbedding = PdfFontEmbedding.None;
+            fontEncoding = encoding;
+            fontEmbedding = PdfFontEmbedding.None;
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XPdfFontOptions(PdfFontEmbedding embedding)
         {
-            this.fontEncoding = PdfFontEncoding.WinAnsi;
-            this.fontEmbedding = embedding;
+            fontEncoding = PdfFontEncoding.WinAnsi;
+            fontEmbedding = embedding;
         }
 
         /// <summary>
@@ -80,15 +80,15 @@ namespace PdfSharp.Drawing
         /// <param name="baseFont">Not yet implemented. Should be "".</param>
         /// <param name="fontFile">Not yet implemented. Should be "".</param>
         [Obsolete("Use other constructor")]
-        XPdfFontOptions(bool embed, bool unicode, string baseFont, string fontFile)
+        private XPdfFontOptions(bool embed, bool unicode, string baseFont, string fontFile)
         {
-            this.fontEmbedding = embed ? PdfFontEmbedding.Always : PdfFontEmbedding.None;
-            this.fontEncoding = unicode ? PdfFontEncoding.Unicode : PdfFontEncoding.WinAnsi;
+            fontEmbedding = embed ? PdfFontEmbedding.Always : PdfFontEmbedding.None;
+            fontEncoding = unicode ? PdfFontEncoding.Unicode : PdfFontEncoding.WinAnsi;
             //this.baseFont = baseFont == null ? "" : baseFont;
             //this.fontFile = fontFile == null ? "" : fontFile;
 
-            this.fontEmbedding = PdfFontEmbedding.Default;
-            this.fontEncoding = PdfFontEncoding.WinAnsi;
+            fontEmbedding = PdfFontEmbedding.Default;
+            fontEncoding = PdfFontEncoding.WinAnsi;
         }
 
         /// <summary>
@@ -99,8 +99,8 @@ namespace PdfSharp.Drawing
         [Obsolete("Use other constructor")]
         public XPdfFontOptions(bool unicode, byte[] fontData)
         {
-            this.fontEmbedding = PdfFontEmbedding.None;
-            this.fontEncoding = unicode ? PdfFontEncoding.Unicode : PdfFontEncoding.WinAnsi;
+            fontEmbedding = PdfFontEmbedding.None;
+            fontEncoding = unicode ? PdfFontEncoding.Unicode : PdfFontEncoding.WinAnsi;
             //this.baseFont = "";
             //this.fontFile = "";
             //this.fontData = fontData;
@@ -152,7 +152,7 @@ namespace PdfSharp.Drawing
         [Obsolete("Use FontEmbedding")]
         public bool Embed
         {
-            get { return this.fontEmbedding != PdfFontEmbedding.None; }
+            get { return fontEmbedding != PdfFontEmbedding.None; }
         }
         //bool embed;
 
@@ -161,10 +161,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         public PdfFontEmbedding FontEmbedding
         {
-            get { return this.fontEmbedding; }
+            get { return fontEmbedding; }
         }
 
-        readonly PdfFontEmbedding fontEmbedding;
+        private readonly PdfFontEmbedding fontEmbedding;
 
         //public bool Subset
         //{
@@ -178,7 +178,7 @@ namespace PdfSharp.Drawing
         [Obsolete("Use FontEncoding")]
         public bool Unicode
         {
-            get { return this.fontEncoding == PdfFontEncoding.Unicode; }
+            get { return fontEncoding == PdfFontEncoding.Unicode; }
         }
         //bool unicode;
 
@@ -188,10 +188,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         public PdfFontEncoding FontEncoding
         {
-            get { return this.fontEncoding; }
+            get { return fontEncoding; }
         }
 
-        readonly PdfFontEncoding fontEncoding;
+        private readonly PdfFontEncoding fontEncoding;
 
         /// <summary>
         /// Not yet implemented.

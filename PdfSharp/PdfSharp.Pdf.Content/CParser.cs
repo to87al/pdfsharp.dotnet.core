@@ -38,25 +38,25 @@ namespace PdfSharp.Pdf.Content
     /// </summary>
     internal sealed class CParser
     {
-        readonly PdfPage page;
-        readonly CLexer lexer;
+        private readonly PdfPage page;
+        private readonly CLexer lexer;
 
         public CParser(PdfPage page)
         {
             this.page = page;
             PdfContent content = page.Contents.CreateSingleContent();
             byte[] bytes = content.Stream.Value;
-            this.lexer = new CLexer(bytes);
+            lexer = new CLexer(bytes);
         }
 
         public CParser(byte[] content)
         {
-            this.lexer = new CLexer(content);
+            lexer = new CLexer(content);
         }
 
         public CSymbol Symbol
         {
-            get { return this.lexer.Symbol; }
+            get { return lexer.Symbol; }
         }
 
         public CSequence ReadContent()
@@ -70,7 +70,7 @@ namespace PdfSharp.Pdf.Content
         /// <summary>
         /// Parses whatever comes until the specified stop symbol is reached.
         /// </summary>
-        void ParseObject(CSequence sequence, CSymbol stop)
+        private void ParseObject(CSequence sequence, CSymbol stop)
         {
             CSymbol symbol;
             while ((symbol = ScanNextToken()) != CSymbol.Eof)
@@ -86,14 +86,14 @@ namespace PdfSharp.Pdf.Content
 
                     case CSymbol.Integer:
                         CInteger n = new();
-                        n.Value = this.lexer.TokenToInteger;
-                        this.operands.Add(n);
+                        n.Value = lexer.TokenToInteger;
+                        operands.Add(n);
                         break;
 
                     case CSymbol.Real:
                         CReal r = new();
-                        r.Value = this.lexer.TokenToReal;
-                        this.operands.Add(r);
+                        r.Value = lexer.TokenToReal;
+                        operands.Add(r);
                         break;
 
                     case CSymbol.String:
@@ -101,29 +101,29 @@ namespace PdfSharp.Pdf.Content
                     case CSymbol.UnicodeString:
                     case CSymbol.UnicodeHexString:
                         CString s = new();
-                        s.Value = this.lexer.Token;
-                        this.operands.Add(s);
+                        s.Value = lexer.Token;
+                        operands.Add(s);
                         break;
 
                     case CSymbol.Name:
                         CName name = new();
-                        name.Name = this.lexer.Token;
-                        this.operands.Add(name);
+                        name.Name = lexer.Token;
+                        operands.Add(name);
                         break;
 
                     case CSymbol.Operator:
                         COperator op = CreateOperator();
-                        this.operands.Clear();
+                        operands.Clear();
                         sequence.Add(op);
                         break;
 
                     case CSymbol.BeginArray:
                         CArray array = [];
-                        Debug.Assert(this.operands.Count == 0, "Array within array...");
+                        Debug.Assert(operands.Count == 0, "Array within array...");
                         ParseObject(array, CSymbol.EndArray);
-                        array.Add(this.operands);
-                        this.operands.Clear();
-                        this.operands.Add((CObject)array);
+                        array.Add(operands);
+                        operands.Clear();
+                        operands.Add((CObject)array);
                         break;
 
                     case CSymbol.EndArray:
@@ -132,17 +132,17 @@ namespace PdfSharp.Pdf.Content
             }
         }
 
-        COperator CreateOperator()
+        private COperator CreateOperator()
         {
-            string name = this.lexer.Token;
+            string name = lexer.Token;
             COperator op = OpCodes.OperatorFromName(name);
             if (op.OpCode.OpCodeName == OpCodeName.ID)
             {
-                this.lexer.ScanInlineImage();
+                lexer.ScanInlineImage();
             }
 
 #if DEBUG
-      if (op.OpCode.Operands != -1 && op.OpCode.Operands != this.operands.Count)
+      if (op.OpCode.Operands != -1 && op.OpCode.Operands != operands.Count)
       {
         if (op.OpCode.OpCodeName != OpCodeName.ID)
         {
@@ -151,15 +151,15 @@ namespace PdfSharp.Pdf.Content
         }
       }
 #endif
-            op.Operands.Add(this.operands);
+            op.Operands.Add(operands);
             return op;
         }
 
-        CSymbol ScanNextToken()
+        private CSymbol ScanNextToken()
         {
-            return this.lexer.ScanNextToken();
+            return lexer.ScanNextToken();
         }
 
-        readonly CSequence operands = [];
+        private readonly CSequence operands = [];
     }
 }

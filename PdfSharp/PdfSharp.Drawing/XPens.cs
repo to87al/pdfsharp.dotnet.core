@@ -40,8 +40,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.aliceBlue ??= new XPen(XColors.AliceBlue, 1, true);
-                return XPens.aliceBlue;
+                aliceBlue ??= new XPen(XColors.AliceBlue, 1, true);
+                return aliceBlue;
             }
         }
 
@@ -50,8 +50,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.antiqueWhite ??= new XPen(XColors.AntiqueWhite, 1, true);
-                return XPens.antiqueWhite;
+                antiqueWhite ??= new XPen(XColors.AntiqueWhite, 1, true);
+                return antiqueWhite;
             }
         }
 
@@ -60,8 +60,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.aqua ??= new XPen(XColors.Aqua, 1, true);
-                return XPens.aqua;
+                aqua ??= new XPen(XColors.Aqua, 1, true);
+                return aqua;
             }
         }
 
@@ -70,8 +70,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.aquamarine ??= new XPen(XColors.Aquamarine, 1, true);
-                return XPens.aquamarine;
+                aquamarine ??= new XPen(XColors.Aquamarine, 1, true);
+                return aquamarine;
             }
         }
 
@@ -80,8 +80,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.azure ??= new XPen(XColors.Azure, 1, true);
-                return XPens.azure;
+                azure ??= new XPen(XColors.Azure, 1, true);
+                return azure;
             }
         }
 
@@ -90,8 +90,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.beige ??= new XPen(XColors.Beige, 1, true);
-                return XPens.beige;
+                beige ??= new XPen(XColors.Beige, 1, true);
+                return beige;
             }
         }
 
@@ -100,8 +100,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.bisque ??= new XPen(XColors.Bisque, 1, true);
-                return XPens.bisque;
+                bisque ??= new XPen(XColors.Bisque, 1, true);
+                return bisque;
             }
         }
 
@@ -110,8 +110,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.black ??= new XPen(XColors.Black, 1, true);
-                return XPens.black;
+                black ??= new XPen(XColors.Black, 1, true);
+                return black;
             }
         }
 
@@ -120,8 +120,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.blanchedAlmond ??= new XPen(XColors.BlanchedAlmond, 1, true);
-                return XPens.blanchedAlmond;
+                blanchedAlmond ??= new XPen(XColors.BlanchedAlmond, 1, true);
+                return blanchedAlmond;
             }
         }
 
@@ -130,8 +130,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.blue ??= new XPen(XColors.Blue, 1, true);
-                return XPens.blue;
+                blue ??= new XPen(XColors.Blue, 1, true);
+                return blue;
             }
         }
 
@@ -140,8 +140,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.blueViolet ??= new XPen(XColors.BlueViolet, 1, true);
-                return XPens.blueViolet;
+                blueViolet ??= new XPen(XColors.BlueViolet, 1, true);
+                return blueViolet;
             }
         }
 
@@ -150,8 +150,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.brown ??= new XPen(XColors.Brown, 1, true);
-                return XPens.brown;
+                brown ??= new XPen(XColors.Brown, 1, true);
+                return brown;
             }
         }
 
@@ -160,8 +160,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.burlyWood ??= new XPen(XColors.BurlyWood, 1, true);
-                return XPens.burlyWood;
+                burlyWood ??= new XPen(XColors.BurlyWood, 1, true);
+                return burlyWood;
             }
         }
 
@@ -170,8 +170,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.cadetBlue ??= new XPen(XColors.CadetBlue, 1, true);
-                return XPens.cadetBlue;
+                cadetBlue ??= new XPen(XColors.CadetBlue, 1, true);
+                return cadetBlue;
             }
         }
 
@@ -180,8 +180,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.chartreuse ??= new XPen(XColors.Chartreuse, 1, true);
-                return XPens.chartreuse;
+                chartreuse ??= new XPen(XColors.Chartreuse, 1, true);
+                return chartreuse;
             }
         }
 
@@ -190,8 +190,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.chocolate ??= new XPen(XColors.Chocolate, 1, true);
-                return XPens.chocolate;
+                chocolate ??= new XPen(XColors.Chocolate, 1, true);
+                return chocolate;
             }
         }
 
@@ -200,8 +200,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.coral ??= new XPen(XColors.Coral, 1, true);
-                return XPens.coral;
+                coral ??= new XPen(XColors.Coral, 1, true);
+                return coral;
             }
         }
 
@@ -210,8 +210,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.cornflowerBlue ??= new XPen(XColors.CornflowerBlue, 1, true);
-                return XPens.cornflowerBlue;
+                cornflowerBlue ??= new XPen(XColors.CornflowerBlue, 1, true);
+                return cornflowerBlue;
             }
         }
 
@@ -220,8 +220,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.cornsilk ??= new XPen(XColors.Cornsilk, 1, true);
-                return XPens.cornsilk;
+                cornsilk ??= new XPen(XColors.Cornsilk, 1, true);
+                return cornsilk;
             }
         }
 
@@ -230,8 +230,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.crimson ??= new XPen(XColors.Crimson, 1, true);
-                return XPens.crimson;
+                crimson ??= new XPen(XColors.Crimson, 1, true);
+                return crimson;
             }
         }
 
@@ -240,8 +240,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.cyan ??= new XPen(XColors.Cyan, 1, true);
-                return XPens.cyan;
+                cyan ??= new XPen(XColors.Cyan, 1, true);
+                return cyan;
             }
         }
 
@@ -250,8 +250,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkBlue ??= new XPen(XColors.DarkBlue, 1, true);
-                return XPens.darkBlue;
+                darkBlue ??= new XPen(XColors.DarkBlue, 1, true);
+                return darkBlue;
             }
         }
 
@@ -260,8 +260,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkCyan ??= new XPen(XColors.DarkCyan, 1, true);
-                return XPens.darkCyan;
+                darkCyan ??= new XPen(XColors.DarkCyan, 1, true);
+                return darkCyan;
             }
         }
 
@@ -270,8 +270,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkGoldenrod ??= new XPen(XColors.DarkGoldenrod, 1, true);
-                return XPens.darkGoldenrod;
+                darkGoldenrod ??= new XPen(XColors.DarkGoldenrod, 1, true);
+                return darkGoldenrod;
             }
         }
 
@@ -280,8 +280,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkGray ??= new XPen(XColors.DarkGray, 1, true);
-                return XPens.darkGray;
+                darkGray ??= new XPen(XColors.DarkGray, 1, true);
+                return darkGray;
             }
         }
 
@@ -290,8 +290,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkGreen ??= new XPen(XColors.DarkGreen, 1, true);
-                return XPens.darkGreen;
+                darkGreen ??= new XPen(XColors.DarkGreen, 1, true);
+                return darkGreen;
             }
         }
 
@@ -300,8 +300,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkKhaki ??= new XPen(XColors.DarkKhaki, 1, true);
-                return XPens.darkKhaki;
+                darkKhaki ??= new XPen(XColors.DarkKhaki, 1, true);
+                return darkKhaki;
             }
         }
 
@@ -310,8 +310,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkMagenta ??= new XPen(XColors.DarkMagenta, 1, true);
-                return XPens.darkMagenta;
+                darkMagenta ??= new XPen(XColors.DarkMagenta, 1, true);
+                return darkMagenta;
             }
         }
 
@@ -320,8 +320,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkOliveGreen ??= new XPen(XColors.DarkOliveGreen, 1, true);
-                return XPens.darkOliveGreen;
+                darkOliveGreen ??= new XPen(XColors.DarkOliveGreen, 1, true);
+                return darkOliveGreen;
             }
         }
 
@@ -330,8 +330,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkOrange ??= new XPen(XColors.DarkOrange, 1, true);
-                return XPens.darkOrange;
+                darkOrange ??= new XPen(XColors.DarkOrange, 1, true);
+                return darkOrange;
             }
         }
 
@@ -340,8 +340,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkOrchid ??= new XPen(XColors.DarkOrchid, 1, true);
-                return XPens.darkOrchid;
+                darkOrchid ??= new XPen(XColors.DarkOrchid, 1, true);
+                return darkOrchid;
             }
         }
 
@@ -350,8 +350,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkRed ??= new XPen(XColors.DarkRed, 1, true);
-                return XPens.darkRed;
+                darkRed ??= new XPen(XColors.DarkRed, 1, true);
+                return darkRed;
             }
         }
 
@@ -360,8 +360,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkSalmon ??= new XPen(XColors.DarkSalmon, 1, true);
-                return XPens.darkSalmon;
+                darkSalmon ??= new XPen(XColors.DarkSalmon, 1, true);
+                return darkSalmon;
             }
         }
 
@@ -370,8 +370,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkSeaGreen ??= new XPen(XColors.DarkSeaGreen, 1, true);
-                return XPens.darkSeaGreen;
+                darkSeaGreen ??= new XPen(XColors.DarkSeaGreen, 1, true);
+                return darkSeaGreen;
             }
         }
 
@@ -380,8 +380,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkSlateBlue ??= new XPen(XColors.DarkSlateBlue, 1, true);
-                return XPens.darkSlateBlue;
+                darkSlateBlue ??= new XPen(XColors.DarkSlateBlue, 1, true);
+                return darkSlateBlue;
             }
         }
 
@@ -390,8 +390,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkSlateGray ??= new XPen(XColors.DarkSlateGray, 1, true);
-                return XPens.darkSlateGray;
+                darkSlateGray ??= new XPen(XColors.DarkSlateGray, 1, true);
+                return darkSlateGray;
             }
         }
 
@@ -400,8 +400,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkTurquoise ??= new XPen(XColors.DarkTurquoise, 1, true);
-                return XPens.darkTurquoise;
+                darkTurquoise ??= new XPen(XColors.DarkTurquoise, 1, true);
+                return darkTurquoise;
             }
         }
 
@@ -410,8 +410,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.darkViolet ??= new XPen(XColors.DarkViolet, 1, true);
-                return XPens.darkViolet;
+                darkViolet ??= new XPen(XColors.DarkViolet, 1, true);
+                return darkViolet;
             }
         }
 
@@ -420,8 +420,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.deepPink ??= new XPen(XColors.DeepPink, 1, true);
-                return XPens.deepPink;
+                deepPink ??= new XPen(XColors.DeepPink, 1, true);
+                return deepPink;
             }
         }
 
@@ -430,8 +430,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.deepSkyBlue ??= new XPen(XColors.DeepSkyBlue, 1, true);
-                return XPens.deepSkyBlue;
+                deepSkyBlue ??= new XPen(XColors.DeepSkyBlue, 1, true);
+                return deepSkyBlue;
             }
         }
 
@@ -440,8 +440,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.dimGray ??= new XPen(XColors.DimGray, 1, true);
-                return XPens.dimGray;
+                dimGray ??= new XPen(XColors.DimGray, 1, true);
+                return dimGray;
             }
         }
 
@@ -450,8 +450,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.dodgerBlue ??= new XPen(XColors.DodgerBlue, 1, true);
-                return XPens.dodgerBlue;
+                dodgerBlue ??= new XPen(XColors.DodgerBlue, 1, true);
+                return dodgerBlue;
             }
         }
 
@@ -460,8 +460,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.firebrick ??= new XPen(XColors.Firebrick, 1, true);
-                return XPens.firebrick;
+                firebrick ??= new XPen(XColors.Firebrick, 1, true);
+                return firebrick;
             }
         }
 
@@ -470,8 +470,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.floralWhite ??= new XPen(XColors.FloralWhite, 1, true);
-                return XPens.floralWhite;
+                floralWhite ??= new XPen(XColors.FloralWhite, 1, true);
+                return floralWhite;
             }
         }
 
@@ -480,8 +480,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.forestGreen ??= new XPen(XColors.ForestGreen, 1, true);
-                return XPens.forestGreen;
+                forestGreen ??= new XPen(XColors.ForestGreen, 1, true);
+                return forestGreen;
             }
         }
 
@@ -490,8 +490,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.fuchsia ??= new XPen(XColors.Fuchsia, 1, true);
-                return XPens.fuchsia;
+                fuchsia ??= new XPen(XColors.Fuchsia, 1, true);
+                return fuchsia;
             }
         }
 
@@ -500,8 +500,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.gainsboro ??= new XPen(XColors.Gainsboro, 1, true);
-                return XPens.gainsboro;
+                gainsboro ??= new XPen(XColors.Gainsboro, 1, true);
+                return gainsboro;
             }
         }
 
@@ -510,8 +510,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.ghostWhite ??= new XPen(XColors.GhostWhite, 1, true);
-                return XPens.ghostWhite;
+                ghostWhite ??= new XPen(XColors.GhostWhite, 1, true);
+                return ghostWhite;
             }
         }
 
@@ -520,8 +520,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.gold ??= new XPen(XColors.Gold, 1, true);
-                return XPens.gold;
+                gold ??= new XPen(XColors.Gold, 1, true);
+                return gold;
             }
         }
 
@@ -530,8 +530,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.goldenrod ??= new XPen(XColors.Goldenrod, 1, true);
-                return XPens.goldenrod;
+                goldenrod ??= new XPen(XColors.Goldenrod, 1, true);
+                return goldenrod;
             }
         }
 
@@ -540,8 +540,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.gray ??= new XPen(XColors.Gray, 1, true);
-                return XPens.gray;
+                gray ??= new XPen(XColors.Gray, 1, true);
+                return gray;
             }
         }
 
@@ -550,8 +550,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.green ??= new XPen(XColors.Green, 1, true);
-                return XPens.green;
+                green ??= new XPen(XColors.Green, 1, true);
+                return green;
             }
         }
 
@@ -560,8 +560,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.greenYellow ??= new XPen(XColors.GreenYellow, 1, true);
-                return XPens.greenYellow;
+                greenYellow ??= new XPen(XColors.GreenYellow, 1, true);
+                return greenYellow;
             }
         }
 
@@ -570,8 +570,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.honeydew ??= new XPen(XColors.Honeydew, 1, true);
-                return XPens.honeydew;
+                honeydew ??= new XPen(XColors.Honeydew, 1, true);
+                return honeydew;
             }
         }
 
@@ -580,8 +580,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.hotPink ??= new XPen(XColors.HotPink, 1, true);
-                return XPens.hotPink;
+                hotPink ??= new XPen(XColors.HotPink, 1, true);
+                return hotPink;
             }
         }
 
@@ -590,8 +590,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.indianRed ??= new XPen(XColors.IndianRed, 1, true);
-                return XPens.indianRed;
+                indianRed ??= new XPen(XColors.IndianRed, 1, true);
+                return indianRed;
             }
         }
 
@@ -600,8 +600,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.indigo ??= new XPen(XColors.Indigo, 1, true);
-                return XPens.indigo;
+                indigo ??= new XPen(XColors.Indigo, 1, true);
+                return indigo;
             }
         }
 
@@ -610,8 +610,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.ivory ??= new XPen(XColors.Ivory, 1, true);
-                return XPens.ivory;
+                ivory ??= new XPen(XColors.Ivory, 1, true);
+                return ivory;
             }
         }
 
@@ -620,8 +620,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.khaki ??= new XPen(XColors.Khaki, 1, true);
-                return XPens.khaki;
+                khaki ??= new XPen(XColors.Khaki, 1, true);
+                return khaki;
             }
         }
 
@@ -630,8 +630,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lavender ??= new XPen(XColors.Lavender, 1, true);
-                return XPens.lavender;
+                lavender ??= new XPen(XColors.Lavender, 1, true);
+                return lavender;
             }
         }
 
@@ -640,8 +640,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lavenderBlush ??= new XPen(XColors.LavenderBlush, 1, true);
-                return XPens.lavenderBlush;
+                lavenderBlush ??= new XPen(XColors.LavenderBlush, 1, true);
+                return lavenderBlush;
             }
         }
 
@@ -650,8 +650,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lawnGreen ??= new XPen(XColors.LawnGreen, 1, true);
-                return XPens.lawnGreen;
+                lawnGreen ??= new XPen(XColors.LawnGreen, 1, true);
+                return lawnGreen;
             }
         }
 
@@ -660,8 +660,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lemonChiffon ??= new XPen(XColors.LemonChiffon, 1, true);
-                return XPens.lemonChiffon;
+                lemonChiffon ??= new XPen(XColors.LemonChiffon, 1, true);
+                return lemonChiffon;
             }
         }
 
@@ -670,8 +670,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightBlue ??= new XPen(XColors.LightBlue, 1, true);
-                return XPens.lightBlue;
+                lightBlue ??= new XPen(XColors.LightBlue, 1, true);
+                return lightBlue;
             }
         }
 
@@ -680,8 +680,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightCoral ??= new XPen(XColors.LightCoral, 1, true);
-                return XPens.lightCoral;
+                lightCoral ??= new XPen(XColors.LightCoral, 1, true);
+                return lightCoral;
             }
         }
 
@@ -690,8 +690,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightCyan ??= new XPen(XColors.LightCyan, 1, true);
-                return XPens.lightCyan;
+                lightCyan ??= new XPen(XColors.LightCyan, 1, true);
+                return lightCyan;
             }
         }
 
@@ -700,8 +700,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightGoldenrodYellow ??= new XPen(XColors.LightGoldenrodYellow, 1, true);
-                return XPens.lightGoldenrodYellow;
+                lightGoldenrodYellow ??= new XPen(XColors.LightGoldenrodYellow, 1, true);
+                return lightGoldenrodYellow;
             }
         }
 
@@ -710,8 +710,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightGray ??= new XPen(XColors.LightGray, 1, true);
-                return XPens.lightGray;
+                lightGray ??= new XPen(XColors.LightGray, 1, true);
+                return lightGray;
             }
         }
 
@@ -720,8 +720,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightGreen ??= new XPen(XColors.LightGreen, 1, true);
-                return XPens.lightGreen;
+                lightGreen ??= new XPen(XColors.LightGreen, 1, true);
+                return lightGreen;
             }
         }
 
@@ -730,8 +730,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightPink ??= new XPen(XColors.LightPink, 1, true);
-                return XPens.lightPink;
+                lightPink ??= new XPen(XColors.LightPink, 1, true);
+                return lightPink;
             }
         }
 
@@ -740,8 +740,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightSalmon ??= new XPen(XColors.LightSalmon, 1, true);
-                return XPens.lightSalmon;
+                lightSalmon ??= new XPen(XColors.LightSalmon, 1, true);
+                return lightSalmon;
             }
         }
 
@@ -750,8 +750,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightSeaGreen ??= new XPen(XColors.LightSeaGreen, 1, true);
-                return XPens.lightSeaGreen;
+                lightSeaGreen ??= new XPen(XColors.LightSeaGreen, 1, true);
+                return lightSeaGreen;
             }
         }
 
@@ -760,8 +760,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightSkyBlue ??= new XPen(XColors.LightSkyBlue, 1, true);
-                return XPens.lightSkyBlue;
+                lightSkyBlue ??= new XPen(XColors.LightSkyBlue, 1, true);
+                return lightSkyBlue;
             }
         }
 
@@ -770,8 +770,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightSlateGray ??= new XPen(XColors.LightSlateGray, 1, true);
-                return XPens.lightSlateGray;
+                lightSlateGray ??= new XPen(XColors.LightSlateGray, 1, true);
+                return lightSlateGray;
             }
         }
 
@@ -780,8 +780,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightSteelBlue ??= new XPen(XColors.LightSteelBlue, 1, true);
-                return XPens.lightSteelBlue;
+                lightSteelBlue ??= new XPen(XColors.LightSteelBlue, 1, true);
+                return lightSteelBlue;
             }
         }
 
@@ -790,8 +790,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lightYellow ??= new XPen(XColors.LightYellow, 1, true);
-                return XPens.lightYellow;
+                lightYellow ??= new XPen(XColors.LightYellow, 1, true);
+                return lightYellow;
             }
         }
 
@@ -800,8 +800,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.lime ??= new XPen(XColors.Lime, 1, true);
-                return XPens.lime;
+                lime ??= new XPen(XColors.Lime, 1, true);
+                return lime;
             }
         }
 
@@ -810,8 +810,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.limeGreen ??= new XPen(XColors.LimeGreen, 1, true);
-                return XPens.limeGreen;
+                limeGreen ??= new XPen(XColors.LimeGreen, 1, true);
+                return limeGreen;
             }
         }
 
@@ -820,8 +820,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.linen ??= new XPen(XColors.Linen, 1, true);
-                return XPens.linen;
+                linen ??= new XPen(XColors.Linen, 1, true);
+                return linen;
             }
         }
 
@@ -830,8 +830,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.magenta ??= new XPen(XColors.Magenta, 1, true);
-                return XPens.magenta;
+                magenta ??= new XPen(XColors.Magenta, 1, true);
+                return magenta;
             }
         }
 
@@ -840,8 +840,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.maroon ??= new XPen(XColors.Maroon, 1, true);
-                return XPens.maroon;
+                maroon ??= new XPen(XColors.Maroon, 1, true);
+                return maroon;
             }
         }
 
@@ -850,8 +850,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumAquamarine ??= new XPen(XColors.MediumAquamarine, 1, true);
-                return XPens.mediumAquamarine;
+                mediumAquamarine ??= new XPen(XColors.MediumAquamarine, 1, true);
+                return mediumAquamarine;
             }
         }
 
@@ -860,8 +860,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumBlue ??= new XPen(XColors.MediumBlue, 1, true);
-                return XPens.mediumBlue;
+                mediumBlue ??= new XPen(XColors.MediumBlue, 1, true);
+                return mediumBlue;
             }
         }
 
@@ -870,8 +870,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumOrchid ??= new XPen(XColors.MediumOrchid, 1, true);
-                return XPens.mediumOrchid;
+                mediumOrchid ??= new XPen(XColors.MediumOrchid, 1, true);
+                return mediumOrchid;
             }
         }
 
@@ -880,8 +880,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumPurple ??= new XPen(XColors.MediumPurple, 1, true);
-                return XPens.mediumPurple;
+                mediumPurple ??= new XPen(XColors.MediumPurple, 1, true);
+                return mediumPurple;
             }
         }
 
@@ -890,8 +890,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumSeaGreen ??= new XPen(XColors.MediumSeaGreen, 1, true);
-                return XPens.mediumSeaGreen;
+                mediumSeaGreen ??= new XPen(XColors.MediumSeaGreen, 1, true);
+                return mediumSeaGreen;
             }
         }
 
@@ -900,8 +900,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumSlateBlue ??= new XPen(XColors.MediumSlateBlue, 1, true);
-                return XPens.mediumSlateBlue;
+                mediumSlateBlue ??= new XPen(XColors.MediumSlateBlue, 1, true);
+                return mediumSlateBlue;
             }
         }
 
@@ -910,8 +910,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumSpringGreen ??= new XPen(XColors.MediumSpringGreen, 1, true);
-                return XPens.mediumSpringGreen;
+                mediumSpringGreen ??= new XPen(XColors.MediumSpringGreen, 1, true);
+                return mediumSpringGreen;
             }
         }
 
@@ -920,8 +920,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumTurquoise ??= new XPen(XColors.MediumTurquoise, 1, true);
-                return XPens.mediumTurquoise;
+                mediumTurquoise ??= new XPen(XColors.MediumTurquoise, 1, true);
+                return mediumTurquoise;
             }
         }
 
@@ -930,8 +930,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mediumVioletRed ??= new XPen(XColors.MediumVioletRed, 1, true);
-                return XPens.mediumVioletRed;
+                mediumVioletRed ??= new XPen(XColors.MediumVioletRed, 1, true);
+                return mediumVioletRed;
             }
         }
 
@@ -940,8 +940,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.midnightBlue ??= new XPen(XColors.MidnightBlue, 1, true);
-                return XPens.midnightBlue;
+                midnightBlue ??= new XPen(XColors.MidnightBlue, 1, true);
+                return midnightBlue;
             }
         }
 
@@ -950,8 +950,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mintCream ??= new XPen(XColors.MintCream, 1, true);
-                return XPens.mintCream;
+                mintCream ??= new XPen(XColors.MintCream, 1, true);
+                return mintCream;
             }
         }
 
@@ -960,8 +960,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.mistyRose ??= new XPen(XColors.MistyRose, 1, true);
-                return XPens.mistyRose;
+                mistyRose ??= new XPen(XColors.MistyRose, 1, true);
+                return mistyRose;
             }
         }
 
@@ -970,8 +970,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.moccasin ??= new XPen(XColors.Moccasin, 1, true);
-                return XPens.moccasin;
+                moccasin ??= new XPen(XColors.Moccasin, 1, true);
+                return moccasin;
             }
         }
 
@@ -980,8 +980,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.navajoWhite ??= new XPen(XColors.NavajoWhite, 1, true);
-                return XPens.navajoWhite;
+                navajoWhite ??= new XPen(XColors.NavajoWhite, 1, true);
+                return navajoWhite;
             }
         }
 
@@ -990,8 +990,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.navy ??= new XPen(XColors.Navy, 1, true);
-                return XPens.navy;
+                navy ??= new XPen(XColors.Navy, 1, true);
+                return navy;
             }
         }
 
@@ -1000,8 +1000,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.oldLace ??= new XPen(XColors.OldLace, 1, true);
-                return XPens.oldLace;
+                oldLace ??= new XPen(XColors.OldLace, 1, true);
+                return oldLace;
             }
         }
 
@@ -1010,8 +1010,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.olive ??= new XPen(XColors.Olive, 1, true);
-                return XPens.olive;
+                olive ??= new XPen(XColors.Olive, 1, true);
+                return olive;
             }
         }
 
@@ -1020,8 +1020,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.oliveDrab ??= new XPen(XColors.OliveDrab, 1, true);
-                return XPens.oliveDrab;
+                oliveDrab ??= new XPen(XColors.OliveDrab, 1, true);
+                return oliveDrab;
             }
         }
 
@@ -1030,8 +1030,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.orange ??= new XPen(XColors.Orange, 1, true);
-                return XPens.orange;
+                orange ??= new XPen(XColors.Orange, 1, true);
+                return orange;
             }
         }
 
@@ -1040,8 +1040,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.orangeRed ??= new XPen(XColors.OrangeRed, 1, true);
-                return XPens.orangeRed;
+                orangeRed ??= new XPen(XColors.OrangeRed, 1, true);
+                return orangeRed;
             }
         }
 
@@ -1050,8 +1050,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.orchid ??= new XPen(XColors.Orchid, 1, true);
-                return XPens.orchid;
+                orchid ??= new XPen(XColors.Orchid, 1, true);
+                return orchid;
             }
         }
 
@@ -1060,8 +1060,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.paleGoldenrod ??= new XPen(XColors.PaleGoldenrod, 1, true);
-                return XPens.paleGoldenrod;
+                paleGoldenrod ??= new XPen(XColors.PaleGoldenrod, 1, true);
+                return paleGoldenrod;
             }
         }
 
@@ -1070,8 +1070,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.paleGreen ??= new XPen(XColors.PaleGreen, 1, true);
-                return XPens.paleGreen;
+                paleGreen ??= new XPen(XColors.PaleGreen, 1, true);
+                return paleGreen;
             }
         }
 
@@ -1080,8 +1080,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.paleTurquoise ??= new XPen(XColors.PaleTurquoise, 1, true);
-                return XPens.paleTurquoise;
+                paleTurquoise ??= new XPen(XColors.PaleTurquoise, 1, true);
+                return paleTurquoise;
             }
         }
 
@@ -1090,8 +1090,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.paleVioletRed ??= new XPen(XColors.PaleVioletRed, 1, true);
-                return XPens.paleVioletRed;
+                paleVioletRed ??= new XPen(XColors.PaleVioletRed, 1, true);
+                return paleVioletRed;
             }
         }
 
@@ -1100,8 +1100,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.papayaWhip ??= new XPen(XColors.PapayaWhip, 1, true);
-                return XPens.papayaWhip;
+                papayaWhip ??= new XPen(XColors.PapayaWhip, 1, true);
+                return papayaWhip;
             }
         }
 
@@ -1110,8 +1110,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.peachPuff ??= new XPen(XColors.PeachPuff, 1, true);
-                return XPens.peachPuff;
+                peachPuff ??= new XPen(XColors.PeachPuff, 1, true);
+                return peachPuff;
             }
         }
 
@@ -1120,8 +1120,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.peru ??= new XPen(XColors.Peru, 1, true);
-                return XPens.peru;
+                peru ??= new XPen(XColors.Peru, 1, true);
+                return peru;
             }
         }
 
@@ -1130,8 +1130,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.pink ??= new XPen(XColors.Pink, 1, true);
-                return XPens.pink;
+                pink ??= new XPen(XColors.Pink, 1, true);
+                return pink;
             }
         }
 
@@ -1140,8 +1140,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.plum ??= new XPen(XColors.Plum, 1, true);
-                return XPens.plum;
+                plum ??= new XPen(XColors.Plum, 1, true);
+                return plum;
             }
         }
 
@@ -1150,8 +1150,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.powderBlue ??= new XPen(XColors.PowderBlue, 1, true);
-                return XPens.powderBlue;
+                powderBlue ??= new XPen(XColors.PowderBlue, 1, true);
+                return powderBlue;
             }
         }
 
@@ -1160,8 +1160,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.purple ??= new XPen(XColors.Purple, 1, true);
-                return XPens.purple;
+                purple ??= new XPen(XColors.Purple, 1, true);
+                return purple;
             }
         }
 
@@ -1170,8 +1170,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.red ??= new XPen(XColors.Red, 1, true);
-                return XPens.red;
+                red ??= new XPen(XColors.Red, 1, true);
+                return red;
             }
         }
 
@@ -1180,8 +1180,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.rosyBrown ??= new XPen(XColors.RosyBrown, 1, true);
-                return XPens.rosyBrown;
+                rosyBrown ??= new XPen(XColors.RosyBrown, 1, true);
+                return rosyBrown;
             }
         }
 
@@ -1190,8 +1190,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.royalBlue ??= new XPen(XColors.RoyalBlue, 1, true);
-                return XPens.royalBlue;
+                royalBlue ??= new XPen(XColors.RoyalBlue, 1, true);
+                return royalBlue;
             }
         }
 
@@ -1200,8 +1200,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.saddleBrown ??= new XPen(XColors.SaddleBrown, 1, true);
-                return XPens.saddleBrown;
+                saddleBrown ??= new XPen(XColors.SaddleBrown, 1, true);
+                return saddleBrown;
             }
         }
 
@@ -1210,8 +1210,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.salmon ??= new XPen(XColors.Salmon, 1, true);
-                return XPens.salmon;
+                salmon ??= new XPen(XColors.Salmon, 1, true);
+                return salmon;
             }
         }
 
@@ -1220,8 +1220,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.sandyBrown ??= new XPen(XColors.SandyBrown, 1, true);
-                return XPens.sandyBrown;
+                sandyBrown ??= new XPen(XColors.SandyBrown, 1, true);
+                return sandyBrown;
             }
         }
 
@@ -1230,8 +1230,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.seaGreen ??= new XPen(XColors.SeaGreen, 1, true);
-                return XPens.seaGreen;
+                seaGreen ??= new XPen(XColors.SeaGreen, 1, true);
+                return seaGreen;
             }
         }
 
@@ -1240,8 +1240,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.seaShell ??= new XPen(XColors.SeaShell, 1, true);
-                return XPens.seaShell;
+                seaShell ??= new XPen(XColors.SeaShell, 1, true);
+                return seaShell;
             }
         }
 
@@ -1250,8 +1250,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.sienna ??= new XPen(XColors.Sienna, 1, true);
-                return XPens.sienna;
+                sienna ??= new XPen(XColors.Sienna, 1, true);
+                return sienna;
             }
         }
 
@@ -1260,8 +1260,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.silver ??= new XPen(XColors.Silver, 1, true);
-                return XPens.silver;
+                silver ??= new XPen(XColors.Silver, 1, true);
+                return silver;
             }
         }
 
@@ -1270,8 +1270,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.skyBlue ??= new XPen(XColors.SkyBlue, 1, true);
-                return XPens.skyBlue;
+                skyBlue ??= new XPen(XColors.SkyBlue, 1, true);
+                return skyBlue;
             }
         }
 
@@ -1280,8 +1280,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.slateBlue ??= new XPen(XColors.SlateBlue, 1, true);
-                return XPens.slateBlue;
+                slateBlue ??= new XPen(XColors.SlateBlue, 1, true);
+                return slateBlue;
             }
         }
 
@@ -1290,8 +1290,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.slateGray ??= new XPen(XColors.SlateGray, 1, true);
-                return XPens.slateGray;
+                slateGray ??= new XPen(XColors.SlateGray, 1, true);
+                return slateGray;
             }
         }
 
@@ -1300,8 +1300,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.snow ??= new XPen(XColors.Snow, 1, true);
-                return XPens.snow;
+                snow ??= new XPen(XColors.Snow, 1, true);
+                return snow;
             }
         }
 
@@ -1310,8 +1310,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.springGreen ??= new XPen(XColors.SpringGreen, 1, true);
-                return XPens.springGreen;
+                springGreen ??= new XPen(XColors.SpringGreen, 1, true);
+                return springGreen;
             }
         }
 
@@ -1320,8 +1320,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.steelBlue ??= new XPen(XColors.SteelBlue, 1, true);
-                return XPens.steelBlue;
+                steelBlue ??= new XPen(XColors.SteelBlue, 1, true);
+                return steelBlue;
             }
         }
 
@@ -1330,8 +1330,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.tan ??= new XPen(XColors.Tan, 1, true);
-                return XPens.tan;
+                tan ??= new XPen(XColors.Tan, 1, true);
+                return tan;
             }
         }
 
@@ -1340,8 +1340,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.teal ??= new XPen(XColors.Teal, 1, true);
-                return XPens.teal;
+                teal ??= new XPen(XColors.Teal, 1, true);
+                return teal;
             }
         }
 
@@ -1350,8 +1350,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.thistle ??= new XPen(XColors.Thistle, 1, true);
-                return XPens.thistle;
+                thistle ??= new XPen(XColors.Thistle, 1, true);
+                return thistle;
             }
         }
 
@@ -1360,8 +1360,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.tomato ??= new XPen(XColors.Tomato, 1, true);
-                return XPens.tomato;
+                tomato ??= new XPen(XColors.Tomato, 1, true);
+                return tomato;
             }
         }
 
@@ -1370,8 +1370,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.transparent ??= new XPen(XColors.Transparent, 1, true);
-                return XPens.transparent;
+                transparent ??= new XPen(XColors.Transparent, 1, true);
+                return transparent;
             }
         }
 
@@ -1380,8 +1380,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.turquoise ??= new XPen(XColors.Turquoise, 1, true);
-                return XPens.turquoise;
+                turquoise ??= new XPen(XColors.Turquoise, 1, true);
+                return turquoise;
             }
         }
 
@@ -1390,8 +1390,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.violet ??= new XPen(XColors.Violet, 1, true);
-                return XPens.violet;
+                violet ??= new XPen(XColors.Violet, 1, true);
+                return violet;
             }
         }
 
@@ -1400,8 +1400,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.wheat ??= new XPen(XColors.Wheat, 1, true);
-                return XPens.wheat;
+                wheat ??= new XPen(XColors.Wheat, 1, true);
+                return wheat;
             }
         }
 
@@ -1410,8 +1410,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.white ??= new XPen(XColors.White, 1, true);
-                return XPens.white;
+                white ??= new XPen(XColors.White, 1, true);
+                return white;
             }
         }
 
@@ -1420,8 +1420,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.whiteSmoke ??= new XPen(XColors.WhiteSmoke, 1, true);
-                return XPens.whiteSmoke;
+                whiteSmoke ??= new XPen(XColors.WhiteSmoke, 1, true);
+                return whiteSmoke;
             }
         }
 
@@ -1430,8 +1430,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.yellow ??= new XPen(XColors.Yellow, 1, true);
-                return XPens.yellow;
+                yellow ??= new XPen(XColors.Yellow, 1, true);
+                return yellow;
             }
         }
 
@@ -1440,152 +1440,152 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XPens.yellowGreen ??= new XPen(XColors.YellowGreen, 1, true);
-                return XPens.yellowGreen;
+                yellowGreen ??= new XPen(XColors.YellowGreen, 1, true);
+                return yellowGreen;
             }
         }
 
 
-        static XPen aliceBlue;
-        static XPen antiqueWhite;
-        static XPen aqua;
-        static XPen aquamarine;
-        static XPen azure;
-        static XPen beige;
-        static XPen bisque;
-        static XPen black;
-        static XPen blanchedAlmond;
-        static XPen blue;
-        static XPen blueViolet;
-        static XPen brown;
-        static XPen burlyWood;
-        static XPen cadetBlue;
-        static XPen chartreuse;
-        static XPen chocolate;
-        static XPen coral;
-        static XPen cornflowerBlue;
-        static XPen cornsilk;
-        static XPen crimson;
-        static XPen cyan;
-        static XPen darkBlue;
-        static XPen darkCyan;
-        static XPen darkGoldenrod;
-        static XPen darkGray;
-        static XPen darkGreen;
-        static XPen darkKhaki;
-        static XPen darkMagenta;
-        static XPen darkOliveGreen;
-        static XPen darkOrange;
-        static XPen darkOrchid;
-        static XPen darkRed;
-        static XPen darkSalmon;
-        static XPen darkSeaGreen;
-        static XPen darkSlateBlue;
-        static XPen darkSlateGray;
-        static XPen darkTurquoise;
-        static XPen darkViolet;
-        static XPen deepPink;
-        static XPen deepSkyBlue;
-        static XPen dimGray;
-        static XPen dodgerBlue;
-        static XPen firebrick;
-        static XPen floralWhite;
-        static XPen forestGreen;
-        static XPen fuchsia;
-        static XPen gainsboro;
-        static XPen ghostWhite;
-        static XPen gold;
-        static XPen goldenrod;
-        static XPen gray;
-        static XPen green;
-        static XPen greenYellow;
-        static XPen honeydew;
-        static XPen hotPink;
-        static XPen indianRed;
-        static XPen indigo;
-        static XPen ivory;
-        static XPen khaki;
-        static XPen lavender;
-        static XPen lavenderBlush;
-        static XPen lawnGreen;
-        static XPen lemonChiffon;
-        static XPen lightBlue;
-        static XPen lightCoral;
-        static XPen lightCyan;
-        static XPen lightGoldenrodYellow;
-        static XPen lightGray;
-        static XPen lightGreen;
-        static XPen lightPink;
-        static XPen lightSalmon;
-        static XPen lightSeaGreen;
-        static XPen lightSkyBlue;
-        static XPen lightSlateGray;
-        static XPen lightSteelBlue;
-        static XPen lightYellow;
-        static XPen lime;
-        static XPen limeGreen;
-        static XPen linen;
-        static XPen magenta;
-        static XPen maroon;
-        static XPen mediumAquamarine;
-        static XPen mediumBlue;
-        static XPen mediumOrchid;
-        static XPen mediumPurple;
-        static XPen mediumSeaGreen;
-        static XPen mediumSlateBlue;
-        static XPen mediumSpringGreen;
-        static XPen mediumTurquoise;
-        static XPen mediumVioletRed;
-        static XPen midnightBlue;
-        static XPen mintCream;
-        static XPen mistyRose;
-        static XPen moccasin;
-        static XPen navajoWhite;
-        static XPen navy;
-        static XPen oldLace;
-        static XPen olive;
-        static XPen oliveDrab;
-        static XPen orange;
-        static XPen orangeRed;
-        static XPen orchid;
-        static XPen paleGoldenrod;
-        static XPen paleGreen;
-        static XPen paleTurquoise;
-        static XPen paleVioletRed;
-        static XPen papayaWhip;
-        static XPen peachPuff;
-        static XPen peru;
-        static XPen pink;
-        static XPen plum;
-        static XPen powderBlue;
-        static XPen purple;
-        static XPen red;
-        static XPen rosyBrown;
-        static XPen royalBlue;
-        static XPen saddleBrown;
-        static XPen salmon;
-        static XPen sandyBrown;
-        static XPen seaGreen;
-        static XPen seaShell;
-        static XPen sienna;
-        static XPen silver;
-        static XPen skyBlue;
-        static XPen slateBlue;
-        static XPen slateGray;
-        static XPen snow;
-        static XPen springGreen;
-        static XPen steelBlue;
-        static XPen tan;
-        static XPen teal;
-        static XPen thistle;
-        static XPen tomato;
-        static XPen transparent;
-        static XPen turquoise;
-        static XPen violet;
-        static XPen wheat;
-        static XPen white;
-        static XPen whiteSmoke;
-        static XPen yellow;
-        static XPen yellowGreen;
+        private static XPen aliceBlue;
+        private static XPen antiqueWhite;
+        private static XPen aqua;
+        private static XPen aquamarine;
+        private static XPen azure;
+        private static XPen beige;
+        private static XPen bisque;
+        private static XPen black;
+        private static XPen blanchedAlmond;
+        private static XPen blue;
+        private static XPen blueViolet;
+        private static XPen brown;
+        private static XPen burlyWood;
+        private static XPen cadetBlue;
+        private static XPen chartreuse;
+        private static XPen chocolate;
+        private static XPen coral;
+        private static XPen cornflowerBlue;
+        private static XPen cornsilk;
+        private static XPen crimson;
+        private static XPen cyan;
+        private static XPen darkBlue;
+        private static XPen darkCyan;
+        private static XPen darkGoldenrod;
+        private static XPen darkGray;
+        private static XPen darkGreen;
+        private static XPen darkKhaki;
+        private static XPen darkMagenta;
+        private static XPen darkOliveGreen;
+        private static XPen darkOrange;
+        private static XPen darkOrchid;
+        private static XPen darkRed;
+        private static XPen darkSalmon;
+        private static XPen darkSeaGreen;
+        private static XPen darkSlateBlue;
+        private static XPen darkSlateGray;
+        private static XPen darkTurquoise;
+        private static XPen darkViolet;
+        private static XPen deepPink;
+        private static XPen deepSkyBlue;
+        private static XPen dimGray;
+        private static XPen dodgerBlue;
+        private static XPen firebrick;
+        private static XPen floralWhite;
+        private static XPen forestGreen;
+        private static XPen fuchsia;
+        private static XPen gainsboro;
+        private static XPen ghostWhite;
+        private static XPen gold;
+        private static XPen goldenrod;
+        private static XPen gray;
+        private static XPen green;
+        private static XPen greenYellow;
+        private static XPen honeydew;
+        private static XPen hotPink;
+        private static XPen indianRed;
+        private static XPen indigo;
+        private static XPen ivory;
+        private static XPen khaki;
+        private static XPen lavender;
+        private static XPen lavenderBlush;
+        private static XPen lawnGreen;
+        private static XPen lemonChiffon;
+        private static XPen lightBlue;
+        private static XPen lightCoral;
+        private static XPen lightCyan;
+        private static XPen lightGoldenrodYellow;
+        private static XPen lightGray;
+        private static XPen lightGreen;
+        private static XPen lightPink;
+        private static XPen lightSalmon;
+        private static XPen lightSeaGreen;
+        private static XPen lightSkyBlue;
+        private static XPen lightSlateGray;
+        private static XPen lightSteelBlue;
+        private static XPen lightYellow;
+        private static XPen lime;
+        private static XPen limeGreen;
+        private static XPen linen;
+        private static XPen magenta;
+        private static XPen maroon;
+        private static XPen mediumAquamarine;
+        private static XPen mediumBlue;
+        private static XPen mediumOrchid;
+        private static XPen mediumPurple;
+        private static XPen mediumSeaGreen;
+        private static XPen mediumSlateBlue;
+        private static XPen mediumSpringGreen;
+        private static XPen mediumTurquoise;
+        private static XPen mediumVioletRed;
+        private static XPen midnightBlue;
+        private static XPen mintCream;
+        private static XPen mistyRose;
+        private static XPen moccasin;
+        private static XPen navajoWhite;
+        private static XPen navy;
+        private static XPen oldLace;
+        private static XPen olive;
+        private static XPen oliveDrab;
+        private static XPen orange;
+        private static XPen orangeRed;
+        private static XPen orchid;
+        private static XPen paleGoldenrod;
+        private static XPen paleGreen;
+        private static XPen paleTurquoise;
+        private static XPen paleVioletRed;
+        private static XPen papayaWhip;
+        private static XPen peachPuff;
+        private static XPen peru;
+        private static XPen pink;
+        private static XPen plum;
+        private static XPen powderBlue;
+        private static XPen purple;
+        private static XPen red;
+        private static XPen rosyBrown;
+        private static XPen royalBlue;
+        private static XPen saddleBrown;
+        private static XPen salmon;
+        private static XPen sandyBrown;
+        private static XPen seaGreen;
+        private static XPen seaShell;
+        private static XPen sienna;
+        private static XPen silver;
+        private static XPen skyBlue;
+        private static XPen slateBlue;
+        private static XPen slateGray;
+        private static XPen snow;
+        private static XPen springGreen;
+        private static XPen steelBlue;
+        private static XPen tan;
+        private static XPen teal;
+        private static XPen thistle;
+        private static XPen tomato;
+        private static XPen transparent;
+        private static XPen turquoise;
+        private static XPen violet;
+        private static XPen wheat;
+        private static XPen white;
+        private static XPen whiteSmoke;
+        private static XPen yellow;
+        private static XPen yellowGreen;
     }
 }

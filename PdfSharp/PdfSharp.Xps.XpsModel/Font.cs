@@ -5,7 +5,7 @@ namespace PdfSharp.Xps.XpsModel
     /// <summary>
     /// Represents a font or font subset.
     /// </summary>
-    class Font
+    internal class Font
     {
         public Font(string name, byte[] fontData)
         {
@@ -20,16 +20,17 @@ namespace PdfSharp.Xps.XpsModel
 
         public PdfFont PdfFont
         {
-            get { return this.pdfFont; }
-            set { this.pdfFont = value; }
+            get { return pdfFont; }
+            set { pdfFont = value; }
         }
-        PdfFont pdfFont;
+
+        private PdfFont pdfFont;
 
         public byte[] FontData
         {
-            get { return this.fontData; }
+            get { return fontData; }
         }
 
-        readonly byte[] fontData;
+        private readonly byte[] fontData;
     }
 }

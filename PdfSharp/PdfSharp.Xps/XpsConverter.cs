@@ -47,14 +47,14 @@ namespace PdfSharp.Xps
                 throw new ArgumentNullException(nameof(xpsDocumentPath));
 
             this.pdfDocument = pdfDocument;
-            this.xpsDocument = new XpsDocument(xpsDocumentPath, FileAccess.Read);
+            xpsDocument = new XpsDocument(xpsDocumentPath, FileAccess.Read);
 
             Initialize();
         }
 
         private void Initialize()
         {
-            this.context = new DocumentRenderingContext(this.pdfDocument);
+            context = new DocumentRenderingContext(pdfDocument);
         }
 
         private DocumentRenderingContext context;
@@ -64,7 +64,7 @@ namespace PdfSharp.Xps
         /// </summary>
         public PdfDocument PdfDocument
         {
-            get { return this.pdfDocument; }
+            get { return pdfDocument; }
         }
 
         private readonly PdfDocument pdfDocument;
@@ -74,7 +74,7 @@ namespace PdfSharp.Xps
         /// </summary>
         public XpsDocument XpsDocument
         {
-            get { return this.xpsDocument; }
+            get { return xpsDocument; }
         }
 
         private readonly XpsDocument xpsDocument;
@@ -111,10 +111,10 @@ namespace PdfSharp.Xps
         /// </summary>
         public static void Convert(XpsDocument xpsDocument, string pdfFilename, int docIndex)
         {
-            var apartment = System.Threading.Thread.CurrentThread.GetApartmentState();
-            if (apartment != System.Threading.ApartmentState.STA)
+            var apartment = Thread.CurrentThread.GetApartmentState();
+            if (apartment != ApartmentState.STA)
             {
-                System.Threading.AutoResetEvent evCompleted = new(false);
+                AutoResetEvent evCompleted = new(false);
                 Thread t = new(new ParameterizedThreadStart((evt) =>
                 {
                     try
@@ -166,7 +166,7 @@ namespace PdfSharp.Xps
                     var fixedPage = page.GetPageRoot(false);
                     if (fixedPage == null)
                         continue;
-                    Debug.WriteLine(String.Format("  doc={0}, page={1}", docIndex, pageIndex));
+                    Debug.WriteLine($"  doc={docIndex}, page={pageIndex}");
                     PdfPage pdfPage = PdfRenderer.CreatePage(pdfDocument, fixedPage);
                     renderer.RenderPage(pdfPage, fixedPage);
                     pageIndex++;
@@ -221,7 +221,7 @@ namespace PdfSharp.Xps
                     {
                         foreach (var page in doc.Pages)
                         {
-                            Debug.WriteLine(String.Format("  doc={0}, page={1}", docIndex, pageIndex));
+                            Debug.WriteLine($"  doc={docIndex}, page={pageIndex}");
 
                             PdfPage pdfPage = pdfComparisonDocument.AddPage();
                             double width = page.Width;
@@ -272,7 +272,7 @@ namespace PdfSharp.Xps
 
         public static void SaveXpsPageToBitmap(string xpsFileName)
         {
-            var xpsDoc = new XpsDocument(xpsFileName, System.IO.FileAccess.Read);
+            var xpsDoc = new XpsDocument(xpsFileName, FileAccess.Read);
             var docSeq = xpsDoc.GetFixedDocumentSequence();
 
             // You can get the total page count from docSeq.PageCount    

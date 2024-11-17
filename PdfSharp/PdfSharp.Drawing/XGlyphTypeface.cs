@@ -59,7 +59,7 @@ namespace PdfSharp.Drawing
                 stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
                 int length = (int)stream.Length;
                 byte[] data = new byte[length];
-                stream.Read(data, 0, length);
+                stream.ReadExactly(data, 0, length);
                 Initialize(data);
             }
             finally
@@ -78,15 +78,15 @@ namespace PdfSharp.Drawing
             Initialize(data);
         }
 
-        void Initialize(byte[] data)
+        private void Initialize(byte[] data)
         {
             // Cache data and return a FontData
-            this.fontData = FontDataStock.Global.RegisterFontData(data);
+            fontData = FontDataStock.Global.RegisterFontData(data);
         }
 
         internal FontData FontData
         {
-            get { return this.fontData; }
+            get { return fontData; }
         }
         private FontData fontData;
 

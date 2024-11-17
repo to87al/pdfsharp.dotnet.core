@@ -51,10 +51,10 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                Debug.Assert(this.fontDescriptor != null);
+                Debug.Assert(fontDescriptor != null);
                 //if (this.fontDescriptor2 == null)
                 //  this.fontDescriptor2 = (PdfFontDescriptor)Elements.GetValue(Keys.FontDescriptor, VCF.CreateIndirect);
-                return this.fontDescriptor;
+                return fontDescriptor;
             }
         }
         internal PdfFontDescriptor fontDescriptor;
@@ -74,7 +74,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public bool IsSymbolFont
         {
-            get { return this.fontDescriptor.IsSymbolFont; }
+            get { return fontDescriptor.IsSymbolFont; }
         }
 
 #if true_
@@ -110,12 +110,12 @@ namespace PdfSharp.Pdf.Advanced
 
         public void AddChars(string text)
         {
-            this.cmapInfo?.AddChars(text);
+            cmapInfo?.AddChars(text);
         }
 
         public void AddGlyphIndices(string glyphIndices)
         {
-            this.cmapInfo?.AddGlyphIndices(glyphIndices);
+            cmapInfo?.AddGlyphIndices(glyphIndices);
         }
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal CMapInfo CMapInfo
         {
-            get { return this.cmapInfo; }
-            set { this.cmapInfo = value; }
+            get { return cmapInfo; }
+            set { cmapInfo = value; }
         }
         internal CMapInfo cmapInfo;
 
@@ -133,8 +133,8 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal PdfToUnicodeMap ToUnicodeMap
         {
-            get { return this.toUnicode; }
-            set { this.toUnicode = value; }
+            get { return toUnicode; }
+            set { toUnicode = value; }
         }
         internal PdfToUnicodeMap toUnicode;
 
@@ -183,7 +183,7 @@ namespace PdfSharp.Pdf.Advanced
 
             /// <summary>
             /// (Required except for the standard 14 fonts; must be an indirect reference)
-            /// A font descriptor describing the font’s metrics other than its glyph widths.
+            /// A font descriptor describing the fontï¿½s metrics other than its glyph widths.
             /// Note: For the standard 14 fonts, the entries FirstChar, LastChar, Widths, and 
             /// FontDescriptor must either all be present or all be absent. Ordinarily, they are
             /// absent; specifying them enables a standard font to be overridden.

@@ -94,7 +94,7 @@ namespace PdfSharp.Pdf.Advanced
         /// <summary>
         /// Unfilters the stream.
         /// </summary>
-        void Decode()
+        private void Decode()
         {
             if (Stream != null && Stream.Value != null)
             {
@@ -121,7 +121,7 @@ namespace PdfSharp.Pdf.Advanced
             // prepended or appended. Some nasty PDF tools does not preserve the graphical state correctly.
             // Therefore we try to relieve the problem by surrounding the content stream with push/restore 
             // graphic state operation.
-            if (this.Stream != null)
+            if (Stream != null)
             {
                 byte[] value = Stream.Value;
                 int length = value.Length;
@@ -142,17 +142,17 @@ namespace PdfSharp.Pdf.Advanced
 
         internal override void WriteObject(PdfWriter writer)
         {
-            if (this.pdfRenderer != null)
+            if (pdfRenderer != null)
             {
                 // GetContent also disposes the underlying XGraphics object, if one exists
                 //Stream = new PdfStream(PdfEncoders.RawEncoding.GetBytes(this.pdfRenderer.GetContent()), this);
-                this.pdfRenderer.Close();
-                Debug.Assert(this.pdfRenderer == null);
+                pdfRenderer.Close();
+                Debug.Assert(pdfRenderer == null);
             }
 
             if (Stream != null)
             {
-                if (this.Owner.Options.CompressContentStreams)
+                if (Owner.Options.CompressContentStreams)
                 {
                     Stream.Value = Filtering.FlateDecode.Encode(Stream.Value);
                     Elements["/Filter"] = new PdfName("/FlateDecode");
@@ -177,11 +177,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

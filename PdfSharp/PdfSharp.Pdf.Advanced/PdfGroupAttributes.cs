@@ -62,7 +62,7 @@ namespace PdfSharp.Pdf.Advanced
             /// <summary>
             /// (Required) The group subtype, which identifies the type of group whose
             /// attributes this dictionary describes and determines the format and meaning
-            /// of the dictionary’s remaining entries. The only group subtype defined in
+            /// of the dictionaryï¿½s remaining entries. The only group subtype defined in
             /// PDF 1.4 is Transparency. Other group subtypes may be added in the future.
             /// </summary>
             [KeyInfo(KeyType.Name | KeyType.Required)]
@@ -75,11 +75,12 @@ namespace PdfSharp.Pdf.Advanced
             {
                 get
                 {
-                    Keys.meta ??= CreateMeta(typeof(Keys));
-                    return Keys.meta;
+                    meta ??= CreateMeta(typeof(Keys));
+                    return meta;
                 }
             }
-            static DictionaryMeta meta;
+
+            private static DictionaryMeta meta;
         }
 
         /// <summary>

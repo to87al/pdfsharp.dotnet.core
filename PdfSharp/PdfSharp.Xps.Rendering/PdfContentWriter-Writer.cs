@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PdfSharp.Xps.Rendering
 {
-    partial class PdfContentWriter
+    internal partial class PdfContentWriter
     {
         /// <summary>
         /// Writes a string literally to the content stream.
@@ -16,7 +16,7 @@ namespace PdfSharp.Xps.Rendering
         public void WriteLiteral(string value)
         {
             WriteIndent();
-            this.content.Append(value);
+            content.Append(value);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace PdfSharp.Xps.Rendering
         public void WriteLiteral(string format, params object[] args)
         {
             WriteIndent();
-            this.content.AppendFormat(CultureInfo.InvariantCulture, format, args);
+            content.AppendFormat(CultureInfo.InvariantCulture, format, args);
         }
 
         //internal void AppendRgb(float r, float g, float b, string op)
@@ -36,19 +36,19 @@ namespace PdfSharp.Xps.Rendering
         public void WriteRgb(Color color, string op)
         {
             WriteIndent();
-            this.content.AppendFormat(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3}", color.R / 255.0, color.G / 255.0, color.B / 255.0, op);
+            content.AppendFormat(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3}", color.R / 255.0, color.G / 255.0, color.B / 255.0, op);
         }
 
         public void WriteRgb(System.Windows.Media.Color color, string op)
         {
             WriteIndent();
-            this.content.AppendFormat(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3}", color.R / 255.0, color.G / 255.0, color.B / 255.0, op);
+            content.AppendFormat(CultureInfo.InvariantCulture, "{0:0.###} {1:0.###} {2:0.###} {3}", color.R / 255.0, color.G / 255.0, color.B / 255.0, op);
         }
 
         public void WriteMatrix(XMatrix matrix)
         {
             WriteIndent();
-            this.content.Append(PdfEncoders.ToString(matrix) + " cm\n");
+            content.Append(PdfEncoders.ToString(matrix) + " cm\n");
         }
 
         public void WriteGraphicsState(PdfExtGState extGState)
@@ -67,12 +67,12 @@ namespace PdfSharp.Xps.Rendering
         /// Helps to make the content stream more human readable.
         /// </summary>
         [Conditional("DEBUG")]
-        void WriteIndent()
+        private void WriteIndent()
         {
-            this.content.Append(new string(' ', 2 * this.graphicsState.Level));
+            content.Append(new string(' ', 2 * graphicsState.Level));
         }
 
-        readonly StringBuilder content;
-        readonly PdfTraceLevel traceLevel = PdfTraceLevel.Verbose;
+        private readonly StringBuilder content;
+        private readonly PdfTraceLevel traceLevel = PdfTraceLevel.Verbose;
     }
 }

@@ -46,7 +46,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfNameObject()
         {
-            this.value = "/";  // Empty name.
+            value = "/";  // Empty name.
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public override bool Equals(object obj)
         {
-            return this.value.Equals(obj);
+            return value.Equals(obj);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace PdfSharp.Pdf
         /// </summary>
         public override int GetHashCode()
         {
-            return this.value.GetHashCode();
+            return value.GetHashCode();
         }
 
         /// <summary>
@@ -85,17 +85,18 @@ namespace PdfSharp.Pdf
         /// </summary>
         public string Value
         {
-            get { return this.value; }
+            get { return value; }
             set { this.value = value; }
         }
-        string value;
+
+        private string value;
 
         /// <summary>
         /// Returns the name. The string always begins with a slash.
         /// </summary>
         public override string ToString()
         {
-            return this.value;
+            return value;
         }
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace PdfSharp.Pdf
         internal override void WriteObject(PdfWriter writer)
         {
             writer.WriteBeginObject(this);
-            writer.Write(new PdfName(this.value));
+            writer.Write(new PdfName(value));
             writer.WriteEndObject();
         }
     }

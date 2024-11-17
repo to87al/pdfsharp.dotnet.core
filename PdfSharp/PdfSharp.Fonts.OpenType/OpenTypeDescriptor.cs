@@ -49,8 +49,8 @@ namespace PdfSharp.Fonts.OpenType
         {
             try
             {
-                this.fontData = new FontData(font, options);
-                this.fontName = font.Name;
+                fontData = new FontData(font, options);
+                fontName = font.Name;
                 Initialize();
             }
             catch
@@ -100,7 +100,7 @@ namespace PdfSharp.Fonts.OpenType
                         idName += "," + this.fontData.name.Style;
                     idName = idName.Replace(" ", "");
                 }
-                this.fontName = idName;
+                fontName = idName;
                 Initialize();
             }
             catch (Exception)
@@ -119,7 +119,7 @@ namespace PdfSharp.Fonts.OpenType
                 if (this.fontData.name.Style.Length != 0)
                     name += "," + this.fontData.name.Style;
                 name = name.Replace(" ", "");
-                this.fontName = name;
+                fontName = name;
                 Initialize();
             }
             catch
@@ -130,22 +130,22 @@ namespace PdfSharp.Fonts.OpenType
 
         public FontData fontData;
 
-        void Initialize()
+        private void Initialize()
         {
             //bool embeddingRestricted = this.fontData.os2.fsType == 0x0002;
 
             //this.fontName = image.n
-            this.italicAngle = this.fontData.post.italicAngle;
+            italicAngle = fontData.post.italicAngle;
 
-            this.xMin = this.fontData.head.xMin;
-            this.yMin = this.fontData.head.yMin;
-            this.xMax = this.fontData.head.xMax;
-            this.yMax = this.fontData.head.yMax;
+            xMin = fontData.head.xMin;
+            yMin = fontData.head.yMin;
+            xMax = fontData.head.xMax;
+            yMax = fontData.head.yMax;
 
-            this.underlinePosition = this.fontData.post.underlinePosition;
-            this.underlineThickness = this.fontData.post.underlineThickness;
-            this.strikeoutPosition = this.fontData.os2.yStrikeoutPosition;
-            this.strikeoutSize = this.fontData.os2.yStrikeoutSize;
+            underlinePosition = fontData.post.underlinePosition;
+            underlineThickness = fontData.post.underlineThickness;
+            strikeoutPosition = fontData.os2.yStrikeoutPosition;
+            strikeoutSize = fontData.os2.yStrikeoutSize;
 
             // No documetation found how to get the set vertical stems width from the
             // TrueType tables.
@@ -153,57 +153,57 @@ namespace PdfSharp.Fonts.OpenType
             // /StemV to 0 always. I think the value doesn't matter.
             //float weight = (float)(this.image.os2.usWeightClass / 65.0f);
             //this.stemV = (int)(50 + weight * weight);  // MAGIC
-            this.stemV = 0;
+            stemV = 0;
 
             // PDFlib states that some Apple fonts miss the OS/2 table.
             Debug.Assert(fontData.os2 != null, "TrueType font has no OS/2 table.");
 
-            this.unitsPerEm = fontData.head.unitsPerEm;
+            unitsPerEm = fontData.head.unitsPerEm;
 
             // PDFlib takes sTypoAscender and sTypoDescender from OS/2 tabel, but GDI+ uses usWinAscent and usWinDescent
             if (fontData.os2.sTypoAscender != 0)
-                this.ascender = fontData.os2.usWinAscent;
+                ascender = fontData.os2.usWinAscent;
             else
-                this.ascender = fontData.hhea.ascender;
-            Debug.Assert(this.ascender > 0, "PDFsharp internal: Ascender should be greater than 0.");
+                ascender = fontData.hhea.ascender;
+            Debug.Assert(ascender > 0, "PDFsharp internal: Ascender should be greater than 0.");
 
             if (fontData.os2.sTypoDescender != 0)
             {
-                this.descender = fontData.os2.usWinDescent;
-                Debug.Assert(this.descender > 0, "PDFsharp internal: Font with non positive ascender value found.");
+                descender = fontData.os2.usWinDescent;
+                Debug.Assert(descender > 0, "PDFsharp internal: Font with non positive ascender value found.");
 #if true_
         Debug.WriteLine(String.Format(CultureInfo.InvariantCulture,
           "os2.usWinDescent={0}, hhea.descender={1}, os2.sTypoDescender={2}", fontData.os2.usWinDescent, fontData.hhea.descender, fontData.os2.sTypoDescender));
 #endif
                 // Force sign from hhea.descender
                 // TODO:
-                this.descender = Math.Abs(this.descender) * Math.Sign(fontData.hhea.descender);
+                descender = Math.Abs(descender) * Math.Sign(fontData.hhea.descender);
             }
             else
-                this.descender = fontData.hhea.descender;
-            Debug.Assert(this.descender < 0, "PDFsharp internal: Ascender should be less than 0.");
+                descender = fontData.hhea.descender;
+            Debug.Assert(descender < 0, "PDFsharp internal: Ascender should be less than 0.");
 
-            this.leading = fontData.hhea.lineGap;
+            leading = fontData.hhea.lineGap;
 
             // sCapHeight and sxHeight are only valid if version >= 2
             if (fontData.os2.version >= 2 && fontData.os2.sCapHeight != 0)
-                this.capHeight = fontData.os2.sCapHeight;
+                capHeight = fontData.os2.sCapHeight;
             else
-                this.capHeight = fontData.hhea.ascender;
+                capHeight = fontData.hhea.ascender;
 
             if (fontData.os2.version >= 2 && fontData.os2.sxHeight != 0)
-                this.xHeight = fontData.os2.sxHeight;
+                xHeight = fontData.os2.sxHeight;
             else
-                this.xHeight = (int)(0.66f * this.ascender);
+                xHeight = (int)(0.66f * ascender);
 
             //this.flags = this.image.
 
-            Encoding ansi = System.Text.Encoding.Default; //PdfEncoders.WinAnsiEncoding;
+            Encoding ansi = Encoding.Default; //PdfEncoders.WinAnsiEncoding;
             Encoding unicode = Encoding.Unicode;
             byte[] bytes = new byte[256];
 
-            bool symbol = this.fontData.cmap.symbol;
-            this.widths = new int[256];
+            bool symbol = fontData.cmap.symbol;
+            widths = new int[256];
             for (int idx = 0; idx < 256; idx++)
             {
                 bytes[idx] = (byte)idx;
@@ -224,7 +224,7 @@ namespace PdfSharp.Fonts.OpenType
                 int glyphIndex;
                 if (symbol)
                 {
-                    glyphIndex = idx + (this.fontData.os2.usFirstCharIndex & 0xFF00);
+                    glyphIndex = idx + (fontData.os2.usFirstCharIndex & 0xFF00);
                     glyphIndex = CharCodeToGlyphIndex((char)glyphIndex);
                 }
                 else
@@ -233,7 +233,7 @@ namespace PdfSharp.Fonts.OpenType
                     //glyphIndex = CharCodeToGlyphIndex((char)idx);
                     glyphIndex = CharCodeToGlyphIndex(ch);
                 }
-                this.widths[idx] = GlyphIndexToPdfWidth(glyphIndex);
+                widths[idx] = GlyphIndexToPdfWidth(glyphIndex);
             }
         }
         public int[] widths;
@@ -247,7 +247,7 @@ namespace PdfSharp.Fonts.OpenType
             {
                 // usWeightClass 700 is Bold
                 //Debug.Assert((this.fontData.os2.usWeightClass >= 700) == ((this.fontData.os2.fsSelection & (ushort)OS2Table.FontSelectionFlags.Bold) != 0));
-                return (this.fontData.os2.fsSelection & (ushort)OS2Table.FontSelectionFlags.Bold) != 0;
+                return (fontData.os2.fsSelection & (ushort)OS2Table.FontSelectionFlags.Bold) != 0;
             }
         }
 
@@ -256,12 +256,12 @@ namespace PdfSharp.Fonts.OpenType
         /// </summary>
         public override bool IsItalicFace
         {
-            get { return (this.fontData.os2.fsSelection & (ushort)OS2Table.FontSelectionFlags.Italic) != 0; }
+            get { return (fontData.os2.fsSelection & (ushort)OS2Table.FontSelectionFlags.Italic) != 0; }
         }
 
         internal int DesignUnitsToPdf(double value)
         {
-            return (int)Math.Round(value * 1000.0 / this.fontData.head.unitsPerEm);
+            return (int)Math.Round(value * 1000.0 / fontData.head.unitsPerEm);
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace PdfSharp.Fonts.OpenType
         {
             try
             {
-                CMap4 cmap = this.fontData.cmap.cmap4;
+                CMap4 cmap = fontData.cmap.cmap4;
                 int segCount = cmap.segCountX2 / 2;
                 int seg;
                 for (seg = 0; seg < segCount; seg++)
@@ -310,14 +310,14 @@ namespace PdfSharp.Fonts.OpenType
         {
             try
             {
-                int numberOfHMetrics = this.fontData.hhea.numberOfHMetrics;
-                int unitsPerEm = this.fontData.head.unitsPerEm;
+                int numberOfHMetrics = fontData.hhea.numberOfHMetrics;
+                int unitsPerEm = fontData.head.unitsPerEm;
 
                 // glyphIndex >= numberOfHMetrics means the font is mono-spaced and all glyphs have the same width
                 if (glyphIndex >= numberOfHMetrics)
                     glyphIndex = numberOfHMetrics - 1;
 
-                int width = this.fontData.hmtx.metrics[glyphIndex].advanceWidth;
+                int width = fontData.hmtx.metrics[glyphIndex].advanceWidth;
 
                 // Sometimes the unitsPerEm is 1000, sometimes a power of 2.
                 if (unitsPerEm == 1000)

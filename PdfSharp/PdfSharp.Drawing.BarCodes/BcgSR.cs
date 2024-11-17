@@ -39,12 +39,13 @@ namespace PdfSharp.Drawing.BarCodes
     {
         internal static string Invalid2Of5Code(string code)
         {
-            return String.Format("'{0}' is not a valid code for an interleave 2 of 5 bar code. It can only represent an even number of digits.", code);
+            return
+                $"'{code}' is not a valid code for an interleave 2 of 5 bar code. It can only represent an even number of digits.";
         }
 
         internal static string Invalid3Of9Code(string code)
         {
-            return String.Format("'{0}' is not a valid code for a 3 of 9 standard bar code.", code);
+            return $"'{code}' is not a valid code for a 3 of 9 standard bar code.";
         }
 
         internal static string BarCodeNotSet
@@ -73,7 +74,7 @@ namespace PdfSharp.Drawing.BarCodes
 
         internal static string InvalidMarkName(string name)
         {
-            return String.Format("'{0}' is not a valid mark name for this OMR representation.", name);
+            return $"'{name}' is not a valid mark name for this OMR representation.";
         }
 
         internal static string OmrAlreadyInitialized

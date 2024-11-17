@@ -70,17 +70,18 @@ namespace PdfSharp.Pdf
         /// </summary>
         public double Value
         {
-            get { return this.value; }
+            get { return value; }
             set { this.value = value; }
         }
-        double value;
+
+        private double value;
 
         /// <summary>
         /// Returns the real as a culture invariant string.
         /// </summary>
         public override string ToString()
         {
-            return this.value.ToString(CultureInfo.InvariantCulture);
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace PdfSharp.Pdf
         internal override void WriteObject(PdfWriter writer)
         {
             writer.WriteBeginObject(this);
-            writer.Write(this.value);
+            writer.Write(value);
             writer.WriteEndObject();
         }
     }

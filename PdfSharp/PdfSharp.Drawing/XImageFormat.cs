@@ -36,16 +36,16 @@ namespace PdfSharp.Drawing
     /// </summary>
     public sealed class XImageFormat
     {
-        readonly Guid guid;
+        private readonly Guid guid;
 
-        XImageFormat(Guid guid)
+        private XImageFormat(Guid guid)
         {
             this.guid = guid;
         }
 
         internal Guid Guid
         {
-            get { return this.guid; }
+            get { return guid; }
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PdfSharp.Drawing
         {
             if (obj is not XImageFormat format)
                 return false;
-            return this.guid == format.guid;
+            return guid == format.guid;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public override int GetHashCode()
         {
-            return this.guid.GetHashCode();
+            return guid.GetHashCode();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Png
         {
-            get { return XImageFormat.png; }
+            get { return png; }
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Gif
         {
-            get { return XImageFormat.gif; }
+            get { return gif; }
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Jpeg
         {
-            get { return XImageFormat.jpeg; }
+            get { return jpeg; }
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Tiff
         {
-            get { return XImageFormat.tiff; }
+            get { return tiff; }
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Pdf
         {
-            get { return XImageFormat.pdf; }
+            get { return pdf; }
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static XImageFormat Icon
         {
-            get { return XImageFormat.icon; }
+            get { return icon; }
         }
 
         static XImageFormat()

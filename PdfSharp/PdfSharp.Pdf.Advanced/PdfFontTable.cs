@@ -67,21 +67,21 @@ namespace PdfSharp.Pdf.Advanced
         {
             string fontName = font.Name;
 
-            PdfFontTable.FontSelector selector = font.selector;
+            FontSelector selector = font.selector;
             if (selector == null)
             {
                 selector = new FontSelector(font);
                 font.selector = selector;
             }
-            if (!this.fonts.TryGetValue(selector, out PdfFont pdfFont))
+            if (!fonts.TryGetValue(selector, out PdfFont pdfFont))
             {
                 if (font.Unicode)
-                    pdfFont = new PdfType0Font(this.owner, font, font.IsVertical);
+                    pdfFont = new PdfType0Font(owner, font, font.IsVertical);
                 else
-                    pdfFont = new PdfTrueTypeFont(this.owner, font);
+                    pdfFont = new PdfTrueTypeFont(owner, font);
                 //pdfFont.Document = this.document;
-                Debug.Assert(pdfFont.Owner == this.owner);
-                this.fonts[selector] = pdfFont;
+                Debug.Assert(pdfFont.Owner == owner);
+                fonts[selector] = pdfFont;
                 //if (this.owner.EarlyWrite)
                 //{
                 //  //pdfFont.Close(); delete 
@@ -183,16 +183,16 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfFont GetFont(string idName, byte[] fontData)
         {
-            PdfFontTable.FontSelector selector = new(idName);
-            if (!this.fonts.TryGetValue(selector, out PdfFont pdfFont))
+            FontSelector selector = new(idName);
+            if (!fonts.TryGetValue(selector, out PdfFont pdfFont))
             {
                 //if (font.Unicode)
-                pdfFont = new PdfType0Font(this.owner, idName, fontData, false);
+                pdfFont = new PdfType0Font(owner, idName, fontData, false);
                 //else
                 //  pdfFont = new PdfTrueTypeFont(this.owner, font);
                 //pdfFont.Document = this.document;
-                Debug.Assert(pdfFont.Owner == this.owner);
-                this.fonts[selector] = pdfFont;
+                Debug.Assert(pdfFont.Owner == owner);
+                fonts[selector] = pdfFont;
             }
             return pdfFont;
         }
@@ -205,18 +205,18 @@ namespace PdfSharp.Pdf.Advanced
         public PdfFont TryGetFont(string idName)
         {
             FontSelector selector = new(idName);
-            this.fonts.TryGetValue(selector, out PdfFont pdfFont);
+            fonts.TryGetValue(selector, out PdfFont pdfFont);
             return pdfFont;
         }
 
         /// <summary>
         /// Map from PdfFontSelector to PdfFont.
         /// </summary>
-        readonly Dictionary<FontSelector, PdfFont> fonts = [];
+        private readonly Dictionary<FontSelector, PdfFont> fonts = [];
 
         public void PrepareForSave()
         {
-            foreach (PdfFont font in this.fonts.Values)
+            foreach (PdfFont font in fonts.Values)
                 font.PrepareForSave();
         }
 
@@ -232,9 +232,9 @@ namespace PdfSharp.Pdf.Advanced
             /// </summary>
             public FontSelector(XFont font)
             {
-                this.name = font.Name;
+                name = font.Name;
                 // Ignore Strikeout and Underline
-                this.style = font.Style & (XFontStyle.Bold | XFontStyle.Italic);
+                style = font.Style & (XFontStyle.Bold | XFontStyle.Italic);
                 // Clear styles that are not available as a separate type face to prevent embedding of identical font files
 #if GDI && !WPF
         if ((this.style & XFontStyle.Bold) == XFontStyle.Bold && !font.FontFamily.IsStyleAvailable(XFontStyle.Bold))
@@ -245,10 +245,10 @@ namespace PdfSharp.Pdf.Advanced
 #if WPF && !GDI
 #if !SILVERLIGHT
                 Debug.Assert(font.typeface != null);
-                if ((this.style & XFontStyle.Bold) == XFontStyle.Bold && font.typeface.IsBoldSimulated)
-                    this.style &= ~XFontStyle.Bold;
-                if ((this.style & XFontStyle.Italic) == XFontStyle.Italic && font.typeface.IsObliqueSimulated)
-                    this.style &= ~XFontStyle.Italic;
+                if ((style & XFontStyle.Bold) == XFontStyle.Bold && font.typeface.IsBoldSimulated)
+                    style &= ~XFontStyle.Bold;
+                if ((style & XFontStyle.Italic) == XFontStyle.Italic && font.typeface.IsObliqueSimulated)
+                    style &= ~XFontStyle.Italic;
 #else
         // AGHACK
 #endif
@@ -260,7 +260,7 @@ namespace PdfSharp.Pdf.Advanced
         if ((this.style & XFontStyle.Italic) == XFontStyle.Italic && font.typeface.IsObliqueSimulated)
           this.style &= ~XFontStyle.Italic;
 #endif
-                this.fontType = font.Unicode ? FontType.Type0 : FontType.TrueType;
+                fontType = font.Unicode ? FontType.Type0 : FontType.TrueType;
             }
 
             /// <summary>
@@ -276,7 +276,7 @@ namespace PdfSharp.Pdf.Advanced
                 //  this.style &= ~XFontStyle.Bold;
                 //if ((this.style & XFontStyle.Italic) == XFontStyle.Italic && !font.FontFamily.IsStyleAvailable(XFontStyle.Italic))
                 //  this.style &= ~XFontStyle.Italic;
-                this.fontType = FontType.Type0;
+                fontType = FontType.Type0;
             }
 
             public FontSelector(XFontFamily family, XFontStyle style)
@@ -290,10 +290,10 @@ namespace PdfSharp.Pdf.Advanced
             /// </summary>
             public string Name
             {
-                get { return this.name; }
+                get { return name; }
             }
 
-            readonly string name;
+            private readonly string name;
 
             /// <summary>
             /// Gets the style. Contains only flags that effects the font face and are available for the specified font.
@@ -301,25 +301,25 @@ namespace PdfSharp.Pdf.Advanced
             /// <value>The style.</value>
             public XFontStyle Style
             {
-                get { return this.style; }
+                get { return style; }
             }
 
-            readonly XFontStyle style;
+            private readonly XFontStyle style;
 
             /// <summary>
             /// Gets the type of the font (TrueType with Ansi Encoding or CID font).
             /// </summary>
             public FontType FontType
             {
-                get { return this.fontType; }
+                get { return fontType; }
             }
 
-            readonly FontType fontType;
+            private readonly FontType fontType;
 
             public static bool operator ==(FontSelector selector1, FontSelector selector2)
             {
                 selector1?.Equals(selector2);
-                return Object.ReferenceEquals(selector2, null);
+                return ReferenceEquals(selector2, null);
             }
 
             public static bool operator !=(FontSelector selector1, FontSelector selector2)
@@ -330,14 +330,14 @@ namespace PdfSharp.Pdf.Advanced
             public override bool Equals(object obj)
             {
                 FontSelector selector = obj as FontSelector;
-                if (obj != null && this.name == selector.name && this.style == selector.style)
-                    return this.fontType == selector.fontType;
+                if (obj != null && name == selector.name && style == selector.style)
+                    return fontType == selector.fontType;
                 return false;
             }
 
             public override int GetHashCode()
             {
-                return this.name.GetHashCode() ^ this.style.GetHashCode() ^ this.fontType.GetHashCode();
+                return name.GetHashCode() ^ style.GetHashCode() ^ fontType.GetHashCode();
             }
 
             /// <summary>
@@ -346,7 +346,7 @@ namespace PdfSharp.Pdf.Advanced
             public override string ToString()
             {
                 string variation = "";
-                switch (this.style)
+                switch (style)
                 {
                     case XFontStyle.Regular:
                         variation = "(Regular)";
@@ -364,7 +364,7 @@ namespace PdfSharp.Pdf.Advanced
                         variation = "(BoldItalic)";
                         break;
                 }
-                return this.name + variation;
+                return name + variation;
             }
         }
     }

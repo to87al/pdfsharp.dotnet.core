@@ -40,7 +40,7 @@ namespace PdfSharp.Drawing
     /// <summary>
     /// Temporary hack to implement PrivateFontCollection.
     /// </summary>
-    class XTypefaceHack
+    internal class XTypefaceHack
     {
         public XTypefaceHack(string typefaceName)
           : this(typefaceName, XFontStyle.Regular, XFontWeights.Normal, new XFontStretch())
@@ -63,26 +63,26 @@ namespace PdfSharp.Drawing
 
         public string FontFamilyName
         {
-            get { return this.fontFamilyName; }
+            get { return fontFamilyName; }
         }
 
-        readonly string fontFamilyName;
+        private readonly string fontFamilyName;
 
         public XFontWeight Weight
         {
-            get { return this.weight; }
+            get { return weight; }
         }
         private readonly XFontWeight weight;
 
         public XFontStyle Style
         {
-            get { return this.style; }
+            get { return style; }
         }
         private readonly XFontStyle style;
 
         public XFontStretch Stretch
         {
-            get { return this.stretch; }
+            get { return stretch; }
         }
         private readonly XFontStretch stretch;
     }

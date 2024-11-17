@@ -76,8 +76,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XPoint(System.Windows.Point point)
         {
-            this.x = point.X;
-            this.y = point.Y;
+            x = point.X;
+            y = point.Y;
         }
 #endif
 
@@ -177,8 +177,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double X
         {
-            readonly get { return this.x; }
-            set { this.x = value; }
+            readonly get { return x; }
+            set { x = value; }
         }
 
         /// <summary>
@@ -186,8 +186,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public double Y
         {
-            readonly get { return this.y; }
-            set { this.y = value; }
+            readonly get { return y; }
+            set { y = value; }
         }
 
 #if GDI
@@ -206,7 +206,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public readonly System.Windows.Point ToPoint()
         {
-            return new System.Windows.Point(this.x, this.y);
+            return new System.Windows.Point(x, y);
         }
 #endif
 
@@ -215,7 +215,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public override string ToString()
         {
-            return this.ConvertToString(null, null);
+            return ConvertToString(null, null);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public string ToString(IFormatProvider provider)
         {
-            return this.ConvertToString(null, provider);
+            return ConvertToString(null, provider);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         string IFormattable.ToString(string format, IFormatProvider provider)
         {
-            return this.ConvertToString(format, provider);
+            return ConvertToString(format, provider);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace PdfSharp.Drawing
         internal readonly string ConvertToString(string format, IFormatProvider provider)
         {
             char numericListSeparator = TokenizerHelper.GetNumericListSeparator(provider);
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, this.x, this.y]);
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, x, y]);
         }
 
         /// <summary>
@@ -248,8 +248,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void Offset(double offsetX, double offsetY)
         {
-            this.x += offsetX;
-            this.y += offsetY;
+            x += offsetX;
+            y += offsetY;
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace PdfSharp.Drawing
         [Obsolete("Use '== new XPoint()'")]
         public readonly bool IsEmpty // DELETE: 09-12-31
         {
-            get { return this.x == 0 && this.y == 0; }
+            get { return x == 0 && y == 0; }
         }
 
         /// <summary>

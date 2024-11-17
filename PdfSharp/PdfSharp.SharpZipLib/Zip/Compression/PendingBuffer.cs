@@ -54,11 +54,11 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         /// </summary>
         protected byte[] buf;
 
-        int start;
-        int end;
+        private int start;
+        private int end;
 
-        uint bits;
-        int bitCount;
+        private uint bits;
+        private int bitCount;
 
         /// <summary>
         /// construct instance using default buffer size of 4096

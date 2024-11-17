@@ -50,20 +50,20 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public Lexer(Stream pdfInputStream)
         {
-            this.pdf = pdfInputStream;
-            this.pdfLength = (int)pdf.Length;
-            this.idxChar = 0;
+            pdf = pdfInputStream;
+            pdfLength = (int)pdf.Length;
+            idxChar = 0;
             Position = 0;
         }
 
         /// <summary>
         /// Initializes fields after position has changed.
         /// </summary>
-        void Initialize()
+        private void Initialize()
         {
-            this.currChar = (char)this.pdf.ReadByte();
-            this.nextChar = (char)this.pdf.ReadByte();
-            this.token = new StringBuilder();
+            currChar = (char)pdf.ReadByte();
+            nextChar = (char)pdf.ReadByte();
+            token = new StringBuilder();
             //this.symbol = Symbol.None;
         }
 
@@ -72,11 +72,11 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public int Position
         {
-            get { return this.idxChar; }
+            get { return idxChar; }
             set
             {
-                this.idxChar = value;
-                this.pdf.Position = value;
+                idxChar = value;
+                pdf.Position = value;
                 Initialize();
             }
         }
@@ -92,7 +92,7 @@ namespace PdfSharp.Pdf.IO
         public Symbol ScanNextToken()
         {
         Again:
-            this.token = new StringBuilder();
+            token = new StringBuilder();
             char ch = MoveToNonWhiteSpace();
             switch (ch)
             {
@@ -103,7 +103,7 @@ namespace PdfSharp.Pdf.IO
                     goto Again;
 
                 case '/':
-                    return this.symbol = ScanName();
+                    return symbol = ScanName();
 
                 //case 'R':
                 //  if (Lexer.IsWhiteSpace(this.nextChar))
@@ -115,51 +115,51 @@ namespace PdfSharp.Pdf.IO
 
                 case '+': //TODO is it so easy?
                 case '-':
-                    return this.symbol = ScanNumber();
+                    return symbol = ScanNumber();
 
                 case '(':
-                    return this.symbol = ScanLiteralString();
+                    return symbol = ScanLiteralString();
 
                 case '[':
                     ScanNextChar();
-                    return this.symbol = Symbol.BeginArray;
+                    return symbol = Symbol.BeginArray;
 
                 case ']':
                     ScanNextChar();
-                    return this.symbol = Symbol.EndArray;
+                    return symbol = Symbol.EndArray;
 
                 case '<':
-                    if (this.nextChar == '<')
+                    if (nextChar == '<')
                     {
                         ScanNextChar();
                         ScanNextChar();
-                        return this.symbol = Symbol.BeginDictionary;
+                        return symbol = Symbol.BeginDictionary;
                     }
-                    return this.symbol = ScanHexadecimalString();
+                    return symbol = ScanHexadecimalString();
 
                 case '>':
-                    if (this.nextChar == '>')
+                    if (nextChar == '>')
                     {
                         ScanNextChar();
                         ScanNextChar();
-                        return this.symbol = Symbol.EndDictionary;
+                        return symbol = Symbol.EndDictionary;
                     }
                     Debug.Assert(false, ">???");
                     break;
 
                 case '.':
-                    return this.symbol = ScanNumber();
+                    return symbol = ScanNumber();
             }
             if (Char.IsDigit(ch))
-                return this.symbol = ScanNumber();
+                return symbol = ScanNumber();
 
             if (Char.IsLetter(ch))
-                return this.symbol = ScanKeyword();
+                return symbol = ScanKeyword();
 
             if (ch == Chars.EOF)
-                return this.symbol = Symbol.Eof;
+                return symbol = Symbol.Eof;
             Debug.Assert(false, "not implemented");
-            return this.symbol = Symbol.None;
+            return symbol = Symbol.None;
         }
 
         ////public Symbol ScanNextToken(bool x)
@@ -173,23 +173,23 @@ namespace PdfSharp.Pdf.IO
         public byte[] ReadStream(int length)
         {
             int pos = 0;
-            // Skip new line behind «stream»
-            if (this.currChar == Chars.CR)
+            // Skip new line behind ï¿½streamï¿½
+            if (currChar == Chars.CR)
             {
-                if (this.nextChar == Chars.LF)
-                    pos = this.idxChar + 2;
+                if (nextChar == Chars.LF)
+                    pos = idxChar + 2;
                 else
-                    pos = this.idxChar + 1;
+                    pos = idxChar + 1;
             }
             else
-                pos = this.idxChar + 1;
+                pos = idxChar + 1;
 
-            this.pdf.Position = pos;
+            pdf.Position = pos;
             byte[] bytes = new byte[length];
-            int read = this.pdf.Read(bytes, 0, length);
+            int read = pdf.Read(bytes, 0, length);
             Debug.Assert(read == length);
             // synchronize idxChar etc.
-            this.Position = pos + length;
+            Position = pos + length;
             return bytes;
         }
 
@@ -198,9 +198,9 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public String ReadRawString(int position, int length)
         {
-            this.pdf.Position = position;
+            pdf.Position = position;
             byte[] bytes = new byte[length];
-            this.pdf.Read(bytes, 0, length);
+            pdf.ReadExactly(bytes, 0, length);
             return PdfEncoders.RawEncoding.GetString(bytes, 0, bytes.Length);
         }
 
@@ -209,14 +209,14 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public Symbol ScanComment()
         {
-            Debug.Assert(this.currChar == Chars.Percent);
+            Debug.Assert(currChar == Chars.Percent);
 
-            this.token = new StringBuilder();
+            token = new StringBuilder();
             while (AppendAndScanNextChar() != Chars.LF) ;
             // TODO: not correct
-            if (this.token.ToString().StartsWith("%%EOF"))
+            if (token.ToString().StartsWith("%%EOF"))
                 return Symbol.Eof;
-            return this.symbol = Symbol.Comment;
+            return symbol = Symbol.Comment;
         }
 
         /// <summary>
@@ -224,23 +224,23 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public Symbol ScanName()
         {
-            Debug.Assert(this.currChar == Chars.Slash);
+            Debug.Assert(currChar == Chars.Slash);
 
-            this.token = new StringBuilder();
+            token = new StringBuilder();
             while (true)
             {
                 char ch = AppendAndScanNextChar();
                 if (IsWhiteSpace(ch) || IsDelimiter(ch))
-                    return this.symbol = Symbol.Name;
+                    return symbol = Symbol.Name;
 
                 if (ch == '#')
                 {
                     ScanNextChar();
-                    char[] hex = [this.currChar, this.nextChar];
+                    char[] hex = [currChar, nextChar];
                     ScanNextChar();
                     // TODO Check syntax
                     ch = (char)(ushort)int.Parse(new string(hex), NumberStyles.AllowHexSpecifier);
-                    this.currChar = ch;
+                    currChar = ch;
                 }
             }
         }
@@ -256,26 +256,26 @@ namespace PdfSharp.Pdf.IO
             period.GetType();
             sign.GetType();
 
-            this.token = new StringBuilder();
-            char ch = this.currChar;
+            token = new StringBuilder();
+            char ch = currChar;
             if (ch is '+' or '-')
             {
                 sign = true;
-                this.token.Append(ch);
+                token.Append(ch);
                 ch = ScanNextChar();
             }
             while (true)
             {
                 if (char.IsDigit(ch))
                 {
-                    this.token.Append(ch);
+                    token.Append(ch);
                 }
                 else if (ch == '.')
                 {
                     if (period)
                         throw new PdfReaderException("More than one period in number.");
                     period = true;
-                    this.token.Append(ch);
+                    token.Append(ch);
                 }
                 else
                     break;
@@ -284,7 +284,7 @@ namespace PdfSharp.Pdf.IO
 
             if (period)
                 return Symbol.Real;
-            long l = Int64.Parse(this.token.ToString(), CultureInfo.InvariantCulture);
+            long l = Int64.Parse(token.ToString(), CultureInfo.InvariantCulture);
             if (l is >= Int32.MinValue and <= Int32.MaxValue)
                 return Symbol.Integer;
             if (l is > 0 and <= UInt32.MaxValue)
@@ -294,14 +294,14 @@ namespace PdfSharp.Pdf.IO
 
         public Symbol ScanKeyword()
         {
-            this.token = new StringBuilder();
-            char ch = this.currChar;
+            token = new StringBuilder();
+            char ch = currChar;
             // Scan token
             while (true)
             {
                 if (char.IsLetter(ch))
                 {
-                    this.token.Append(ch);
+                    token.Append(ch);
                 }
                 else
                     break;
@@ -309,44 +309,44 @@ namespace PdfSharp.Pdf.IO
             }
 
             // Check known tokens
-            return this.token.ToString() switch
+            return token.ToString() switch
             {
-                "obj" => this.symbol = Symbol.Obj,
-                "endobj" => this.symbol = Symbol.EndObj,
-                "null" => this.symbol = Symbol.Null,
-                "true" or "false" => this.symbol = Symbol.Boolean,
-                "R" => this.symbol = Symbol.R,
-                "stream" => this.symbol = Symbol.BeginStream,
-                "endstream" => this.symbol = Symbol.EndStream,
-                "xref" => this.symbol = Symbol.XRef,
-                "trailer" => this.symbol = Symbol.Trailer,
-                "startxref" => this.symbol = Symbol.StartXRef,
+                "obj" => symbol = Symbol.Obj,
+                "endobj" => symbol = Symbol.EndObj,
+                "null" => symbol = Symbol.Null,
+                "true" or "false" => symbol = Symbol.Boolean,
+                "R" => symbol = Symbol.R,
+                "stream" => symbol = Symbol.BeginStream,
+                "endstream" => symbol = Symbol.EndStream,
+                "xref" => symbol = Symbol.XRef,
+                "trailer" => symbol = Symbol.Trailer,
+                "startxref" => symbol = Symbol.StartXRef,
                 // Anything else is treated as a keyword. Samples are f or n in iref.
-                _ => this.symbol = Symbol.Keyword,
+                _ => symbol = Symbol.Keyword,
             };
         }
 
         public Symbol ScanLiteralString()
         {
-            Debug.Assert(this.currChar == Chars.ParenLeft);
+            Debug.Assert(currChar == Chars.ParenLeft);
 
 #if DEBUG
-      if (this.idxChar == 0x1b67aa)
+      if (idxChar == 0x1b67aa)
         GetType();
 #endif
 
-            this.token = new StringBuilder();
+            token = new StringBuilder();
             int parenLevel = 0;
             char ch = ScanNextChar();
             // Test UNICODE string
-            if (ch == '\xFE' && this.nextChar == '\xFF')
+            if (ch == '\xFE' && nextChar == '\xFF')
             {
                 // I'm not sure if the code is correct in any case.
                 // ? Can a UNICODE character not start with ')' as hibyte
                 // ? What about \# escape sequences
 
                 // BUG: The code is not correct. I got a file containing the following sting:
-                // (þÿñùãfØÚ\rÞF`:7.2.5 Acceptable daily intake \(ADI\) and other guideline levels)
+                // (ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½\rï¿½F`:7.2.5 Acceptable daily intake \(ADI\) and other guideline levels)
                 // It starts as unicode but ends as Ascii. No idea how to parse.
 #if true
                 //List<byte> bytes = new List<byte>();
@@ -363,7 +363,7 @@ namespace PdfSharp.Pdf.IO
                             if (parenLevel == 0)
                             {
                                 ScanNextChar();
-                                return this.symbol = Symbol.String;
+                                return symbol = Symbol.String;
                             }
                             else
                                 parenLevel--;
@@ -416,13 +416,13 @@ namespace PdfSharp.Pdf.IO
                                             // Octal character code
                                             Debug.Assert(ch < '8', "Illegal octal digit.");
                                             int n = ch - '0';
-                                            if (Char.IsDigit(this.nextChar))
+                                            if (Char.IsDigit(nextChar))
                                             {
-                                                Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
+                                                Debug.Assert(nextChar < '8', "Illegal octal digit.");
                                                 n = (n * 8) + ScanNextChar() - '0';
-                                                if (Char.IsDigit(this.nextChar))
+                                                if (Char.IsDigit(nextChar))
                                                 {
-                                                    Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
+                                                    Debug.Assert(nextChar < '8', "Illegal octal digit.");
                                                     n = (n * 8) + ScanNextChar() - '0';
                                                 }
                                             }
@@ -446,7 +446,7 @@ namespace PdfSharp.Pdf.IO
                         default:
                             break;
                     }
-                    this.token.Append(ch);
+                    token.Append(ch);
                     //chHi = ScanNextChar();
                     //if (chHi == ')')
                     //{
@@ -594,7 +594,7 @@ namespace PdfSharp.Pdf.IO
                             if (parenLevel == 0)
                             {
                                 ScanNextChar();
-                                return this.symbol = Symbol.String;
+                                return symbol = Symbol.String;
                             }
                             else
                                 parenLevel--;
@@ -647,13 +647,13 @@ namespace PdfSharp.Pdf.IO
                                             // Octal character code
                                             Debug.Assert(ch < '8', "Illegal octal digit.");
                                             int n = ch - '0';
-                                            if (Char.IsDigit(this.nextChar))
+                                            if (Char.IsDigit(nextChar))
                                             {
-                                                Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
+                                                Debug.Assert(nextChar < '8', "Illegal octal digit.");
                                                 n = (n * 8) + ScanNextChar() - '0';
-                                                if (Char.IsDigit(this.nextChar))
+                                                if (Char.IsDigit(nextChar))
                                                 {
-                                                    Debug.Assert(this.nextChar < '8', "Illegal octal digit.");
+                                                    Debug.Assert(nextChar < '8', "Illegal octal digit.");
                                                     n = (n * 8) + ScanNextChar() - '0';
                                                 }
                                             }
@@ -677,7 +677,7 @@ namespace PdfSharp.Pdf.IO
                         default:
                             break;
                     }
-                    this.token.Append(ch);
+                    token.Append(ch);
                     ch = ScanNextChar();
                 }
             }
@@ -686,39 +686,39 @@ namespace PdfSharp.Pdf.IO
 
         public Symbol ScanHexadecimalString()
         {
-            Debug.Assert(this.currChar == Chars.Less);
+            Debug.Assert(currChar == Chars.Less);
 
-            this.token = new StringBuilder();
+            token = new StringBuilder();
             char[] hex = new char[2];
             ScanNextChar();
             while (true)
             {
                 MoveToNonWhiteSpace();
-                if (this.currChar == '>')
+                if (currChar == '>')
                 {
                     ScanNextChar();
                     break;
                 }
-                if (char.IsLetterOrDigit(this.currChar))
+                if (char.IsLetterOrDigit(currChar))
                 {
-                    hex[0] = char.ToUpper(this.currChar);
-                    hex[1] = char.ToUpper(this.nextChar);
+                    hex[0] = char.ToUpper(currChar);
+                    hex[1] = char.ToUpper(nextChar);
                     int ch = int.Parse(new string(hex), NumberStyles.AllowHexSpecifier);
-                    this.token.Append(Convert.ToChar(ch));
+                    token.Append(Convert.ToChar(ch));
                     ScanNextChar();
                     ScanNextChar();
                 }
             }
-            string chars = this.token.ToString();
+            string chars = token.ToString();
             int count = chars.Length;
             if (count > 2 && chars[0] == (char)0xFE && chars[1] == (char)0xFF)
             {
                 Debug.Assert(count % 2 == 0);
-                this.token.Length = 0;
+                token.Length = 0;
                 for (int idx = 2; idx < count; idx += 2)
-                    this.token.Append((char)((chars[idx] * 256) + chars[idx + 1]));
+                    token.Append((char)((chars[idx] * 256) + chars[idx + 1]));
             }
-            return this.symbol = Symbol.HexString;
+            return symbol = Symbol.HexString;
         }
 
         /// <summary>
@@ -726,29 +726,29 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         internal char ScanNextChar()
         {
-            if (this.pdfLength <= this.idxChar)
+            if (pdfLength <= idxChar)
             {
-                this.currChar = Chars.EOF;
-                this.nextChar = Chars.EOF;
+                currChar = Chars.EOF;
+                nextChar = Chars.EOF;
             }
             else
             {
-                this.currChar = this.nextChar;
-                this.nextChar = (char)this.pdf.ReadByte();
-                this.idxChar++;
-                if (this.currChar == Chars.CR)
+                currChar = nextChar;
+                nextChar = (char)pdf.ReadByte();
+                idxChar++;
+                if (currChar == Chars.CR)
                 {
-                    if (this.nextChar == Chars.LF)
+                    if (nextChar == Chars.LF)
                     {
                         // Treat CR LF as LF
-                        this.currChar = this.nextChar;
-                        this.nextChar = (char)this.pdf.ReadByte();
-                        this.idxChar++;
+                        currChar = nextChar;
+                        nextChar = (char)pdf.ReadByte();
+                        idxChar++;
                     }
                     else
                     {
                         // Treat single CR as LF
-                        this.currChar = Chars.LF;
+                        currChar = Chars.LF;
                     }
                 }
             }
@@ -760,7 +760,7 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         internal char AppendAndScanNextChar()
         {
-            token.Append(this.currChar);
+            token.Append(currChar);
             return ScanNextChar();
         }
 
@@ -771,9 +771,9 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public char MoveToNonWhiteSpace()
         {
-            while (this.currChar != Chars.EOF)
+            while (currChar != Chars.EOF)
             {
-                switch (this.currChar)
+                switch (currChar)
                 {
                     case Chars.NUL:
                     case Chars.HT:
@@ -796,8 +796,8 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public Symbol Symbol
         {
-            get { return this.symbol; }
-            set { this.symbol = value; }
+            get { return symbol; }
+            set { symbol = value; }
         }
 
         /// <summary>
@@ -805,7 +805,7 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         internal string Token
         {
-            get { return this.token.ToString(); }
+            get { return token.ToString(); }
         }
 
         /// <summary>
@@ -815,8 +815,8 @@ namespace PdfSharp.Pdf.IO
         {
             get
             {
-                Debug.Assert(this.token.ToString() == "true" || this.token.ToString() == "false");
-                return this.token.ToString()[0] == 't';
+                Debug.Assert(token.ToString() == "true" || token.ToString() == "false");
+                return token.ToString()[0] == 't';
             }
         }
 
@@ -828,7 +828,7 @@ namespace PdfSharp.Pdf.IO
             get
             {
                 //Debug.Assert(this.token.ToString().IndexOf('.') == -1);
-                return Int32.Parse(this.token.ToString(), CultureInfo.InvariantCulture);
+                return Int32.Parse(token.ToString(), CultureInfo.InvariantCulture);
             }
         }
 
@@ -840,7 +840,7 @@ namespace PdfSharp.Pdf.IO
             get
             {
                 //Debug.Assert(this.token.ToString().IndexOf('.') == -1);
-                return UInt32.Parse(this.token.ToString(), CultureInfo.InvariantCulture);
+                return UInt32.Parse(token.ToString(), CultureInfo.InvariantCulture);
             }
         }
 
@@ -879,15 +879,15 @@ namespace PdfSharp.Pdf.IO
 
         public int PdfLength
         {
-            get { return this.pdfLength; }
+            get { return pdfLength; }
         }
 
-        readonly int pdfLength;
-        int idxChar;
-        char currChar;
-        char nextChar;
-        StringBuilder token;
-        Symbol symbol = Symbol.None;
+        private readonly int pdfLength;
+        private int idxChar;
+        private char currChar;
+        private char nextChar;
+        private StringBuilder token;
+        private Symbol symbol = Symbol.None;
 
         private readonly Stream pdf;
     }

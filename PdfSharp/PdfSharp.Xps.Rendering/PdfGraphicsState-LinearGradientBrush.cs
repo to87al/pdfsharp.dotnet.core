@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace PdfSharp.Xps.Rendering
 {
-    partial class PdfGraphicsState
+    internal partial class PdfGraphicsState
     {
 
         //void RealizeImageBrush(ImageBrush brush, XForm xform)
@@ -26,9 +26,9 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds the shading function of the specified gradient stop collection.
         /// </summary>
-        PdfDictionary BuildShadingFunction(GradientStopCollection gradients, PdfColorMode colorMode)
+        private PdfDictionary BuildShadingFunction(GradientStopCollection gradients, PdfColorMode colorMode)
         {
-            bool softMask = this.writer.renderMode == RenderMode.SoftMask;
+            bool softMask = writer.renderMode == RenderMode.SoftMask;
             PdfDictionary func = new();
             int count = gradients.Count;
             Debug.Assert(count >= 2);

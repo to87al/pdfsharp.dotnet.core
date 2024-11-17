@@ -50,23 +50,23 @@ namespace PdfSharp.Pdf.Filters
             {
                 case "ASCIIHexDecode":
                 case "AHx":
-                    Filtering.asciiHexDecode ??= new ASCIIHexDecode();
-                    return Filtering.asciiHexDecode;
+                    asciiHexDecode ??= new ASCIIHexDecode();
+                    return asciiHexDecode;
 
                 case "ASCII85Decode":
                 case "A85":
-                    Filtering.ascii85Decode ??= new ASCII85Decode();
-                    return Filtering.ascii85Decode;
+                    ascii85Decode ??= new ASCII85Decode();
+                    return ascii85Decode;
 
                 case "LZWDecode":
                 case "LZW":
-                    Filtering.lzwDecode ??= new LzwDecode();
-                    return Filtering.lzwDecode;
+                    lzwDecode ??= new LzwDecode();
+                    return lzwDecode;
 
                 case "FlateDecode":
                 case "Fl":
-                    Filtering.flateDecode ??= new FlateDecode();
-                    return Filtering.flateDecode;
+                    flateDecode ??= new FlateDecode();
+                    return flateDecode;
 
                 //case "RunLengthDecode":
                 //  if (Filtering.RunLengthDecode == null)
@@ -117,11 +117,12 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                Filtering.asciiHexDecode ??= new ASCIIHexDecode();
-                return Filtering.asciiHexDecode;
+                asciiHexDecode ??= new ASCIIHexDecode();
+                return asciiHexDecode;
             }
         }
-        static ASCIIHexDecode asciiHexDecode;
+
+        private static ASCIIHexDecode asciiHexDecode;
 
         /// <summary>
         /// Gets the filter singleton.
@@ -130,11 +131,12 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                Filtering.ascii85Decode ??= new ASCII85Decode();
-                return Filtering.ascii85Decode;
+                ascii85Decode ??= new ASCII85Decode();
+                return ascii85Decode;
             }
         }
-        static ASCII85Decode ascii85Decode;
+
+        private static ASCII85Decode ascii85Decode;
 
         /// <summary>
         /// Gets the filter singleton.
@@ -143,11 +145,12 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                Filtering.lzwDecode ??= new LzwDecode();
-                return Filtering.lzwDecode;
+                lzwDecode ??= new LzwDecode();
+                return lzwDecode;
             }
         }
-        static LzwDecode lzwDecode;
+
+        private static LzwDecode lzwDecode;
 
         /// <summary>
         /// Gets the filter singleton.
@@ -156,11 +159,12 @@ namespace PdfSharp.Pdf.Filters
         {
             get
             {
-                Filtering.flateDecode ??= new FlateDecode();
-                return Filtering.flateDecode;
+                flateDecode ??= new FlateDecode();
+                return flateDecode;
             }
         }
-        static FlateDecode flateDecode;
+
+        private static FlateDecode flateDecode;
 
         //runLengthDecode
         //ccittFaxDecode
@@ -229,7 +233,7 @@ namespace PdfSharp.Pdf.Filters
             {
                 PdfArray array = (PdfArray)filterItem;
                 foreach (PdfItem item in array)
-                    data = Filtering.Decode(data, item);
+                    data = Decode(data, item);
                 result = data;
             }
             return result;

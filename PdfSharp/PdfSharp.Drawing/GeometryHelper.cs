@@ -266,7 +266,7 @@ namespace PdfSharp.Drawing
         /// Calculates the quadrant (0 through 3) of the specified angle. If the angle lies on an edge
         /// (0, 90, 180, etc.) the result depends on the details how the angle is used.
         /// </summary>
-        static int Quatrant(double φ, bool start, bool clockwise)
+        private static int Quatrant(double φ, bool start, bool clockwise)
         {
             Debug.Assert(φ >= 0);
             if (φ > 360)
@@ -286,7 +286,7 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Appends a Bézier curve for an arc within a full quadrant.
         /// </summary>
-        static void AppendPartialArcQuadrant(List<XPoint> points, double x, double y, double width, double height, double α, double β, PathStart pathStart, XMatrix matrix)
+        private static void AppendPartialArcQuadrant(List<XPoint> points, double x, double y, double width, double height, double α, double β, PathStart pathStart, XMatrix matrix)
         {
             Debug.Assert(α is >= 0 and <= 360);
             Debug.Assert(β >= 0);
@@ -352,9 +352,6 @@ namespace PdfSharp.Drawing
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα))));
-                        break;
-
                     case PathStart.LineTo1st:
                         points.Add(matrix.Transform(new XPoint(x0 + (δx * cosα), y0 + (δy * sinα))));
                         break;
@@ -372,9 +369,6 @@ namespace PdfSharp.Drawing
                 switch (pathStart)
                 {
                     case PathStart.MoveTo1st:
-                        points.Add(matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα))));
-                        break;
-
                     case PathStart.LineTo1st:
                         points.Add(matrix.Transform(new XPoint(x0 - (δx * cosα), y0 - (δy * sinα))));
                         break;
@@ -474,7 +468,7 @@ namespace PdfSharp.Drawing
 
 #if WPF
 
-        const double FUZZ = 1e-6;           // Relative 0
+        private const double FUZZ = 1e-6;           // Relative 0
 
 
         //+-------------------------------------------------------------------------------------------------

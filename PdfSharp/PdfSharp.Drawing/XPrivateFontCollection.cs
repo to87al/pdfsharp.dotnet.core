@@ -220,11 +220,11 @@ namespace PdfSharp.Drawing
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentException("familyName has invalid format.");
 
-            if (this.fontFamilies.ContainsKey(key))
+            if (fontFamilies.ContainsKey(key))
                 throw new ArgumentException("An entry with the specified family name already exists.");
 
 #if !SILVERLIGHT
-            System.Windows.Media.FontFamily fontFamily = new(baseUri, familyName);
+            FontFamily fontFamily = new(baseUri, familyName);
 #else
       System.Windows.Media.FontFamily fontFamily = new System.Windows.Media.FontFamily(familyName);
 #endif
@@ -241,7 +241,7 @@ namespace PdfSharp.Drawing
       }
 #endif
 
-            this.fontFamilies.Add(key, fontFamily);
+            fontFamilies.Add(key, fontFamily);
         }
 #endif
 
@@ -269,7 +269,7 @@ namespace PdfSharp.Drawing
 #endif
 
 #if WPF
-        internal static Typeface TryFindTypeface(string name, XFontStyle style, out System.Windows.Media.FontFamily fontFamily)
+        internal static Typeface TryFindTypeface(string name, XFontStyle style, out FontFamily fontFamily)
         {
             if (s_global.fontFamilies.TryGetValue(name, out fontFamily))
             {
@@ -325,7 +325,7 @@ namespace PdfSharp.Drawing
     //List<XGlyphTypeface> privateFonts = new List<XGlyphTypeface>();
 #endif
 #if WPF
-        readonly Dictionary<string, System.Windows.Media.FontFamily> fontFamilies = new(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, FontFamily> fontFamilies = new(StringComparer.InvariantCultureIgnoreCase);
 #endif
     }
 }

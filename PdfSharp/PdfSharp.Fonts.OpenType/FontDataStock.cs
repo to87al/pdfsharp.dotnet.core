@@ -36,28 +36,28 @@ namespace PdfSharp.Fonts.OpenType
     /// <summary>
     /// Global table of TrueType font faces.
     /// </summary>
-    class FontDataStock  // TODO: rename
+    internal class FontDataStock  // TODO: rename
     {
-        FontDataStock()
+        private FontDataStock()
         {
-            this.fontDataTable = [];
+            fontDataTable = [];
         }
 
         public FontData RegisterFontData(byte[] data)
         {
             uint checksum = CalcChecksum(data);
-            string key = String.Format("??{0:X}", checksum);
+            string key = $"??{checksum:X}";
 
-            if (!this.fontDataTable.TryGetValue(key, out FontData fontData))
+            if (!fontDataTable.TryGetValue(key, out FontData fontData))
             {
                 lock (typeof(FontDataStock))
                 {
                     // may be created by other thread meanwhile
-                    if (!this.fontDataTable.TryGetValue(key, out fontData))
+                    if (!fontDataTable.TryGetValue(key, out fontData))
                     {
                         fontData = new FontData(data);
-                        this.fontDataTable.Add(key, fontData);
-                        this.lastEntry = fontData;
+                        fontDataTable.Add(key, fontData);
+                        lastEntry = fontData;
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace PdfSharp.Fonts.OpenType
         /// <summary>
         /// Calculates an Adler32 checksum.
         /// </summary>
-        static uint CalcChecksum(byte[] buffer)
+        private static uint CalcChecksum(byte[] buffer)
         {
             ArgumentNullException.ThrowIfNull(buffer);
 
@@ -133,7 +133,8 @@ namespace PdfSharp.Fonts.OpenType
                 return global;
             }
         }
-        static FontDataStock global;
-        readonly Dictionary<string, FontData> fontDataTable;
+
+        private static FontDataStock global;
+        private readonly Dictionary<string, FontData> fontDataTable;
     }
 }

@@ -46,21 +46,21 @@ namespace PdfSharp.Pdf.Advanced
             ArgumentNullException.ThrowIfNull(owner);
             ArgumentNullException.ThrowIfNull(externalDocument);
             this.owner = owner;
-            this.externalDocumentHandle = externalDocument.Handle;
-            this.xObjects = new PdfFormXObject[externalDocument.PageCount];
+            externalDocumentHandle = externalDocument.Handle;
+            xObjects = new PdfFormXObject[externalDocument.PageCount];
         }
 
-        readonly PdfFormXObject[] xObjects;
+        private readonly PdfFormXObject[] xObjects;
 
         /// <summary>
         /// Gets the document this table belongs to.
         /// </summary>
         public PdfDocument Owner
         {
-            get { return this.owner; }
+            get { return owner; }
         }
 
-        readonly PdfDocument owner;
+        private readonly PdfDocument owner;
 
         /// <summary>
         /// Gets the external document, or null, if the external document is garbage collected.
@@ -69,22 +69,22 @@ namespace PdfSharp.Pdf.Advanced
         {
             get
             {
-                if (this.externalDocumentHandle.IsAlive)
-                    return this.externalDocumentHandle.Target;
+                if (externalDocumentHandle.IsAlive)
+                    return externalDocumentHandle.Target;
                 return null;
             }
         }
 
-        readonly PdfDocument.DocumentHandle externalDocumentHandle;
+        private readonly PdfDocument.DocumentHandle externalDocumentHandle;
 
         public PdfFormXObject GetXObject(int pageNumber)
         {
-            return this.xObjects[pageNumber - 1];
+            return xObjects[pageNumber - 1];
         }
 
         public void SetXObject(int pageNumber, PdfFormXObject xObject)
         {
-            this.xObjects[pageNumber - 1] = xObject;
+            xObjects[pageNumber - 1] = xObject;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public bool Contains(PdfObjectID externalID)
         {
-            return this.externalIDs.ContainsKey(externalID.ToString());
+            return externalIDs.ContainsKey(externalID.ToString());
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace PdfSharp.Pdf.Advanced
         /// this document. In general the clone has a different object identifier.</param>
         public void Add(PdfObjectID externalID, PdfReference iref)
         {
-            this.externalIDs[externalID.ToString()] = iref;
+            externalIDs[externalID.ToString()] = iref;
         }
 
         /// <summary>
@@ -111,13 +111,13 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public PdfReference this[PdfObjectID externalID]
         {
-            get { return (PdfReference)this.externalIDs[externalID.ToString()]; }
+            get { return (PdfReference)externalIDs[externalID.ToString()]; }
         }
 
         /// <summary>
         /// Maps external object identifiers to cross reference entries of the importing document
         /// {PdfObjectID -> PdfReference}.
         /// </summary>
-        readonly Dictionary<string, PdfReference> externalIDs = [];
+        private readonly Dictionary<string, PdfReference> externalIDs = [];
     }
 }

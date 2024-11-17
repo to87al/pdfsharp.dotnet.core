@@ -9,12 +9,12 @@ namespace PdfSharp.Xps.Rendering
     /// <summary>
     /// Constructs a PdfTilingPattern from ImageBrush or VisualBrush.
     /// </summary>
-    class TilingPatternBuilder : PatternOrShadingBuilder
+    internal class TilingPatternBuilder : PatternOrShadingBuilder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TilingPatternBuilder"/> class.
         /// </summary>
-        TilingPatternBuilder(DocumentRenderingContext context) :
+        private TilingPatternBuilder(DocumentRenderingContext context) :
             base(context)
         { }
 
@@ -39,7 +39,7 @@ namespace PdfSharp.Xps.Rendering
             return pdfPattern;
         }
 
-        PdfTilingPattern BuildPattern(ImageBrush brush, XMatrix transform)
+        private PdfTilingPattern BuildPattern(ImageBrush brush, XMatrix transform)
         {
             // Bounding box lays always at (0,0)
             XRect bbox = new(0, 0, brush.Viewport.Width, brush.Viewport.Height);
@@ -139,7 +139,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a PdfFormXObject from the specified brush. 
         /// </summary>
-        PdfFormXObject BuildForm(ImageBrush brush)
+        private PdfFormXObject BuildForm(ImageBrush brush)
         {
             //<<
             //  /BBox [0 100 100 0]
@@ -229,7 +229,7 @@ namespace PdfSharp.Xps.Rendering
             return pdfForm;
         }
 
-        PdfTilingPattern BuildPattern(VisualBrush brush, XMatrix transform)
+        private PdfTilingPattern BuildPattern(VisualBrush brush, XMatrix transform)
         {
             // Bounding box lays always at (0,0)
             XRect bbox = new(0, 0, brush.Viewport.Width, brush.Viewport.Height);
@@ -322,7 +322,7 @@ namespace PdfSharp.Xps.Rendering
         /// <summary>
         /// Builds a PdfFormXObject from the specified brush. 
         /// </summary>
-        PdfFormXObject BuildForm(VisualBrush brush)
+        private PdfFormXObject BuildForm(VisualBrush brush)
         {
             //<<
             //  /BBox [0 100 100 0]

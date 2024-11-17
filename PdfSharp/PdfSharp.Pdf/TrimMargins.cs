@@ -58,10 +58,10 @@ namespace PdfSharp.Pdf
         {
             set
             {
-                this.left = value;
-                this.right = value;
-                this.top = value;
-                this.bottom = value;
+                left = value;
+                right = value;
+                top = value;
+                bottom = value;
             }
         }
 
@@ -70,47 +70,51 @@ namespace PdfSharp.Pdf
         /// </summary>
         public XUnit Left
         {
-            get { return this.left; }
-            set { this.left = value; }
+            get { return left; }
+            set { left = value; }
         }
-        XUnit left;
+
+        private XUnit left;
 
         /// <summary>
         /// Gets or sets the right crop margin.
         /// </summary>
         public XUnit Right
         {
-            get { return this.right; }
-            set { this.right = value; }
+            get { return right; }
+            set { right = value; }
         }
-        XUnit right;
+
+        private XUnit right;
 
         /// <summary>
         /// Gets or sets the top crop margin.
         /// </summary>
         public XUnit Top
         {
-            get { return this.top; }
-            set { this.top = value; }
+            get { return top; }
+            set { top = value; }
         }
-        XUnit top;
+
+        private XUnit top;
 
         /// <summary>
         /// Gets or sets the bottom crop margin.
         /// </summary>
         public XUnit Bottom
         {
-            get { return this.bottom; }
-            set { this.bottom = value; }
+            get { return bottom; }
+            set { bottom = value; }
         }
-        XUnit bottom;
+
+        private XUnit bottom;
 
         /// <summary>
         /// Gets a value indicating whether this instance has at least one margin with a value other than zero.
         /// </summary>
         public bool AreSet
         {
-            get { return this.left.Value != 0 || this.right.Value != 0 || this.top.Value != 0 || this.bottom.Value != 0; }
+            get { return left.Value != 0 || right.Value != 0 || top.Value != 0 || bottom.Value != 0; }
         }
     }
 }

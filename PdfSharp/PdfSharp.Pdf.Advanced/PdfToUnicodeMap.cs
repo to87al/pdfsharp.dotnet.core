@@ -57,10 +57,11 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public CMapInfo CMapInfo
         {
-            get { return this.cmapInfo; }
-            set { this.cmapInfo = value; }
+            get { return cmapInfo; }
+            set { cmapInfo = value; }
         }
-        CMapInfo cmapInfo;
+
+        private CMapInfo cmapInfo;
 
         /// <summary>
         /// Creates the ToUnicode map from the CMapInfo.
@@ -80,7 +81,7 @@ namespace PdfSharp.Pdf.Advanced
 
             Dictionary<int, char> glyphIndexToCharacter = [];
             int lowIndex = 65536, hiIndex = -1;
-            foreach (KeyValuePair<char, int> entry in this.cmapInfo.CharacterToGlyphIndex)
+            foreach (KeyValuePair<char, int> entry in cmapInfo.CharacterToGlyphIndex)
             {
                 int index = (int)entry.Value;
                 lowIndex = Math.Min(lowIndex, index);
@@ -99,11 +100,11 @@ namespace PdfSharp.Pdf.Advanced
             wrt.Write(prefix);
 
             wrt.WriteLine("1 begincodespacerange");
-            wrt.WriteLine(String.Format("<{0:X4}><{1:X4}>", lowIndex, hiIndex));
+            wrt.WriteLine($"<{lowIndex:X4}><{hiIndex:X4}>");
             wrt.WriteLine("endcodespacerange");
 
             // Sorting seems not necessary. The limit is 100 entries, we will see.
-            wrt.WriteLine(String.Format("{0} beginbfrange", glyphIndexToCharacter.Count));
+            wrt.WriteLine($"{glyphIndexToCharacter.Count} beginbfrange");
             foreach (KeyValuePair<int, char> entry in glyphIndexToCharacter)
                 wrt.WriteLine(String.Format("<{0:X4}><{0:X4}><{1:X4}>", entry.Key, (int)entry.Value));
             wrt.WriteLine("endbfrange");

@@ -40,7 +40,7 @@ namespace PdfSharp.Pdf.Security
             this.document = document;
         }
 
-        readonly PdfDocument document;
+        private readonly PdfDocument document;
 
         /// <summary>
         /// Indicates whether the granted access to the document is 'owner permission'. Returns true if the document 
@@ -49,7 +49,7 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         public bool HasOwnerPermissions
         {
-            get { return this.hasOwnerPermissions; }
+            get { return hasOwnerPermissions; }
         }
         internal bool hasOwnerPermissions = true;
 
@@ -59,10 +59,11 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         public PdfDocumentSecurityLevel DocumentSecurityLevel
         {
-            get { return this.documentSecurityLevel; }
-            set { this.documentSecurityLevel = value; }
+            get { return documentSecurityLevel; }
+            set { documentSecurityLevel = value; }
         }
-        PdfDocumentSecurityLevel documentSecurityLevel;
+
+        private PdfDocumentSecurityLevel documentSecurityLevel;
 
         /// <summary>
         /// Sets the user password of the document. Setting a password automatically sets the
@@ -89,7 +90,7 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         internal bool CanSave(ref string message)
         {
-            if (this.documentSecurityLevel != PdfDocumentSecurityLevel.None)
+            if (documentSecurityLevel != PdfDocumentSecurityLevel.None)
             {
                 if ((SecurityHandler.userPassword == null || SecurityHandler.userPassword.Length == 0) &&
                   (SecurityHandler.ownerPassword == null || SecurityHandler.ownerPassword.Length == 0))
@@ -249,7 +250,7 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         internal PdfStandardSecurityHandler SecurityHandler
         {
-            get { return this.document.trailer.SecurityHandler; }
+            get { return document.trailer.SecurityHandler; }
         }
     }
 }

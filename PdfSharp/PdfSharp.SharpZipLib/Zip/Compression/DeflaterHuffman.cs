@@ -52,17 +52,17 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
     /// </summary>
     internal class DeflaterHuffman
     {
-        static readonly int BUFSIZE = 1 << (DeflaterConstants.DEFAULT_MEM_LEVEL + 6);
-        static readonly int LITERAL_NUM = 286;
-        static readonly int DIST_NUM = 30;
-        static readonly int BITLEN_NUM = 19;
-        static readonly int REP_3_6 = 16;
-        static readonly int REP_3_10 = 17;
-        static readonly int REP_11_138 = 18;
-        static readonly int EOF_SYMBOL = 256;
-        static readonly int[] BL_ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+        private static readonly int BUFSIZE = 1 << (DeflaterConstants.DEFAULT_MEM_LEVEL + 6);
+        private static readonly int LITERAL_NUM = 286;
+        private static readonly int DIST_NUM = 30;
+        private static readonly int BITLEN_NUM = 19;
+        private static readonly int REP_3_6 = 16;
+        private static readonly int REP_3_10 = 17;
+        private static readonly int REP_11_138 = 18;
+        private static readonly int EOF_SYMBOL = 256;
+        private static readonly int[] BL_ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
-        static readonly byte[] bit4Reverse = [
+        private static readonly byte[] bit4Reverse = [
             0,
             8,
             4,
@@ -106,10 +106,10 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             /// </summary>
             public int numCodes;
 
-            short[] codes;
-            readonly int[] bl_counts;
-            readonly int maxLength;
-            readonly DeflaterHuffman dh;
+            private short[] codes;
+            private readonly int[] bl_counts;
+            private readonly int maxLength;
+            private readonly DeflaterHuffman dh;
 
             /// <summary>
             /// Not documented
@@ -117,7 +117,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             public Tree(DeflaterHuffman dh, int elems, int minCodes, int maxLength)
             {
                 this.dh = dh;
-                this.minNumCodes = minCodes;
+                minNumCodes = minCodes;
                 this.maxLength = maxLength;
                 freqs = new short[elems];
                 bl_counts = new int[maxLength];
@@ -227,9 +227,9 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                 }
             }
 
-            void BuildLength(int[] childs)
+            private void BuildLength(int[] childs)
             {
-                this.length = new byte[freqs.Length];
+                length = new byte[freqs.Length];
                 int numNodes = childs.Length / 2;
                 int numLeafs = (numNodes + 1) / 2;
                 int overflow = 0;
@@ -260,7 +260,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
                         /* A leaf node */
                         int bitLength = lengths[i];
                         bl_counts[bitLength - 1]++;
-                        this.length[childs[2 * i]] = (byte)lengths[i];
+                        length[childs[2 * i]] = (byte)lengths[i];
                     }
                 }
 
@@ -620,16 +620,17 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
         /// Pending buffer to use
         /// </summary>
         public DeflaterPending pending;
-        readonly Tree literalTree, distTree, blTree;
-        readonly short[] d_buf;
-        readonly byte[] l_buf;
-        int last_lit;
-        int extra_bits;
 
-        static readonly short[] staticLCodes;
-        static readonly byte[] staticLLength;
-        static readonly short[] staticDCodes;
-        static readonly byte[] staticDLength;
+        private readonly Tree literalTree, distTree, blTree;
+        private readonly short[] d_buf;
+        private readonly byte[] l_buf;
+        private int last_lit;
+        private int extra_bits;
+
+        private static readonly short[] staticLCodes;
+        private static readonly byte[] staticLLength;
+        private static readonly short[] staticDCodes;
+        private static readonly byte[] staticDLength;
 
         /// <summary>
         /// Reverse the bits of a 16 bit value.
@@ -711,7 +712,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             blTree.Reset();
         }
 
-        static int Lcode(int len)
+        private static int Lcode(int len)
         {
             if (len == 255)
             {
@@ -727,7 +728,7 @@ namespace PdfSharp.SharpZipLib.Zip.Compression
             return code + len;
         }
 
-        static int Dcode(int distance)
+        private static int Dcode(int distance)
         {
             int code = 0;
             while (distance >= 4)

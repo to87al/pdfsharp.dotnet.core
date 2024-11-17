@@ -6,7 +6,7 @@ namespace PdfSharp.Xps.XpsModel
     /// <summary>
     /// Represents a transformation matrix.
     /// </summary>
-    static class MatrixHelper
+    internal static class MatrixHelper
     {
         public static XMatrix ToXMatrix(this Matrix matrix)
         {

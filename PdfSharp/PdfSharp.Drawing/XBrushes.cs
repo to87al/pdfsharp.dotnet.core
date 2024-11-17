@@ -40,8 +40,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.aliceBlue ??= new XSolidBrush(XColors.AliceBlue, true);
-                return XBrushes.aliceBlue;
+                aliceBlue ??= new XSolidBrush(XColors.AliceBlue, true);
+                return aliceBlue;
             }
         }
 
@@ -50,8 +50,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.antiqueWhite ??= new XSolidBrush(XColors.AntiqueWhite, true);
-                return XBrushes.antiqueWhite;
+                antiqueWhite ??= new XSolidBrush(XColors.AntiqueWhite, true);
+                return antiqueWhite;
             }
         }
 
@@ -60,8 +60,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.aqua ??= new XSolidBrush(XColors.Aqua, true);
-                return XBrushes.aqua;
+                aqua ??= new XSolidBrush(XColors.Aqua, true);
+                return aqua;
             }
         }
 
@@ -70,8 +70,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.aquamarine ??= new XSolidBrush(XColors.Aquamarine, true);
-                return XBrushes.aquamarine;
+                aquamarine ??= new XSolidBrush(XColors.Aquamarine, true);
+                return aquamarine;
             }
         }
 
@@ -80,8 +80,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.azure ??= new XSolidBrush(XColors.Azure, true);
-                return XBrushes.azure;
+                azure ??= new XSolidBrush(XColors.Azure, true);
+                return azure;
             }
         }
 
@@ -90,8 +90,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.beige ??= new XSolidBrush(XColors.Beige, true);
-                return XBrushes.beige;
+                beige ??= new XSolidBrush(XColors.Beige, true);
+                return beige;
             }
         }
 
@@ -100,8 +100,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.bisque ??= new XSolidBrush(XColors.Bisque, true);
-                return XBrushes.bisque;
+                bisque ??= new XSolidBrush(XColors.Bisque, true);
+                return bisque;
             }
         }
 
@@ -110,8 +110,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.black ??= new XSolidBrush(XColors.Black, true);
-                return XBrushes.black;
+                black ??= new XSolidBrush(XColors.Black, true);
+                return black;
             }
         }
 
@@ -120,8 +120,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.blanchedAlmond ??= new XSolidBrush(XColors.BlanchedAlmond, true);
-                return XBrushes.blanchedAlmond;
+                blanchedAlmond ??= new XSolidBrush(XColors.BlanchedAlmond, true);
+                return blanchedAlmond;
             }
         }
 
@@ -130,8 +130,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.blue ??= new XSolidBrush(XColors.Blue, true);
-                return XBrushes.blue;
+                blue ??= new XSolidBrush(XColors.Blue, true);
+                return blue;
             }
         }
 
@@ -140,8 +140,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.blueViolet ??= new XSolidBrush(XColors.BlueViolet, true);
-                return XBrushes.blueViolet;
+                blueViolet ??= new XSolidBrush(XColors.BlueViolet, true);
+                return blueViolet;
             }
         }
 
@@ -150,8 +150,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.brown ??= new XSolidBrush(XColors.Brown, true);
-                return XBrushes.brown;
+                brown ??= new XSolidBrush(XColors.Brown, true);
+                return brown;
             }
         }
 
@@ -160,8 +160,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.burlyWood ??= new XSolidBrush(XColors.BurlyWood, true);
-                return XBrushes.burlyWood;
+                burlyWood ??= new XSolidBrush(XColors.BurlyWood, true);
+                return burlyWood;
             }
         }
 
@@ -170,8 +170,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.cadetBlue ??= new XSolidBrush(XColors.CadetBlue, true);
-                return XBrushes.cadetBlue;
+                cadetBlue ??= new XSolidBrush(XColors.CadetBlue, true);
+                return cadetBlue;
             }
         }
 
@@ -180,8 +180,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.chartreuse ??= new XSolidBrush(XColors.Chartreuse, true);
-                return XBrushes.chartreuse;
+                chartreuse ??= new XSolidBrush(XColors.Chartreuse, true);
+                return chartreuse;
             }
         }
 
@@ -190,8 +190,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.chocolate ??= new XSolidBrush(XColors.Chocolate, true);
-                return XBrushes.chocolate;
+                chocolate ??= new XSolidBrush(XColors.Chocolate, true);
+                return chocolate;
             }
         }
 
@@ -200,8 +200,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.coral ??= new XSolidBrush(XColors.Coral, true);
-                return XBrushes.coral;
+                coral ??= new XSolidBrush(XColors.Coral, true);
+                return coral;
             }
         }
 
@@ -210,8 +210,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.cornflowerBlue ??= new XSolidBrush(XColors.CornflowerBlue, true);
-                return XBrushes.cornflowerBlue;
+                cornflowerBlue ??= new XSolidBrush(XColors.CornflowerBlue, true);
+                return cornflowerBlue;
             }
         }
 
@@ -220,8 +220,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.cornsilk ??= new XSolidBrush(XColors.Cornsilk, true);
-                return XBrushes.cornsilk;
+                cornsilk ??= new XSolidBrush(XColors.Cornsilk, true);
+                return cornsilk;
             }
         }
 
@@ -230,8 +230,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.crimson ??= new XSolidBrush(XColors.Crimson, true);
-                return XBrushes.crimson;
+                crimson ??= new XSolidBrush(XColors.Crimson, true);
+                return crimson;
             }
         }
 
@@ -240,8 +240,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.cyan ??= new XSolidBrush(XColors.Cyan, true);
-                return XBrushes.cyan;
+                cyan ??= new XSolidBrush(XColors.Cyan, true);
+                return cyan;
             }
         }
 
@@ -250,8 +250,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkBlue ??= new XSolidBrush(XColors.DarkBlue, true);
-                return XBrushes.darkBlue;
+                darkBlue ??= new XSolidBrush(XColors.DarkBlue, true);
+                return darkBlue;
             }
         }
 
@@ -260,8 +260,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkCyan ??= new XSolidBrush(XColors.DarkCyan, true);
-                return XBrushes.darkCyan;
+                darkCyan ??= new XSolidBrush(XColors.DarkCyan, true);
+                return darkCyan;
             }
         }
 
@@ -270,8 +270,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkGoldenrod ??= new XSolidBrush(XColors.DarkGoldenrod, true);
-                return XBrushes.darkGoldenrod;
+                darkGoldenrod ??= new XSolidBrush(XColors.DarkGoldenrod, true);
+                return darkGoldenrod;
             }
         }
 
@@ -280,8 +280,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkGray ??= new XSolidBrush(XColors.DarkGray, true);
-                return XBrushes.darkGray;
+                darkGray ??= new XSolidBrush(XColors.DarkGray, true);
+                return darkGray;
             }
         }
 
@@ -290,8 +290,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkGreen ??= new XSolidBrush(XColors.DarkGreen, true);
-                return XBrushes.darkGreen;
+                darkGreen ??= new XSolidBrush(XColors.DarkGreen, true);
+                return darkGreen;
             }
         }
 
@@ -300,8 +300,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkKhaki ??= new XSolidBrush(XColors.DarkKhaki, true);
-                return XBrushes.darkKhaki;
+                darkKhaki ??= new XSolidBrush(XColors.DarkKhaki, true);
+                return darkKhaki;
             }
         }
 
@@ -310,8 +310,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkMagenta ??= new XSolidBrush(XColors.DarkMagenta, true);
-                return XBrushes.darkMagenta;
+                darkMagenta ??= new XSolidBrush(XColors.DarkMagenta, true);
+                return darkMagenta;
             }
         }
 
@@ -320,8 +320,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkOliveGreen ??= new XSolidBrush(XColors.DarkOliveGreen, true);
-                return XBrushes.darkOliveGreen;
+                darkOliveGreen ??= new XSolidBrush(XColors.DarkOliveGreen, true);
+                return darkOliveGreen;
             }
         }
 
@@ -330,8 +330,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkOrange ??= new XSolidBrush(XColors.DarkOrange, true);
-                return XBrushes.darkOrange;
+                darkOrange ??= new XSolidBrush(XColors.DarkOrange, true);
+                return darkOrange;
             }
         }
 
@@ -340,8 +340,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkOrchid ??= new XSolidBrush(XColors.DarkOrchid, true);
-                return XBrushes.darkOrchid;
+                darkOrchid ??= new XSolidBrush(XColors.DarkOrchid, true);
+                return darkOrchid;
             }
         }
 
@@ -350,8 +350,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkRed ??= new XSolidBrush(XColors.DarkRed, true);
-                return XBrushes.darkRed;
+                darkRed ??= new XSolidBrush(XColors.DarkRed, true);
+                return darkRed;
             }
         }
 
@@ -360,8 +360,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkSalmon ??= new XSolidBrush(XColors.DarkSalmon, true);
-                return XBrushes.darkSalmon;
+                darkSalmon ??= new XSolidBrush(XColors.DarkSalmon, true);
+                return darkSalmon;
             }
         }
 
@@ -370,8 +370,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkSeaGreen ??= new XSolidBrush(XColors.DarkSeaGreen, true);
-                return XBrushes.darkSeaGreen;
+                darkSeaGreen ??= new XSolidBrush(XColors.DarkSeaGreen, true);
+                return darkSeaGreen;
             }
         }
 
@@ -380,8 +380,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkSlateBlue ??= new XSolidBrush(XColors.DarkSlateBlue, true);
-                return XBrushes.darkSlateBlue;
+                darkSlateBlue ??= new XSolidBrush(XColors.DarkSlateBlue, true);
+                return darkSlateBlue;
             }
         }
 
@@ -390,8 +390,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkSlateGray ??= new XSolidBrush(XColors.DarkSlateGray, true);
-                return XBrushes.darkSlateGray;
+                darkSlateGray ??= new XSolidBrush(XColors.DarkSlateGray, true);
+                return darkSlateGray;
             }
         }
 
@@ -400,8 +400,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkTurquoise ??= new XSolidBrush(XColors.DarkTurquoise, true);
-                return XBrushes.darkTurquoise;
+                darkTurquoise ??= new XSolidBrush(XColors.DarkTurquoise, true);
+                return darkTurquoise;
             }
         }
 
@@ -410,8 +410,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.darkViolet ??= new XSolidBrush(XColors.DarkViolet, true);
-                return XBrushes.darkViolet;
+                darkViolet ??= new XSolidBrush(XColors.DarkViolet, true);
+                return darkViolet;
             }
         }
 
@@ -420,8 +420,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.deepPink ??= new XSolidBrush(XColors.DeepPink, true);
-                return XBrushes.deepPink;
+                deepPink ??= new XSolidBrush(XColors.DeepPink, true);
+                return deepPink;
             }
         }
 
@@ -430,8 +430,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.deepSkyBlue ??= new XSolidBrush(XColors.DeepSkyBlue, true);
-                return XBrushes.deepSkyBlue;
+                deepSkyBlue ??= new XSolidBrush(XColors.DeepSkyBlue, true);
+                return deepSkyBlue;
             }
         }
 
@@ -440,8 +440,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.dimGray ??= new XSolidBrush(XColors.DimGray, true);
-                return XBrushes.dimGray;
+                dimGray ??= new XSolidBrush(XColors.DimGray, true);
+                return dimGray;
             }
         }
 
@@ -450,8 +450,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.dodgerBlue ??= new XSolidBrush(XColors.DodgerBlue, true);
-                return XBrushes.dodgerBlue;
+                dodgerBlue ??= new XSolidBrush(XColors.DodgerBlue, true);
+                return dodgerBlue;
             }
         }
 
@@ -460,8 +460,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.firebrick ??= new XSolidBrush(XColors.Firebrick, true);
-                return XBrushes.firebrick;
+                firebrick ??= new XSolidBrush(XColors.Firebrick, true);
+                return firebrick;
             }
         }
 
@@ -470,8 +470,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.floralWhite ??= new XSolidBrush(XColors.FloralWhite, true);
-                return XBrushes.floralWhite;
+                floralWhite ??= new XSolidBrush(XColors.FloralWhite, true);
+                return floralWhite;
             }
         }
 
@@ -480,8 +480,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.forestGreen ??= new XSolidBrush(XColors.ForestGreen, true);
-                return XBrushes.forestGreen;
+                forestGreen ??= new XSolidBrush(XColors.ForestGreen, true);
+                return forestGreen;
             }
         }
 
@@ -490,8 +490,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.fuchsia ??= new XSolidBrush(XColors.Fuchsia, true);
-                return XBrushes.fuchsia;
+                fuchsia ??= new XSolidBrush(XColors.Fuchsia, true);
+                return fuchsia;
             }
         }
 
@@ -500,8 +500,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.gainsboro ??= new XSolidBrush(XColors.Gainsboro, true);
-                return XBrushes.gainsboro;
+                gainsboro ??= new XSolidBrush(XColors.Gainsboro, true);
+                return gainsboro;
             }
         }
 
@@ -510,8 +510,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.ghostWhite ??= new XSolidBrush(XColors.GhostWhite, true);
-                return XBrushes.ghostWhite;
+                ghostWhite ??= new XSolidBrush(XColors.GhostWhite, true);
+                return ghostWhite;
             }
         }
 
@@ -520,8 +520,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.gold ??= new XSolidBrush(XColors.Gold, true);
-                return XBrushes.gold;
+                gold ??= new XSolidBrush(XColors.Gold, true);
+                return gold;
             }
         }
 
@@ -530,8 +530,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.goldenrod ??= new XSolidBrush(XColors.Goldenrod, true);
-                return XBrushes.goldenrod;
+                goldenrod ??= new XSolidBrush(XColors.Goldenrod, true);
+                return goldenrod;
             }
         }
 
@@ -540,8 +540,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.gray ??= new XSolidBrush(XColors.Gray, true);
-                return XBrushes.gray;
+                gray ??= new XSolidBrush(XColors.Gray, true);
+                return gray;
             }
         }
 
@@ -550,8 +550,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.green ??= new XSolidBrush(XColors.Green, true);
-                return XBrushes.green;
+                green ??= new XSolidBrush(XColors.Green, true);
+                return green;
             }
         }
 
@@ -560,8 +560,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.greenYellow ??= new XSolidBrush(XColors.GreenYellow, true);
-                return XBrushes.greenYellow;
+                greenYellow ??= new XSolidBrush(XColors.GreenYellow, true);
+                return greenYellow;
             }
         }
 
@@ -570,8 +570,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.honeydew ??= new XSolidBrush(XColors.Honeydew, true);
-                return XBrushes.honeydew;
+                honeydew ??= new XSolidBrush(XColors.Honeydew, true);
+                return honeydew;
             }
         }
 
@@ -580,8 +580,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.hotPink ??= new XSolidBrush(XColors.HotPink, true);
-                return XBrushes.hotPink;
+                hotPink ??= new XSolidBrush(XColors.HotPink, true);
+                return hotPink;
             }
         }
 
@@ -590,8 +590,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.indianRed ??= new XSolidBrush(XColors.IndianRed, true);
-                return XBrushes.indianRed;
+                indianRed ??= new XSolidBrush(XColors.IndianRed, true);
+                return indianRed;
             }
         }
 
@@ -600,8 +600,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.indigo ??= new XSolidBrush(XColors.Indigo, true);
-                return XBrushes.indigo;
+                indigo ??= new XSolidBrush(XColors.Indigo, true);
+                return indigo;
             }
         }
 
@@ -610,8 +610,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.ivory ??= new XSolidBrush(XColors.Ivory, true);
-                return XBrushes.ivory;
+                ivory ??= new XSolidBrush(XColors.Ivory, true);
+                return ivory;
             }
         }
 
@@ -620,8 +620,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.khaki ??= new XSolidBrush(XColors.Khaki, true);
-                return XBrushes.khaki;
+                khaki ??= new XSolidBrush(XColors.Khaki, true);
+                return khaki;
             }
         }
 
@@ -630,8 +630,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lavender ??= new XSolidBrush(XColors.Lavender, true);
-                return XBrushes.lavender;
+                lavender ??= new XSolidBrush(XColors.Lavender, true);
+                return lavender;
             }
         }
 
@@ -640,8 +640,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lavenderBlush ??= new XSolidBrush(XColors.LavenderBlush, true);
-                return XBrushes.lavenderBlush;
+                lavenderBlush ??= new XSolidBrush(XColors.LavenderBlush, true);
+                return lavenderBlush;
             }
         }
 
@@ -650,8 +650,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lawnGreen ??= new XSolidBrush(XColors.LawnGreen, true);
-                return XBrushes.lawnGreen;
+                lawnGreen ??= new XSolidBrush(XColors.LawnGreen, true);
+                return lawnGreen;
             }
         }
 
@@ -660,8 +660,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lemonChiffon ??= new XSolidBrush(XColors.LemonChiffon, true);
-                return XBrushes.lemonChiffon;
+                lemonChiffon ??= new XSolidBrush(XColors.LemonChiffon, true);
+                return lemonChiffon;
             }
         }
 
@@ -670,8 +670,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightBlue ??= new XSolidBrush(XColors.LightBlue, true);
-                return XBrushes.lightBlue;
+                lightBlue ??= new XSolidBrush(XColors.LightBlue, true);
+                return lightBlue;
             }
         }
 
@@ -680,8 +680,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightCoral ??= new XSolidBrush(XColors.LightCoral, true);
-                return XBrushes.lightCoral;
+                lightCoral ??= new XSolidBrush(XColors.LightCoral, true);
+                return lightCoral;
             }
         }
 
@@ -690,8 +690,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightCyan ??= new XSolidBrush(XColors.LightCyan, true);
-                return XBrushes.lightCyan;
+                lightCyan ??= new XSolidBrush(XColors.LightCyan, true);
+                return lightCyan;
             }
         }
 
@@ -700,8 +700,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightGoldenrodYellow ??= new XSolidBrush(XColors.LightGoldenrodYellow, true);
-                return XBrushes.lightGoldenrodYellow;
+                lightGoldenrodYellow ??= new XSolidBrush(XColors.LightGoldenrodYellow, true);
+                return lightGoldenrodYellow;
             }
         }
 
@@ -710,8 +710,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightGray ??= new XSolidBrush(XColors.LightGray, true);
-                return XBrushes.lightGray;
+                lightGray ??= new XSolidBrush(XColors.LightGray, true);
+                return lightGray;
             }
         }
 
@@ -720,8 +720,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightGreen ??= new XSolidBrush(XColors.LightGreen, true);
-                return XBrushes.lightGreen;
+                lightGreen ??= new XSolidBrush(XColors.LightGreen, true);
+                return lightGreen;
             }
         }
 
@@ -730,8 +730,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightPink ??= new XSolidBrush(XColors.LightPink, true);
-                return XBrushes.lightPink;
+                lightPink ??= new XSolidBrush(XColors.LightPink, true);
+                return lightPink;
             }
         }
 
@@ -740,8 +740,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightSalmon ??= new XSolidBrush(XColors.LightSalmon, true);
-                return XBrushes.lightSalmon;
+                lightSalmon ??= new XSolidBrush(XColors.LightSalmon, true);
+                return lightSalmon;
             }
         }
 
@@ -750,8 +750,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightSeaGreen ??= new XSolidBrush(XColors.LightSeaGreen, true);
-                return XBrushes.lightSeaGreen;
+                lightSeaGreen ??= new XSolidBrush(XColors.LightSeaGreen, true);
+                return lightSeaGreen;
             }
         }
 
@@ -760,8 +760,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightSkyBlue ??= new XSolidBrush(XColors.LightSkyBlue, true);
-                return XBrushes.lightSkyBlue;
+                lightSkyBlue ??= new XSolidBrush(XColors.LightSkyBlue, true);
+                return lightSkyBlue;
             }
         }
 
@@ -770,8 +770,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightSlateGray ??= new XSolidBrush(XColors.LightSlateGray, true);
-                return XBrushes.lightSlateGray;
+                lightSlateGray ??= new XSolidBrush(XColors.LightSlateGray, true);
+                return lightSlateGray;
             }
         }
 
@@ -780,8 +780,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightSteelBlue ??= new XSolidBrush(XColors.LightSteelBlue, true);
-                return XBrushes.lightSteelBlue;
+                lightSteelBlue ??= new XSolidBrush(XColors.LightSteelBlue, true);
+                return lightSteelBlue;
             }
         }
 
@@ -790,8 +790,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lightYellow ??= new XSolidBrush(XColors.LightYellow, true);
-                return XBrushes.lightYellow;
+                lightYellow ??= new XSolidBrush(XColors.LightYellow, true);
+                return lightYellow;
             }
         }
 
@@ -800,8 +800,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.lime ??= new XSolidBrush(XColors.Lime, true);
-                return XBrushes.lime;
+                lime ??= new XSolidBrush(XColors.Lime, true);
+                return lime;
             }
         }
 
@@ -810,8 +810,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.limeGreen ??= new XSolidBrush(XColors.LimeGreen, true);
-                return XBrushes.limeGreen;
+                limeGreen ??= new XSolidBrush(XColors.LimeGreen, true);
+                return limeGreen;
             }
         }
 
@@ -820,8 +820,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.linen ??= new XSolidBrush(XColors.Linen, true);
-                return XBrushes.linen;
+                linen ??= new XSolidBrush(XColors.Linen, true);
+                return linen;
             }
         }
 
@@ -830,8 +830,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.magenta ??= new XSolidBrush(XColors.Magenta, true);
-                return XBrushes.magenta;
+                magenta ??= new XSolidBrush(XColors.Magenta, true);
+                return magenta;
             }
         }
 
@@ -840,8 +840,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.maroon ??= new XSolidBrush(XColors.Maroon, true);
-                return XBrushes.maroon;
+                maroon ??= new XSolidBrush(XColors.Maroon, true);
+                return maroon;
             }
         }
 
@@ -850,8 +850,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumAquamarine ??= new XSolidBrush(XColors.MediumAquamarine, true);
-                return XBrushes.mediumAquamarine;
+                mediumAquamarine ??= new XSolidBrush(XColors.MediumAquamarine, true);
+                return mediumAquamarine;
             }
         }
 
@@ -860,8 +860,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumBlue ??= new XSolidBrush(XColors.MediumBlue, true);
-                return XBrushes.mediumBlue;
+                mediumBlue ??= new XSolidBrush(XColors.MediumBlue, true);
+                return mediumBlue;
             }
         }
 
@@ -870,8 +870,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumOrchid ??= new XSolidBrush(XColors.MediumOrchid, true);
-                return XBrushes.mediumOrchid;
+                mediumOrchid ??= new XSolidBrush(XColors.MediumOrchid, true);
+                return mediumOrchid;
             }
         }
 
@@ -880,8 +880,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumPurple ??= new XSolidBrush(XColors.MediumPurple, true);
-                return XBrushes.mediumPurple;
+                mediumPurple ??= new XSolidBrush(XColors.MediumPurple, true);
+                return mediumPurple;
             }
         }
 
@@ -890,8 +890,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumSeaGreen ??= new XSolidBrush(XColors.MediumSeaGreen, true);
-                return XBrushes.mediumSeaGreen;
+                mediumSeaGreen ??= new XSolidBrush(XColors.MediumSeaGreen, true);
+                return mediumSeaGreen;
             }
         }
 
@@ -900,8 +900,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumSlateBlue ??= new XSolidBrush(XColors.MediumSlateBlue, true);
-                return XBrushes.mediumSlateBlue;
+                mediumSlateBlue ??= new XSolidBrush(XColors.MediumSlateBlue, true);
+                return mediumSlateBlue;
             }
         }
 
@@ -910,8 +910,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumSpringGreen ??= new XSolidBrush(XColors.MediumSpringGreen, true);
-                return XBrushes.mediumSpringGreen;
+                mediumSpringGreen ??= new XSolidBrush(XColors.MediumSpringGreen, true);
+                return mediumSpringGreen;
             }
         }
 
@@ -920,8 +920,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumTurquoise ??= new XSolidBrush(XColors.MediumTurquoise, true);
-                return XBrushes.mediumTurquoise;
+                mediumTurquoise ??= new XSolidBrush(XColors.MediumTurquoise, true);
+                return mediumTurquoise;
             }
         }
 
@@ -930,8 +930,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mediumVioletRed ??= new XSolidBrush(XColors.MediumVioletRed, true);
-                return XBrushes.mediumVioletRed;
+                mediumVioletRed ??= new XSolidBrush(XColors.MediumVioletRed, true);
+                return mediumVioletRed;
             }
         }
 
@@ -940,8 +940,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.midnightBlue ??= new XSolidBrush(XColors.MidnightBlue, true);
-                return XBrushes.midnightBlue;
+                midnightBlue ??= new XSolidBrush(XColors.MidnightBlue, true);
+                return midnightBlue;
             }
         }
 
@@ -950,8 +950,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mintCream ??= new XSolidBrush(XColors.MintCream, true);
-                return XBrushes.mintCream;
+                mintCream ??= new XSolidBrush(XColors.MintCream, true);
+                return mintCream;
             }
         }
 
@@ -960,8 +960,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.mistyRose ??= new XSolidBrush(XColors.MistyRose, true);
-                return XBrushes.mistyRose;
+                mistyRose ??= new XSolidBrush(XColors.MistyRose, true);
+                return mistyRose;
             }
         }
 
@@ -970,8 +970,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.moccasin ??= new XSolidBrush(XColors.Moccasin, true);
-                return XBrushes.moccasin;
+                moccasin ??= new XSolidBrush(XColors.Moccasin, true);
+                return moccasin;
             }
         }
 
@@ -980,8 +980,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.navajoWhite ??= new XSolidBrush(XColors.NavajoWhite, true);
-                return XBrushes.navajoWhite;
+                navajoWhite ??= new XSolidBrush(XColors.NavajoWhite, true);
+                return navajoWhite;
             }
         }
 
@@ -990,8 +990,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.navy ??= new XSolidBrush(XColors.Navy, true);
-                return XBrushes.navy;
+                navy ??= new XSolidBrush(XColors.Navy, true);
+                return navy;
             }
         }
 
@@ -1000,8 +1000,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.oldLace ??= new XSolidBrush(XColors.OldLace, true);
-                return XBrushes.oldLace;
+                oldLace ??= new XSolidBrush(XColors.OldLace, true);
+                return oldLace;
             }
         }
 
@@ -1010,8 +1010,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.olive ??= new XSolidBrush(XColors.Olive, true);
-                return XBrushes.olive;
+                olive ??= new XSolidBrush(XColors.Olive, true);
+                return olive;
             }
         }
 
@@ -1020,8 +1020,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.oliveDrab ??= new XSolidBrush(XColors.OliveDrab, true);
-                return XBrushes.oliveDrab;
+                oliveDrab ??= new XSolidBrush(XColors.OliveDrab, true);
+                return oliveDrab;
             }
         }
 
@@ -1030,8 +1030,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.orange ??= new XSolidBrush(XColors.Orange, true);
-                return XBrushes.orange;
+                orange ??= new XSolidBrush(XColors.Orange, true);
+                return orange;
             }
         }
 
@@ -1040,8 +1040,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.orangeRed ??= new XSolidBrush(XColors.OrangeRed, true);
-                return XBrushes.orangeRed;
+                orangeRed ??= new XSolidBrush(XColors.OrangeRed, true);
+                return orangeRed;
             }
         }
 
@@ -1050,8 +1050,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.orchid ??= new XSolidBrush(XColors.Orchid, true);
-                return XBrushes.orchid;
+                orchid ??= new XSolidBrush(XColors.Orchid, true);
+                return orchid;
             }
         }
 
@@ -1060,8 +1060,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.paleGoldenrod ??= new XSolidBrush(XColors.PaleGoldenrod, true);
-                return XBrushes.paleGoldenrod;
+                paleGoldenrod ??= new XSolidBrush(XColors.PaleGoldenrod, true);
+                return paleGoldenrod;
             }
         }
 
@@ -1070,8 +1070,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.paleGreen ??= new XSolidBrush(XColors.PaleGreen, true);
-                return XBrushes.paleGreen;
+                paleGreen ??= new XSolidBrush(XColors.PaleGreen, true);
+                return paleGreen;
             }
         }
 
@@ -1080,8 +1080,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.paleTurquoise ??= new XSolidBrush(XColors.PaleTurquoise, true);
-                return XBrushes.paleTurquoise;
+                paleTurquoise ??= new XSolidBrush(XColors.PaleTurquoise, true);
+                return paleTurquoise;
             }
         }
 
@@ -1090,8 +1090,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.paleVioletRed ??= new XSolidBrush(XColors.PaleVioletRed, true);
-                return XBrushes.paleVioletRed;
+                paleVioletRed ??= new XSolidBrush(XColors.PaleVioletRed, true);
+                return paleVioletRed;
             }
         }
 
@@ -1100,8 +1100,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.papayaWhip ??= new XSolidBrush(XColors.PapayaWhip, true);
-                return XBrushes.papayaWhip;
+                papayaWhip ??= new XSolidBrush(XColors.PapayaWhip, true);
+                return papayaWhip;
             }
         }
 
@@ -1110,8 +1110,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.peachPuff ??= new XSolidBrush(XColors.PeachPuff, true);
-                return XBrushes.peachPuff;
+                peachPuff ??= new XSolidBrush(XColors.PeachPuff, true);
+                return peachPuff;
             }
         }
 
@@ -1120,8 +1120,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.peru ??= new XSolidBrush(XColors.Peru, true);
-                return XBrushes.peru;
+                peru ??= new XSolidBrush(XColors.Peru, true);
+                return peru;
             }
         }
 
@@ -1130,8 +1130,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.pink ??= new XSolidBrush(XColors.Pink, true);
-                return XBrushes.pink;
+                pink ??= new XSolidBrush(XColors.Pink, true);
+                return pink;
             }
         }
 
@@ -1140,8 +1140,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.plum ??= new XSolidBrush(XColors.Plum, true);
-                return XBrushes.plum;
+                plum ??= new XSolidBrush(XColors.Plum, true);
+                return plum;
             }
         }
 
@@ -1150,8 +1150,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.powderBlue ??= new XSolidBrush(XColors.PowderBlue, true);
-                return XBrushes.powderBlue;
+                powderBlue ??= new XSolidBrush(XColors.PowderBlue, true);
+                return powderBlue;
             }
         }
 
@@ -1160,8 +1160,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.purple ??= new XSolidBrush(XColors.Purple, true);
-                return XBrushes.purple;
+                purple ??= new XSolidBrush(XColors.Purple, true);
+                return purple;
             }
         }
 
@@ -1170,8 +1170,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.red ??= new XSolidBrush(XColors.Red, true);
-                return XBrushes.red;
+                red ??= new XSolidBrush(XColors.Red, true);
+                return red;
             }
         }
 
@@ -1180,8 +1180,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.rosyBrown ??= new XSolidBrush(XColors.RosyBrown, true);
-                return XBrushes.rosyBrown;
+                rosyBrown ??= new XSolidBrush(XColors.RosyBrown, true);
+                return rosyBrown;
             }
         }
 
@@ -1190,8 +1190,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.royalBlue ??= new XSolidBrush(XColors.RoyalBlue, true);
-                return XBrushes.royalBlue;
+                royalBlue ??= new XSolidBrush(XColors.RoyalBlue, true);
+                return royalBlue;
             }
         }
 
@@ -1200,8 +1200,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.saddleBrown ??= new XSolidBrush(XColors.SaddleBrown, true);
-                return XBrushes.saddleBrown;
+                saddleBrown ??= new XSolidBrush(XColors.SaddleBrown, true);
+                return saddleBrown;
             }
         }
 
@@ -1210,8 +1210,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.salmon ??= new XSolidBrush(XColors.Salmon, true);
-                return XBrushes.salmon;
+                salmon ??= new XSolidBrush(XColors.Salmon, true);
+                return salmon;
             }
         }
 
@@ -1220,8 +1220,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.sandyBrown ??= new XSolidBrush(XColors.SandyBrown, true);
-                return XBrushes.sandyBrown;
+                sandyBrown ??= new XSolidBrush(XColors.SandyBrown, true);
+                return sandyBrown;
             }
         }
 
@@ -1230,8 +1230,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.seaGreen ??= new XSolidBrush(XColors.SeaGreen, true);
-                return XBrushes.seaGreen;
+                seaGreen ??= new XSolidBrush(XColors.SeaGreen, true);
+                return seaGreen;
             }
         }
 
@@ -1240,8 +1240,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.seaShell ??= new XSolidBrush(XColors.SeaShell, true);
-                return XBrushes.seaShell;
+                seaShell ??= new XSolidBrush(XColors.SeaShell, true);
+                return seaShell;
             }
         }
 
@@ -1250,8 +1250,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.sienna ??= new XSolidBrush(XColors.Sienna, true);
-                return XBrushes.sienna;
+                sienna ??= new XSolidBrush(XColors.Sienna, true);
+                return sienna;
             }
         }
 
@@ -1260,8 +1260,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.silver ??= new XSolidBrush(XColors.Silver, true);
-                return XBrushes.silver;
+                silver ??= new XSolidBrush(XColors.Silver, true);
+                return silver;
             }
         }
 
@@ -1270,8 +1270,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.skyBlue ??= new XSolidBrush(XColors.SkyBlue, true);
-                return XBrushes.skyBlue;
+                skyBlue ??= new XSolidBrush(XColors.SkyBlue, true);
+                return skyBlue;
             }
         }
 
@@ -1280,8 +1280,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.slateBlue ??= new XSolidBrush(XColors.SlateBlue, true);
-                return XBrushes.slateBlue;
+                slateBlue ??= new XSolidBrush(XColors.SlateBlue, true);
+                return slateBlue;
             }
         }
 
@@ -1290,8 +1290,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.slateGray ??= new XSolidBrush(XColors.SlateGray, true);
-                return XBrushes.slateGray;
+                slateGray ??= new XSolidBrush(XColors.SlateGray, true);
+                return slateGray;
             }
         }
 
@@ -1300,8 +1300,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.snow ??= new XSolidBrush(XColors.Snow, true);
-                return XBrushes.snow;
+                snow ??= new XSolidBrush(XColors.Snow, true);
+                return snow;
             }
         }
 
@@ -1310,8 +1310,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.springGreen ??= new XSolidBrush(XColors.SpringGreen, true);
-                return XBrushes.springGreen;
+                springGreen ??= new XSolidBrush(XColors.SpringGreen, true);
+                return springGreen;
             }
         }
 
@@ -1320,8 +1320,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.steelBlue ??= new XSolidBrush(XColors.SteelBlue, true);
-                return XBrushes.steelBlue;
+                steelBlue ??= new XSolidBrush(XColors.SteelBlue, true);
+                return steelBlue;
             }
         }
 
@@ -1330,8 +1330,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.tan ??= new XSolidBrush(XColors.Tan, true);
-                return XBrushes.tan;
+                tan ??= new XSolidBrush(XColors.Tan, true);
+                return tan;
             }
         }
 
@@ -1340,8 +1340,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.teal ??= new XSolidBrush(XColors.Teal, true);
-                return XBrushes.teal;
+                teal ??= new XSolidBrush(XColors.Teal, true);
+                return teal;
             }
         }
 
@@ -1350,8 +1350,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.thistle ??= new XSolidBrush(XColors.Thistle, true);
-                return XBrushes.thistle;
+                thistle ??= new XSolidBrush(XColors.Thistle, true);
+                return thistle;
             }
         }
 
@@ -1360,8 +1360,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.tomato ??= new XSolidBrush(XColors.Tomato, true);
-                return XBrushes.tomato;
+                tomato ??= new XSolidBrush(XColors.Tomato, true);
+                return tomato;
             }
         }
 
@@ -1370,8 +1370,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.transparent ??= new XSolidBrush(XColors.Transparent, true);
-                return XBrushes.transparent;
+                transparent ??= new XSolidBrush(XColors.Transparent, true);
+                return transparent;
             }
         }
 
@@ -1380,8 +1380,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.turquoise ??= new XSolidBrush(XColors.Turquoise, true);
-                return XBrushes.turquoise;
+                turquoise ??= new XSolidBrush(XColors.Turquoise, true);
+                return turquoise;
             }
         }
 
@@ -1390,8 +1390,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.violet ??= new XSolidBrush(XColors.Violet, true);
-                return XBrushes.violet;
+                violet ??= new XSolidBrush(XColors.Violet, true);
+                return violet;
             }
         }
 
@@ -1400,8 +1400,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.wheat ??= new XSolidBrush(XColors.Wheat, true);
-                return XBrushes.wheat;
+                wheat ??= new XSolidBrush(XColors.Wheat, true);
+                return wheat;
             }
         }
 
@@ -1410,8 +1410,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.white ??= new XSolidBrush(XColors.White, true);
-                return XBrushes.white;
+                white ??= new XSolidBrush(XColors.White, true);
+                return white;
             }
         }
 
@@ -1420,8 +1420,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.whiteSmoke ??= new XSolidBrush(XColors.WhiteSmoke, true);
-                return XBrushes.whiteSmoke;
+                whiteSmoke ??= new XSolidBrush(XColors.WhiteSmoke, true);
+                return whiteSmoke;
             }
         }
 
@@ -1430,8 +1430,8 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.yellow ??= new XSolidBrush(XColors.Yellow, true);
-                return XBrushes.yellow;
+                yellow ??= new XSolidBrush(XColors.Yellow, true);
+                return yellow;
             }
         }
 
@@ -1440,151 +1440,151 @@ namespace PdfSharp.Drawing
         {
             get
             {
-                XBrushes.yellowGreen ??= new XSolidBrush(XColors.YellowGreen, true);
-                return XBrushes.yellowGreen;
+                yellowGreen ??= new XSolidBrush(XColors.YellowGreen, true);
+                return yellowGreen;
             }
         }
 
-        static XSolidBrush aliceBlue;
-        static XSolidBrush antiqueWhite;
-        static XSolidBrush aqua;
-        static XSolidBrush aquamarine;
-        static XSolidBrush azure;
-        static XSolidBrush beige;
-        static XSolidBrush bisque;
-        static XSolidBrush black;
-        static XSolidBrush blanchedAlmond;
-        static XSolidBrush blue;
-        static XSolidBrush blueViolet;
-        static XSolidBrush brown;
-        static XSolidBrush burlyWood;
-        static XSolidBrush cadetBlue;
-        static XSolidBrush chartreuse;
-        static XSolidBrush chocolate;
-        static XSolidBrush coral;
-        static XSolidBrush cornflowerBlue;
-        static XSolidBrush cornsilk;
-        static XSolidBrush crimson;
-        static XSolidBrush cyan;
-        static XSolidBrush darkBlue;
-        static XSolidBrush darkCyan;
-        static XSolidBrush darkGoldenrod;
-        static XSolidBrush darkGray;
-        static XSolidBrush darkGreen;
-        static XSolidBrush darkKhaki;
-        static XSolidBrush darkMagenta;
-        static XSolidBrush darkOliveGreen;
-        static XSolidBrush darkOrange;
-        static XSolidBrush darkOrchid;
-        static XSolidBrush darkRed;
-        static XSolidBrush darkSalmon;
-        static XSolidBrush darkSeaGreen;
-        static XSolidBrush darkSlateBlue;
-        static XSolidBrush darkSlateGray;
-        static XSolidBrush darkTurquoise;
-        static XSolidBrush darkViolet;
-        static XSolidBrush deepPink;
-        static XSolidBrush deepSkyBlue;
-        static XSolidBrush dimGray;
-        static XSolidBrush dodgerBlue;
-        static XSolidBrush firebrick;
-        static XSolidBrush floralWhite;
-        static XSolidBrush forestGreen;
-        static XSolidBrush fuchsia;
-        static XSolidBrush gainsboro;
-        static XSolidBrush ghostWhite;
-        static XSolidBrush gold;
-        static XSolidBrush goldenrod;
-        static XSolidBrush gray;
-        static XSolidBrush green;
-        static XSolidBrush greenYellow;
-        static XSolidBrush honeydew;
-        static XSolidBrush hotPink;
-        static XSolidBrush indianRed;
-        static XSolidBrush indigo;
-        static XSolidBrush ivory;
-        static XSolidBrush khaki;
-        static XSolidBrush lavender;
-        static XSolidBrush lavenderBlush;
-        static XSolidBrush lawnGreen;
-        static XSolidBrush lemonChiffon;
-        static XSolidBrush lightBlue;
-        static XSolidBrush lightCoral;
-        static XSolidBrush lightCyan;
-        static XSolidBrush lightGoldenrodYellow;
-        static XSolidBrush lightGray;
-        static XSolidBrush lightGreen;
-        static XSolidBrush lightPink;
-        static XSolidBrush lightSalmon;
-        static XSolidBrush lightSeaGreen;
-        static XSolidBrush lightSkyBlue;
-        static XSolidBrush lightSlateGray;
-        static XSolidBrush lightSteelBlue;
-        static XSolidBrush lightYellow;
-        static XSolidBrush lime;
-        static XSolidBrush limeGreen;
-        static XSolidBrush linen;
-        static XSolidBrush magenta;
-        static XSolidBrush maroon;
-        static XSolidBrush mediumAquamarine;
-        static XSolidBrush mediumBlue;
-        static XSolidBrush mediumOrchid;
-        static XSolidBrush mediumPurple;
-        static XSolidBrush mediumSeaGreen;
-        static XSolidBrush mediumSlateBlue;
-        static XSolidBrush mediumSpringGreen;
-        static XSolidBrush mediumTurquoise;
-        static XSolidBrush mediumVioletRed;
-        static XSolidBrush midnightBlue;
-        static XSolidBrush mintCream;
-        static XSolidBrush mistyRose;
-        static XSolidBrush moccasin;
-        static XSolidBrush navajoWhite;
-        static XSolidBrush navy;
-        static XSolidBrush oldLace;
-        static XSolidBrush olive;
-        static XSolidBrush oliveDrab;
-        static XSolidBrush orange;
-        static XSolidBrush orangeRed;
-        static XSolidBrush orchid;
-        static XSolidBrush paleGoldenrod;
-        static XSolidBrush paleGreen;
-        static XSolidBrush paleTurquoise;
-        static XSolidBrush paleVioletRed;
-        static XSolidBrush papayaWhip;
-        static XSolidBrush peachPuff;
-        static XSolidBrush peru;
-        static XSolidBrush pink;
-        static XSolidBrush plum;
-        static XSolidBrush powderBlue;
-        static XSolidBrush purple;
-        static XSolidBrush red;
-        static XSolidBrush rosyBrown;
-        static XSolidBrush royalBlue;
-        static XSolidBrush saddleBrown;
-        static XSolidBrush salmon;
-        static XSolidBrush sandyBrown;
-        static XSolidBrush seaGreen;
-        static XSolidBrush seaShell;
-        static XSolidBrush sienna;
-        static XSolidBrush silver;
-        static XSolidBrush skyBlue;
-        static XSolidBrush slateBlue;
-        static XSolidBrush slateGray;
-        static XSolidBrush snow;
-        static XSolidBrush springGreen;
-        static XSolidBrush steelBlue;
-        static XSolidBrush tan;
-        static XSolidBrush teal;
-        static XSolidBrush thistle;
-        static XSolidBrush tomato;
-        static XSolidBrush transparent;
-        static XSolidBrush turquoise;
-        static XSolidBrush violet;
-        static XSolidBrush wheat;
-        static XSolidBrush white;
-        static XSolidBrush whiteSmoke;
-        static XSolidBrush yellow;
-        static XSolidBrush yellowGreen;
+        private static XSolidBrush aliceBlue;
+        private static XSolidBrush antiqueWhite;
+        private static XSolidBrush aqua;
+        private static XSolidBrush aquamarine;
+        private static XSolidBrush azure;
+        private static XSolidBrush beige;
+        private static XSolidBrush bisque;
+        private static XSolidBrush black;
+        private static XSolidBrush blanchedAlmond;
+        private static XSolidBrush blue;
+        private static XSolidBrush blueViolet;
+        private static XSolidBrush brown;
+        private static XSolidBrush burlyWood;
+        private static XSolidBrush cadetBlue;
+        private static XSolidBrush chartreuse;
+        private static XSolidBrush chocolate;
+        private static XSolidBrush coral;
+        private static XSolidBrush cornflowerBlue;
+        private static XSolidBrush cornsilk;
+        private static XSolidBrush crimson;
+        private static XSolidBrush cyan;
+        private static XSolidBrush darkBlue;
+        private static XSolidBrush darkCyan;
+        private static XSolidBrush darkGoldenrod;
+        private static XSolidBrush darkGray;
+        private static XSolidBrush darkGreen;
+        private static XSolidBrush darkKhaki;
+        private static XSolidBrush darkMagenta;
+        private static XSolidBrush darkOliveGreen;
+        private static XSolidBrush darkOrange;
+        private static XSolidBrush darkOrchid;
+        private static XSolidBrush darkRed;
+        private static XSolidBrush darkSalmon;
+        private static XSolidBrush darkSeaGreen;
+        private static XSolidBrush darkSlateBlue;
+        private static XSolidBrush darkSlateGray;
+        private static XSolidBrush darkTurquoise;
+        private static XSolidBrush darkViolet;
+        private static XSolidBrush deepPink;
+        private static XSolidBrush deepSkyBlue;
+        private static XSolidBrush dimGray;
+        private static XSolidBrush dodgerBlue;
+        private static XSolidBrush firebrick;
+        private static XSolidBrush floralWhite;
+        private static XSolidBrush forestGreen;
+        private static XSolidBrush fuchsia;
+        private static XSolidBrush gainsboro;
+        private static XSolidBrush ghostWhite;
+        private static XSolidBrush gold;
+        private static XSolidBrush goldenrod;
+        private static XSolidBrush gray;
+        private static XSolidBrush green;
+        private static XSolidBrush greenYellow;
+        private static XSolidBrush honeydew;
+        private static XSolidBrush hotPink;
+        private static XSolidBrush indianRed;
+        private static XSolidBrush indigo;
+        private static XSolidBrush ivory;
+        private static XSolidBrush khaki;
+        private static XSolidBrush lavender;
+        private static XSolidBrush lavenderBlush;
+        private static XSolidBrush lawnGreen;
+        private static XSolidBrush lemonChiffon;
+        private static XSolidBrush lightBlue;
+        private static XSolidBrush lightCoral;
+        private static XSolidBrush lightCyan;
+        private static XSolidBrush lightGoldenrodYellow;
+        private static XSolidBrush lightGray;
+        private static XSolidBrush lightGreen;
+        private static XSolidBrush lightPink;
+        private static XSolidBrush lightSalmon;
+        private static XSolidBrush lightSeaGreen;
+        private static XSolidBrush lightSkyBlue;
+        private static XSolidBrush lightSlateGray;
+        private static XSolidBrush lightSteelBlue;
+        private static XSolidBrush lightYellow;
+        private static XSolidBrush lime;
+        private static XSolidBrush limeGreen;
+        private static XSolidBrush linen;
+        private static XSolidBrush magenta;
+        private static XSolidBrush maroon;
+        private static XSolidBrush mediumAquamarine;
+        private static XSolidBrush mediumBlue;
+        private static XSolidBrush mediumOrchid;
+        private static XSolidBrush mediumPurple;
+        private static XSolidBrush mediumSeaGreen;
+        private static XSolidBrush mediumSlateBlue;
+        private static XSolidBrush mediumSpringGreen;
+        private static XSolidBrush mediumTurquoise;
+        private static XSolidBrush mediumVioletRed;
+        private static XSolidBrush midnightBlue;
+        private static XSolidBrush mintCream;
+        private static XSolidBrush mistyRose;
+        private static XSolidBrush moccasin;
+        private static XSolidBrush navajoWhite;
+        private static XSolidBrush navy;
+        private static XSolidBrush oldLace;
+        private static XSolidBrush olive;
+        private static XSolidBrush oliveDrab;
+        private static XSolidBrush orange;
+        private static XSolidBrush orangeRed;
+        private static XSolidBrush orchid;
+        private static XSolidBrush paleGoldenrod;
+        private static XSolidBrush paleGreen;
+        private static XSolidBrush paleTurquoise;
+        private static XSolidBrush paleVioletRed;
+        private static XSolidBrush papayaWhip;
+        private static XSolidBrush peachPuff;
+        private static XSolidBrush peru;
+        private static XSolidBrush pink;
+        private static XSolidBrush plum;
+        private static XSolidBrush powderBlue;
+        private static XSolidBrush purple;
+        private static XSolidBrush red;
+        private static XSolidBrush rosyBrown;
+        private static XSolidBrush royalBlue;
+        private static XSolidBrush saddleBrown;
+        private static XSolidBrush salmon;
+        private static XSolidBrush sandyBrown;
+        private static XSolidBrush seaGreen;
+        private static XSolidBrush seaShell;
+        private static XSolidBrush sienna;
+        private static XSolidBrush silver;
+        private static XSolidBrush skyBlue;
+        private static XSolidBrush slateBlue;
+        private static XSolidBrush slateGray;
+        private static XSolidBrush snow;
+        private static XSolidBrush springGreen;
+        private static XSolidBrush steelBlue;
+        private static XSolidBrush tan;
+        private static XSolidBrush teal;
+        private static XSolidBrush thistle;
+        private static XSolidBrush tomato;
+        private static XSolidBrush transparent;
+        private static XSolidBrush turquoise;
+        private static XSolidBrush violet;
+        private static XSolidBrush wheat;
+        private static XSolidBrush white;
+        private static XSolidBrush whiteSmoke;
+        private static XSolidBrush yellow;
+        private static XSolidBrush yellowGreen;
     }
 }

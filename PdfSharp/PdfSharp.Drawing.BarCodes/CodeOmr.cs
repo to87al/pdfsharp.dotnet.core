@@ -50,7 +50,7 @@ namespace PdfSharp.Drawing.BarCodes
         {
             XGraphicsState state = gfx.Save();
 
-            switch (this.direction)
+            switch (direction)
             {
                 case CodeDirection.RightToLeft:
                     gfx.RotateAtTransform(180, position);
@@ -66,24 +66,24 @@ namespace PdfSharp.Drawing.BarCodes
             }
 
             //XPoint pt = center - this.size / 2;
-            XPoint pt = position - CodeBase.CalcDistance(AnchorType.TopLeft, this.anchor, this.size);
-            uint.TryParse(this.text, out uint value);
+            XPoint pt = position - CalcDistance(AnchorType.TopLeft, anchor, size);
+            uint.TryParse(text, out uint value);
 #if true
             // HACK: Project Wallenwein: set LK
             value |= 1;
-            this.synchronizeCode = true;
+            synchronizeCode = true;
 #endif
-            if (this.synchronizeCode)
+            if (synchronizeCode)
             {
-                XRect rect = new(pt.x, pt.y, this.makerThickness, this.size.height);
+                XRect rect = new(pt.x, pt.y, makerThickness, size.height);
                 gfx.DrawRectangle(brush, rect);
-                pt.x += 2 * this.makerDistance;
+                pt.x += 2 * makerDistance;
             }
             for (int idx = 0; idx < 32; idx++)
             {
                 if ((value & 1) == 1)
                 {
-                    XRect rect = new(pt.x + (idx * this.makerDistance), pt.y, this.makerThickness, this.size.height);
+                    XRect rect = new(pt.x + (idx * makerDistance), pt.y, makerThickness, size.height);
                     gfx.DrawRectangle(brush, rect);
                 }
                 value >>= 1;
@@ -96,30 +96,33 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public bool SynchronizeCode
         {
-            get { return this.synchronizeCode; }
-            set { this.synchronizeCode = value; }
+            get { return synchronizeCode; }
+            set { synchronizeCode = value; }
         }
-        bool synchronizeCode;
+
+        private bool synchronizeCode;
 
         /// <summary>
         /// Gets or sets the distance of the markers.
         /// </summary>
         public double MakerDistance
         {
-            get { return this.makerDistance; }
-            set { this.makerDistance = value; }
+            get { return makerDistance; }
+            set { makerDistance = value; }
         }
-        double makerDistance = 12;  // 1/6"
+
+        private double makerDistance = 12;  // 1/6"
 
         /// <summary>
         /// Gets or sets the thickness of the makers.
         /// </summary>
         public double MakerThickness
         {
-            get { return this.makerThickness; }
-            set { this.makerThickness = value; }
+            get { return makerThickness; }
+            set { makerThickness = value; }
         }
-        double makerThickness = 1;
+
+        private double makerThickness = 1;
 
         ///// <summary>
         ///// Renders the mark at the given position.

@@ -60,12 +60,12 @@ namespace PdfSharp.Drawing
 #if WPF
         internal XFontFamily(System.Windows.Media.FontFamily family)
         {
-            this.name = family.Source;
+            name = family.Source;
             // HACK
-            int idxHash = this.name.LastIndexOf('#');
+            int idxHash = name.LastIndexOf('#');
             if (idxHash > 0)
-                this.name = this.name[(idxHash + 1)..];
-            this.wpfFamily = family;
+                name = name[(idxHash + 1)..];
+            wpfFamily = family;
 #if GDI
       this.gdiFamily = new System.Drawing.FontFamily(family.Source);
 #endif
@@ -87,7 +87,7 @@ namespace PdfSharp.Drawing
       this.gdiFamily = new System.Drawing.FontFamily(name);
 #endif
 #if WPF
-            this.wpfFamily = new System.Windows.Media.FontFamily(name);
+            wpfFamily = new System.Windows.Media.FontFamily(name);
 #endif
         }
 
@@ -101,9 +101,10 @@ namespace PdfSharp.Drawing
         /// </summary>
         public string Name
         {
-            get { return this.name; }
+            get { return name; }
         }
-        readonly string name;
+
+        private readonly string name;
 
         /// <summary>
         /// Returns the cell ascent, in design units, of the XFontFamily object of the specified style.

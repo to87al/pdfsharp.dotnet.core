@@ -84,7 +84,7 @@ namespace PdfSharp.Drawing
 
         public override readonly int GetHashCode()
         {
-            return this.x.GetHashCode() ^ this.y.GetHashCode();
+            return x.GetHashCode() ^ y.GetHashCode();
         }
 
         //public static XVector Parse(string source)
@@ -99,14 +99,14 @@ namespace PdfSharp.Drawing
 
         public double X
         {
-            readonly get { return this.x; }
-            set { this.x = value; }
+            readonly get { return x; }
+            set { x = value; }
         }
 
         public double Y
         {
-            readonly get { return this.y; }
-            set { this.y = value; }
+            readonly get { return y; }
+            set { y = value; }
         }
 
         public override string ToString()
@@ -127,22 +127,22 @@ namespace PdfSharp.Drawing
         internal readonly string ConvertToString(string format, IFormatProvider provider)
         {
             const char numericListSeparator = ',';
-            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, this.x, this.y]);
+            return string.Format(provider, "{1:" + format + "}{0}{2:" + format + "}", [numericListSeparator, x, y]);
         }
 
         public readonly double Length
         {
-            get { return Math.Sqrt((this.x * this.x) + (this.y * this.y)); }
+            get { return Math.Sqrt((x * x) + (y * y)); }
         }
 
         public readonly double LengthSquared
         {
-            get { return (this.x * this.x) + (this.y * this.y); }
+            get { return (x * x) + (y * y); }
         }
 
         public void Normalize()
         {
-            this /= Math.Max(Math.Abs(this.x), Math.Abs(this.y));
+            this /= Math.Max(Math.Abs(x), Math.Abs(y));
             this /= Length;
         }
 
@@ -165,8 +165,8 @@ namespace PdfSharp.Drawing
 
         public void Negate()
         {
-            this.x = -this.x;
-            this.y = -this.y;
+            x = -x;
+            y = -y;
         }
 
         public static XVector operator +(XVector vector1, XVector vector2)

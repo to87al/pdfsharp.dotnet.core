@@ -71,15 +71,15 @@ namespace PdfSharp.Drawing.BarCodes
             this.columns = columns;
         }
 
-        readonly string text;
-        readonly string encoding;
-        readonly int rows;
-        readonly int columns;
+        private readonly string text;
+        private readonly string encoding;
+        private readonly int rows;
+        private readonly int columns;
 
         /// <summary>
         /// Possible ECC200 Matrixes
         /// </summary>
-        static readonly Ecc200Block[] ecc200Sizes =
+        private static readonly Ecc200Block[] ecc200Sizes =
         [
       new Ecc200Block( 10,  10, 10, 10,    3,   3,  5),    //
       new Ecc200Block( 12,  12, 12, 12,    5,   5,  7),    //
@@ -116,7 +116,7 @@ namespace PdfSharp.Drawing.BarCodes
 
         public XImage DrawMatrix()
         {
-            return CreateImage(DataMatrix(), this.rows, this.columns);
+            return CreateImage(DataMatrix(), rows, columns);
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         internal char[] DataMatrix()
         {
-            int matrixColumns = this.columns;
-            int matrixRows = this.rows;
+            int matrixColumns = columns;
+            int matrixRows = rows;
             Ecc200Block matrix = new(0, 0, 0, 0, 0, 0, 0);
 
             foreach (Ecc200Block eccmatrix in ecc200Sizes)
@@ -213,7 +213,7 @@ namespace PdfSharp.Drawing.BarCodes
         }
     }
 
-    struct Ecc200Block
+    internal struct Ecc200Block
     {
         public int Height;
         public int Width;
